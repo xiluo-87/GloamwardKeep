@@ -14,10 +14,10 @@ export function botInput(s: RunState, out: Input): Input {
     const dx = p.x - e.x;
     const dy = p.y - e.y;
     const d2 = dx * dx + dy * dy;
-    if (d2 < 170 * 170 && d2 > 1) {
+    if (d2 < 60 * 60 && d2 > 1) {
       const k = 1 / d2;
-      ax += dx * k * 40;
-      ay += dy * k * 40;
+      ax += dx * k * 18;
+      ay += dy * k * 18;
     }
   }
   let best = Infinity;
@@ -36,16 +36,18 @@ export function botInput(s: RunState, out: Input): Input {
     if (d * 0.1 < best) { best = d * 0.1; bx = c.x - p.x; by = c.y - p.y; }
   }
   const bl = Math.hypot(bx, by) || 1;
-  out.mx = ax * 3 + (bx / bl) * 0.9;
-  out.my = ay * 3 + (by / bl) * 0.9;
-  if (s.bossEnemy && s.boss?.phase === 3) {
-    // Knows the secret, keeps out of the telegraphed wedge by circling.
-    out.dim = true;
+  out.mx = ax + (bx / bl) * 0.9;
+  out.my = ay + (by / bl) * 0.9;
+  out.dim = false;
+  if (s.bossEnemy && s.boss) {
+    // Circles the boss within weapon reach; in the last phase it knows the secret.
     const e = s.bossEnemy;
-    const a = Math.atan2(p.y - e.y, p.x - e.x) + 1.2;
-    out.mx = Math.cos(a);
-    out.my = Math.sin(a);
-  } else out.dim = false;
+    const d = Math.hypot(p.x - e.x, p.y - e.y);
+    const a = Math.atan2(p.y - e.y, p.x - e.x) + (d > 170 ? 2.4 : 1.2);
+    out.mx = Math.cos(a) + ax * 0.5;
+    out.my = Math.sin(a) + ay * 0.5;
+    out.dim = s.boss.phase === 3;
+  }
   return out;
 }
 

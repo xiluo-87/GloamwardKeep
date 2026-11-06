@@ -194,8 +194,10 @@ export function updateEnemies(s: RunState, dt: number): void {
         }
       }
     }
-    e.x += (dx * e.speed + sx * 5 + e.kbx) * dt;
-    e.y += (dy * e.speed + sy * 5 + e.kby) * dt;
+    // The boss never lets the player simply walk away from the end of the night.
+    const spd = e.boss && d > BOSS.catchUpDist ? e.speed * BOSS.catchUp : e.speed;
+    e.x += (dx * spd + sx * 5 + e.kbx) * dt;
+    e.y += (dy * spd + sy * 5 + e.kby) * dt;
     e.kbx *= 0.9;
     e.kby *= 0.9;
 

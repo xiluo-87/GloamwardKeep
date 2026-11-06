@@ -23,7 +23,7 @@ export const WICK = { radius: 30, damage: 0.08, burn: 0.35, spawn: 0.08 };
 
 export const DARK_DAMAGE = 0.4;
 
-export const OIL = { droplet: 4, dropletChance: 0.12, flask: 25, crateEvery: 90 };
+export const OIL = { droplet: 4, dropletChance: 0.05, flask: 25, crateEvery: 90 };
 
 export const POST = {
   spacing: 700,
@@ -62,6 +62,8 @@ export const BOSS = {
   phase2At: 0.6,
   phase3At: 0.25,
   speed: [32, 40, 26],
+  catchUpDist: 420,
+  catchUp: 4,
   waveEvery: 9,
   waveSize: 18,
   eclipseRate: 8,

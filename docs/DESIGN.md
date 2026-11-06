@@ -72,7 +72,7 @@ Being "in the light" means an enemy's centre is inside the player's light radius
 
 | Source | Oil |
 |---|---|
-| Droplet from a kill (common enemies, 12% chance) | +4 |
+| Droplet from a kill (common enemies, 5% chance) | +4 |
 | Flask from an elite (always) | +25 |
 | Flask from a supply crate (one spawns every 90 s, off-screen) | +25 |
 
@@ -87,7 +87,7 @@ Lampposts are scattered about 700 px apart across the map.
 | Light cost | 10 oil |
 | Light time | Stand within 40 px for 1.0 s |
 | Light radius | 180, shrinking evenly to 0 |
-| Lifetime | 45 s, relight costs the same |
+| Lifetime | 45 s. It can be relit once it is out, at the same cost |
 
 A lit post damages nothing by itself. It lets the player fight at full damage, gives a safe view of the surroundings and allows dimming without going blind. Snuffers will attack lit posts and shorten their lifetime.
 
@@ -162,7 +162,7 @@ Damage is per touch, with a 0.5 s hit interval per enemy.
 |---|---|---|---|---|---|---|
 | Soot Mite | 0:00 | 8 | 70 | 4 | 1 | Swarms straight at the player |
 | Hollow One | 2:00 | 45 | 40 | 10 | 5 | Slow and heavy; resists push by 50% |
-| Snuffer | 5:00 | 20 | 110 | 3 | 1 | Flies to the nearest light. Touching the player drains 5 oil. Touching a post removes 5 s of its life |
+| Snuffer | 5:00 | 20 | 110 | 3 | 1 | Flies to the nearest light. Touching the player drains 5 oil. Touching a post removes 5 s of its life and consumes the Snuffer, which drops nothing |
 | Shade Hound | 8:00 | 30 | 170 | 8 | 5 | Fully invisible in the dark, with no eyes. Hunts in packs of 6 |
 | Elite | 4:00 | ×12 | ×0.8 | ×2 | 25 | Larger version of the current toughest type, with a pale halo. Always drops a flask |
 
@@ -191,9 +191,11 @@ When phase 3 begins, the lantern stutters, the music drops out, and the boss fad
 - Oil stops burning for the whole phase, so holding the dim button is always possible.
 - The boss attacks with slow, telegraphed sweeps that are bright against the dark, so playing dim stays fair.
 
+When the phase begins the eclipse lifts and the light returns to full size, so burning looks safe for the first time in minutes. If the lantern was out it relights with 10 oil. Oil cannot be drained during this phase, and the boss no longer hurts by touch. The boss has no leash limit: if the player gets far away it speeds up to close the distance.
+
 The only hint is that the boss's core flickers visibly for a moment whenever the player's lantern dims. For the whole run the player has learned that light is safety; to finish the night they have to trust the dark.
 
-Killing it plays the dawn: the darkness overlay fades over 4 s into pink-grey morning, enemies crumble to ash, and the lantern goes out on its own.
+Killing it plays the dawn at once, even if the clock has not reached 15:00: the darkness overlay fades over 4 s into pink-grey morning, enemies crumble to ash, and the lantern goes out on its own.
 
 ## 12. Between runs
 
