@@ -38,7 +38,11 @@ export class Controls {
     } else {
       this.dimId = e.pointerId;
     }
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    try {
+      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    } catch {
+      // Capture is only a nicety: moves still arrive while the finger stays over the canvas.
+    }
   }
 
   private moved(e: PointerEvent): void {

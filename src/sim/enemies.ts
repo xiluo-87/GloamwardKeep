@@ -263,6 +263,12 @@ export function sweepDead(s: RunState): void {
       s.bossDead = true;
       s.bossEnemy = null;
       s.dawnT = 0;
+      // The fight is over: nothing of it carries into the morning.
+      s.pools.count = 0;
+      s.projectiles.count = 0;
+      s.rings.count = 0;
+      s.sentries.count = 0;
+      s.litSentries.length = 0;
       emit(s, 'dawn', e.x, e.y);
       for (let j = 0; j < pool.count; j++) if (j !== i) { pool.items[j].hp = 0; pool.items[j].noDrops = true; }
       pool.removeAt(i);

@@ -123,6 +123,7 @@ export class Renderer {
     for (let i = 0; i < s.eventCount; i++) {
       const e = s.events[i];
       switch (e.type) {
+        case 'dawn': this.whips.length = 0; break;
         case 'hit': if (e.a) this.addSparks(e.x, e.y, 1, '#ffd9a0', 90); break;
         case 'kill':
           if (e.b === 2) this.addSparks(e.x, e.y, 2, '#8a8078', 40);
@@ -281,7 +282,7 @@ export class Renderer {
     }
     const fire = s.weapons.some((w) => w.id === 'firemoth');
     g.fillStyle = fire ? '#ff9a4a' : '#e8dcae';
-    const mothCount = s.weapons.some((w) => w.id === 'moth' || w.id === 'firemoth') ? s.moths.length : 0;
+    const mothCount = !s.bossDead && s.weapons.some((w) => w.id === 'moth' || w.id === 'firemoth') ? s.moths.length : 0;
     for (let i = 0; i < mothCount; i++) {
       const m = s.moths[i];
       const mx = lerp(m.px, m.x, alpha);
@@ -369,7 +370,7 @@ export class Renderer {
     const sx = (px - camX) * z;
     const sy = (py - camY) * z;
     g.drawImage(this.glow, sx - gr, sy - gr, gr * 2, gr * 2);
-    for (const post of s.litPosts) {
+    for (const post of s.bossDead ? [] : s.litPosts) {
       const r = postRadius(post) * z * 1.1;
       g.drawImage(this.glow, (post.x - camX) * z - r, (post.y - camY) * z - r, r * 2, r * 2);
     }
@@ -674,8 +675,11 @@ export class Renderer {
     if (s.boss && s.boss.stutter > 0) stutter = Math.sin(time * 47) > 0 ? 0.25 : 1;
     const breathe = 1 + Math.sin(time * 5.1) * 0.012 + Math.sin(time * 11.7) * 0.008;
     if (s.radius > 1) hole(px, py, s.radius * breathe * stutter);
-    for (const post of s.litPosts) hole(post.x, post.y, postRadius(post));
-    for (const l of s.litSentries) hole(l.x, l.y, 80);
+    // Morning has no pools of light in it, or they would read as dark patches.
+    if (!s.bossDead) {
+      for (const post of s.litPosts) hole(post.x, post.y, postRadius(post));
+      for (const l of s.litSentries) hole(l.x, l.y, 80);
+    }
     d.globalCompositeOperation = 'source-over';
   }
 

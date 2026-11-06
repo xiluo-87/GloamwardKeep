@@ -4,7 +4,7 @@ A browser survivor game built around a lantern whose light is the player's sight
 
 ## Current state
 
-Design only. There is no code yet. Start at Milestone 0.
+All milestones are built and the game is playable from dusk to dawn. Balance has only been checked with the bot in `src/sim/bot.ts` (see `tests/balance.test.ts`), so the next step is human playtesting, starting with the Milestone 2 oil tension.
 
 ## Tech rules
 

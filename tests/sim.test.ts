@@ -207,6 +207,7 @@ describe('boss', () => {
     stepRun(s, idle);
     expect(s.bossDead).toBe(true);
     expect(s.enemies.count).toBe(0);
+    expect(s.pools.count + s.projectiles.count + s.sentries.count).toBe(0);
     for (let i = 0; i < 300 && !s.over; i++) stepRun(s, idle);
     expect(s.outcome).toBe('dawn');
   });
