@@ -38,8 +38,8 @@ let mode: Mode = 'menu';
 let run: RunState | null = null;
 let acc = 0;
 let last = performance.now();
-let timeScale = Number(params.get('speed')) || 1;
-let useBot = params.has('bot');
+let timeScale = debugMode ? Number(params.get('speed')) || 1 : 1;
+let useBot = debugMode && params.has('bot');
 const botIn: Input = { mx: 0, my: 0, dim: false };
 
 function persist(): void {
@@ -75,7 +75,7 @@ function setMode(m: Mode): void {
   mode = m;
   pauseBtn.hidden = m !== 'run';
   if (m === 'run') screens.hide();
-  controls.clear();
+  else synth.stopRun();
   last = performance.now();
 }
 
@@ -94,6 +94,7 @@ function startRun(character: CharacterId, newMoon: boolean): void {
     run.player.hp = run.player.maxHp;
   }
   renderer.resetFx(seed);
+  controls.clear();
   acc = 0;
   setMode('run');
 }
@@ -128,7 +129,6 @@ controls.onKey = (key: string): void => {
     else if (mode === 'paused') setMode('run');
     return;
   }
-  if (!debugMode && k !== 'f3') return;
   if (k === 'f3' || k === '`') renderer.debug = !renderer.debug;
   if (!debugMode) return;
   if (k === ']') timeScale = Math.min(32, timeScale * 2);

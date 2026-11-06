@@ -1,3 +1,4 @@
+import { PLAYER } from '../data/balance';
 import { BASE_WEAPONS, COMBOS, MAX_PASSIVES, MAX_WEAPONS, PASSIVE_IDS, PASSIVES, PassiveId, WEAPONS, WeaponId } from '../data/content';
 import { Choice, passiveRank, RunState, weaponOf } from './state';
 
@@ -51,14 +52,14 @@ export function recalcPassives(s: RunState): void {
   const p = s.player;
   const moth = s.cfg.character === 'mothchild';
   p.burnMul = 1 - passiveRank(s, 'trim') * 0.08;
-  p.speed = 150 * (moth ? 1.15 : 1) * (1 + passiveRank(s, 'boots') * 0.07);
+  p.speed = PLAYER.speed * (moth ? 1.15 : 1) * (1 + passiveRank(s, 'boots') * 0.07);
   p.armor = passiveRank(s, 'coat');
-  p.pickupRange = 60 * (1 + passiveRank(s, 'hook') * 0.25);
+  p.pickupRange = PLAYER.pickupRange * (1 + passiveRank(s, 'hook') * 0.25);
   p.regen = passiveRank(s, 'heart') * 0.2;
-  const maxOil = 100 + passiveRank(s, 'reservoir') * 20;
+  const maxOil = PLAYER.maxOil + passiveRank(s, 'reservoir') * 20;
   if (maxOil > p.maxOil) p.oil += 10;
   p.maxOil = maxOil;
-  const maxHp = 100 + (s.cfg.shop.frame ?? 0) * 10 + passiveRank(s, 'heart') * 20;
+  const maxHp = PLAYER.hp + (s.cfg.shop.frame ?? 0) * 10 + passiveRank(s, 'heart') * 20;
   if (maxHp > p.maxHp) p.hp += maxHp - p.maxHp;
   p.maxHp = maxHp;
   p.oil = Math.min(p.oil, p.maxOil);

@@ -22,6 +22,7 @@ export interface UiHandlers {
 export class Screens {
   private root: HTMLElement;
   private newMoon = false;
+  private armedAt = 0;
 
   constructor(private save: SaveData, private h: UiHandlers) {
     this.root = document.getElementById('overlay') as HTMLElement;
@@ -55,7 +56,10 @@ export class Screens {
         break;
       case 'resume': this.h.resume(); break;
       case 'quit': this.h.quit(); break;
-      case 'choose': this.h.choose(Number(arg)); break;
+      case 'choose':
+        // A thumb already on its way down when the screen appears shouldn't pick an upgrade.
+        if (performance.now() >= this.armedAt) this.h.choose(Number(arg));
+        break;
       case 'reroll': this.h.reroll(); break;
       case 'motion':
         this.save.reduceMotion = !this.save.reduceMotion;
@@ -122,9 +126,10 @@ export class Screens {
   }
 
   levelUp(choices: Choice[], rerolls: number): void {
+    this.armedAt = performance.now() + 250;
     const cards = choices.map((c, i) => `<button class="card choice" data-act="choose" data-arg="${i}">
         <i style="color:${c.colour};border-color:${c.colour}">${esc(c.glyph)}</i>
-        <strong>${esc(c.name)}${c.rank > 0 && c.kind !== 'combo' ? ` <em>rank ${c.rank}</em>` : ''}</strong>
+        <strong>${esc(c.name)}${c.kind === 'combo' ? ' <em>combination</em>' : c.rank === 1 ? ' <em>new</em>' : c.rank > 1 ? ` <em>rank ${c.rank}</em>` : ''}</strong>
         <span>${esc(c.desc)}</span><kbd>${i + 1}</kbd>
       </button>`).join('');
     const reroll = rerolls > 0 ? `<button class="small" data-act="reroll">Reroll (${rerolls} left, R)</button>` : '';

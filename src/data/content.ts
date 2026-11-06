@@ -24,9 +24,9 @@ export const WAVES: Wave[] = [
   { from: 0, name: 'Dusk', weights: { mite: 1 } },
   { from: 120, name: 'Early night', weights: { mite: 0.8, hollow: 0.2 } },
   { from: 300, name: 'Night', weights: { mite: 0.6, hollow: 0.2, snuffer: 0.2 } },
-  { from: 480, name: 'Deep night', weights: { mite: 0.5, hollow: 0.2, snuffer: 0.15, hound: 0.15 } },
-  { from: 660, name: 'The small hours', weights: { mite: 0.35, hollow: 0.25, snuffer: 0.2, hound: 0.2 } },
-  { from: 840, name: 'Last dark', weights: { mite: 0.5, hollow: 0.2, snuffer: 0.15, hound: 0.15 } },
+  { from: 480, name: 'Deep night', weights: { mite: 0.6, hollow: 0.2, snuffer: 0.17, hound: 0.03 } },
+  { from: 660, name: 'The small hours', weights: { mite: 0.5, hollow: 0.27, snuffer: 0.19, hound: 0.04 } },
+  { from: 840, name: 'Last dark', weights: { mite: 0.6, hollow: 0.2, snuffer: 0.17, hound: 0.03 } },
 ];
 
 export function waveAt(t: number): Wave {

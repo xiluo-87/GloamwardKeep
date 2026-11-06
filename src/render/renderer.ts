@@ -49,8 +49,8 @@ function lightSprite(stop: number): HTMLCanvasElement {
 function glowSprite(): HTMLCanvasElement {
   const [c, g] = makeCanvas(256, 256);
   const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
-  gr.addColorStop(0, 'rgba(255,179,71,0.5)');
-  gr.addColorStop(0.35, 'rgba(255,179,71,0.14)');
+  gr.addColorStop(0, 'rgba(255,179,71,0.3)');
+  gr.addColorStop(0.35, 'rgba(255,179,71,0.08)');
   gr.addColorStop(1, 'rgba(255,179,71,0)');
   g.fillStyle = gr;
   g.fillRect(0, 0, 256, 256);
@@ -706,7 +706,7 @@ export class Renderer {
 
     // HP bar.
     const margin = 14;
-    const barW = small ? 104 : 170;
+    const barW = small ? 92 : 170;
     g.fillStyle = 'rgba(10,12,22,0.8)';
     g.beginPath();
     g.roundRect(margin + 44, 20, barW, 12, 4);
@@ -717,9 +717,11 @@ export class Renderer {
     g.fill();
     g.fillStyle = '#efe6da';
     g.font = '600 12px Georgia, serif';
-    g.textAlign = 'left';
     g.textBaseline = 'middle';
-    g.fillText(`${Math.ceil(p.hp)}`, margin + 50 + barW, 27);
+    // On a phone the number sits inside the bar so it can't run into the clock.
+    g.textAlign = small ? 'center' : 'left';
+    g.fillText(`${Math.ceil(p.hp)}`, small ? margin + 44 + barW / 2 : margin + 50 + barW, small ? 26.5 : 27);
+    g.textAlign = 'left';
     g.font = '12px Georgia, serif';
     g.fillStyle = '#b9b3c4';
     g.fillText(`Level ${p.level}`, margin + 44, 44);

@@ -10,14 +10,17 @@ function play(seed: number) {
   const inp: Input = { mx: 0, my: 0, dim: false };
   let early = 0;
   let earlyN = 0;
+  let late = 0;
+  let lateN = 0;
   for (let i = 0; i < 60 * 60 * 25 && !s.over; i++) {
     if (s.choices) chooseUpgrade(s, botChoose(s, s.choices));
     botInput(s, inp);
     stepRun(s, inp);
     s.eventCount = 0;
     if (s.t < 180) { early += s.player.oil / s.player.maxOil; earlyN++; }
+    if (s.t > 360) { late += s.player.oil / s.player.maxOil; lateN++; }
   }
-  return { seed, t: Math.round(s.t), outcome: s.outcome, kills: s.kills, level: s.player.level, earlyOil: +(early / earlyN).toFixed(2), gutter: Math.round(s.stats.gutterTime), peak: s.stats.peakEnemies, phase: s.boss?.phase ?? 0 };
+  return { seed, t: Math.round(s.t), outcome: s.outcome, kills: s.kills, level: s.player.level, earlyOil: +(early / earlyN).toFixed(2), lateOil: +(late / Math.max(1, lateN)).toFixed(2), gutter: Math.round(s.stats.gutterTime), peak: s.stats.peakEnemies, phase: s.boss?.phase ?? 0 };
 }
 
 describe('balance', () => {

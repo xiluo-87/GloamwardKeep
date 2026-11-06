@@ -1,5 +1,5 @@
 import { FLAME, PLAYER, emberNeed } from '../data/balance';
-import { CharacterId, CHARACTERS, EnemyDef, ENEMIES, PassiveId, ShopId, WeaponId } from '../data/content';
+import { CharacterId, CHARACTERS, EnemyDef, ENEMIES, EnemyId, PassiveId, ShopId, WeaponId } from '../data/content';
 import { Grid } from './grid';
 import { Rng } from './rng';
 
@@ -90,7 +90,7 @@ export interface RunState {
   enemies: Pool<Enemy>; projectiles: Pool<Projectile>; pickups: Pool<Pickup>;
   pools: Pool<BurnPool>; rings: Pool<Ring>; sentries: Pool<Sentry>; crates: Pool<Crate>;
   moths: Moth[]; posts: Map<number, Post>; litPosts: Post[]; litSentries: Sentry[]; activePost: Post | null;
-  grid: Grid; nextUid: number; budget: number; crateCd: number; eliteNext: number; ringNext: number;
+  grid: Grid; nextUid: number; budget: number; nextKind: EnemyId | null; crateCd: number; eliteNext: number; ringNext: number;
   bossEnemy: Enemy | null; boss: BossState | null; bossDead: boolean; dawnT: number;
   pendingLevels: number; choices: Choice[] | null; rerolls: number;
   kills: number; events: GameEvent[]; eventCount: number; hitBudget: number;
@@ -123,7 +123,7 @@ export function createRun(cfg: RunConfig): RunState {
     sentries: new Pool(8, (): Sentry => ({ x: 0, y: 0, t: 0, life: 0, cd: 0, toll: 0, light: false, bell: false, px: 0, py: 0 })),
     crates: new Pool(8, (): Crate => ({ x: 0, y: 0 })),
     moths: [], posts: new Map(), litPosts: [], litSentries: [], activePost: null,
-    grid: new Grid(1000), nextUid: 1, budget: 0, crateCd: 90, eliteNext: 0, ringNext: 0,
+    grid: new Grid(1000), nextUid: 1, budget: 0, nextKind: null, crateCd: 90, eliteNext: 0, ringNext: 0,
     bossEnemy: null, boss: null, bossDead: false, dawnT: 0,
     pendingLevels: 0, choices: null, rerolls: 1 + (shop.thought ?? 0),
     kills: 0, events: [], eventCount: 0, hitBudget: 0,

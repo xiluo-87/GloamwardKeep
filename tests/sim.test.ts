@@ -145,6 +145,21 @@ describe('lampposts and oil', () => {
   });
 });
 
+describe('spawning', () => {
+  it('brings hound packs after 8:00, saving up for their cost', () => {
+    const s = createRun(cfg({ startAt: 8 * 60 }));
+    let hounds = 0;
+    for (let i = 0; i < 60 * 30; i++) {
+      stepRun(s, idle);
+      s.choices = null;
+      s.eventCount = 0;
+      s.player.hp = 100;
+      hounds = Math.max(hounds, s.enemies.items.slice(0, s.enemies.count).filter((e) => e.def.id === 'hound').length);
+    }
+    expect(hounds).toBeGreaterThanOrEqual(6);
+  });
+});
+
 describe('upgrades', () => {
   it('offers three choices, then combinations at rank 5, then fallbacks', () => {
     const s = createRun(cfg());

@@ -1,4 +1,4 @@
-import { budgetRate, BOSS, ELITE, hpScale, OIL, PLAYER, RUN, emberNeed } from '../data/balance';
+import { budgetRate, BOSS, dropletChance, ELITE, hpScale, OIL, PLAYER, POST, RUN, emberNeed } from '../data/balance';
 import { ENEMIES, EnemyDef, EnemyId, HOUND_PACK, SNUFFER_DRAIN, waveAt, Wave } from '../data/content';
 import { addOil, drainOil, flameSpawn, isInverted, postRadius, snuffPost } from './lantern';
 import { Enemy, emit, passiveRank, PickupKind, RunState } from './state';
@@ -92,17 +92,16 @@ export function updateSpawner(s: RunState, dt: number): void {
   const scale = flameSpawn(s.flame, wick) * (s.bossEnemy ? RUN.bossSpawnScale : 1);
   s.budget += budgetRate(s.t) * scale * dt;
   let guard = 0;
-  while (s.budget >= 1 && guard++ < 40) {
-    const kind = pickKind(wave, s.rng);
+  while (guard++ < 40) {
+    // The next spawn is rolled once and then saved up for, so costly packs arrive at their true rate.
+    if (!s.nextKind) s.nextKind = pickKind(wave, s.rng);
+    const kind = s.nextKind;
     const def = ENEMIES[kind];
     const n = kind === 'hound' ? HOUND_PACK : 1;
     const cost = def.cost * n;
-    if (s.budget < cost) {
-      // Save up unless this would stall on an expensive pack in the early game.
-      if (s.budget < 1 || kind === 'hound') { s.budget -= 0.25; }
-      break;
-    }
+    if (s.budget < cost) break;
     s.budget -= cost;
+    s.nextKind = null;
     edgePoint(s, pt);
     for (let i = 0; i < n; i++) spawnEnemy(s, def, pt.x + s.rng.range(-30, 30), pt.y + s.rng.range(-30, 30));
   }
@@ -144,7 +143,7 @@ export function updateSpawner(s: RunState, dt: number): void {
 export function updateEnemies(s: RunState, dt: number): void {
   const p = s.player;
   const inverted = isInverted(s);
-  const pr = 12;
+  const pr = PLAYER.radius;
   const items = s.enemies.items;
   for (let i = 0; i < s.enemies.count; i++) {
     const e = items[i];
@@ -206,7 +205,7 @@ export function updateEnemies(s: RunState, dt: number): void {
       for (let j = 0; j < s.litPosts.length; j++) {
         const lp = s.litPosts[j];
         if ((lp.x - e.x) ** 2 + (lp.y - e.y) ** 2 < 18 * 18) {
-          snuffPost(s, lp, 5);
+          snuffPost(s, lp, POST.snufferLife);
           e.hp = 0;
           e.noDrops = true;
           break;
@@ -277,7 +276,7 @@ export function sweepDead(s: RunState): void {
       // Kills inside a lamppost's light drop no oil. Safety doesn't pay.
       if (!e.inPost) {
         if (e.elite) dropPickup(s, 'flask', OIL.flask, e.x + 8, e.y);
-        else if (s.rng.chance(OIL.dropletChance)) dropPickup(s, 'droplet', OIL.droplet, e.x, e.y);
+        else if (s.rng.chance(dropletChance(s.t))) dropPickup(s, 'droplet', OIL.droplet, e.x, e.y);
       }
       emit(s, 'kill', e.x, e.y, e.r, e.inLight ? 1 : 0);
     } else if (s.bossDead) emit(s, 'kill', e.x, e.y, e.r, 2);

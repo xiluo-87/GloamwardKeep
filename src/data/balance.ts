@@ -24,7 +24,7 @@ export const WICK = { radius: 30, damage: 0.08, burn: 0.35, spawn: 0.08 };
 
 export const DARK_DAMAGE = 0.4;
 
-export const OIL = { droplet: 4, dropletChance: 0.06, flask: 25, crateEvery: 90 };
+export const OIL = { droplet: 4, dropletChance: 0.09, dropletFalloffMinutes: 2.5, flask: 25, crateEvery: 90 };
 
 export const POST = {
   spacing: 700,
@@ -86,4 +86,6 @@ export const WAX = { perMinute: 5, killsPerWax: 100, dawn: 50, chandler: 1.3, ne
 export const emberNeed = (level: number): number => Math.floor(5 + 4 * level + 0.4 * level * level);
 export const budgetRate = (t: number): number =>
   RUN.budgetStart + (RUN.budgetEnd - RUN.budgetStart) * Math.min(1, t / RUN.budgetEndAt);
+// Kills come much faster late in the night, so each one must be worth less oil to keep the tension.
+export const dropletChance = (t: number): number => OIL.dropletChance / (1 + t / 60 / OIL.dropletFalloffMinutes);
 export const hpScale = (t: number): number => 1 + t / 60 / 6;

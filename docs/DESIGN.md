@@ -72,7 +72,7 @@ Being "in the light" means an enemy's centre is inside the player's light radius
 
 | Source | Oil |
 |---|---|
-| Droplet from a kill (common enemies, 6% chance) | +4 |
+| Droplet from a kill (common enemies, 9% chance, divided by `1 + minutes / 2.5`) | +4 |
 | Flask from an elite (always) | +25 |
 | Flask from a supply crate (one spawns every 90 s, off-screen) | +25 |
 

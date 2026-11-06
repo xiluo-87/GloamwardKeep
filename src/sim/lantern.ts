@@ -1,4 +1,5 @@
 import { BOSS, DARK_DAMAGE, FLAME, POST, WICK } from '../data/balance';
+import { TUNING } from '../data/content';
 import { hashCell } from './rng';
 import { emit, Flame, Input, passiveRank, Post, RunState } from './state';
 
@@ -117,6 +118,7 @@ export function classifyLight(s: RunState): void {
   const r2 = s.radius * s.radius;
   const posts = s.litPosts;
   const lights = s.litSentries;
+  const sentryLight2 = TUNING.sentry.light * TUNING.sentry.light;
   for (let i = 0; i < s.enemies.count; i++) {
     const e = s.enemies.items[i];
     const dx = e.x - p.x;
@@ -135,7 +137,7 @@ export function classifyLight(s: RunState): void {
         const l = lights[j];
         const ax = e.x - l.x;
         const ay = e.y - l.y;
-        if (ax * ax + ay * ay <= 6400) { lit = true; break; }
+        if (ax * ax + ay * ay <= sentryLight2) { lit = true; break; }
       }
     }
     e.inLight = lit;
