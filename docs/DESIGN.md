@@ -72,7 +72,7 @@ Being "in the light" means an enemy's centre is inside the player's light radius
 
 | Source | Oil |
 |---|---|
-| Droplet from a kill (common enemies, 5% chance) | +4 |
+| Droplet from a kill (common enemies, 6% chance) | +4 |
 | Flask from an elite (always) | +25 |
 | Flask from a supply crate (one spawns every 90 s, off-screen) | +25 |
 
@@ -125,7 +125,7 @@ Six slots. Each weapon has 5 ranks. Rank bonuses are +20% damage per rank, plus 
 |---|---|---|---|---|---|
 | Moth Swarm | 3 moths orbit at 70 px, hitting what they touch | 6 per hit | 0.5 per enemy | +1 moth | +2 moths |
 | Cinder Toss | Arcs to a random enemy and burns the ground for 3 s | 14 + 5/s burn | 1.8 | +1 throw | Larger pool |
-| Wick Lash | Short whip in the movement direction, with a wide arc | 18 | 1.2 | Hits behind too | +40% length |
+| Wick Lash | Short whip in the movement direction, with a wide arc | 18 | 1.0 | Hits behind too | +40% length |
 | Glass Shards | A shard bounces between enemies | 9 per hit, 4 bounces | 1.4 | +2 bounces | +1 shard |
 | Bell Toll | Expanding ring that damages and pushes back | 10 | 4.0 | +30% push | +25% radius |
 | Candle Sentry | Places a turret at your feet, firing at the nearest enemy; lasts 12 s | 7 per shot, 2 shots/s | 8.0 | +1 sentry | Sentries give a small light of radius 80 |
@@ -156,7 +156,7 @@ Six slots, 5 ranks each.
 
 ## 10. Enemies
 
-Damage is per touch, with a 0.5 s hit interval per enemy.
+Damage is per touch, with a 0.5 s hit interval per enemy. After any hit the player has 0.35 s of grace in which further hits do nothing.
 
 | Enemy | From | HP | Speed | Damage | Embers | Behaviour |
 |---|---|---|---|---|---|---|

@@ -150,7 +150,7 @@ window.addEventListener('resize', () => {
   }
 });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && mode === 'run') { setMode('paused'); screens.pause(); }
+  if (document.hidden && mode === 'run' && !debugMode) { setMode('paused'); screens.pause(); }
 });
 
 function frame(now: number): void {
@@ -159,6 +159,9 @@ function frame(now: number): void {
   last = now;
   if (dt > 0) renderer.fps += (1 / dt - renderer.fps) * 0.05;
   const wall = now / 1000;
+  // A hidden pane or tab can report a zero-sized window; wait until there is something to draw on.
+  if (window.innerWidth !== renderer.w || window.innerHeight !== renderer.h) renderer.resize();
+  if (renderer.w <= 0 || renderer.h <= 0) return;
   if (!run || (mode === 'menu')) {
     renderer.drawTitle(wall);
     return;
@@ -192,7 +195,31 @@ function frame(now: number): void {
   renderer.draw(run, mode === 'run' ? acc / STEP : 1, mode === 'run' ? dt : 0, wall);
 }
 
-if (debugMode) (window as unknown as { __gw: unknown }).__gw = { get run() { return run; }, save };
+if (debugMode) {
+  // Runs the real simulation with the bot, for testing in panes where animation frames are throttled.
+  const tick = (seconds: number, godMode = false): unknown => {
+    if (!run) return null;
+    const t0 = performance.now();
+    let steps = 0;
+    for (let i = 0; i < seconds * 60 && !run.over; i++) {
+      if (run.choices) chooseUpgrade(run, botChoose(run, run.choices));
+      botInput(run, botIn);
+      stepRun(run, botIn);
+      steps++;
+      if (godMode) run.player.hp = Math.max(run.player.hp, run.player.maxHp * 0.5);
+      if (i % 30 === 0) { renderer.consumeEvents(run); run.eventCount = 0; }
+    }
+    run.eventCount = 0;
+    return { msPerStep: (performance.now() - t0) / Math.max(1, steps), t: run.t, hp: run.player.hp, oil: run.player.oil, level: run.player.level, enemies: run.enemies.count, projectiles: run.projectiles.count, pickups: run.pickups.count, kills: run.kills, phase: run.boss?.phase, bossHp: run.bossEnemy?.hp, outcome: run.outcome };
+  };
+  const bench = (frames: number): number => {
+    if (!run) return 0;
+    const t0 = performance.now();
+    for (let i = 0; i < frames; i++) renderer.draw(run, 1, 0.016, i / 60);
+    return (performance.now() - t0) / frames;
+  };
+  (window as unknown as { __gw: unknown }).__gw = { get run() { return run; }, save, tick, bench, finish: finishRun };
+}
 pauseBtn.hidden = true;
 screens.title();
 requestAnimationFrame(frame);

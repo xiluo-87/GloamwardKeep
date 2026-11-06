@@ -18,6 +18,7 @@ function updatePlayer(s: RunState, input: Input, dt: number): void {
     p.facing = Math.atan2(input.my, input.mx);
   }
   if (p.hurt > 0) p.hurt -= dt;
+  if (p.grace > 0) p.grace -= dt;
   if (p.regen > 0) p.hp = Math.min(p.maxHp, p.hp + p.regen * dt);
 }
 

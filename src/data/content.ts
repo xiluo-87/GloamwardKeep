@@ -45,7 +45,7 @@ export interface WeaponDef {
 export const WEAPONS: Record<WeaponId, WeaponDef> = {
   moth: { id: 'moth', name: 'Moth Swarm', desc: 'Moths orbit you and bite what they touch.', damage: 6, cooldown: 0.5, maxRank: 5, colour: '#e8dcae', glyph: 'Mo', rank3: '+1 moth', rank5: '+2 moths' },
   cinder: { id: 'cinder', name: 'Cinder Toss', desc: 'Lobs a coal that burns the ground for 3 s.', damage: 14, cooldown: 1.8, maxRank: 5, colour: '#ff7a2f', glyph: 'Ci', rank3: '+1 throw', rank5: 'Larger pool' },
-  lash: { id: 'lash', name: 'Wick Lash', desc: 'A wide whip in the direction you move.', damage: 18, cooldown: 1.2, maxRank: 5, colour: '#ffb347', glyph: 'La', rank3: 'Hits behind too', rank5: '+40% length' },
+  lash: { id: 'lash', name: 'Wick Lash', desc: 'A wide whip in the direction you move.', damage: 18, cooldown: 1.0, maxRank: 5, colour: '#ffb347', glyph: 'La', rank3: 'Hits behind too', rank5: '+40% length' },
   shard: { id: 'shard', name: 'Glass Shards', desc: 'A shard bounces between enemies.', damage: 9, cooldown: 1.4, maxRank: 5, colour: '#9fd8ff', glyph: 'Gl', rank3: '+2 bounces', rank5: '+1 shard' },
   bell: { id: 'bell', name: 'Bell Toll', desc: 'An expanding ring that damages and pushes back.', damage: 10, cooldown: 4, maxRank: 5, colour: '#d9d2f0', glyph: 'Be', rank3: '+30% push', rank5: '+25% radius' },
   sentry: { id: 'sentry', name: 'Candle Sentry', desc: 'Sets down a turret that lasts 12 s.', damage: 7, cooldown: 8, maxRank: 5, colour: '#f7e3b0', glyph: 'Se', rank3: '+1 sentry', rank5: 'Sentries give a small light' },
@@ -66,7 +66,7 @@ export const TUNING = {
   moth: { orbit: 70, count: 3, spin: 2.6, radius: 8 },
   firemoth: { diveEvery: 2.4, diveSpeed: 430, range: 380, trailEvery: 0.28, trailLife: 1.4, trailRadius: 20, trailDps: 10 },
   cinder: { range: 460, flight: 0.6, hitRadius: 40, pool: 46, poolLarge: 72, burn: 5, life: 3 },
-  lash: { length: 135, halfArc: 0.95, stainedShards: 9, shardSpeed: 420, shardDamage: 9, shardLife: 0.65 },
+  lash: { length: 135, halfArc: 1.2, stainedShards: 9, shardSpeed: 420, shardDamage: 9, shardLife: 0.65 },
   shard: { range: 420, bounceRange: 190, speed: 500, bounces: 4 },
   bell: { radius: 200, time: 0.6, push: 240 },
   sentry: { life: 12, range: 340, rate: 2, shotSpeed: 460, light: 80, cap: 8 },

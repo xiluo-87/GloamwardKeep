@@ -83,7 +83,7 @@ export interface RunState {
   player: {
     x: number; y: number; px: number; py: number; hp: number; maxHp: number; oil: number; maxOil: number;
     speed: number; pickupRange: number; facing: number; armor: number; regen: number; burnMul: number;
-    level: number; embers: number; emberMul: number; hurt: number; moving: boolean;
+    level: number; embers: number; emberMul: number; hurt: number; grace: number; moving: boolean;
   };
   flame: Flame; radius: number; lightBonus: number; lightCap: number; gutterSeen: boolean;
   weapons: OwnedWeapon[]; passives: { id: PassiveId; rank: number }[];
@@ -110,7 +110,7 @@ export function createRun(cfg: RunConfig): RunState {
     player: {
       x: 0, y: 0, px: 0, py: 0, hp: maxHp, maxHp, oil: Math.min(PLAYER.maxOil, PLAYER.startOil + (shop.flask ?? 0) * 5),
       maxOil: PLAYER.maxOil, speed: PLAYER.speed * (moth ? 1.15 : 1), pickupRange: PLAYER.pickupRange, facing: 0,
-      armor: 0, regen: 0, burnMul: 1, level: 1, embers: 0, emberMul: 1 + (shop.memory ?? 0) * 0.04, hurt: 0, moving: false,
+      armor: 0, regen: 0, burnMul: 1, level: 1, embers: 0, emberMul: 1 + (shop.memory ?? 0) * 0.04, hurt: 0, grace: 0, moving: false,
     },
     flame: 'burning', radius: FLAME.burning.radius + lightBonus, lightBonus,
     lightCap: cfg.newMoon ? 120 : Infinity, gutterSeen: false,

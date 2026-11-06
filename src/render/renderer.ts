@@ -18,14 +18,16 @@ function cobbleTile(): HTMLCanvasElement {
   const [c, g] = makeCanvas(256, 256);
   g.fillStyle = '#141927';
   g.fillRect(0, 0, 256, 256);
+  // Seven columns and eight rows divide the tile exactly, so the pattern repeats without a seam.
+  const colW = 256 / 7;
   for (let row = 0; row < 8; row++) {
-    for (let col = -1; col < 8; col++) {
-      const x = col * 36 + (row % 2) * 18;
+    for (let col = -1; col <= 7; col++) {
+      const x = col * colW + (row % 2) * (colW / 2);
       const y = row * 32;
-      const h = hashCell(9, col & 7, row);
+      const h = hashCell(9, (col + 7) % 7, row);
       g.fillStyle = h > 0.5 ? '#1a2030' : '#232a3d';
       g.beginPath();
-      g.roundRect(x + 2, y + 2, 32 - h * 3, 28 - h * 2, 8);
+      g.roundRect(x + 2, y + 2, colW - 4 - h * 3, 28 - h * 2, 8);
       g.fill();
     }
   }
@@ -92,8 +94,8 @@ export class Renderer {
     this.canvas.height = Math.floor(this.h * this.dpr);
     // Keep at least 640 world pixels across the short side so the light always fits on phones.
     this.zoom = Math.max(0.55, Math.min(1.25, Math.min(this.w, this.h) / 640));
-    this.dark.width = Math.ceil(this.w / 2);
-    this.dark.height = Math.ceil(this.h / 2);
+    this.dark.width = Math.max(1, Math.ceil(this.w / 2));
+    this.dark.height = Math.max(1, Math.ceil(this.h / 2));
     this.tile = this.ctx.createPattern(cobbleTile(), 'repeat');
   }
 

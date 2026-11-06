@@ -2,32 +2,49 @@ import { flameRadius } from './lantern';
 import { Choice, Input, passiveRank, RunState } from './state';
 
 /**
- * A simple player for balance checks and headless runs. Moves away from the nearest threat
- * while drifting toward pickups, and ramps its wick only when oil allows.
+ * A stand-in player for balance checks and headless runs. It circles the swarm the way people
+ * do in this kind of game, cuts in for pickups when it's safe, and backs off when hurt.
  */
 export function botInput(s: RunState, out: Input): Input {
   const p = s.player;
-  let ax = 0;
-  let ay = 0;
-  for (let i = 0; i < s.enemies.count; i += 3) {
+  let cx = 0;
+  let cy = 0;
+  let n = 0;
+  let rx = 0;
+  let ry = 0;
+  for (let i = 0; i < s.enemies.count; i++) {
     const e = s.enemies.items[i];
     const dx = p.x - e.x;
     const dy = p.y - e.y;
     const d2 = dx * dx + dy * dy;
-    if (d2 < 60 * 60 && d2 > 1) {
-      const k = 1 / d2;
-      ax += dx * k * 18;
-      ay += dy * k * 18;
+    if (d2 < 320 * 320) { cx += e.x; cy += e.y; n++; }
+    if (d2 < 70 * 70 && d2 > 1) {
+      rx += dx / d2;
+      ry += dy / d2;
     }
   }
+  let mx = 0;
+  let my = 0;
+  if (n > 0) {
+    // Orbit the swarm's centre at a distance that keeps it inside whip reach but off our back.
+    const ox = p.x - cx / n;
+    const oy = p.y - cy / n;
+    const d = Math.hypot(ox, oy) || 1;
+    const hurt = p.hp < p.maxHp * 0.5;
+    const radial = ((hurt ? 240 : 130) - d) / 130;
+    const dir = Math.sin(s.t * 0.09) > 0 ? 1 : -1;
+    mx = (ox / d) * radial + (-oy / d) * dir;
+    my = (oy / d) * radial + (ox / d) * dir;
+  }
+  // Fetch the most useful pickup in reach; oil matters more as the flask empties.
+  const wantOil = p.oil < p.maxOil * 0.6;
   let best = Infinity;
   let bx = 0;
   let by = 0;
-  const wantOil = p.oil < p.maxOil * 0.6;
   for (let i = 0; i < s.pickups.count; i++) {
     const k = s.pickups.items[i];
     const d = (k.x - p.x) ** 2 + (k.y - p.y) ** 2;
-    const score = k.kind === 'ember' ? d * (wantOil ? 4 : 1) : d * 0.25;
+    const score = k.kind === 'ember' ? d * (wantOil ? 3 : 1) : d * 0.3;
     if (score < best) { best = score; bx = k.x - p.x; by = k.y - p.y; }
   }
   for (let i = 0; i < s.crates.count; i++) {
@@ -35,17 +52,22 @@ export function botInput(s: RunState, out: Input): Input {
     const d = (c.x - p.x) ** 2 + (c.y - p.y) ** 2;
     if (d * 0.1 < best) { best = d * 0.1; bx = c.x - p.x; by = c.y - p.y; }
   }
-  const bl = Math.hypot(bx, by) || 1;
-  out.mx = ax + (bx / bl) * 0.9;
-  out.my = ay + (by / bl) * 0.9;
+  const bl = Math.hypot(bx, by);
+  if (bl > 0) {
+    const pull = n === 0 ? 2 : 0.85;
+    mx += (bx / bl) * pull;
+    my += (by / bl) * pull;
+  }
+  out.mx = mx + rx * 90;
+  out.my = my + ry * 90;
   out.dim = false;
   if (s.bossEnemy && s.boss) {
     // Circles the boss within weapon reach; in the last phase it knows the secret.
     const e = s.bossEnemy;
     const d = Math.hypot(p.x - e.x, p.y - e.y);
     const a = Math.atan2(p.y - e.y, p.x - e.x) + (d > 170 ? 2.4 : 1.2);
-    out.mx = Math.cos(a) + ax * 0.5;
-    out.my = Math.sin(a) + ay * 0.5;
+    out.mx = Math.cos(a) + rx * 60;
+    out.my = Math.sin(a) + ry * 60;
     out.dim = s.boss.phase === 3;
   }
   return out;

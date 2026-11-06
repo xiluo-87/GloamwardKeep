@@ -1,4 +1,4 @@
-import { budgetRate, BOSS, ELITE, hpScale, OIL, RUN, emberNeed } from '../data/balance';
+import { budgetRate, BOSS, ELITE, hpScale, OIL, PLAYER, RUN, emberNeed } from '../data/balance';
 import { ENEMIES, EnemyDef, EnemyId, HOUND_PACK, SNUFFER_DRAIN, waveAt, Wave } from '../data/content';
 import { addOil, drainOil, flameSpawn, isInverted, postRadius, snuffPost } from './lantern';
 import { Enemy, emit, passiveRank, PickupKind, RunState } from './state';
@@ -224,10 +224,12 @@ export function updateEnemies(s: RunState, dt: number): void {
 }
 
 export function hurtPlayer(s: RunState, amount: number): void {
-  if (s.bossDead) return;
   const p = s.player;
+  // A brief grace after each hit keeps being swarmed readable instead of instantly fatal.
+  if (s.bossDead || p.grace > 0) return;
   p.hp -= Math.max(1, amount - p.armor);
   p.hurt = 0.2;
+  p.grace = PLAYER.grace;
   emit(s, 'hurt', p.x, p.y);
 }
 

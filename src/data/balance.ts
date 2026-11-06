@@ -9,6 +9,7 @@ export const PLAYER = {
   startOil: 70,
   pickupRange: 60,
   radius: 12,
+  grace: 0.35,
 };
 
 export const FLAME = {
@@ -23,7 +24,7 @@ export const WICK = { radius: 30, damage: 0.08, burn: 0.35, spawn: 0.08 };
 
 export const DARK_DAMAGE = 0.4;
 
-export const OIL = { droplet: 4, dropletChance: 0.05, flask: 25, crateEvery: 90 };
+export const OIL = { droplet: 4, dropletChance: 0.06, flask: 25, crateEvery: 90 };
 
 export const POST = {
   spacing: 700,
