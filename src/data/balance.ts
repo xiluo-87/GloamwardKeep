@@ -86,7 +86,8 @@ export const TOWER_GROUP: Record<TowerId, BuildGroup | null> = {
   archer: 'physical',
   catapult: 'physical',
   aviary: 'physical',
-  frost: 'magic',
+  // Frost is mostly about slowing, so it sits with the support towers.
+  frost: 'support',
   mage: 'magic',
   shrine: 'support',
 };

@@ -69,8 +69,8 @@ export const TOWER_TEXT: Record<TowerId, TowerText> = {
 
 export const GROUP_TEXT: Record<BuildGroup | 'heroes', { name: string; blurb: string }> = {
   physical: { name: 'Physical', blurb: 'Arrows, stones and claws. Strong against unarmoured foes.' },
-  magic: { name: 'Magical', blurb: 'Frost and lightning. Ignores armour; trolls resist it.' },
-  support: { name: 'Support', blurb: 'No attack of its own: makes nearby towers stronger, or earns gold.' },
+  magic: { name: 'Magical', blurb: 'Lightning and arcane beams. Ignores armour; trolls resist it.' },
+  support: { name: 'Support', blurb: 'Control and blessings: slow and freeze enemies, strengthen nearby towers or earn gold.' },
   heroes: { name: 'Heroes', blurb: 'Unique champions that level up and learn skills.' },
 };
 
