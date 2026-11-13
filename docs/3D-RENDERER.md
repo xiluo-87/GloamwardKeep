@@ -26,10 +26,37 @@ Keep the 2D renderer as a fallback. Choose the renderer with a setting, and fall
 
 ## Choices to make before starting
 
-1. **Project rules.** `CLAUDE.md` says "Canvas 2D only, no game engine, no runtime dependencies". Amend it to allow Three.js as the single runtime dependency, pinned to an exact version.
-2. **Art.** Keep everything procedural (low-poly meshes built in code, matching the current flat storybook style), or allow `.glb` model files. Procedural keeps the "no asset files" rule. Model files look better, but they add a modelling workflow and file size.
+1. **Project rules.** `CLAUDE.md` says "Canvas 2D only, no game engine, no runtime dependencies" and forbids asset files. Amend it to allow Three.js as the single runtime dependency, pinned to an exact version, and `.glb` model files built through the pipeline below.
+2. **Art.** See Assets below.
 3. **Camera.** Use a tilted orthographic camera as the default: it keeps the board readable and tile picking reliable. A perspective camera that can rotate is an option, but needs controls and a reset to a clear view.
 4. **UI.** Keep the DOM HUD and panels over the WebGL canvas. Don't move the UI into Three.js.
+
+## Assets
+
+Recommendation: Blender for models, free CC0 packs as a base for characters, and AI generation for concepts only.
+
+| What | How |
+|---|---|
+| Terrain, trees, rocks, effects | Procedural in code (instanced meshes, particles) |
+| Towers with all tiers and forks | Blender Python scripts kept in the repo |
+| Heroes and enemies | CC0 packs as the base, restyled and recombined in Blender |
+| AI 3D generation | Concepts only; nothing ships without cleanup in Blender |
+
+**Blender.** It is free and runs headless from Python (`bpy`), so models can be built by scripts in the repo and rebuilt reproducibly. Tower variants share a base (for example a wooden archer tower that becomes stone, then a slim Longbow or a wide Volley), so one parametrised script can make all 35 tower variants in one consistent style. It exports compressed glTF (`.glb`, Draco or meshopt) that Three.js loads directly, and it handles rigging and simple animation: walk cycles, catapult swings, bat wings.
+
+**CC0 asset packs** (Kenney, Quaternius, KayKit). These are low-poly fantasy sets (castles, towers, knights, orcs, skeletons, hex tiles), CC0 so free for any use, already glTF, often rigged and animated, and consistent in style. Other games use them too, so recolour, combine and modify them in Blender to keep the game's own look. This also matters for the "keep the game original" rule.
+
+**AI 3D generation APIs** (Meshy, Tripo, Rodin and similar). These are useful for quick concepts or a one-off prop, but not as the main pipeline:
+- Style drifts between models, which is a problem for about 50 models that must match.
+- Topology is messy: high poly counts, uneven meshes and baked textures, so every model needs cleanup and decimation in Blender anyway.
+- Auto-rigging handles humanoids, but not bats, wagons or catapults.
+- Each model costs credits, results are not reproducible, and commercial-use terms differ by service and plan. Check them before using anything.
+
+**Pipeline**
+- Blender sources and build scripts go in `assets-src/`. The exported `.glb` files are produced by one command, and output goes to `public/models/`.
+- Record each asset's source and licence in `assets-src/CREDITS.md` (CC0 packs included).
+- Size budget: about 5 MB total of models for mobile. Prefer shared materials and texture atlases or vertex colours.
+- This requires relaxing the "no image or audio files" rule in `CLAUDE.md` to allow model files, together with the Canvas 2D rule.
 
 ## Rough plan
 
