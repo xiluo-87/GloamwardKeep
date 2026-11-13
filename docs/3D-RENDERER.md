@@ -62,8 +62,8 @@ Recommendation: Blender for models, free CC0 packs as a base for characters, and
 
 1. Add Three.js and a `src/render3d/` module that implements the renderer contract.
 2. Terrain: instanced hex prisms per height, road material on level 0, instanced trees and rocks, gates and keep.
-3. Towers and heroes: low-poly procedural meshes per type, tier and fork, with recoil and status effects.
-4. Enemies: instanced meshes per kind, with health bars as sprites or in a DOM/canvas overlay.
+3. Asset pipeline: `assets-src/` with Blender build scripts, then towers and heroes as `.glb` models per type, tier and fork, with recoil and status effects.
+4. Enemies: models from CC0 bases restyled in Blender, instanced per kind, with health bars as sprites or in a DOM/canvas overlay.
 5. Projectiles, hawks, beams, pools and event effects (particles via `Points` or instanced quads).
 6. Picking via raycast, placement ghost, range rings.
 7. Renderer switch in settings with WebGL detection, then check performance on a phone.
