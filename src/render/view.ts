@@ -19,6 +19,11 @@ export interface ViewState {
    */
   routePreview: number[] | null;
   routeSealed: boolean;
+  /**
+   * Player option: draw enemy paths (flyers' straight flight lines and the current ground route).
+   * The placement route preview (routePreview) is shown regardless.
+   */
+  showPaths: boolean;
   /** Game speed shown by the debug overlay. */
   speed: number;
   debug: boolean;
@@ -27,7 +32,7 @@ export interface ViewState {
 
 export const defaultView = (): ViewState => ({
   selectedUid: 0, selectedTile: null, hoverTile: null, placing: null, placeOk: false,
-  routePreview: null, routeSealed: false, speed: 1, debug: false, fps: 60,
+  routePreview: null, routeSealed: false, showPaths: true, speed: 1, debug: false, fps: 60,
 });
 
 /**
