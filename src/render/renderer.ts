@@ -26,7 +26,6 @@ const FX_CAP = 900;
 const DASH = [6, 5];
 const NO_DASH: number[] = [];
 const DOTS = [1.5, 5.5];
-const PATH_DASH = [6, 4];
 
 /** Rough sprite heights for status icons and bars, in world px. */
 const ENEMY_H: Record<EnemyId, number> = {
@@ -813,7 +812,7 @@ export class Renderer implements CameraApi {
           }
         }
       }
-      if (!view.routePreview) this.drawPath(g, s, this.routeCache, '#d0392b', 0.65, wallTime, false);
+      if (!view.routePreview) this.drawPath(g, s, this.routeCache, '#d0392b', 0.6, wallTime, false);
       this.drawFlyPaths(g, s, view, wallTime);
     }
     this.drawGroundOverlays(g, s, view, wallTime);
@@ -1008,7 +1007,7 @@ export class Renderer implements CameraApi {
     return false;
   }
 
-  /** The one canonical path style: dark underlay, dashed coloured line through tile centres, chevrons every 3 tiles. */
+  /** The canonical path style: a chain of small dots through the tile centres over a darker dotted underlay. */
   private drawPath(g: CanvasRenderingContext2D, s: RunState, tiles: number[], colour: string, alpha: number, time: number, animate: boolean): void {
     if (tiles.length < 2) return;
     const cols = s.terrain.cols;
@@ -1025,41 +1024,21 @@ export class Renderer implements CameraApi {
         if (k === 0 || far) g.moveTo(x, y); else g.lineTo(x, y);
       }
       if (pass === 0) {
-        g.globalAlpha = alpha * 0.5;
-        g.strokeStyle = 'rgba(30,15,5,0.9)';
-        g.lineWidth = 3.4;
-        g.setLineDash(PATH_DASH);
+        g.globalAlpha = alpha * 0.8;
+        g.strokeStyle = 'rgba(40,20,5,0.9)';
+        g.lineWidth = 3.6;
+        g.setLineDash(DOTS);
       } else {
         g.globalAlpha = alpha;
         g.strokeStyle = colour;
         g.lineWidth = 2;
-        g.setLineDash(PATH_DASH);
+        g.setLineDash(DOTS);
       }
       g.lineDashOffset = animate ? -time * 14 : 0;
       g.stroke();
     }
     g.setLineDash(NO_DASH);
     g.lineDashOffset = 0;
-    g.fillStyle = colour;
-    g.globalAlpha = alpha;
-    for (let k = 1; k < tiles.length; k++) {
-      if (k % 3 !== 1 || hexDist(tiles[k - 1], tiles[k], cols) > 1) continue;
-      const c0 = tileCenter(tiles[k - 1] % cols, Math.floor(tiles[k - 1] / cols));
-      const c1 = tileCenter(tiles[k] % cols, Math.floor(tiles[k] / cols));
-      const x0 = this.sx(c0.x, c0.y);
-      const y0 = this.sy(c0.x, c0.y);
-      const mx = (x0 + this.sx(c1.x, c1.y)) / 2;
-      const my = (y0 + this.sy(c1.x, c1.y)) / 2;
-      const a = Math.atan2(this.sy(c1.x, c1.y) - y0, this.sx(c1.x, c1.y) - x0);
-      const ca = Math.cos(a);
-      const sa = Math.sin(a);
-      g.beginPath();
-      g.moveTo(mx + ca * 5, my + sa * 5);
-      g.lineTo(mx - ca * 3 - sa * 3.6, my - sa * 3 + ca * 3.6);
-      g.lineTo(mx - ca * 3 + sa * 3.6, my - sa * 3 - ca * 3.6);
-      g.closePath();
-      g.fill();
-    }
     g.globalAlpha = 1;
   }
 
@@ -1071,7 +1050,7 @@ export class Renderer implements CameraApi {
       const b = isHeroType(view.placing) ? HEROES[view.placing].base : TOWERS[view.placing].base;
       if ((b.hitsFlying ?? 0) > 0) strong = true;
     }
-    const alpha = strong ? 0.9 : 0.5;
+    const alpha = strong ? 0.9 : 0.55;
     const cols = s.terrain.cols;
     for (const seg of this.airSegs) this.drawPath(g, s, seg, '#2f7fd6', alpha, time, strong);
     for (const i of this.branchTiles) {
