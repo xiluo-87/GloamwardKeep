@@ -22,7 +22,8 @@ describe('the keep (per-run unlocks)', () => {
     expect(build(s, 'catapult', x, y)).toBeNull();
     expect(upgradeKeep(s)).toBe(true);
     expect(canBuild(s, 'catapult', x, y)).toBe('ok');
-    expect(canBuild(s, 'shrine', x, y)).toBe('locked');
+    // Every type above level 2 is still locked.
+    for (const type of TOWER_IDS) if (keepForTower(type) > 2) expect(canBuild(s, type, x, y)).toBe('locked');
   });
 
   it('costs gold per level and stops at the top', () => {

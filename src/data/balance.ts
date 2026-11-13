@@ -11,7 +11,7 @@ export const STEP = 1 / 60;
 export const WORLD = { hex: 28, cols: 24, rows: 14 };
 
 export const RUN = {
-  startGold: 300,
+  startGold: 330,
   lives: 20,
   waves: 30,
   /** Seconds between the end of one wave's spawning and the next wave starting on its own. */
@@ -29,7 +29,7 @@ export const RUN = {
 };
 
 /** Gold paid when a wave is cleared. */
-export const waveBonus = (wave: number): number => 35 + 5 * wave;
+export const waveBonus = (wave: number): number => 40 + 6 * wave;
 
 /** Enemy HP multiplier for a wave, bosses excluded. */
 export const waveHpScale = (wave: number): number => 1 + 0.08 * (wave - 1) + 0.005 * (wave - 1) ** 2;
@@ -82,12 +82,13 @@ export type TowerId = 'palisade' | 'archer' | 'catapult' | 'frost' | 'mage' | 'l
  */
 export const KEEP = {
   max: 3,
-  cost: [0, 250, 600],
+  cost: [0, 200, 600],
   /** Keep level needed to build each tower type. */
   tower: {
     palisade: 1, archer: 1, frost: 1, mage: 1,
-    catapult: 2, aviary: 2, lightning: 2,
-    shrine: 3,
+    // The Shrine comes at II so Shadow Stalkers (first in wave 8) can be detected with a Watch Shrine.
+    catapult: 2, lightning: 2, shrine: 2,
+    aviary: 3,
   } as Record<TowerId, number>,
   /** Keep level needed for linear tier 2 and 3 of any tower. */
   tier: [1, 1, 2],
@@ -141,7 +142,7 @@ export const TOWERS: Record<TowerId, TowerDef> = {
       // Guard Wall: archers on the battlements turn the maze into a killing ground.
       b: [
         { cost: 100, add: { damage: 10, rate: 0.5, range: 40, hitsFlying: 1 } },
-        { cost: 170, add: { damage: 14, rate: 0.4, shots: 1, hp: 600 } },
+        { cost: 170, add: { damage: 8, rate: 0.3, shots: 1, hp: 600 } },
       ],
     },
   },
@@ -177,8 +178,8 @@ export const TOWERS: Record<TowerId, TowerDef> = {
         { cost: 460, add: { damage: 40, poolDps: 22, splash: 10 } },
       ],
       b: [
-        { cost: 290, add: { cluster: 4, rate: 0.15 } },
-        { cost: 440, add: { cluster: 3, damage: 22 } },
+        { cost: 290, add: { cluster: 3, rate: 0.1 } },
+        { cost: 440, add: { cluster: 2, damage: 18 } },
       ],
     },
   },
@@ -204,13 +205,13 @@ export const TOWERS: Record<TowerId, TowerDef> = {
     id: 'mage', kind: 'chain', dmgType: 'magic', cost: 120,
     base: { damage: 16, rate: 0.8, range: 140, chains: 2, chainRange: 95, chainFalloff: 0.8, shots: 1, critMul: 2, hitsFlying: 1 },
     tiers: [
-      { cost: 140, add: { damage: 8, chains: 1 } },
-      { cost: 210, add: { rate: 0.2, damage: 8 } },
+      { cost: 120, add: { damage: 8, chains: 1 } },
+      { cost: 180, add: { rate: 0.2, damage: 10 } },
     ],
     forks: {
       a: [
-        { cost: 310, add: { chains: 3, chainFalloff: 0.1 } },
-        { cost: 470, add: { damage: 20, shots: 1 } },
+        { cost: 310, add: { chains: 3, chainFalloff: 0.1, damage: 10 } },
+        { cost: 470, add: { damage: 14, shots: 1 } },
       ],
       // Arcane Beam: a held beam whose damage climbs while it stays on one target.
       b: [
@@ -224,37 +225,37 @@ export const TOWERS: Record<TowerId, TowerDef> = {
     id: 'lightning', kind: 'chain', dmgType: 'magic', cost: 110,
     base: { damage: 40, rate: 0.6, range: 150, chains: 0, chainFalloff: 1, shots: 1, critMul: 2, hitsFlying: 1 },
     tiers: [
-      { cost: 100, add: { damage: 18, range: 10 } },
-      { cost: 160, add: { damage: 24, rate: 0.1 } },
+      { cost: 100, add: { damage: 24, range: 10 } },
+      { cost: 160, add: { damage: 30, rate: 0.12 } },
     ],
     forks: {
       // Thunderhead: strikes can stun.
       a: [
-        { cost: 260, add: { damage: 30, stunChance: 0.3, stun: 0.5 } },
-        { cost: 420, add: { damage: 50, stunChance: 0.2, stun: 0.3 } },
+        { cost: 260, add: { damage: 50, stunChance: 0.3, stun: 0.5 } },
+        { cost: 420, add: { damage: 80, rate: 0.1, stunChance: 0.2, stun: 0.3 } },
       ],
       // Thunder Lance: huge single strikes with crits, for bosses and brutes.
       b: [
-        { cost: 280, add: { damage: 70, rate: -0.1, crit: 0.2, critMul: 1 } },
-        { cost: 450, add: { damage: 110, crit: 0.1, range: 30 } },
+        { cost: 280, add: { damage: 80, rate: -0.05, crit: 0.2, critMul: 1 } },
+        { cost: 450, add: { damage: 130, crit: 0.1, range: 30 } },
       ],
     },
   },
   aviary: {
     id: 'aviary', kind: 'summon', dmgType: 'physical', cost: 100,
-    base: { damage: 9, rate: 1.3, range: 160, pets: 2, petSpeed: 220, critMul: 2, hitsFlying: 1 },
+    base: { damage: 11, rate: 1.3, range: 160, pets: 2, petSpeed: 220, critMul: 2, hitsFlying: 1 },
     tiers: [
       { cost: 100, add: { pets: 1 } },
-      { cost: 170, add: { damage: 6, rate: 0.2, petSpeed: 40 } },
+      { cost: 170, add: { damage: 8, rate: 0.2, petSpeed: 40 } },
     ],
     forks: {
       a: [
-        { cost: 290, add: { burnDps: 14, burnTime: 2.5 } },
-        { cost: 450, add: { pets: 2, burnDps: 12 } },
+        { cost: 290, add: { burnDps: 20, burnTime: 2.5, damage: 4 } },
+        { cost: 450, add: { pets: 2, burnDps: 14 } },
       ],
       b: [
-        { cost: 310, add: { damage: 20, shred: 0.05, rate: -0.3 } },
-        { cost: 470, add: { damage: 30, stunChance: 0.12, stun: 0.5 } },
+        { cost: 310, add: { damage: 26, shred: 0.05, rate: -0.2 } },
+        { cost: 470, add: { damage: 36, stunChance: 0.12, stun: 0.5 } },
       ],
     },
   },
@@ -528,7 +529,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     },
   },
   canyon: {
-    hpMul: 1.2, xpMul: 1.6, unlock: 8,
+    hpMul: 1.15, xpMul: 1.6, unlock: 8,
     gen: {
       heightShare: [0.16, 0.22, 0.3, 0.32], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
       spawns: 2, mergeAt: 0.5, splitLegs: 2, legs: [4, 5], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 22,

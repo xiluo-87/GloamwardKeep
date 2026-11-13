@@ -76,7 +76,7 @@ em { font-style: normal; }
 @keyframes fade { from { opacity: 0; } }
 .ri .cir { position: relative; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #fff6dc, #e3cc92); border: 2px solid var(--gold); box-shadow: 0 3px 8px rgba(0,0,0,0.45); overflow: hidden; pointer-events: auto; }
 .ri .ic { width: 25px; height: 25px; display: block; margin-top: -3px; pointer-events: none; }
-.ri .co { position: absolute; top: 37px; left: 50%; transform: translateX(-50%); pointer-events: auto; min-width: 30px; height: 14px; padding: 0 5px; border-radius: 8px; background: rgba(47, 34, 20, 0.88); color: #ffe9a8; font-size: 12px; line-height: 14px; font-weight: 700; text-align: center; white-space: nowrap; }
+.ri .co { position: absolute; top: 37px; white-space: nowrap; left: 50%; transform: translateX(-50%); pointer-events: auto; min-width: 30px; height: 14px; padding: 0 5px; border-radius: 8px; background: rgba(47, 34, 20, 0.88); color: #ffe9a8; font-size: 12px; line-height: 14px; font-weight: 700; text-align: center; white-space: nowrap; }
 .ri .co:empty { visibility: hidden; }
 .ri.poor .cir { filter: grayscale(0.85) brightness(0.9); }
 .ri.poor .co { color: #ff9b8f; }
@@ -234,3 +234,19 @@ ul.unlocks li.got { border-color: var(--green); color: var(--ink); }
 .ri.locked .co { background: #555; color: #e9e1cc; }
 .ri.lockLook .cir { filter: grayscale(0.6) brightness(0.9); }
 #desc ul.unl { margin: 2px 0 0; padding-left: 18px; }
+
+/* which item the card is about */
+.ri .cir, .ri .co { transition: transform 0.09s, box-shadow 0.09s, opacity 0.09s; }
+.ri { transition: opacity 0.09s; }
+#ring.hasPress .ri:not(.pressed) { opacity: 0.6; }
+.ri.pressed .cir { transform: scale(1.15); border-color: #fff; box-shadow: 0 0 0 3px var(--gold2), 0 0 14px 4px rgba(255, 220, 120, 0.85); }
+.ri.pressed .co { transform: translateX(-50%) scale(1.1); }
+.ri:hover .cir, .ri:active .cir { outline: none; }
+.ri .lt { position: absolute; right: -6px; bottom: 14px; min-width: 14px; height: 14px; padding: 0 3px; border-radius: 7px; background: #2f2a22; color: #f3d27a; font-size: 9px; line-height: 14px; font-weight: 700; text-align: center; pointer-events: none; }
+.ri .lt:empty { display: none; }
+.ri.locked .co, .ri.lockLook .co { background: #555; color: #e9e1cc; padding-left: 16px; }
+.ri.locked .co::before, .ri.lockLook .co::before { content: ''; position: absolute; left: 4px; top: 2px; width: 10px; height: 10px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='5' y='11' width='14' height='10' rx='2' fill='%23e9e1cc'/%3E%3Cpath d='M8 11V8a4 4 0 018 0v3' fill='none' stroke='%23e9e1cc' stroke-width='3'/%3E%3C/svg%3E") center / contain no-repeat; }
+.ri.lockLook .co { background: #2f5f8a; color: #fff; }
+#desc .dh .di { width: 26px; height: 26px; flex: none; }
+#desc .dh h4 { flex: 1; }
+#desc .dh { align-items: center; }

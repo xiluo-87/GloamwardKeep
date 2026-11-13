@@ -19,7 +19,7 @@ const HOLD_MS = 600;
 /** Order of the build folders on the top level (palisade-like ungrouped towers come first, heroes last). */
 const GROUP_ORDER: BuildGroup[] = ['physical', 'magic', 'support'];
 
-export interface DescInfo { title: string; sub?: string; body: string; cost?: number; warn?: string }
+export interface DescInfo { title: string; sub?: string; body: string; cost?: number; warn?: string; icon?: string }
 
 export interface RingItem {
   key: string;
@@ -30,6 +30,8 @@ export interface RingItem {
   locked?: boolean;
   /** Lock shown but still activatable (a folder whose members are all locked). */
   lockLook?: boolean;
+  /** Keep level shown on the lock corner of a locked item. */
+  lockTag?: string;
   aria?: string;
   label: string;
   cost?: number;
@@ -104,9 +106,9 @@ export function buildItems(s: RunState, ss: Session): RingItem[] {
     const need = isHero ? 1 : keepForTower(id as TowerId);
     if (need > s.keep) {
       return {
-        key: id, icon: iconFor(id), label: name, locked: true,
+        key: id, icon: iconFor(id), label: name, locked: true, cost, lockTag: roman(need),
         desc: () => ({ ...desc, cost, warn: `Unlocks at Keep ${roman(need)} — raise the keep (${goldToKeep(need)} gold)` }),
-        state: () => ({ poor: false, sub: `Keep ${roman(need)}` }),
+        state: () => ({ poor: false }),
         run: () => undefined,
       };
     }
@@ -158,7 +160,8 @@ export function buildItems(s: RunState, ss: Session): RingItem[] {
     const gt = GROUP_TEXT[e.group as keyof typeof GROUP_TEXT];
     const list = members.map((m) => `${m in HEROES ? HERO_TEXT[m as HeroId].name.replace('The ', '') : TOWER_TEXT[m as TowerId].name} ${ss.costOf(m)}`).join(' · ');
     items.push({
-      key: `group-${e.group}`, folder: true, lockLook: members.every((m) => !(m in HEROES) && keepForTower(m as TowerId) > s.keep), icon: GROUP_ICONS[e.group as keyof typeof GROUP_ICONS], label: gt.name,
+      key: `group-${e.group}`, folder: true, lockLook: members.every((m) => !(m in HEROES) && keepForTower(m as TowerId) > s.keep),
+      lockTag: roman(Math.min(...members.map((m) => (m in HEROES ? 1 : keepForTower(m as TowerId))))), icon: GROUP_ICONS[e.group as keyof typeof GROUP_ICONS], label: gt.name,
       aria: e.group === 'heroes' ? `${gt.name} (${members.length})` : `${gt.name} towers (${members.length})`,
       desc: () => ({ title: gt.name, sub: `${members.length} to choose from — tap to open`, body: `<p>${esc(gt.blurb)}</p><p class="stats">${esc(list)}</p>` }),
       state: () => ({ poor: false, sub: `${members.length} ›` }),
@@ -219,14 +222,14 @@ function towerItems(s: RunState, ss: Session, t: Tower): RingItem[] {
     if (o.keep > s.keep) {
       const sum = (): number => { let g = 0; for (let k = s.keep; k < o.keep; k++) g += Math.round(KEEP.cost[k] * s.mods.costMul); return g; };
       items.push({
-        key: `up-${o.path}`, icon: ACTION_ICONS.upgrade, label: fork && t.forkTier === 0 ? fork.name : 'Upgrade', locked: true,
+        key: `up-${o.path}`, icon: ACTION_ICONS.upgrade, label: fork && t.forkTier === 0 ? fork.name : 'Upgrade', locked: true, cost: o.cost, lockTag: roman(o.keep),
         desc: () => ({
           title: fork && t.forkTier === 0 ? fork.name : `Upgrade: ${next}`,
           sub: fork && t.forkTier === 0 ? `Fork ${o.path.toUpperCase()}` : next,
           body: `${fork && t.forkTier === 0 ? `<p>${esc(fork.blurb)}</p>` : ''}<p class="mod">${esc(describeMod(o.upgrade.add))}</p>`,
           cost: o.cost, warn: `Unlocks at Keep ${roman(o.keep)} — raise the keep (${sum()} gold)`,
         }),
-        state: () => ({ poor: false, sub: `Keep ${roman(o.keep)}` }),
+        state: () => ({ poor: false }),
         run: () => undefined,
       });
       continue;
@@ -331,14 +334,21 @@ export class Ring {
     const s = this.session.run;
     if (!it || !s) { this.leave(); return; }
     if (it.place) this.session.previewBuild(it.place); else this.session.previewPlain(true);
-    this.showCard(it.desc(s));
+    this.showCard({ ...it.desc(s), icon: it.icon });
+    this.setPressed(i);
     if (press && it.hold) {
       this.els[i].classList.add('holding');
       this.holdTimer = window.setTimeout(() => { this.pressId = null; this.activate(it); }, HOLD_MS);
     }
   }
 
+  private setPressed(i: number): void {
+    this.els.forEach((e, k) => e.classList.toggle('pressed', k === i));
+    this.root.classList.toggle('hasPress', i >= 0);
+  }
+
   private leave(): void {
+    this.setPressed(-1);
     window.clearTimeout(this.holdTimer);
     this.cur = -1;
     this.card.hidden = true;
@@ -357,7 +367,7 @@ export class Ring {
     this.card.className = ys < 330 ? 'bottom' : 'top';
     const s = this.session.run;
     const warn = d.warn ? `<p class="warn">${esc(d.warn)}</p>` : '';
-    this.card.innerHTML = `<div class="dh"><h4>${esc(d.title)}</h4>${d.cost !== undefined ? `<b class="price${s && s.gold < d.cost ? ' poor' : ''}">${d.cost} gold</b>` : ''}</div>${d.sub ? `<p class="sub">${esc(d.sub)}</p>` : ''}${d.body}${warn}`;
+    this.card.innerHTML = `<div class="dh">${d.icon ? `<i class="di">${d.icon}</i>` : ''}<h4>${esc(d.title)}</h4>${d.cost !== undefined ? `<b class="price${s && s.gold < d.cost ? ' poor' : ''}">${d.cost} gold</b>` : ''}</div>${d.sub ? `<p class="sub">${esc(d.sub)}</p>` : ''}${d.body}${warn}`;
     this.card.hidden = false;
   }
 
@@ -369,7 +379,7 @@ export class Ring {
       const b = document.createElement('button');
       b.className = `ri${it.hold ? ' hold' : ''}${it.folder ? ' folder' : ''}${it.locked ? ' locked' : ''}${it.lockLook ? ' lockLook' : ''}`;
       b.setAttribute('aria-label', it.aria ?? it.desc(this.session.run as RunState).title);
-      b.innerHTML = `<span class="cir"><span class="ic">${it.icon}</span></span>${it.locked || it.lockLook ? `<i class="lk">${ACTION_ICONS.lock}</i>` : ''}<span class="co">${it.cost ?? ''}</span>`;
+      b.innerHTML = `<span class="cir"><span class="ic">${it.icon}</span></span>${it.locked || it.lockLook ? `<i class="lk">${ACTION_ICONS.lock}</i><b class="lt">${it.lockTag ?? ''}</b>` : ''}<span class="co">${it.cost ?? ''}</span>`;
       b.dataset.i = String(k);
       this.root.appendChild(b);
       return b;
@@ -440,7 +450,7 @@ const CIR = 46;
 type Pt = [number, number];
 /** Item shapes: the 46 px circle and the cost pill hanging off its bottom edge (about 40 x 14). */
 const circBox = (p: Pt): Rect => ({ left: p[0] - CIR / 2, top: p[1] - CIR / 2, right: p[0] + CIR / 2, bottom: p[1] + CIR / 2 });
-const pillBox = (p: Pt): Rect => ({ left: p[0] - 20, top: p[1] + 14, right: p[0] + 20, bottom: p[1] + 28 });
+const pillBox = (p: Pt): Rect => ({ left: p[0] - 24, top: p[1] + 14, right: p[0] + 24, bottom: p[1] + 28 });
 const hits = (a: Rect, b: Rect, m = 0): boolean => a.left < b.right + m && a.right > b.left - m && a.top < b.bottom + m && a.bottom > b.top - m;
 const inside = (b: Rect, f: Rect): boolean => b.left >= f.left && b.right <= f.right && b.top >= f.top && b.bottom <= f.bottom;
 export interface RowInfo { r: number; a0: number; a1: number; full: boolean; free0: number; free1: number; freeFull: boolean }

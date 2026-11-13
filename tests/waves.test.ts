@@ -44,7 +44,7 @@ describe('wave data', () => {
   });
 
   it('wave bonus grows with the wave', () => {
-    expect(waveBonus(10)).toBe(35 + 50);
+    expect(waveBonus(10)).toBe(40 + 60);
     expect(waveBonus(2)).toBeGreaterThan(waveBonus(1));
   });
 });

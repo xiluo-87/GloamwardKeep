@@ -2,7 +2,7 @@
 // ground), upgrades, learns skills, and calls waves.
 import { HEROES, HeroId, TowerId } from '../data/balance';
 import { build, callWave, canBuild, canCallWave, learnSkill, upgrade, upgradeKeep, useAbility } from './actions';
-import { hexDistance } from './hex';
+import { HEX_W, hexDistance, tileCenter } from './hex';
 import { FEATURE } from './mapgen';
 import { buildCost, keepForTower, skillState, upgradeOptions } from './stats';
 import { RunState } from './state';
@@ -18,8 +18,10 @@ export interface BotPlan {
   heroBranch: number;
   /** Plug the map's shortcut gaps with palisades. */
   plugGaps: boolean;
-  /** Raise the keep once this many towers stand, per level (keep 2, keep 3). */
+  /** Raise the keep once this many attacking towers stand (walls and heroes don't count), per level. */
   keepAt: [number, number];
+  /** Learn hero skills only once this many attacking towers stand. */
+  skillsAt: number;
 }
 
 export const DEFAULT_PLAN: BotPlan = {
@@ -29,6 +31,7 @@ export const DEFAULT_PLAN: BotPlan = {
   heroBranch: 0,
   plugGaps: true,
   keepAt: [5, 12],
+  skillsAt: 7,
 };
 
 /** Buildable tiles off the road, ranked by how much road lies within 2.5 hexes, then by height. */
@@ -46,6 +49,14 @@ export function rankSpots(s: RunState): [number, number][] {
         if (Math.abs(ry - y) > 3) continue;
         const d = hexDistance(x, y, rx, ry);
         if (d <= 3) v += d <= 2 ? 1 : 0.4;
+      }
+      // Flyers go straight from each gate to the keep: spots near that line also cover them.
+      const c = tileCenter(x, y);
+      for (const [gx, gy] of s.terrain.spawns) {
+        const a = tileCenter(gx, gy);
+        const b = tileCenter(s.terrain.goal[0], s.terrain.goal[1]);
+        const d = distToSegment(c.x, c.y, a.x, a.y, b.x, b.y) / HEX_W;
+        if (d <= 3) v += (3 - d) * 1.5;
       }
       if (v > 0) spots.push({ x, y, v: v * (1 + 0.15 * height[i]) });
     }
@@ -86,13 +97,25 @@ export class Bot {
       if (t.abilityCd <= 0 && s.enemies.count > 6) useAbility(s, t.uid);
       for (let b = 0; b < 3; b++) {
         const branch = (this.plan.heroBranch + b) % 3;
+        // Skills only once the defence stands; before that, gold goes to towers.
+        if (this.defenders() < this.plan.skillsAt) continue;
         for (let n = 0; n < 4; n++) if (skillState(s, t, branch, n) === 'available') learnSkill(s, t.uid, branch, n);
       }
     }
     // Save for the keep once the defence has a few towers.
     const keepGoal = s.keep < 3 ? this.plan.keepAt[s.keep - 1] : Infinity;
-    if (s.towers.length >= keepGoal) {
+    if (this.defenders() >= keepGoal) {
       if (!upgradeKeep(s)) { if (canCallWave(s) && (s.waiting || s.enemies.count === 0)) callWave(s); return; }
+    }
+    // Detection for Shadow Stalkers: one Watch Shrine (shrine tier 3) as soon as the keep allows it.
+    if (keepForTower('shrine') <= s.keep && !s.towers.some((t) => !t.hero && t.stats.reveal > 0)) {
+      const shrine = s.towers.find((t) => t.type === 'shrine');
+      if (!shrine) {
+        const spot = this.freeSpot('shrine');
+        if (spot && !build(s, 'shrine', spot[0], spot[1])) return;
+      } else if (!upgrade(s, shrine.uid)) {
+        return;
+      }
     }
     for (let guard = 0; guard < 8; guard++) {
       // Skip tower types the keep hasn't unlocked yet.
@@ -115,6 +138,11 @@ export class Bot {
     if (canCallWave(s) && (s.waiting || s.enemies.count === 0)) callWave(s);
   }
 
+  /** Towers that attack: not walls, not heroes. */
+  private defenders(): number {
+    return this.s.towers.filter((t) => !t.hero && t.type !== 'palisade').length;
+  }
+
   private freeSpot(type: TowerId | HeroId): [number, number] | null {
     for (const [x, y] of this.spots) {
       const c = canBuild(this.s, type, x, y);
@@ -134,4 +162,11 @@ export class Bot {
     }
     return best;
   }
+}
+
+function distToSegment(px: number, py: number, ax: number, ay: number, bx: number, by: number): number {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const k = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy || 1)));
+  return Math.hypot(px - (ax + dx * k), py - (ay + dy * k));
 }
