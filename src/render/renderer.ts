@@ -1,6 +1,6 @@
 // Canvas 2D renderer for Gloamward Keep. Reads the simulation, never changes it.
-import { EnemyId, HEIGHT, HEROES, PROJECTILE, TOWERS, WORLD } from '../data/balance';
-import { boardHeight, boardWidth, hexDistance, hexNeighbours, pixelToTile, tileCenter } from '../sim/hex';
+import { ENEMIES, EnemyId, HEIGHT, HEROES, PROJECTILE, TOWERS, WAVES, WORLD } from '../data/balance';
+import { boardHeight, boardWidth, HEX_W, hexDistance, hexNeighbours, pixelToTile, tileCenter } from '../sim/hex';
 import { FEATURE, generateMap, Terrain } from '../sim/mapgen';
 import { isHeroType } from '../sim/stats';
 import { Enemy, Pet, RunState, Tower } from '../sim/state';
@@ -25,6 +25,7 @@ const FX_CAP = 900;
 const DASH = [6, 5];
 const NO_DASH: number[] = [];
 const DOTS = [1.5, 5.5];
+const FLY_DASH = [7, 6];
 
 /** Rough sprite heights for status icons and bars, in world px. */
 const ENEMY_H: Record<EnemyId, number> = {
@@ -768,6 +769,7 @@ export class Renderer implements CameraApi {
     // Burning ground.
     for (let i = 0; i < s.pools.count; i++) this.drawPool(g, s.pools.items[i], wallTime);
 
+    this.drawFlyLines(g, s, view, wallTime);
     this.drawGroundOverlays(g, s, view, wallTime);
 
     // Towers and walking enemies, back to front.
@@ -951,6 +953,63 @@ export class Renderer implements CameraApi {
       g.lineWidth = 2.2;
       g.stroke();
     }
+  }
+
+  private waveHasFlyers(idx: number): boolean {
+    const w = WAVES[idx];
+    if (!w) return false;
+    for (const grp of w) if (ENEMIES[grp[0]].flying) return true;
+    return false;
+  }
+
+  /** Flight paths of flyers: straight from each gate (just off the board) to the keep. */
+  private drawFlyLines(g: CanvasRenderingContext2D, s: RunState, view: ViewState, time: number): void {
+    const terrain = s.terrain;
+    let strong = this.waveHasFlyers(s.wave) || this.waveHasFlyers(s.wave - 1);
+    if (view.placing) {
+      const b = isHeroType(view.placing) ? HEROES[view.placing].base : TOWERS[view.placing].base;
+      if ((b.hitsFlying ?? 0) > 0) strong = true;
+    }
+    const a = strong ? 0.7 : 0.35;
+    const kc = tileCenter(terrain.goal[0], terrain.goal[1]);
+    const kx = this.sx(kc.x, kc.y);
+    const ky = this.sy(kc.x, kc.y);
+    g.lineCap = 'round';
+    g.lineJoin = 'round';
+    for (const [gx, gy] of terrain.spawns) {
+      const c = tileCenter(gx, gy);
+      const x0 = this.sx(c.x - HEX_W, c.y);
+      const y0 = this.sy(c.x - HEX_W, c.y);
+      const dx = kx - x0;
+      const dy = ky - y0;
+      const len = Math.hypot(dx, dy) || 1;
+      const ux = dx / len;
+      const uy = dy / len;
+      g.globalAlpha = a;
+      g.strokeStyle = '#bfe4ff';
+      g.lineWidth = strong ? 1.8 : 1.3;
+      g.setLineDash(FLY_DASH);
+      g.lineDashOffset = strong ? -time * 14 : 0;
+      g.beginPath();
+      g.moveTo(x0, y0);
+      g.lineTo(kx, ky);
+      g.stroke();
+      g.setLineDash(NO_DASH);
+      g.lineDashOffset = 0;
+      // Wing chevrons every ~3 hexes, pointing at the keep.
+      const step = HEX_W * 3;
+      g.lineWidth = strong ? 2 : 1.5;
+      for (let d = step * 0.6; d < len - 12; d += step) {
+        const px = x0 + ux * d;
+        const py = y0 + uy * d;
+        g.beginPath();
+        g.moveTo(px - ux * 6 - uy * 6, py - uy * 6 + ux * 6);
+        g.lineTo(px + ux * 3, py + uy * 3);
+        g.lineTo(px - ux * 6 + uy * 6, py - uy * 6 - ux * 6);
+        g.stroke();
+      }
+    }
+    g.globalAlpha = 1;
   }
 
   private rangeCircle(g: CanvasRenderingContext2D, x: number, y: number, r: number, colour: string, a: number): void {

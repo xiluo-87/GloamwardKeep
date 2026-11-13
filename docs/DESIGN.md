@@ -30,6 +30,7 @@ Phones and desktop share one model: **tap a tile to select it, tap it again for 
 - **Selling** gives a full refund for gold spent since the current wave started ("Undo"); otherwise it needs a press-and-hold.
 - **Bottom row:** Call wave (with countdown), speed, hero abilities, fit map. **Top bar:** gold, lives, wave, pause.
 - **Slow time while a menu is open:** Normal, Half speed (default) or Pause.
+- **Flight lines.** A dashed pale-blue line with arrows shows the straight path flyers take from each gate to the keep (they skip the road). It brightens while the current or next wave has flyers, and while placing a tower that hits flyers.
 - **Edge arrows** point at off-screen threats near the keep, bosses and leaks; tap one to jump there.
 
 | Keyboard (desktop) | Action |
