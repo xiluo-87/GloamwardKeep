@@ -245,7 +245,7 @@ function frame(now: number): void {
 // -- boot -------------------------------------------------------------------------------------
 
 if (debugMode) {
-  (window as unknown as { __gk: unknown }).__gk = { session, profile, renderer, get run() { return run; }, startRun, screens };
+  (window as unknown as { __gk: unknown }).__gk = { session, profile, renderer, ring, get run() { return run; }, startRun, screens };
 }
 if (debugMode && Number(params.get('speed'))) session.speed = Number(params.get('speed'));
 layout();

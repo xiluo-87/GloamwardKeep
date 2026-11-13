@@ -178,6 +178,8 @@ export class Ring {
   private els: HTMLElement[] = [];
   private lay = '';
   private guide: SVGSVGElement | null = null;
+  /** The last computed layout (read by tests). */
+  lastLayout: RingLayout | null = null;
   private sig = '';
   private shown = false;
   private cur = -1;
@@ -305,6 +307,7 @@ export class Ring {
       this.lay = key;
       const L = layoutRing(this.items.length, c.x, c.y, c.r, free, card ? { left: card.left - 4, top: card.top - 4, right: card.right + 4, bottom: card.bottom + 4 } : null);
       this.els.forEach((el, k) => { el.style.transform = `translate(${Math.round(L.pts[k][0])}px, ${Math.round(L.pts[k][1])}px)`; });
+      this.lastLayout = L;
       this.drawGuide(c.x, c.y, L);
     }
     this.items.forEach((it, k) => {
@@ -335,101 +338,101 @@ export class Ring {
 // -- layout -------------------------------------------------------------------------------------
 
 export interface Rect { left: number; top: number; right: number; bottom: number }
-interface Row { r: number; a0: number; a1: number; full: boolean }
-export interface RingLayout { pts: [number, number][]; rows: Row[]; fits: boolean }
-
 const CIR = 46;
-const GAP = 4;
-const ROW_GAP = 70;
 
 type Pt = [number, number];
-/** Item shapes: the 46 px circle and, under it, the cost pill (about 40 x 15, 2 px below). */
+/** Item shapes: the 46 px circle and the cost pill hanging off its bottom edge (about 40 x 14). */
 const circBox = (p: Pt): Rect => ({ left: p[0] - CIR / 2, top: p[1] - CIR / 2, right: p[0] + CIR / 2, bottom: p[1] + CIR / 2 });
-const pillBox = (p: Pt): Rect => ({ left: p[0] - 20, top: p[1] + CIR / 2 + 2, right: p[0] + 20, bottom: p[1] + CIR / 2 + 17 });
+const pillBox = (p: Pt): Rect => ({ left: p[0] - 20, top: p[1] + 14, right: p[0] + 20, bottom: p[1] + 28 });
 const hits = (a: Rect, b: Rect, m = 0): boolean => a.left < b.right + m && a.right > b.left - m && a.top < b.bottom + m && a.bottom > b.top - m;
 const inside = (b: Rect, f: Rect): boolean => b.left >= f.left && b.right <= f.right && b.top >= f.top && b.bottom <= f.bottom;
-function circleHitsBox(c: Pt, b: Rect, m: number): boolean {
-  const dx = Math.max(b.left - c[0], 0, c[0] - b.right);
-  const dy = Math.max(b.top - c[1], 0, c[1] - b.bottom);
-  return Math.hypot(dx, dy) < CIR / 2 + m;
-}
-function itemsHit(a: Pt, b: Pt): boolean {
-  if (Math.hypot(a[0] - b[0], a[1] - b[1]) < CIR + GAP) return true;
-  const pa = pillBox(a), pb = pillBox(b);
-  return hits(pa, pb, 2) || circleHitsBox(a, pb, 2) || circleHitsBox(b, pa, 2);
+export interface RowInfo { r: number; a0: number; a1: number; full: boolean; free0: number; free1: number; freeFull: boolean }
+export interface RingLayout { pts: Pt[]; rows: RowInfo[]; fits: boolean }
+
+const STEP = (5 * Math.PI) / 180;
+const TAU = Math.PI * 2;
+const wrap = (a: number): number => { let x = a % TAU; if (x > Math.PI) x -= TAU; if (x < -Math.PI) x += TAU; return x; };
+
+function slotFree(x: number, y: number, free: Rect, card: Rect | null): boolean {
+  const c = circBox([x, y]);
+  const pl = pillBox([x, y]);
+  return inside(c, free) && inside(pl, free) && !(card && (hits(c, card) || hits(pl, card)));
 }
 
-function rowPoints(n: number, r: number, mid: number, span: number, phase: number, cx: number, cy: number): Pt[] {
-  const out: Pt[] = [];
-  const full = span >= Math.PI * 2 - 1e-6;
-  for (let k = 0; k < n; k++) {
-    let a: number;
-    if (n === 1) a = mid;
-    else if (full) a = mid + Math.PI + ((k + phase) * 2 * Math.PI) / n;
-    else a = mid - span / 2 + ((k + phase) * span) / (n - 1 + (phase ? 1 : 0));
-    out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+/** Largest contiguous run of free 5-degree samples around the tile at radius r (wrap-around aware). */
+function freeInterval(cx: number, cy: number, r: number, free: Rect, card: Rect | null): { start: number; span: number; full: boolean } | null {
+  const N = 72;
+  const ok: boolean[] = [];
+  let all = true;
+  for (let i = 0; i < N; i++) {
+    const a = -Math.PI + i * STEP;
+    const f = slotFree(cx + r * Math.cos(a), cy + r * Math.sin(a), free, card);
+    ok.push(f);
+    if (!f) all = false;
   }
-  return out;
-}
-
-function valid(pts: Pt[], free: Rect, card: Rect | null): boolean {
-  for (let i = 0; i < pts.length; i++) {
-    const c = circBox(pts[i]);
-    const pl = pillBox(pts[i]);
-    if (!inside(c, free) || !inside(pl, free)) return false;
-    if (card && (hits(c, card) || hits(pl, card))) return false;
-    for (let j = 0; j < i; j++) if (itemsHit(pts[i], pts[j])) return false;
+  if (all) return { start: -Math.PI, span: TAU, full: true };
+  let best = 0;
+  let bestStart = 0;
+  for (let i = 0; i < N; i++) {
+    if (!ok[i] || ok[(i + N - 1) % N]) continue; // only runs' first samples
+    let len = 0;
+    while (len < N && ok[(i + len) % N]) len++;
+    if (len > best) { best = len; bestStart = i; }
   }
-  return true;
+  if (best === 0) return null;
+  return { start: -Math.PI + bestStart * STEP, span: (best - 1) * STEP, full: false };
 }
 
-/** Items per row, roughly in proportion to each row's radius (outer rows hold more). */
-function splitCounts(n: number, radii: number[]): number[] {
-  if (radii.length === 1) return [n];
-  const sum = radii.reduce((a, b) => a + b, 0);
-  const out = radii.map((r) => Math.max(1, Math.floor((n * r) / sum)));
-  let left = n - out.reduce((a, b) => a + b, 0);
-  for (let j = out.length - 1; left > 0; j = (j + out.length - 1) % out.length) { out[j]++; left--; }
-  while (left < 0) { const j = out.indexOf(Math.max(...out)); out[j]--; left++; }
-  return out;
-}
-
-/** Places n items evenly on an arc around (cx, cy), pointing away from the screen edges. */
+/**
+ * Items on true arcs centred on the tile: row j has radius R1 + j*P (R1 = tile radius + 44). Each row uses the
+ * largest free angular interval at its radius and holds floor(span * R / P) + 1 items, spaced P apart along
+ * the arc and centred in the interval. Rows fill in order; P drops to 52 only if three rows are not enough.
+ */
 export function layoutRing(n: number, cx: number, cy: number, tileR: number, free: Rect, card: Rect | null): RingLayout {
   const fx = (free.left + free.right) / 2;
   const fy = (free.top + free.bottom) / 2;
-  // Away from the edges: toward the middle of the free area (any direction if the tile is near the middle).
-  const near = Math.hypot(fx - cx, fy - cy) < 8;
-  const mid = near ? -Math.PI / 2 : Math.atan2(fy - cy, fx - cx);
-  const r0 = Math.max(46, tileR) + 44;
-  const rMax = r0 * 2.2;
-  const TAU = Math.PI * 2;
-  // Nudges of the arc's middle direction, smallest first, for when its ends would poke off screen.
-  const MIN_SPAN = 0.5;
-  const nudges = [0];
-  for (let d = 8; d <= 96; d += 8) nudges.push((d * Math.PI) / 180, (-d * Math.PI) / 180);
-  // One row if it fits, then two concentric rows, then three (a tile squeezed into a corner).
-  const maxRows = n >= 6 ? 3 : n >= 3 ? 2 : 1;
-  for (let rows = 1; rows <= maxRows; rows++) {
-    for (let span = TAU; span >= MIN_SPAN - 1e-6; span -= (15 * Math.PI) / 180) {
-      const s = Math.min(span, TAU);
-      const full = s >= TAU - 1e-6;
-      for (let r = r0; r <= rMax + 0.1; r += 6) {
-        const radii = Array.from({ length: rows }, (_, j) => r + ROW_GAP * j);
-        const counts = splitCounts(n, radii);
-        for (const nd of full ? [0] : nudges) {
-          const m = mid + nd;
-          const pts: Pt[] = [];
-          radii.forEach((rr, j) => pts.push(...rowPoints(counts[j], rr, m, s, full && j % 2 ? 0.5 : 0, cx, cy)));
-          if (valid(pts, free, card)) return { pts, fits: true, rows: radii.map((rr) => ({ r: rr, a0: m - s / 2, a1: m + s / 2, full })) };
-        }
+  const toCentre = Math.atan2(fy - cy, fx - cx);
+  for (const P of [58, 52]) {
+    const R1 = tileR + 44;
+    const pts: Pt[] = [];
+    const rows: RowInfo[] = [];
+    let left = n;
+    for (let j = 0; j < 3 && left > 0; j++) {
+      const r = R1 + j * P;
+      const iv = freeInterval(cx, cy, r, free, card);
+      if (!iv) continue;
+      const cap = iv.full ? Math.floor((TAU * r) / P) : Math.floor((iv.span * r) / P) + 1;
+      const k = Math.min(left, Math.max(0, cap));
+      if (k === 0) continue;
+      left -= k;
+      let angles: number[] = [];
+      let a0: number;
+      let a1: number;
+      const evenAll = iv.full && k >= Math.floor((TAU * r) / P);
+      if (evenAll) {
+        // Whole circle: evenly around, starting at the point nearest the screen centre.
+        for (let q = 0; q < k; q++) angles.push(toCentre + (q * TAU) / k);
+        a0 = -Math.PI; a1 = Math.PI;
+      } else {
+        const used = k > 1 ? ((k - 1) * P) / r : 0;
+        const mid = iv.full ? toCentre : iv.start + iv.span / 2;
+        for (let q = 0; q < k; q++) angles.push(mid - used / 2 + (k > 1 ? (q * used) / (k - 1) : 0));
+        a0 = mid - used / 2 - P / (2 * r);
+        a1 = mid + used / 2 + P / (2 * r);
+        // Start from the end of the arc nearest the screen centre.
+        const d = (a: number): number => Math.abs(wrap(a - toCentre));
+        if (d(angles[k - 1]) < d(angles[0])) angles = angles.reverse();
       }
+      for (const a of angles) pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+      rows.push({ r, a0, a1, full: evenAll, free0: iv.start, free1: iv.start + iv.span, freeFull: iv.full });
+    }
+    if (left === 0) return { pts, rows, fits: true };
+    if (P === 52) {
+      // Should not happen with nine items: park the rest on the last row so nothing is lost.
+      const r = R1 + 3 * P;
+      for (let q = 0; q < left; q++) pts.push([cx + r * Math.cos(toCentre + q * 0.3), cy + r * Math.sin(toCentre + q * 0.3)]);
+      return { pts, rows, fits: false };
     }
   }
-  // Best effort: the base arc, each item clamped into the free area.
-  const pts = rowPoints(n, r0 + 20, mid, Math.PI, 0, cx, cy).map(([x, y]): Pt => [
-    Math.min(free.right - CIR / 2, Math.max(free.left + CIR / 2, x)),
-    Math.min(free.bottom - CIR / 2 - 17, Math.max(free.top + CIR / 2, y)),
-  ]);
-  return { pts, fits: false, rows: [{ r: r0 + 20, a0: mid - Math.PI / 2, a1: mid + Math.PI / 2, full: false }] };
+  return { pts: [], rows: [], fits: false };
 }
