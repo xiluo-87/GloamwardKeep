@@ -390,6 +390,12 @@ export interface MapGenParams {
   maxStep: number;
   /** Level-0 pockets smaller than this, cut off from the valley, are raised to level 1. */
   minPocket: number;
+  /**
+   * Forest and rocks only ever cover heights 1..4, never the level-0 road and fields. Covered tiles
+   * can't be built on. Forest grows in groves on low hills; rocks sit on high ground and cliff edges.
+   */
+  forest: { share: number; heights: [number, number]; scale: number };
+  rocks: { share: number; heights: [number, number]; cliffBonus: number };
   /** Reject maps whose shortest walk is shorter than this, in tiles. */
   minPathTiles: number;
 }
@@ -400,6 +406,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     gen: {
       heightShare: [0.2, 0.28, 0.22, 0.17, 0.13], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
       spawns: 1, bends: [2, 3], valleyRadius: 1, clearings: [2, 3], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 22,
+      forest: { share: 0.22, heights: [1, 2], scale: 3 }, rocks: { share: 0.06, heights: [2, 4], cliffBonus: 0.15 },
     },
   },
   highlands: {
@@ -407,6 +414,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     gen: {
       heightShare: [0.12, 0.2, 0.24, 0.24, 0.2], noiseScales: [6, 3], noiseWeights: [0.7, 0.3], maxStep: 2,
       spawns: 1, bends: [3, 4], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 26,
+      forest: { share: 0.16, heights: [1, 3], scale: 3 }, rocks: { share: 0.12, heights: [2, 4], cliffBonus: 0.25 },
     },
   },
   canyon: {
@@ -414,6 +422,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     gen: {
       heightShare: [0.12, 0.14, 0.2, 0.26, 0.28], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
       spawns: 2, bends: [2, 3], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 22,
+      forest: { share: 0.1, heights: [1, 2], scale: 2.5 }, rocks: { share: 0.18, heights: [2, 4], cliffBonus: 0.35 },
     },
   },
 };

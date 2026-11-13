@@ -9,6 +9,8 @@ export interface Terrain {
   rows: number;
   /** Height per tile, row-major. */
   height: Uint8Array;
+  /** Feature per tile: FEATURE.none, forest or rocks. Never set on height 0. */
+  feature: Uint8Array;
   /** Spawn gates (tiles on the left edge) and the keep (a tile on the right edge). */
   spawns: [number, number][];
   goal: [number, number];
@@ -17,6 +19,8 @@ export interface Terrain {
 }
 
 const MAX_ATTEMPTS = 40;
+
+export const FEATURE = { none: 0, forest: 1, rocks: 2 } as const;
 
 export function generateMap(preset: MapId, seed: number): Terrain {
   const p = MAP_BALANCE[preset].gen;
@@ -110,7 +114,42 @@ function tryGenerate(p: MapGenParams, seed: number): Terrain | null {
     const d = dist[y * cols + x];
     if (!Number.isFinite(d) || d < p.minPathTiles) return null;
   }
-  return { cols, rows, height, spawns, goal, seed };
+  const feature = placeFeatures(p, height, cols, rows, rng);
+  return { cols, rows, height, feature, spawns, goal, seed };
+}
+
+/**
+ * Forest groves follow their own noise layer over low hills; rocks are scattered over high ground,
+ * more often on cliff edges. Both only cover tiles of height 1 or more.
+ */
+function placeFeatures(p: MapGenParams, height: Uint8Array, cols: number, rows: number, rng: Rng): Uint8Array {
+  const n = cols * rows;
+  const feature = new Uint8Array(n);
+  const inBand = (h: number, [lo, hi]: [number, number]): boolean => h >= Math.max(1, lo) && h <= hi;
+
+  // Forest: take the highest-noise share of eligible tiles, so trees clump into groves.
+  const grove = new Float32Array(n);
+  addValueNoise(grove, cols, rows, p.forest.scale, 1, rng);
+  const forestCandidates: number[] = [];
+  for (let i = 0; i < n; i++) if (inBand(height[i], p.forest.heights)) forestCandidates.push(i);
+  forestCandidates.sort((a, b) => grove[b] - grove[a]);
+  const forestCount = Math.round(p.forest.share * forestCandidates.length);
+  for (let k = 0; k < forestCount; k++) feature[forestCandidates[k]] = FEATURE.forest;
+
+  // Rocks: random picks among free high tiles, with extra weight where the ground drops away.
+  for (let i = 0; i < n; i++) {
+    if (feature[i] || !inBand(height[i], p.rocks.heights)) continue;
+    const x = i % cols;
+    const y = Math.floor(i / cols);
+    let cliff = false;
+    for (const [dx, dy] of hexNeighbours(y)) {
+      const tx = x + dx;
+      const ty = y + dy;
+      if (tx >= 0 && ty >= 0 && tx < cols && ty < rows && height[i] - height[ty * cols + tx] >= 2) cliff = true;
+    }
+    if (rng.chance(p.rocks.share + (cliff ? p.rocks.cliffBonus : 0))) feature[i] = FEATURE.rocks;
+  }
+  return feature;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -280,7 +319,7 @@ export function walkDistance(h: Uint8Array, cols: number, rows: number, goal: [n
   return dist;
 }
 
-/** Text picture of a map for tests and debugging: digits are heights, S spawns, K the keep. Odd rows are indented. */
+/** Text picture of a map for tests and debugging: digits are heights, f forest, r rocks, S spawns, K the keep. Odd rows are indented. */
 export function terrainToString(t: Terrain): string {
   const lines: string[] = [];
   for (let y = 0; y < t.rows; y++) {
@@ -289,6 +328,8 @@ export function terrainToString(t: Terrain): string {
       if (x > 0) line += ' ';
       if (t.spawns.some(([sx, sy]) => sx === x && sy === y)) line += 'S';
       else if (t.goal[0] === x && t.goal[1] === y) line += 'K';
+      else if (t.feature[y * t.cols + x] === FEATURE.forest) line += 'f';
+      else if (t.feature[y * t.cols + x] === FEATURE.rocks) line += 'r';
       else line += t.height[y * t.cols + x] === 0 ? '.' : String(t.height[y * t.cols + x]);
     }
     lines.push(line);
