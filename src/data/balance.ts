@@ -401,8 +401,11 @@ export interface MapGenParams {
   /** Value-noise cell sizes in tiles, coarse to fine, and their weights. */
   noiseScales: number[];
   noiseWeights: number[];
-  /** Number of spawn gates on the left edge. */
+  /** Number of spawn gates on the left edge (1 or 2). Two gates sit in the top and bottom parts of the edge. */
   spawns: number;
+  /** With two gates: where their roads merge, as a share of the board width, and legs each road makes before. */
+  mergeAt: number;
+  splitLegs: number;
   /** Number of road legs sweeping between the top and bottom of the board, spread from left to right. */
   legs: [number, number];
   /** How far from the top or bottom edge a leg may turn, as a share of the board height. */
@@ -444,7 +447,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     hpMul: 1, xpMul: 1, unlock: 1,
     gen: {
       heightShare: [0.38, 0.28, 0.2, 0.14], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
-      spawns: 1, legs: [3, 4], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [4, 6], clearingRadius: [2, 2], minPathTiles: 22,
+      spawns: 1, mergeAt: 0, splitLegs: 0, legs: [3, 4], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [4, 6], clearingRadius: [2, 2], minPathTiles: 22,
       gaps: [2, 3], gapMaxLength: 3, gapMinSave: 10,
       forest: { share: 0.22, heights: [1, 2], scale: 3 }, rocks: { share: 0.06, heights: [2, 4], cliffBonus: 0.15 },
     },
@@ -453,7 +456,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     hpMul: 1.1, xpMul: 1.3, unlock: 4,
     gen: {
       heightShare: [0.22, 0.28, 0.27, 0.23], noiseScales: [6, 3], noiseWeights: [0.7, 0.3], maxStep: 2,
-      spawns: 1, legs: [4, 5], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 26,
+      spawns: 1, mergeAt: 0, splitLegs: 0, legs: [4, 5], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 26,
       gaps: [1, 2], gapMaxLength: 3, gapMinSave: 12,
       forest: { share: 0.16, heights: [1, 3], scale: 3 }, rocks: { share: 0.12, heights: [2, 4], cliffBonus: 0.25 },
     },
@@ -462,7 +465,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     hpMul: 1.2, xpMul: 1.6, unlock: 8,
     gen: {
       heightShare: [0.16, 0.22, 0.3, 0.32], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
-      spawns: 2, legs: [3, 4], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 22,
+      spawns: 2, mergeAt: 0.5, splitLegs: 2, legs: [4, 5], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 22,
       gaps: [1, 2], gapMaxLength: 3, gapMinSave: 12,
       forest: { share: 0.1, heights: [1, 2], scale: 2.5 }, rocks: { share: 0.18, heights: [2, 4], cliffBonus: 0.35 },
     },

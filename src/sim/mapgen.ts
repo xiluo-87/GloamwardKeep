@@ -45,45 +45,60 @@ function tryGenerate(p: MapGenParams, seed: number): Terrain | null {
   const noise = new Float32Array(n);
   p.noiseScales.forEach((scale, i) => addValueNoise(noise, cols, rows, scale, p.noiseWeights[i] ?? 0, rng));
 
-  // 2. Spawns on the left edge, the keep on the right edge, kept away from the corners.
+  // 2. The keep on the right edge, away from the corners.
   const margin = 2;
-  const spawns: [number, number][] = [];
-  for (let i = 0; i < p.spawns; i++) {
-    // Spread several gates over separate bands of the edge.
-    const band = (rows - margin * 2) / p.spawns;
-    const y = Math.floor(margin + band * i + rng.range(0.2, 0.8) * band);
-    spawns.push([0, Math.min(rows - 1 - margin, y)]);
-  }
   const goal: [number, number] = [cols - 1, margin + rng.int(rows - margin * 2)];
-
-  // 3. Carve the road as a serpentine: legs that sweep between the top and bottom bands, spread
-  //    across the board, so the route passes near most tiles. Extra gates join the first leg.
-  const carved = new Uint8Array(n);
-  const legs = p.legs[0] + rng.int(p.legs[1] - p.legs[0] + 1);
+  const mid = Math.floor(rows / 2);
   const band = Math.max(1, Math.round((rows - 2) * p.bendBand));
-  const topY = (): number => rng.int(band);
-  const bottomY = (): number => rows - 1 - rng.int(band);
-  const route: [number, number][] = [spawns[0]];
-  let down = rng.chance(0.5);
-  for (let k = 0; k < legs; k++) {
-    const x = Math.round(((k + 1) / (legs + 1)) * (cols - 1) + rng.range(-0.8, 0.8));
-    const clampX = (v: number): number => Math.max(1, Math.min(cols - 2, v));
-    route.push([clampX(x), down ? topY() : bottomY()]);
-    route.push([clampX(x + rng.int(3) - 1), down ? bottomY() : topY()]);
-    down = !down;
-  }
-  route.push(goal);
-  for (let i = 1; i < route.length; i++) carveLine(carved, cols, rows, route[i - 1], route[i], p.valleyRadius, rng);
-  for (let g = 1; g < spawns.length; g++) carveLine(carved, cols, rows, spawns[g], route[1], p.valleyRadius, rng);
+  const clampX = (v: number): number => Math.max(1, Math.min(cols - 2, v));
 
-  // 4. Clearings at the road's turns give room to build mazes. Turns sit near the top and bottom
-  //    edges, so a clearing there widens the bend without bridging two legs into a shortcut.
-  const turns = route.slice(1, -1);
+  /** Serpentine turn points: `count` legs spread over x0..x1, each sweeping between yTop and yBottom bands. */
+  const serpentine = (x0: number, x1: number, yTop: number, yBottom: number, count: number): [number, number][] => {
+    const pts: [number, number][] = [];
+    const b = Math.max(1, Math.min(band, Math.floor((yBottom - yTop) / 3)));
+    let down = rng.chance(0.5);
+    for (let k = 0; k < count; k++) {
+      const x = Math.round(x0 + ((k + 1) / (count + 1)) * (x1 - x0) + rng.range(-0.8, 0.8));
+      const top = (): number => yTop + rng.int(b);
+      const bottom = (): number => yBottom - rng.int(b);
+      pts.push([clampX(x), down ? top() : bottom()]);
+      pts.push([clampX(x + rng.int(3) - 1), down ? bottom() : top()]);
+      down = !down;
+    }
+    return pts;
+  };
+
+  // 3. Carve the road as a serpentine, so the route passes near most tiles.
+  //    One gate: a single serpentine across the whole board.
+  //    Two gates: one in the top part of the left edge and one in the bottom part. Each winds through
+  //    its own half of the board, and the roads merge at mergeAt of the width before the shared stretch.
+  const carved = new Uint8Array(n);
+  const spawns: [number, number][] = [];
+  const roads: [number, number][][] = [];
+  const legs = p.legs[0] + rng.int(p.legs[1] - p.legs[0] + 1);
+  if (p.spawns < 2) {
+    spawns.push([0, margin + rng.int(rows - margin * 2)]);
+    roads.push([spawns[0], ...serpentine(0, cols - 1, 0, rows - 1, legs), goal]);
+  } else {
+    const mergeX = Math.round((cols - 1) * p.mergeAt);
+    const merge: [number, number] = [mergeX, mid];
+    const halves: [number, number][] = [[0, mid - 2], [mid + 2, rows - 1]];
+    for (const [yTop, yBottom] of halves) {
+      const gate: [number, number] = [0, yTop + 1 + rng.int(Math.max(1, yBottom - yTop - 1))];
+      spawns.push(gate);
+      roads.push([gate, ...serpentine(0, mergeX - 1, yTop, yBottom, p.splitLegs), merge]);
+    }
+    roads.push([merge, ...serpentine(mergeX, cols - 1, 0, rows - 1, Math.max(1, legs - p.splitLegs)), goal]);
+  }
+  for (const road of roads) for (let i = 1; i < road.length; i++) carveLine(carved, cols, rows, road[i - 1], road[i], p.valleyRadius, rng);
+
+  // 4. Clearings at the road's turns near the top and bottom edges give room to build mazes. Pushed
+  //    toward the edge, they widen a bend without bridging two legs into a shortcut.
+  const turns = roads.flatMap((r) => r.slice(1, -1)).filter(([, y]) => y < band + 1 || y > rows - 2 - band);
   const clearings = Math.min(turns.length, p.clearings[0] + rng.int(p.clearings[1] - p.clearings[0] + 1));
   for (let c = 0; c < clearings; c++) {
     const [tx, ty] = turns.splice(rng.int(turns.length), 1)[0];
     const r = p.clearingRadius[0] + rng.int(p.clearingRadius[1] - p.clearingRadius[0] + 1);
-    // Push the centre toward the nearer edge, away from the neighbouring legs.
     const cy = ty < rows / 2 ? Math.max(0, ty - 1) : Math.min(rows - 1, ty + 1);
     carveBlob(carved, cols, rows, tx, cy, r, rng);
   }
