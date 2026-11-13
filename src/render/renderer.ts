@@ -7,7 +7,7 @@ import { Enemy, Pet, RunState, Tower } from '../sim/state';
 import { circ, clamp01, frame, glow, lerp, poly, setTint, TAU } from './art';
 import { drawEnemySprite } from './enemies';
 import { drawHero, drawHeroBadge } from './heroes';
-import { previewRoute } from '../sim/path';
+import { airRoute, previewRoute } from '../sim/path';
 import { drawKeepSprite } from './keep';
 import { blitBake, hexSub, LIFT, TOP_MARGIN } from './terrain';
 import { drawTower, newLinks, towerHeight, WallLinks } from './towers';
@@ -62,6 +62,14 @@ export class Renderer implements CameraApi {
   private arrowCount = 0;
   private routeCache: number[] = [];
   private routeVer = -1;
+  private routeSet = new Uint8Array(0);
+  private airCache: number[] = [];
+  private airRun: RunState | null = null;
+  private flyPts: number[] = [];
+  private flySeg: number[] = [];
+  private ox2: number[] = [];
+  private oy2: number[] = [];
+  private airTerrain: Terrain | null = null;
   private routeRun: RunState | null = null;
   private terrainNow: Terrain | null = null;
   private bg: HTMLCanvasElement | null = null;
@@ -774,15 +782,20 @@ export class Renderer implements CameraApi {
     for (let i = 0; i < s.pools.count; i++) this.drawPool(g, s.pools.items[i], wallTime);
 
     if (view.showPaths) {
-      this.drawFlyLines(g, s, view, wallTime);
-      if (!view.routePreview) {
-        if (this.routeRun !== s || this.routeVer !== s.flowVersion) {
-          this.routeRun = s;
-          this.routeVer = s.flowVersion;
-          this.routeCache = previewRoute(s, -1, -1).tiles;
-        }
-        this.drawRoute(g, s, this.routeCache, false, wallTime, true);
+      if (this.routeRun !== s || this.routeVer !== s.flowVersion) {
+        this.routeRun = s;
+        this.routeVer = s.flowVersion;
+        this.routeCache = previewRoute(s, -1, -1).tiles;
+        this.routeSet = new Uint8Array(terrain.cols * terrain.rows);
+        for (const i of this.routeCache) this.routeSet[i] = 1;
       }
+      if (this.airRun !== s || this.airTerrain !== terrain) {
+        this.airRun = s;
+        this.airTerrain = terrain;
+        this.airCache = airRoute(s);
+      }
+      if (!view.routePreview) this.drawRoute(g, s, this.routeCache, false, wallTime, true);
+      this.drawFlyLines(g, s, view, wallTime);
     }
     this.drawGroundOverlays(g, s, view, wallTime);
 
@@ -976,52 +989,89 @@ export class Renderer implements CameraApi {
     return false;
   }
 
-  /** Flight paths of flyers: straight from each gate (just off the board) to the keep. */
+  /** Flight path of flyers: along the air route from each gate (just off the board) to the keep. */
   private drawFlyLines(g: CanvasRenderingContext2D, s: RunState, view: ViewState, time: number): void {
     const terrain = s.terrain;
+    const cols = terrain.cols;
+    const route = this.airCache;
+    if (route.length < 2) return;
     let strong = this.waveHasFlyers(s.wave) || this.waveHasFlyers(s.wave - 1);
     if (view.placing) {
       const b = isHeroType(view.placing) ? HEROES[view.placing].base : TOWERS[view.placing].base;
       if ((b.hitsFlying ?? 0) > 0) strong = true;
     }
-    const a = strong ? 0.7 : 0.35;
-    const kc = tileCenter(terrain.goal[0], terrain.goal[1]);
-    const kx = this.sx(kc.x, kc.y);
-    const ky = this.sy(kc.x, kc.y);
+    const n = route.length;
+    // Screen-space points; vertices that share a tile with the ground route are nudged 4 px aside.
+    const pts = this.flyPts;
+    pts.length = 0;
+    const segStart = this.flySeg;
+    segStart.length = 0;
+    for (let k = 0; k < n; k++) {
+      const i = route[k];
+      const c = tileCenter(i % cols, Math.floor(i / cols));
+      const far = k === 0 || hexDist(i, route[k - 1], cols) > 1;
+      if (far) {
+        segStart.push(pts.length / 3);
+        // Spawn point just off the board.
+        pts.push(this.sx(c.x - HEX_W, c.y), this.sy(c.x - HEX_W, c.y), 0);
+      }
+      pts.push(this.sx(c.x, c.y), this.sy(c.x, c.y), this.routeSet[i]);
+    }
+    const m = pts.length / 3;
+    const ox = this.ox2;
+    const oy = this.oy2;
+    ox.length = m;
+    oy.length = m;
+    for (let k = 0; k < m; k++) {
+      ox[k] = pts[k * 3];
+      oy[k] = pts[k * 3 + 1];
+      if (pts[k * 3 + 2] === 0) continue;
+      const p = Math.max(0, k - 1);
+      const q = Math.min(m - 1, k + 1);
+      const dx = pts[q * 3] - pts[p * 3];
+      const dy = pts[q * 3 + 1] - pts[p * 3 + 1];
+      const len = Math.hypot(dx, dy) || 1;
+      ox[k] += (-dy / len) * 4;
+      oy[k] += (dx / len) * 4;
+    }
     g.lineCap = 'round';
     g.lineJoin = 'round';
-    for (const [gx, gy] of terrain.spawns) {
-      const c = tileCenter(gx, gy);
-      const x0 = this.sx(c.x - HEX_W, c.y);
-      const y0 = this.sy(c.x - HEX_W, c.y);
-      const dx = kx - x0;
-      const dy = ky - y0;
-      const len = Math.hypot(dx, dy) || 1;
+    g.globalAlpha = strong ? 0.7 : 0.35;
+    g.strokeStyle = '#bfe4ff';
+    g.lineWidth = strong ? 1.8 : 1.3;
+    g.setLineDash(FLY_DASH);
+    g.lineDashOffset = strong ? -time * 14 : 0;
+    g.beginPath();
+    let si = 0;
+    for (let k = 0; k < m; k++) {
+      if (si < segStart.length && segStart[si] === k) { g.moveTo(ox[k], oy[k]); si++; } else g.lineTo(ox[k], oy[k]);
+    }
+    g.stroke();
+    g.setLineDash(NO_DASH);
+    g.lineDashOffset = 0;
+    // Wing chevrons every ~3 hexes of travel, pointing along the route.
+    const step = HEX_W * 3;
+    g.lineWidth = strong ? 2 : 1.5;
+    let acc = step * 0.5;
+    si = 0;
+    for (let k = 1; k < m; k++) {
+      if (si < segStart.length && segStart[si] === k) { si++; acc = step * 0.5; continue; }
+      const dx = ox[k] - ox[k - 1];
+      const dy = oy[k] - oy[k - 1];
+      const len = Math.hypot(dx, dy);
+      if (len < 1e-3) continue;
+      acc += len;
+      if (acc < step) continue;
+      acc = 0;
       const ux = dx / len;
       const uy = dy / len;
-      g.globalAlpha = a;
-      g.strokeStyle = '#bfe4ff';
-      g.lineWidth = strong ? 1.8 : 1.3;
-      g.setLineDash(FLY_DASH);
-      g.lineDashOffset = strong ? -time * 14 : 0;
+      const px = (ox[k] + ox[k - 1]) / 2;
+      const py = (oy[k] + oy[k - 1]) / 2;
       g.beginPath();
-      g.moveTo(x0, y0);
-      g.lineTo(kx, ky);
+      g.moveTo(px - ux * 6 - uy * 6, py - uy * 6 + ux * 6);
+      g.lineTo(px + ux * 3, py + uy * 3);
+      g.lineTo(px - ux * 6 + uy * 6, py - uy * 6 - ux * 6);
       g.stroke();
-      g.setLineDash(NO_DASH);
-      g.lineDashOffset = 0;
-      // Wing chevrons every ~3 hexes, pointing at the keep.
-      const step = HEX_W * 3;
-      g.lineWidth = strong ? 2 : 1.5;
-      for (let d = step * 0.6; d < len - 12; d += step) {
-        const px = x0 + ux * d;
-        const py = y0 + uy * d;
-        g.beginPath();
-        g.moveTo(px - ux * 6 - uy * 6, py - uy * 6 + ux * 6);
-        g.lineTo(px + ux * 3, py + uy * 3);
-        g.lineTo(px - ux * 6 + uy * 6, py - uy * 6 - ux * 6);
-        g.stroke();
-      }
     }
     g.globalAlpha = 1;
   }
