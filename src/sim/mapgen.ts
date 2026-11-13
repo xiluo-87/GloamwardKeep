@@ -1,6 +1,7 @@
-// Seeded terrain generator. Heights 0..4; enemies walk on height 0 only.
+// Seeded terrain generator on a hex grid (see hex.ts). Heights 0..4; enemies walk on height 0 only.
 // Same seed and preset always give the same map.
 import { HEIGHT, MAP_BALANCE, MapGenParams, MapId, WORLD } from '../data/balance';
+import { hexDistance, hexNeighbours } from './hex';
 import { Rng } from './rng';
 
 export interface Terrain {
@@ -115,7 +116,7 @@ function tryGenerate(p: MapGenParams, seed: number): Terrain | null {
 // ---------------------------------------------------------------------------------------------
 
 function addValueNoise(out: Float32Array, cols: number, rows: number, scale: number, weight: number, rng: Rng): void {
-  const gw = Math.ceil(cols / scale) + 2;
+  const gw = Math.ceil((cols + 1) / scale) + 2;
   const gh = Math.ceil(rows / scale) + 2;
   const grid = new Float32Array(gw * gh);
   for (let i = 0; i < grid.length; i++) grid[i] = rng.next();
@@ -124,8 +125,9 @@ function addValueNoise(out: Float32Array, cols: number, rows: number, scale: num
   const smooth = (t: number): number => t * t * (3 - 2 * t);
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      const fx = (x + ox) / scale;
-      const fy = (y + oy) / scale;
+      // Sample at the hex centre so the noise isn't skewed by the row offset.
+      const fx = (x + 0.5 * (y & 1) + ox) / scale;
+      const fy = (y * 0.866 + oy) / scale;
       const ix = Math.floor(fx);
       const iy = Math.floor(fy);
       const tx = smooth(fx - ix);
@@ -140,43 +142,50 @@ function addValueNoise(out: Float32Array, cols: number, rows: number, scale: num
 }
 
 function mark(carved: Uint8Array, cols: number, rows: number, x: number, y: number, r: number): void {
-  for (let dy = -r; dy <= r; dy++) {
-    for (let dx = -r; dx <= r; dx++) {
-      const tx = x + dx;
-      const ty = y + dy;
-      if (tx >= 0 && ty >= 0 && tx < cols && ty < rows) carved[ty * cols + tx] = 1;
+  for (let ty = y - r; ty <= y + r; ty++) {
+    for (let tx = x - r - 1; tx <= x + r + 1; tx++) {
+      if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
+      if (hexDistance(x, y, tx, ty) <= r) carved[ty * cols + tx] = 1;
     }
   }
 }
 
-/** Walks from a to b one tile at a time, wandering a little, carving a road. */
+/**
+ * Walks from a to b one hex at a time, carving a road. Each step goes to a neighbour that gets
+ * closer to b; when two neighbours are equally good it picks one at random, which makes the road wander.
+ */
 function carveLine(carved: Uint8Array, cols: number, rows: number, a: [number, number], b: [number, number], r: number, rng: Rng): void {
   let [x, y] = a;
   mark(carved, cols, rows, x, y, r);
   let guard = 0;
   while ((x !== b[0] || y !== b[1]) && guard++ < 400) {
-    const dx = Math.sign(b[0] - x);
-    const dy = Math.sign(b[1] - y);
-    // Prefer the axis with more distance left, with some randomness for bends.
-    const horiz = dx !== 0 && (dy === 0 || rng.next() < Math.abs(b[0] - x) / (Math.abs(b[0] - x) + Math.abs(b[1] - y)));
-    if (horiz) x += dx;
-    else y += dy;
+    const here = hexDistance(x, y, b[0], b[1]);
+    let options = 0;
+    let nx = x;
+    let ny = y;
+    for (const [dx, dy] of hexNeighbours(y)) {
+      const tx = x + dx;
+      const ty = y + dy;
+      if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
+      if (hexDistance(tx, ty, b[0], b[1]) >= here) continue;
+      options++;
+      if (rng.next() < 1 / options) { nx = tx; ny = ty; }
+    }
+    x = nx;
+    y = ny;
     mark(carved, cols, rows, x, y, r);
   }
 }
 
 function carveBlob(carved: Uint8Array, cols: number, rows: number, cx: number, cy: number, r: number, rng: Rng): void {
-  for (let dy = -r - 1; dy <= r + 1; dy++) {
-    for (let dx = -r - 1; dx <= r + 1; dx++) {
-      const x = cx + dx;
-      const y = cy + dy;
+  for (let y = cy - r - 1; y <= cy + r + 1; y++) {
+    for (let x = cx - r - 2; x <= cx + r + 2; x++) {
       if (x < 1 || y < 0 || x >= cols - 1 || y >= rows) continue;
-      if (dx * dx + dy * dy <= (r + rng.range(-0.4, 0.6)) ** 2) carved[y * cols + x] = 1;
+      // A slightly ragged edge so clearings don't look like perfect hexagons.
+      if (hexDistance(cx, cy, x, y) <= r + rng.range(-0.4, 0.6)) carved[y * cols + x] = 1;
     }
   }
 }
-
-const N4: [number, number][] = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 
 function terrace(h: Uint8Array, cols: number, rows: number, step: number): void {
   let changed = true;
@@ -185,7 +194,7 @@ function terrace(h: Uint8Array, cols: number, rows: number, step: number): void 
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const i = y * cols + x;
-        for (const [dx, dy] of N4) {
+        for (const [dx, dy] of hexNeighbours(y)) {
           const tx = x + dx;
           const ty = y + dy;
           if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
@@ -206,7 +215,7 @@ function terraceUp(h: Uint8Array, cols: number, rows: number, step: number): voi
       for (let x = 0; x < cols; x++) {
         const i = y * cols + x;
         if (h[i] === 0) continue;
-        for (const [dx, dy] of N4) {
+        for (const [dx, dy] of hexNeighbours(y)) {
           const tx = x + dx;
           const ty = y + dy;
           if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
@@ -227,7 +236,7 @@ function floodZero(h: Uint8Array, cols: number, rows: number, start: number): Ui
     const i = stack.pop() as number;
     const x = i % cols;
     const y = Math.floor(i / cols);
-    for (const [dx, dy] of N4) {
+    for (const [dx, dy] of hexNeighbours(y)) {
       const tx = x + dx;
       const ty = y + dy;
       if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
@@ -250,7 +259,7 @@ function raisePockets(h: Uint8Array, main: Uint8Array, cols: number, rows: numbe
   }
 }
 
-/** Shortest 4-way walk over level 0 from every tile to the goal, in tiles. Infinity if unreachable. */
+/** Shortest walk over level-0 hexes from every tile to the goal, in tiles. Infinity if unreachable. */
 export function walkDistance(h: Uint8Array, cols: number, rows: number, goal: [number, number]): Float32Array {
   const dist = new Float32Array(cols * rows).fill(Infinity);
   const start = goal[1] * cols + goal[0];
@@ -260,7 +269,7 @@ export function walkDistance(h: Uint8Array, cols: number, rows: number, goal: [n
     const i = queue[qi];
     const x = i % cols;
     const y = Math.floor(i / cols);
-    for (const [dx, dy] of N4) {
+    for (const [dx, dy] of hexNeighbours(y)) {
       const tx = x + dx;
       const ty = y + dy;
       if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
@@ -271,12 +280,13 @@ export function walkDistance(h: Uint8Array, cols: number, rows: number, goal: [n
   return dist;
 }
 
-/** Text picture of a map for tests and debugging: digits are heights, S spawns, K the keep. */
+/** Text picture of a map for tests and debugging: digits are heights, S spawns, K the keep. Odd rows are indented. */
 export function terrainToString(t: Terrain): string {
   const lines: string[] = [];
   for (let y = 0; y < t.rows; y++) {
-    let line = '';
+    let line = y & 1 ? ' ' : '';
     for (let x = 0; x < t.cols; x++) {
+      if (x > 0) line += ' ';
       if (t.spawns.some(([sx, sy]) => sx === x && sy === y)) line += 'S';
       else if (t.goal[0] === x && t.goal[1] === y) line += 'K';
       else line += t.height[y * t.cols + x] === 0 ? '.' : String(t.height[y * t.cols + x]);

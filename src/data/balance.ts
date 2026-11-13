@@ -7,7 +7,8 @@ export const STEP = 1 / 60;
 // World and run
 // ---------------------------------------------------------------------------------------------
 
-export const WORLD = { tile: 48, cols: 24, rows: 14 };
+/** Hex board: `hex` is the hex radius (centre to corner) in world pixels. */
+export const WORLD = { hex: 28, cols: 24, rows: 14 };
 
 export const RUN = {
   startGold: 300,
@@ -380,7 +381,7 @@ export interface MapGenParams {
   spawns: number;
   /** Bends in the carved valley between a spawn and the keep. */
   bends: [number, number];
-  /** Half-width of the carved valley in tiles (0 = one tile wide). */
+  /** Half-width of the carved valley in hexes (0 = one hex wide). */
   valleyRadius: number;
   /** Extra level-0 clearings joined to the valley, for building mazes. */
   clearings: [number, number];
@@ -397,29 +398,28 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
   meadow: {
     hpMul: 1, xpMul: 1, unlock: 1,
     gen: {
-      heightShare: [0.3, 0.26, 0.2, 0.14, 0.1], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
-      spawns: 1, bends: [2, 3], valleyRadius: 1, clearings: [2, 3], clearingRadius: [2, 3], minPocket: 4, minPathTiles: 26,
+      heightShare: [0.2, 0.28, 0.22, 0.17, 0.13], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
+      spawns: 1, bends: [2, 3], valleyRadius: 1, clearings: [2, 3], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 22,
     },
   },
   highlands: {
     hpMul: 1.1, xpMul: 1.3, unlock: 4,
     gen: {
       heightShare: [0.12, 0.2, 0.24, 0.24, 0.2], noiseScales: [6, 3], noiseWeights: [0.7, 0.3], maxStep: 2,
-      spawns: 1, bends: [3, 4], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 30,
+      spawns: 1, bends: [3, 4], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 26,
     },
   },
   canyon: {
     hpMul: 1.2, xpMul: 1.6, unlock: 8,
     gen: {
       heightShare: [0.12, 0.14, 0.2, 0.26, 0.28], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
-      spawns: 2, bends: [2, 3], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 24,
+      spawns: 2, bends: [2, 3], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 22,
     },
   },
 };
 
 /** Pathing costs, in tiles. Towers on the road can be walked "through" by smashing them. */
 export const PATHING = {
-  diagonal: Math.SQRT2,
   /** Extra cost of a tile holding a tower, so enemies only smash through when no open road exists. */
   towerCost: 60,
 };
