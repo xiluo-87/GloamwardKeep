@@ -2,8 +2,8 @@
 // in balance.ts by describeMod(), so the two can't drift apart.
 import type { AbilityKind, EnemyId, HeroId, MapId, PerkId, StatKey, StatMod, TowerId } from './balance';
 
-export const GAME_NAME = 'Lampwatch';
-export const GAME_TAG = 'Keep the hearth lit through thirty nights of dark.';
+export const GAME_NAME = 'Gloamward Keep';
+export const GAME_TAG = 'Hold the keep through thirty waves.';
 
 export interface TowerText { name: string; blurb: string; tiers: [string, string, string]; forks: { a: ForkText; b: ForkText } }
 export interface ForkText { name: string; blurb: string; tiers: [string, string] }
@@ -17,52 +17,52 @@ export const TOWER_TEXT: Record<TowerId, TowerText> = {
       b: { name: 'Stone Wall', blurb: 'Very sturdy. For maze walls that must hold.', tiers: ['Stone Wall', 'Rampart'] },
     },
   },
-  wick: {
-    name: 'Wick Post', blurb: 'Fires quick bolts of flame at one target. Hits flyers.',
-    tiers: ['Wick Post', 'Trimmed Wick', 'Steady Wick'],
+  archer: {
+    name: 'Archer Tower', blurb: 'Quick arrows at one target. Hits flyers.',
+    tiers: ['Archer Tower', 'Bowmen', 'Marksmen'],
     forks: {
-      a: { name: 'Long Wick', blurb: 'A sniper. Reaches far past its own light, so pair it with a lamppost.', tiers: ['Long Wick', 'Far Flame'] },
-      b: { name: 'Twin Wick', blurb: 'Two, then three bolts at once.', tiers: ['Twin Wick', 'Triple Wick'] },
+      a: { name: 'Longbow', blurb: 'A sniper with huge reach and deadly crits. Best on high ground.', tiers: ['Longbow', 'Eagle Eye'] },
+      b: { name: 'Volley', blurb: 'Two, then three arrows at once.', tiers: ['Volley', 'Arrow Storm'] },
     },
   },
-  kiln: {
-    name: 'Cinder Kiln', blurb: 'Lobs coals that burst on the ground. Cannot hit flyers.',
-    tiers: ['Cinder Kiln', 'Hot Kiln', 'Blast Kiln'],
+  catapult: {
+    name: 'Catapult', blurb: 'Lobs burning stones that burst on the ground. Cannot hit flyers.',
+    tiers: ['Catapult', 'Heavy Catapult', 'Siege Catapult'],
     forks: {
-      a: { name: 'Ember Mortar', blurb: 'Huge bursts that leave the ground burning.', tiers: ['Ember Mortar', 'Furnace Mortar'] },
-      b: { name: 'Cluster Coals', blurb: 'Each coal splits into smaller bursts.', tiers: ['Cluster Coals', 'Coal Storm'] },
+      a: { name: 'Fire Pot', blurb: 'Huge bursts that leave the ground burning.', tiers: ['Fire Pot', 'Inferno'] },
+      b: { name: 'Scatter Shot', blurb: 'Each stone splits into smaller bursts.', tiers: ['Scatter Shot', 'Hailstorm'] },
     },
   },
-  bell: {
-    name: 'Bell Tower', blurb: 'Rings around itself and slows everything nearby, lit or not. Cannot hit flyers.',
-    tiers: ['Bell Tower', 'Bronze Bell', 'Great Bell'],
+  frost: {
+    name: 'Frost Tower', blurb: 'Pulses cold around itself and slows everything nearby. Cannot hit flyers.',
+    tiers: ['Frost Tower', 'Ice Spire', 'Winter Spire'],
     forks: {
-      a: { name: 'Toll of Stillness', blurb: 'Rings can stop enemies dead.', tiers: ['Stillness', 'Deep Stillness'] },
-      b: { name: 'Resonance', blurb: 'Hard rings that crack armour.', tiers: ['Resonance', 'Shattering Peal'] },
+      a: { name: 'Deep Freeze', blurb: 'Pulses can freeze enemies solid.', tiers: ['Deep Freeze', 'Glacier'] },
+      b: { name: 'Shatter', blurb: 'Hard pulses that break armour.', tiers: ['Shatter', 'Frostbite'] },
     },
   },
-  prism: {
-    name: 'Glass Prism', blurb: 'A shard that bounces between enemies. Hits flyers.',
-    tiers: ['Glass Prism', 'Cut Prism', 'Clear Prism'],
+  mage: {
+    name: 'Mage Tower', blurb: 'Lightning that jumps between enemies. Hits flyers.',
+    tiers: ['Mage Tower', 'Adept Tower', 'Wizard Tower'],
     forks: {
-      a: { name: 'Stained Prism', blurb: 'Longer chains that lose less on each bounce.', tiers: ['Stained Prism', 'Rose Window'] },
-      b: { name: 'Burning Lens', blurb: 'A held beam that grows hotter the longer it stays on one target.', tiers: ['Burning Lens', 'Sunglass'] },
+      a: { name: 'Storm Spire', blurb: 'Longer chains that lose less on each jump.', tiers: ['Storm Spire', 'Tempest'] },
+      b: { name: 'Arcane Beam', blurb: 'A held beam that grows stronger the longer it stays on one target.', tiers: ['Arcane Beam', 'Sunfire'] },
     },
   },
-  moth: {
-    name: 'Moth Cote', blurb: 'Sends moths that chase and bite. Hits flyers.',
-    tiers: ['Moth Cote', 'Busy Cote', 'Swift Cote'],
+  aviary: {
+    name: 'Aviary', blurb: 'Sends hawks that chase and claw. Hits flyers.',
+    tiers: ['Aviary', 'Hawk Roost', 'Falconry'],
     forks: {
-      a: { name: 'Firemoths', blurb: 'Bites set enemies alight.', tiers: ['Firemoths', 'Pyre Moths'] },
-      b: { name: "Death's-heads", blurb: 'Fewer bites, but heavy ones that crack armour.', tiers: ["Death's-heads", 'Grave Moths'] },
+      a: { name: 'Fire Hawks', blurb: 'Claws set enemies alight.', tiers: ['Fire Hawks', 'Phoenix Roost'] },
+      b: { name: 'War Eagles', blurb: 'Fewer strikes, but heavy ones that break armour.', tiers: ['War Eagles', 'Royal Eagles'] },
     },
   },
-  lamp: {
-    name: 'Lamppost', blurb: 'No attack. A big light, and towers inside it deal more damage.',
-    tiers: ['Lamppost', 'Bright Lamp', 'Seeing Lamp'],
+  shrine: {
+    name: 'Shrine', blurb: 'No attack. Towers in its range deal more damage.',
+    tiers: ['Shrine', 'Blessed Shrine', 'Watch Shrine'],
     forks: {
-      a: { name: 'Beacon', blurb: 'A huge light that strengthens every tower inside it.', tiers: ['Beacon', 'Lighthouse'] },
-      b: { name: 'Oil Still', blurb: 'Brings in gold after every wave.', tiers: ['Oil Still', 'Oil Works'] },
+      a: { name: 'War Banner', blurb: 'A wide blessing of damage and speed.', tiers: ['War Banner', 'Royal Standard'] },
+      b: { name: 'Treasury', blurb: 'Brings in gold after every wave.', tiers: ['Treasury', 'Royal Mint'] },
     },
   },
 };
@@ -71,68 +71,68 @@ export interface HeroText { name: string; title: string; blurb: string; ability:
 export interface BranchText { name: string; nodes: [string, string, string, string] }
 
 export const HERO_TEXT: Record<HeroId, HeroText> = {
-  lamplighter: {
-    name: 'The Lamplighter', title: 'Keeper of the lane', blurb: 'Whips the closest enemies with fire. Carries a light that reveals Shade Hounds.',
-    ability: 'Flare', abilityDesc: 'A blast of light that burns and stuns everything nearby.',
+  knight: {
+    name: 'The Knight', title: 'Sworn shield of the keep', blurb: 'Cleaves the closest enemies with a greatsword and spots Shadow Stalkers.',
+    ability: 'Charge', abilityDesc: 'Slams into everything nearby, dealing damage and stunning.',
     branches: [
-      { name: 'Flame', nodes: ['Hot Lash', 'Clinging Fire', 'Wide Arc', 'Bonfire'] },
-      { name: 'Wick', nodes: ['Long Wick', 'Warm Company', 'Big Flare', 'Midsummer'] },
-      { name: 'Oil', nodes: ['Small Change', 'Oil Trade', 'Good Business', 'Golden Flame'] },
+      { name: 'Blade', nodes: ['Sharp Edge', 'Bleeding Cuts', 'Wide Swing', 'Earthshaker'] },
+      { name: 'Banner', nodes: ['Long Reach', 'Inspire', 'Battle Cry', 'Lord Commander'] },
+      { name: 'Spoils', nodes: ['Loot', 'Tribute', 'Plunder', 'Golden Crown'] },
     ],
   },
-  sexton: {
-    name: 'The Sexton', title: 'Ringer of the dead bell', blurb: 'Rings a heavy bell that slows, and hits flyers too.',
-    ability: 'Great Toll', abilityDesc: 'Stuns every enemy in a wide circle.',
+  cleric: {
+    name: 'The Cleric', title: 'Keeper of the chapel', blurb: 'Holy pulses that slow, and hit flyers too.',
+    ability: 'Sanctify', abilityDesc: 'Stuns every enemy in a wide circle.',
     branches: [
       { name: 'Stillness', nodes: ['Heavy Air', 'Hush', 'Long Silence', 'Requiem'] },
-      { name: 'Peal', nodes: ['Loud Bell', 'Cracked Bronze', 'Fast Peal', 'Doom Peal'] },
-      { name: 'Sanctuary', nodes: ['Mending', 'Steady Hands', 'Kept Hearth', 'Sanctuary'] },
+      { name: 'Wrath', nodes: ['Smite', 'Judgement', 'Zeal', 'Divine Wrath'] },
+      { name: 'Sanctuary', nodes: ['Mending', 'Blessing', 'Kept Walls', 'Sanctuary'] },
     ],
   },
-  glazier: {
-    name: 'The Glazier', title: 'Cutter of sharp light', blurb: 'Throws glass that bounces between many enemies.',
-    ability: 'Shatter', abilityDesc: 'Hits the strongest enemies in a wide range with heavy glass.',
+  sorcerer: {
+    name: 'The Sorcerer', title: 'Student of the storm', blurb: 'Lightning that jumps between many enemies.',
+    ability: 'Arcane Barrage', abilityDesc: 'Strikes the strongest enemies in a wide range.',
     branches: [
-      { name: 'Facets', nodes: ['Extra Facet', 'True Angle', 'Many Faces', 'Kaleidoscope'] },
-      { name: 'Edge', nodes: ['Keen Edge', 'Deep Cut', 'Razor', 'Diamond'] },
-      { name: 'Mirror', nodes: ['Polish', 'Quick Hands', 'Twin Pane', 'Hall of Mirrors'] },
+      { name: 'Storm', nodes: ['Extra Arc', 'Conduction', 'Forked Bolt', 'Thunderhead'] },
+      { name: 'Focus', nodes: ['Keen Mind', 'Overload', 'Precision', 'Archmage'] },
+      { name: 'Echo', nodes: ['Far Sight', 'Quick Casting', 'Twin Bolt', 'Hall of Echoes'] },
     ],
   },
-  chandler: {
-    name: 'The Chandler', title: 'Maker of candles', blurb: 'Fires quick candle bolts and speeds up nearby towers.',
-    ability: 'Vigil', abilityDesc: 'Every tower attacks faster for a while.',
+  ranger: {
+    name: 'The Ranger', title: 'Warden of the wild roads', blurb: 'Rapid arrows, and nearby towers attack faster.',
+    ability: 'Rally', abilityDesc: 'Every tower attacks faster for a while.',
     branches: [
-      { name: 'Wax', nodes: ['Soft Wax', 'Second Wick', 'Hard Wax', 'Candelabra'] },
-      { name: 'Wick', nodes: ['Shared Flame', 'Tall Candle', 'Good Light', 'All-Night Vigil'] },
-      { name: 'Tallow', nodes: ['Penny Candles', 'Trade Route', 'Guild Price', 'Candle Guild'] },
+      { name: 'Bow', nodes: ['Quick Draw', 'Second Arrow', 'Heavy Draw', 'Rain of Arrows'] },
+      { name: 'Captain', nodes: ['Drill', 'Watchful', 'Discipline', 'Call to Arms'] },
+      { name: 'Hunter', nodes: ['Pelts', 'Trade Route', 'Bounty Hunter', 'Hunting Lodge'] },
     ],
   },
-  mothchild: {
-    name: 'The Moth Child', title: 'Friend of the night wings', blurb: 'A cloud of moths follows them and bites anything in reach.',
-    ability: 'Swarm', abilityDesc: 'Releases a large swarm of moths for a while.',
+  druid: {
+    name: 'The Druid', title: 'Voice of the old forest', blurb: 'Spirit hawks follow them and strike anything in reach.',
+    ability: 'Wild Hunt', abilityDesc: 'Releases a large flock of spirit hawks for a while.',
     branches: [
-      { name: 'Brood', nodes: ['More Wings', 'Quick Wings', 'Big Brood', 'Cloud'] },
-      { name: 'Flame', nodes: ['Ember Wings', 'Hot Wings', 'Bright Wings', 'Phoenix Moths'] },
-      { name: "Death's-head", nodes: ['Sharp Mouths', 'Gnaw', 'Hunters', 'Skull Moths'] },
+      { name: 'Flock', nodes: ['More Wings', 'Swift Wings', 'Great Flock', 'Sky Cloud'] },
+      { name: 'Flame', nodes: ['Ember Feathers', 'Burning Talons', 'Far Flight', 'Phoenix'] },
+      { name: 'Talon', nodes: ['Sharp Talons', 'Rend', 'Hunters', 'Roc'] },
     ],
   },
 };
 
 export const ABILITY_TEXT: Record<AbilityKind, string> = {
-  flare: 'Flare', toll: 'Great Toll', shatter: 'Shatter', vigil: 'Vigil', swarm: 'Swarm',
+  charge: 'Charge', sanctify: 'Sanctify', barrage: 'Arcane Barrage', rally: 'Rally', wildhunt: 'Wild Hunt',
 };
 
 export const ENEMY_TEXT: Record<EnemyId, { name: string; blurb: string }> = {
-  mite: { name: 'Soot Mite', blurb: 'Small and many.' },
-  snuffer: { name: 'Snuffer', blurb: 'Fast. Dims the lights of towers it runs past.' },
-  hollow: { name: 'Hollow One', blurb: 'Slow and armoured. Fire and bells work best.' },
-  hound: { name: 'Shade Hound', blurb: 'Fast and unseen. Only a Seeing Lamp or the Lamplighter can reveal it.' },
-  bat: { name: 'Gloom Bat', blurb: 'Flies. Kilns and bells cannot hit it.' },
-  brute: { name: 'Tallow Brute', blurb: 'Huge and warded against fire and sound. Bolts and glass work best.' },
-  brood: { name: 'Brood Mother', blurb: 'Bursts into Soot Mites when killed.' },
-  weaver: { name: 'Veil Weaver', blurb: 'Wraps nearby enemies in shields.' },
-  tallow: { name: 'The Tallow King', blurb: 'Sheds mites as it melts.' },
-  longnight: { name: 'The Long Night', blurb: 'Snuffs out lights around it and calls hounds.' },
+  goblin: { name: 'Goblin', blurb: 'Small and many.' },
+  hexer: { name: 'Goblin Hexer', blurb: 'Fast. Jinxes towers it runs past so they attack slower.' },
+  orc: { name: 'Orc Warrior', blurb: 'Slow and armoured. Fire and magic work best.' },
+  stalker: { name: 'Shadow Stalker', blurb: 'Fast and unseen. Only a Watch Shrine or the Knight can detect it.' },
+  bat: { name: 'Giant Bat', blurb: 'Flies straight over the hills to the keep. Catapults and frost cannot hit it.' },
+  troll: { name: 'Troll', blurb: 'Huge and resistant to fire and magic. Arrows work best.' },
+  wagon: { name: 'War Wagon', blurb: 'Spills goblins when destroyed.' },
+  shaman: { name: 'Orc Shaman', blurb: 'Wraps nearby enemies in shields.' },
+  ogreking: { name: 'The Ogre King', blurb: 'Sheds goblins as it is wounded.' },
+  lich: { name: 'The Lich', blurb: 'Silences towers around it and raises stalkers.' },
 };
 
 export const MAP_TEXT: Record<MapId, { name: string; blurb: string }> = {
@@ -143,17 +143,17 @@ export const MAP_TEXT: Record<MapId, { name: string; blurb: string }> = {
 
 export const PERK_TEXT: Record<PerkId, { name: string; desc: string }> = {
   purse: { name: 'Full Purse', desc: 'More starting gold.' },
-  hearth: { name: 'Banked Hearth', desc: 'More lives.' },
-  thrift: { name: 'Thrift', desc: 'Towers, upgrades and heroes cost less.' },
+  walls: { name: 'Thick Walls', desc: 'More lives.' },
+  thrift: { name: 'Thrift', desc: 'Towers, upgrades, skills and heroes cost less.' },
   salvage: { name: 'Salvage', desc: 'Selling returns more gold.' },
-  glass: { name: 'Clear Glass', desc: 'All lights reach further.' },
+  eagle: { name: 'Eagle Eye', desc: 'All towers reach further.' },
   veteran: { name: 'Veterans', desc: 'Heroes start at a higher level.' },
   bounty: { name: 'Bounty', desc: 'Kills give more gold.' },
   haste: { name: 'Eager', desc: 'Calling a wave early pays much more.' },
-  sharpened: { name: 'Sharpened', desc: 'All towers and heroes deal more damage.' },
+  sharpened: { name: 'Whetstone', desc: 'All towers and heroes deal more damage.' },
   tutor: { name: 'Tutor', desc: 'Heroes gain more experience.' },
   interest: { name: 'Interest', desc: 'Earn a share of your banked gold after each wave, up to a cap.' },
-  deepwick: { name: 'Deep Wick', desc: 'All towers reach further, and lights grow a little.' },
+  highground: { name: 'High Ground', desc: 'Height gives towers even more range.' },
 };
 
 /** How each stat reads in upgrade descriptions. `pct` shows the value as a percentage. */
@@ -165,13 +165,13 @@ export const STAT_TEXT: Record<StatKey, { label: string; pct?: boolean; flag?: s
   stunChance: { label: 'stun chance', pct: true }, stun: { label: 'stun', unit: 's' },
   chains: { label: 'bounces' }, chainRange: { label: 'bounce range' }, chainFalloff: { label: 'bounce strength', pct: true },
   shots: { label: 'shots' }, crit: { label: 'crit chance', pct: true }, critMul: { label: 'crit damage', pct: true },
-  shred: { label: 'armour crack per hit', pct: true }, beam: { label: 'beam', flag: 'Fires a held beam' },
+  shred: { label: 'armour break per hit', pct: true }, beam: { label: 'beam', flag: 'Fires a held beam' },
   ramp: { label: 'beam heat/s', pct: true }, rampMax: { label: 'max beam heat', pct: true },
-  cluster: { label: 'cluster bursts' }, moths: { label: 'moths' }, mothSpeed: { label: 'moth speed' },
-  cleave: { label: 'targets per lash' }, reveal: { label: 'reveal', flag: 'Reveals Shade Hounds in its light' },
-  buffDamage: { label: 'damage to towers in light', pct: true }, buffRate: { label: 'attack speed to towers in light', pct: true },
+  cluster: { label: 'cluster bursts' }, pets: { label: 'hawks' }, petSpeed: { label: 'hawk speed' },
+  cleave: { label: 'targets per swing' }, reveal: { label: 'detection', flag: 'Detects Shadow Stalkers in range' },
+  buffDamage: { label: 'damage to towers in range', pct: true }, buffRate: { label: 'attack speed to towers in range', pct: true },
   income: { label: 'gold per wave' }, bounty: { label: 'kill gold', pct: true },
-  hitsFlying: { label: 'flyers', flag: 'Can hit flyers' }, dimImmune: { label: 'dim', flag: 'Snuffers can no longer dim it' },
+  hitsFlying: { label: 'flyers', flag: 'Can hit flyers' }, jinxImmune: { label: 'jinx', flag: 'Hexers can no longer jinx it' },
   lifeRegen: { label: 'lives per wave' },
   hp: { label: 'hit points' }, thorns: { label: 'damage/s to attackers' },
   abilityDamage: { label: 'ability damage' }, abilityRadius: { label: 'ability radius' },

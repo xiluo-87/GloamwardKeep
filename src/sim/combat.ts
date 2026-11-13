@@ -2,47 +2,62 @@
 import {
   DamageType, ENEMIES, EnemyId, HERO, heroXpNeed, MAP_BALANCE, RESIST_CAP, SHRED_CAP, SPECIAL, waveHpScale,
 } from '../data/balance';
-import { computeStats, isHeroType } from './stats';
-import { Enemy, emit, pointAt, RunState, Tower } from './state';
+import { HEX_W, tileCenter } from './hex';
+import { isHeroType, refreshStats } from './stats';
+import { Enemy, emit, RunState, Tower } from './state';
 
-const tmp = new Float64Array(3);
-
-export function spawnEnemy(s: RunState, kind: EnemyId, path: number, wave: number, dist = 0): Enemy | null {
-  const e = s.enemies.add();
-  if (!e) return null;
+function initEnemy(s: RunState, e: Enemy, kind: EnemyId, wave: number): void {
   const def = ENEMIES[kind];
   const hpMul = (def.boss ? 1 : waveHpScale(wave)) * MAP_BALANCE[s.cfg.map].hpMul;
   e.uid = s.nextUid++;
   e.def = def;
   e.wave = wave;
-  e.path = path % s.paths.length;
-  e.dist = dist;
-  e.lane = def.boss ? 0 : s.rng.range(-SPECIAL.laneSpread, SPECIAL.laneSpread);
   e.maxHp = e.hp = def.hp * hpMul;
   e.shield = 0;
   e.speed = def.speed * s.rng.range(0.95, 1.05);
   e.slow = 0; e.slowT = 0; e.stunT = 0; e.burnDps = 0; e.burnT = 0; e.shred = 0;
-  e.flash = 0; e.dead = false; e.lit = false; e.revealed = false;
-  e.cdA = kind === 'weaver' ? SPECIAL.weaver.every * 0.5 : kind === 'longnight' ? SPECIAL.longnight.snuffEvery : 0;
-  e.cdB = kind === 'longnight' ? SPECIAL.longnight.spawnEvery : 0;
-  e.nextShed = 1 - SPECIAL.tallow.shedEvery;
-  placeEnemy(s, e);
-  e.px = e.x; e.py = e.y;
+  e.flash = 0; e.dead = false; e.revealed = false; e.smashing = 0;
+  e.vx = 0; e.vy = 0;
+  const spread = def.boss ? 0 : SPECIAL.laneSpread;
+  e.ox = s.rng.range(-spread, spread);
+  e.oy = s.rng.range(-spread, spread) * 0.6;
+  e.cdA = kind === 'shaman' ? SPECIAL.shaman.every * 0.5 : kind === 'lich' ? SPECIAL.lich.silenceEvery : 0;
+  e.cdB = kind === 'lich' ? SPECIAL.lich.spawnEvery : 0;
+  e.nextShed = 1 - SPECIAL.ogreking.shedEvery;
   s.waveLeft[wave] = (s.waveLeft[wave] ?? 0) + 1;
-  if (def.boss) emit(s, 'boss', e.x, e.y, ENEMIES[kind].radius);
+  if (def.boss) emit(s, 'boss', e.x, e.y, def.radius);
+}
+
+/** Spawns an enemy just outside a gate, walking onto the board. */
+export function spawnAtGate(s: RunState, kind: EnemyId, gate: number, wave: number): Enemy | null {
+  const e = s.enemies.add();
+  if (!e) return null;
+  const [gx, gy] = s.terrain.spawns[gate % s.terrain.spawns.length];
+  const c = tileCenter(gx, gy);
+  e.x = e.px = c.x - HEX_W;
+  e.y = e.py = c.y;
+  e.next = gy * s.terrain.cols + gx;
+  e.flowVersion = s.flowVersion;
+  e.dist = s.flow[e.next] + 1;
+  initEnemy(s, e, kind, wave);
   return e;
 }
 
-export function placeEnemy(s: RunState, e: Enemy): void {
-  pointAt(s.paths[e.path], e.dist, tmp);
-  const a = tmp[2];
-  e.x = tmp[0] - Math.sin(a) * e.lane;
-  e.y = tmp[1] + Math.cos(a) * e.lane;
-  e.angle = a;
+/** Spawns an enemy at a point, heading where `from` was heading (wagons, ogre sheds, lich summons). */
+export function spawnNear(s: RunState, kind: EnemyId, from: Enemy, spread: number): Enemy | null {
+  const e = s.enemies.add();
+  if (!e) return null;
+  e.x = e.px = from.x + s.rng.range(-spread, spread);
+  e.y = e.py = from.y + s.rng.range(-spread, spread);
+  e.next = from.next;
+  e.flowVersion = -1;
+  e.dist = from.dist;
+  initEnemy(s, e, kind, from.wave);
+  return e;
 }
 
 export function resistOf(e: Enemy, type: DamageType): number {
-  const r = type === 'pierce' ? e.def.armour - e.shred : e.def.ward;
+  const r = type === 'physical' ? e.def.armour - e.shred : e.def.ward;
   return r < 0 ? 0 : r > RESIST_CAP ? RESIST_CAP : r;
 }
 
@@ -59,17 +74,16 @@ export function hurt(s: RunState, e: Enemy, amount: number, type: DamageType, sr
   e.hp -= d;
   e.flash = 0.08;
   if (src) src.dealt += d;
-  if (e.def.id === 'tallow') tallowShed(s, e);
+  if (e.def.id === 'ogreking') ogreShed(s, e);
   if (e.hp <= 0) kill(s, e, src);
   return d;
 }
 
-function tallowShed(s: RunState, e: Enemy): void {
+function ogreShed(s: RunState, e: Enemy): void {
+  const O = SPECIAL.ogreking;
   while (e.hp > 0 && e.hp / e.maxHp <= e.nextShed) {
-    e.nextShed -= SPECIAL.tallow.shedEvery;
-    for (let i = 0; i < SPECIAL.tallow.shedCount; i++) {
-      spawnEnemy(s, SPECIAL.tallow.shed, e.path, e.wave, Math.max(0, e.dist - s.rng.range(0, 30)));
-    }
+    e.nextShed -= O.shedEvery;
+    for (let i = 0; i < O.shedCount; i++) spawnNear(s, O.shed, e, 14);
     emit(s, 'shed', e.x, e.y);
   }
 }
@@ -87,10 +101,8 @@ export function kill(s: RunState, e: Enemy, src: Tower | null): void {
   emit(s, 'kill', e.x, e.y, gold, e.def.radius, e.def.boss ? 1 : 0);
   if (src) src.kills++;
   giveXp(s, e.def.xp, src);
-  if (e.def.id === 'brood') {
-    for (let i = 0; i < SPECIAL.brood.count; i++) {
-      spawnEnemy(s, SPECIAL.brood.spawn, e.path, e.wave, Math.max(0, e.dist + s.rng.range(-SPECIAL.brood.spread, SPECIAL.brood.spread)));
-    }
+  if (e.def.id === 'wagon') {
+    for (let i = 0; i < SPECIAL.wagon.count; i++) spawnNear(s, SPECIAL.wagon.spawn, e, SPECIAL.wagon.spread);
   }
 }
 
@@ -108,7 +120,7 @@ export function addHeroXp(s: RunState, t: Tower, xp: number): void {
   while (t.heroLevel < HERO.maxLevel && t.heroXp >= heroXpNeed(t.heroLevel)) {
     t.heroXp -= heroXpNeed(t.heroLevel);
     t.heroLevel++;
-    if (isHeroType(t.type)) t.stats = computeStats(t, s.mods);
+    if (isHeroType(t.type)) refreshStats(t, s.mods);
     emit(s, 'heroLevel', t.x, t.y, t.heroLevel);
   }
   if (t.heroLevel >= HERO.maxLevel) t.heroXp = 0;

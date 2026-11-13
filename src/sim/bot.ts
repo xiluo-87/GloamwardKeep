@@ -1,39 +1,50 @@
-// A simple player for balance tests: builds near the path, upgrades, and calls waves.
-import { HEROES, HeroId, TowerId, WORLD } from '../data/balance';
+// A simple player for balance tests: plugs shortcut gaps, builds near the road (preferring high
+// ground), upgrades, learns skills, and calls waves.
+import { HEROES, HeroId, TowerId } from '../data/balance';
 import { build, callWave, canBuild, canCallWave, learnSkill, upgrade, useAbility } from './actions';
+import { hexDistance } from './hex';
+import { FEATURE } from './mapgen';
 import { buildCost, skillState, upgradeOptions } from './stats';
-import { RunState, tileAt } from './state';
+import { RunState } from './state';
 
 export interface BotPlan {
   /** Towers to build, in rotation. */
   mix: TowerId[];
   /** Fork choice per tower type. */
   forks: Partial<Record<TowerId, 'a' | 'b'>>;
-  /** Fraction of spare gold spent on upgrades rather than new towers. */
+  /** Upgrade when the cheapest upgrade costs at most this × the next tower's price. */
   upgradeBias: number;
   /** Skill branch the hero follows first. */
   heroBranch: number;
+  /** Plug the map's shortcut gaps with palisades. */
+  plugGaps: boolean;
 }
 
 export const DEFAULT_PLAN: BotPlan = {
-  mix: ['wick', 'bell', 'kiln', 'wick', 'prism', 'lamp', 'moth', 'kiln', 'wick', 'prism'],
-  forks: { wick: 'b', kiln: 'a', bell: 'a', prism: 'a', moth: 'a', lamp: 'a' },
+  mix: ['archer', 'frost', 'catapult', 'archer', 'mage', 'shrine', 'aviary', 'catapult', 'archer', 'mage'],
+  forks: { palisade: 'b', archer: 'b', catapult: 'a', frost: 'a', mage: 'a', aviary: 'a', shrine: 'a' },
   upgradeBias: 0.5,
   heroBranch: 0,
+  plugGaps: true,
 };
 
-/** Free tiles ranked by how much path lies within 2.5 tiles of them. */
+/** Buildable tiles off the road, ranked by how much road lies within 2.5 hexes, then by height. */
 export function rankSpots(s: RunState): [number, number][] {
+  const { cols, rows, height, feature } = s.terrain;
+  const road: [number, number][] = [];
+  for (let i = 0; i < height.length; i++) if (height[i] === 0) road.push([i % cols, Math.floor(i / cols)]);
   const spots: { x: number; y: number; v: number }[] = [];
-  for (let y = 0; y < WORLD.rows; y++) {
-    for (let x = 0; x < WORLD.cols; x++) {
-      if (tileAt(s, x, y) !== 0) continue;
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const i = y * cols + x;
+      if (height[i] === 0 || feature[i] !== FEATURE.none) continue;
       let v = 0;
-      for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) {
-        if (dx * dx + dy * dy > 6.25) continue;
-        if (tileAt(s, x + dx, y + dy) === 1) v++;
+      for (const [rx, ry] of road) {
+        if (Math.abs(ry - y) > 3) continue;
+        const d = hexDistance(x, y, rx, ry);
+        if (d <= 3) v += d <= 2 ? 1 : 0.4;
       }
-      if (v > 0) spots.push({ x, y, v });
+      if (v > 0) spots.push({ x, y, v: v * (1 + 0.15 * height[i]) });
     }
   }
   spots.sort((a, b) => b.v - a.v || a.y - b.y || a.x - b.x);
@@ -53,7 +64,15 @@ export class Bot {
     this.think -= dt;
     if (this.think > 0) return;
     this.think = 0.5;
-    // Heroes first, on the best spots.
+    // One palisade in the middle of each shortcut gap forces the long road.
+    if (this.plan.plugGaps) {
+      for (const gap of s.terrain.gaps) {
+        const i = gap[Math.floor(gap.length / 2)];
+        const x = i % s.terrain.cols;
+        const y = Math.floor(i / s.terrain.cols);
+        if (!s.occ[i] && canBuild(s, 'palisade', x, y) === 'ok') build(s, 'palisade', x, y);
+      }
+    }
     for (const h of s.cfg.heroes) {
       if (s.heroesPlaced.includes(h)) continue;
       const spot = this.freeSpot(h);
@@ -67,12 +86,11 @@ export class Bot {
         for (let n = 0; n < 4; n++) if (skillState(s, t, branch, n) === 'available') learnSkill(s, t.uid, branch, n);
       }
     }
-    // Alternate between upgrading the cheapest option and building the next tower in the mix.
     for (let guard = 0; guard < 8; guard++) {
       const type = this.plan.mix[this.next % this.plan.mix.length];
       const cost = buildCost(type, s.mods);
       const up = this.cheapestUpgrade();
-      const wantUpgrade = up && (s.towers.length >= 4) && (up.cost <= cost * (1 + this.plan.upgradeBias) || this.spotsLeft() === 0);
+      const wantUpgrade = up && s.towers.length >= 4 && (up.cost <= cost * (1 + this.plan.upgradeBias) || !this.freeSpot(type));
       if (wantUpgrade && up && s.gold >= up.cost) {
         upgrade(s, up.uid, up.path);
         continue;
@@ -86,14 +104,10 @@ export class Bot {
     if (canCallWave(s) && (s.waiting || s.enemies.count === 0)) callWave(s);
   }
 
-  private spotsLeft(): number {
-    return this.spots.filter(([x, y]) => tileAt(this.s, x, y) === 0).length;
-  }
-
   private freeSpot(type: TowerId | HeroId): [number, number] | null {
     for (const [x, y] of this.spots) {
       const c = canBuild(this.s, type, x, y);
-      if (c === 'ok' || c === 'gold') return c === 'ok' ? [x, y] : null;
+      if (c === 'ok' || c === 'gold') return [x, y];
     }
     return null;
   }
@@ -101,7 +115,7 @@ export class Bot {
   private cheapestUpgrade(): { uid: number; cost: number; path?: 'a' | 'b' } | null {
     let best: { uid: number; cost: number; path?: 'a' | 'b' } | null = null;
     for (const t of this.s.towers) {
-      if (t.type in HEROES) continue;
+      if (t.type in HEROES || t.type === 'palisade') continue;
       const opts = upgradeOptions(t, this.s.mods);
       if (opts.length === 0) continue;
       const pick = opts.length === 2 ? opts.find((o) => o.path === (this.plan.forks[t.type as TowerId] ?? 'a')) ?? opts[0] : opts[0];

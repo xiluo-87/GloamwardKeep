@@ -3,7 +3,7 @@ import {
   HERO_IDS, HEROES, HeroId, MAP_BALANCE, MapId, PERK_IDS, PERKS, PerkId, PROFILE, profileXpNeed, RUN,
 } from '../data/balance';
 
-export const SAVE_KEY = 'lampwatch.save.v1';
+export const SAVE_KEY = 'gloamward-keep.save.v1';
 
 export interface MapRecord { bestWave: number; wins: number }
 
@@ -21,7 +21,7 @@ export interface Profile {
 }
 
 export const defaultProfile = (): Profile => ({
-  version: 1, xp: 0, perks: [], heroes: ['lamplighter'], map: 'lane', maps: {}, runs: 0, muted: false, reduceMotion: false,
+  version: 1, xp: 0, perks: [], heroes: ['knight'], map: 'meadow', maps: {}, runs: 0, muted: false, reduceMotion: false,
 });
 
 /** Level from total XP, starting at 1. */
@@ -57,8 +57,8 @@ export function fixLoadout(p: Profile): void {
   const level = levelOf(p.xp);
   p.perks = [...new Set(p.perks)].filter((id) => perkUnlocked(level, id)).slice(0, perkSlots(level));
   p.heroes = [...new Set(p.heroes)].filter((id) => heroUnlocked(level, id)).slice(0, heroSlots(level));
-  if (p.heroes.length === 0) p.heroes = ['lamplighter'];
-  if (!mapUnlocked(level, p.map)) p.map = 'lane';
+  if (p.heroes.length === 0) p.heroes = ['knight'];
+  if (!mapUnlocked(level, p.map)) p.map = 'meadow';
 }
 
 const num = (v: unknown, d = 0): number => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? v : d);

@@ -1,6 +1,6 @@
 // Pure helpers for tower stats, prices and the hero skill tree. No state changes here.
 import {
-  AttackKind, DamageType, HERO, HEROES, HeroDef, HeroId, heroXpNeed, StatMod, Stats, STAT_KEYS, TowerDef, TOWERS, TowerId, Upgrade,
+  AttackKind, DamageType, HEIGHT, HERO, HEROES, HeroDef, HeroId, heroXpNeed, StatMod, Stats, STAT_KEYS, TOWER_HP, TowerDef, TOWERS, TowerId, Upgrade,
 } from '../data/balance';
 import { emptyStats, Mods, RunState, Tower } from './state';
 
@@ -32,15 +32,15 @@ export function appliedMods(t: Pick<Tower, 'type' | 'tier' | 'fork' | 'forkTier'
   return out;
 }
 
-export function computeStats(t: Pick<Tower, 'type' | 'tier' | 'fork' | 'forkTier' | 'heroLevel' | 'skills'>, mods: Mods): Stats {
+export function computeStats(t: Pick<Tower, 'type' | 'tier' | 'fork' | 'forkTier' | 'heroLevel' | 'skills' | 'height'>, mods: Mods): Stats {
   const s = emptyStats();
   for (const m of appliedMods(t)) addMod(s, m);
   if (isHeroType(t.type)) addMod(s, HEROES[t.type].perLevel, t.heroLevel - 1);
   s.damage *= mods.damageMul;
   s.abilityDamage *= mods.damageMul;
-  s.light *= mods.lightMul;
-  s.range *= mods.rangeMul;
-  s.moths = Math.floor(s.moths);
+  // Higher ground reaches further.
+  s.range *= mods.rangeMul * (1 + (HEIGHT.rangePerLevel + mods.heightRangeBonus) * t.height);
+  s.pets = Math.floor(s.pets);
   s.shots = Math.max(1, Math.floor(s.shots));
   s.rate = Math.max(0.1, s.rate);
   s.chainFalloff = Math.min(1, s.chainFalloff);
@@ -48,8 +48,20 @@ export function computeStats(t: Pick<Tower, 'type' | 'tier' | 'fork' | 'forkTier
   return s;
 }
 
+/** Hit points from gold invested (or hero level) plus the tower's hp stat. */
+export function maxHpOf(t: Pick<Tower, 'hero' | 'heroLevel' | 'invested' | 'stats'>): number {
+  const base = t.hero
+    ? TOWER_HP.heroBase + TOWER_HP.heroPerLevel * (t.heroLevel - 1)
+    : TOWER_HP.base + TOWER_HP.perGold * t.invested;
+  return Math.round(base + t.stats.hp);
+}
+
+/** Recomputes stats and hit points after an upgrade, level or skill, keeping damage taken. */
 export function refreshStats(t: Tower, mods: Mods): void {
   t.stats = computeStats(t, mods);
+  const lost = t.maxHp - t.hp;
+  t.maxHp = maxHpOf(t);
+  t.hp = Math.max(1, t.maxHp - lost);
 }
 
 export const price = (base: number, mods: Mods): number => Math.round(base * mods.costMul);

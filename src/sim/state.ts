@@ -1,7 +1,8 @@
 import {
-  EnemyDef, ENEMIES, HeroId, MapId, PERKS, PerkId, RUN, Stats, STAT_KEYS, TowerId, WORLD,
+  EnemyDef, ENEMIES, EnemyId, HeroId, MapId, PERKS, PerkId, RUN, Stats, STAT_KEYS, TowerId,
 } from '../data/balance';
-import { MAPS } from '../data/maps';
+import { generateMap, Terrain } from './mapgen';
+import { rebuildFlow } from './path';
 import { Rng } from './rng';
 
 export class Pool<T> {
@@ -33,18 +34,25 @@ export const emptyStats = (): Stats => {
 
 export interface Enemy {
   uid: number; def: EnemyDef; wave: number;
-  path: number; dist: number; lane: number;
-  x: number; y: number; px: number; py: number; angle: number;
+  x: number; y: number; px: number; py: number;
+  /** Velocity this step, for leading shots. */
+  vx: number; vy: number;
+  /** Render-only offset so crowds don't stack on the tile centres. */
+  ox: number; oy: number;
+  /** Tile index the enemy is walking toward (ground only), and the flow version it was chosen with. */
+  next: number; flowVersion: number;
+  /** Remaining distance to the keep in hexes, for "first"/"last" targeting. */
+  dist: number;
   hp: number; maxHp: number; shield: number; speed: number;
   slow: number; slowT: number; stunT: number; burnDps: number; burnT: number; shred: number;
   flash: number; dead: boolean;
-  /** Inside any tower's light this step. */
-  lit: boolean;
-  /** Inside a revealing light this step (only matters for stealthy enemies). */
+  /** Seen by a detecting tower this step (only matters for stealthy enemies). */
   revealed: boolean;
-  /** Ability timers for specials (weaver shield, boss snuff and spawns). */
+  /** uid of the tower it is smashing, or 0. */
+  smashing: number;
+  /** Timers for specials (shaman shield, lich silence and summons). */
   cdA: number; cdB: number;
-  /** Tallow King: next HP fraction at which it sheds. */
+  /** Ogre King: next HP fraction at which it sheds goblins. */
   nextShed: number;
 }
 
@@ -55,7 +63,9 @@ export interface Tower {
   uid: number;
   type: TowerId | HeroId;
   hero: boolean;
-  tx: number; ty: number; x: number; y: number;
+  /** Tile column and row, and the terrain height there (0..4). */
+  tx: number; ty: number; height: number;
+  x: number; y: number;
   /** Base towers: linear tier 1..3. Heroes: always 1. */
   tier: number;
   /** 0 before the fork, then 'a' or 'b'. */
@@ -63,24 +73,25 @@ export interface Tower {
   /** 0..2 tiers bought along the fork. */
   forkTier: number;
   heroLevel: number; heroXp: number;
-  /** Learned skill nodes as [branch, node] pairs encoded branch * 4 + node. */
+  /** Learned skill nodes, encoded branch * 4 + node. */
   skills: number[];
   stats: Stats;
+  hp: number; maxHp: number;
   cd: number; abilityCd: number;
   target: TargetMode; angle: number;
-  /** Gold spent on this tower, for selling. */
+  /** Gold spent on this tower, for selling and for its hit points. */
   invested: number;
   kills: number; dealt: number;
-  /** Seconds left of Snuffer dimming and Long Night snuffing. */
-  dimT: number; snuffT: number;
-  /** Light radius after dimming and perks, refreshed each step. */
-  lightNow: number;
+  /** Seconds left of a Hexer's jinx (slower attacks) and the Lich's silence (no attacks). */
+  jinxT: number; silenceT: number;
   /** Buffs from auras this step, as fractions. */
   buffDamage: number; buffRate: number;
-  /** Burning Lens state. */
+  /** Arcane Beam state. */
   beamUid: number; beamRamp: number; beamX: number; beamY: number;
   /** Seconds since the last attack, for render recoil. */
   fired: number;
+  /** Seconds since it was last hit by an enemy, for render. */
+  hurt: number;
 }
 
 export interface Projectile {
@@ -92,50 +103,54 @@ export interface Projectile {
   owner: Tower | null; damage: number;
 }
 
-export interface Moth {
-  owner: Tower | null; ownerUid: number;
+/** Hawks from aviaries and the Druid. */
+export interface Pet {
+  owner: Tower | null;
   x: number; y: number; px: number; py: number;
   target: Enemy | null; targetUid: number;
   cd: number; phase: number;
-  /** Seconds left for temporary swarm moths; 0 means permanent. */
+  /** Seconds left for temporary Wild Hunt hawks. */
   life: number; temp: boolean;
 }
 
 export interface BurnPool { x: number; y: number; r: number; t: number; life: number; dps: number; owner: Tower | null }
 
 export type GameEventType =
-  | 'shot' | 'hit' | 'kill' | 'leak' | 'splash' | 'cluster' | 'pulse' | 'chain' | 'lash' | 'bite'
+  | 'shot' | 'hit' | 'kill' | 'leak' | 'splash' | 'cluster' | 'pulse' | 'chain' | 'cleave' | 'bite'
   | 'build' | 'upgrade' | 'sell' | 'skill' | 'wave' | 'waveClear' | 'heroLevel' | 'ability'
-  | 'shield' | 'snuff' | 'dim' | 'boss' | 'win' | 'lose' | 'gold' | 'shed';
+  | 'shield' | 'silence' | 'jinx' | 'boss' | 'win' | 'lose' | 'gold' | 'shed' | 'smash' | 'destroyed';
 /**
  * Fields by type:
- * shot: x,y from, a angle, b tower uid · hit: x,y · kill: x,y, a gold, b radius · leak: a lives lost, b index in ENEMY_IDS
- * splash/pulse: x,y, a radius · cluster: x,y, a radius · chain: x,y → a,b · lash: x,y, a angle, b range
- * bite: x,y · gold: x,y, a amount · wave: a wave number · waveClear: a wave, b gold
- * heroLevel: x,y, a level · ability: x,y, a radius, b ability index · shield: x,y · snuff: x,y, a radius
+ * shot: x,y from, a angle, b tower uid · hit: x,y · kill: x,y, a gold, b radius, c 1 if boss
+ * leak: x,y, a lives lost, b index in ENEMY_IDS · splash/pulse/cluster: x,y, a radius
+ * chain: x,y → a,b · cleave: x,y, a angle, b range · bite: x,y · gold: a amount
+ * wave: a wave number · waveClear: a wave, b gold · heroLevel: x,y, a level
+ * ability: x,y, a radius, b ability index · shield: x,y, a radius · silence: x,y, a radius · jinx: x,y (tower)
+ * smash: x,y of the tower being hit (throttled) · destroyed: x,y, a 1 if hero · build: x,y, a 1 if hero
  */
 export interface GameEvent { type: GameEventType; x: number; y: number; a: number; b: number; c: number }
 export const EVENT_CAP = 512;
 
 export interface RunConfig {
+  /** Seed for gameplay randomness. */
   seed: number;
   map: MapId;
+  /** Seed for the map generator. */
+  mapSeed: number;
   heroes: HeroId[];
   perks: PerkId[];
-  /** Debug: start at this wave with extra gold. */
-  startWave?: number;
 }
 
 /** Perk effects folded into plain multipliers. */
 export interface Mods {
-  startGold: number; lives: number; costMul: number; sellRefund: number; lightMul: number; rangeMul: number;
+  startGold: number; lives: number; costMul: number; sellRefund: number; rangeMul: number; heightRangeBonus: number;
   heroStartLevel: number; goldMul: number; earlyMul: number; damageMul: number; heroXpMul: number;
   interest: number; interestCap: number;
 }
 
 export function perkMods(perks: PerkId[]): Mods {
   const m: Mods = {
-    startGold: RUN.startGold, lives: RUN.lives, costMul: 1, sellRefund: RUN.sellRefund, lightMul: 1, rangeMul: 1,
+    startGold: RUN.startGold, lives: RUN.lives, costMul: 1, sellRefund: RUN.sellRefund, rangeMul: 1, heightRangeBonus: 0,
     heroStartLevel: 1, goldMul: 1, earlyMul: 1, damageMul: 1, heroXpMul: 1, interest: 0, interestCap: 0,
   };
   for (const id of perks) {
@@ -145,8 +160,8 @@ export function perkMods(perks: PerkId[]): Mods {
     m.lives += p.lives ?? 0;
     m.costMul *= p.costMul ?? 1;
     m.sellRefund = Math.max(m.sellRefund, p.sellRefund ?? 0);
-    m.lightMul *= p.lightMul ?? 1;
     m.rangeMul *= p.rangeMul ?? 1;
+    m.heightRangeBonus += p.heightRangeBonus ?? 0;
     m.heroStartLevel = Math.max(m.heroStartLevel, p.heroStartLevel ?? 1);
     m.goldMul *= p.goldMul ?? 1;
     m.earlyMul *= p.earlyMul ?? 1;
@@ -158,10 +173,7 @@ export function perkMods(perks: PerkId[]): Mods {
   return m;
 }
 
-/** A path baked into points and cumulative lengths in world pixels. */
-export interface BakedPath { xs: number[]; ys: number[]; cum: number[]; length: number }
-
-export interface SpawnEntry { t: number; kind: EnemyDef['id']; path: number }
+export interface SpawnEntry { t: number; kind: EnemyId; gate: number }
 
 export interface RunState {
   cfg: RunConfig; mods: Mods; rng: Rng; t: number;
@@ -176,97 +188,59 @@ export interface RunState {
   /** Enemies alive (or still to spawn) per wave, so clears pay out exactly once. */
   waveLeft: number[];
   outcome: 'won' | 'lost' | null;
-  paths: BakedPath[];
-  /** Per tile: 0 free, 1 path, 2 scenery, 3 tower. */
-  tiles: Uint8Array;
+  terrain: Terrain;
+  /** Tower uid standing on each tile, or 0. */
+  occ: Int32Array;
+  /** Walking cost from each tile to the keep (Infinity off the road). Rebuilt when level-0 towers change. */
+  flow: Float32Array;
+  flowVersion: number;
   towers: Tower[];
-  enemies: Pool<Enemy>; projectiles: Pool<Projectile>; moths: Pool<Moth>; pools: Pool<BurnPool>;
+  enemies: Pool<Enemy>; projectiles: Pool<Projectile>; pets: Pool<Pet>; pools: Pool<BurnPool>;
   nextUid: number;
-  /** Chandler's Vigil: seconds left and attack-speed bonus. */
-  vigilT: number; vigilPower: number;
+  /** Ranger's Rally: seconds left and attack-speed bonus. */
+  rallyT: number; rallyPower: number;
   kills: number; leaked: number; goldEarned: number;
   /** Waves fully cleared so far. Profile XP is paid per cleared wave. */
   cleared: number;
   events: GameEvent[]; eventCount: number;
-  /** Heroes placed so far this run (a hero can't be placed twice, even after selling). */
+  /** Heroes standing on the board right now. A destroyed or sold hero can be placed again. */
   heroesPlaced: HeroId[];
 }
 
 export function createEnemy(): Enemy {
   return {
-    uid: 0, def: ENEMIES.mite, wave: 0, path: 0, dist: 0, lane: 0, x: 0, y: 0, px: 0, py: 0, angle: 0,
+    uid: 0, def: ENEMIES.goblin, wave: 0, x: 0, y: 0, px: 0, py: 0, vx: 0, vy: 0, ox: 0, oy: 0,
+    next: -1, flowVersion: -1, dist: 0,
     hp: 0, maxHp: 0, shield: 0, speed: 0, slow: 0, slowT: 0, stunT: 0, burnDps: 0, burnT: 0, shred: 0,
-    flash: 0, dead: false, lit: false, revealed: false, cdA: 0, cdB: 0, nextShed: 1,
+    flash: 0, dead: false, revealed: false, smashing: 0, cdA: 0, cdB: 0, nextShed: 1,
   };
-}
-
-export function bakePath(points: [number, number][]): BakedPath {
-  const T = WORLD.tile;
-  const xs = points.map((p) => (p[0] + 0.5) * T);
-  const ys = points.map((p) => (p[1] + 0.5) * T);
-  const cum = [0];
-  for (let i = 1; i < xs.length; i++) cum.push(cum[i - 1] + Math.hypot(xs[i] - xs[i - 1], ys[i] - ys[i - 1]));
-  return { xs, ys, cum, length: cum[cum.length - 1] };
-}
-
-/** Writes the point at `dist` along a path into out[0..2] as x, y, angle. */
-export function pointAt(p: BakedPath, dist: number, out: Float64Array): void {
-  const n = p.xs.length;
-  if (dist <= 0) { out[0] = p.xs[0]; out[1] = p.ys[0]; out[2] = Math.atan2(p.ys[1] - p.ys[0], p.xs[1] - p.xs[0]); return; }
-  let i = 1;
-  while (i < n - 1 && p.cum[i] < dist) i++;
-  const seg = p.cum[i] - p.cum[i - 1] || 1;
-  const k = Math.min(1, (dist - p.cum[i - 1]) / seg);
-  out[0] = p.xs[i - 1] + (p.xs[i] - p.xs[i - 1]) * k;
-  out[1] = p.ys[i - 1] + (p.ys[i] - p.ys[i - 1]) * k;
-  out[2] = Math.atan2(p.ys[i] - p.ys[i - 1], p.xs[i] - p.xs[i - 1]);
-}
-
-/** Marks every tile a path crosses, plus scenery, so towers can't be built there. */
-export function buildTiles(mapId: MapId): Uint8Array {
-  const { cols, rows } = WORLD;
-  const tiles = new Uint8Array(cols * rows);
-  const map = MAPS[mapId];
-  const mark = (x: number, y: number, v: number): void => {
-    if (x >= 0 && y >= 0 && x < cols && y < rows) tiles[y * cols + x] = v;
-  };
-  for (const path of map.paths) {
-    for (let i = 1; i < path.length; i++) {
-      const [x0, y0] = path[i - 1];
-      const [x1, y1] = path[i];
-      const steps = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0));
-      for (let k = 0; k <= steps; k++) {
-        mark(Math.round(x0 + ((x1 - x0) * k) / steps), Math.round(y0 + ((y1 - y0) * k) / steps), 1);
-      }
-    }
-  }
-  for (const [x, y] of map.blocked) if (tiles[y * cols + x] === 0) mark(x, y, 2);
-  return tiles;
 }
 
 export function createRun(cfg: RunConfig): RunState {
   const mods = perkMods(cfg.perks);
+  const terrain = generateMap(cfg.map, cfg.mapSeed);
+  const n = terrain.cols * terrain.rows;
   const s: RunState = {
     cfg, mods, rng: new Rng(cfg.seed), t: 0,
     gold: mods.startGold, lives: mods.lives,
     wave: 0, waiting: true, nextIn: 0, spawns: [], spawnIdx: 0, waveT: 0, waveLeft: [0],
     outcome: null,
-    paths: MAPS[cfg.map].paths.map(bakePath),
-    tiles: buildTiles(cfg.map),
+    terrain, occ: new Int32Array(n), flow: new Float32Array(n), flowVersion: 0,
     towers: [],
     enemies: new Pool(RUN.enemyCap, createEnemy),
     projectiles: new Pool(RUN.projectileCap, (): Projectile => ({
       kind: 'bolt', x: 0, y: 0, px: 0, py: 0, sx: 0, sy: 0, tx: 0, ty: 0, t: 0, life: 0, target: null, targetUid: 0, owner: null, damage: 0,
     })),
-    moths: new Pool(RUN.mothCap, (): Moth => ({
-      owner: null, ownerUid: 0, x: 0, y: 0, px: 0, py: 0, target: null, targetUid: 0, cd: 0, phase: 0, life: 0, temp: false,
+    pets: new Pool(RUN.petCap, (): Pet => ({
+      owner: null, x: 0, y: 0, px: 0, py: 0, target: null, targetUid: 0, cd: 0, phase: 0, life: 0, temp: false,
     })),
     pools: new Pool(RUN.poolCap, (): BurnPool => ({ x: 0, y: 0, r: 0, t: 0, life: 0, dps: 0, owner: null })),
-    nextUid: 1, vigilT: 0, vigilPower: 0,
+    nextUid: 1, rallyT: 0, rallyPower: 0,
     kills: 0, leaked: 0, goldEarned: 0, cleared: 0,
     events: [], eventCount: 0, heroesPlaced: [],
   };
   for (let i = 0; i < EVENT_CAP; i++) s.events.push({ type: 'hit', x: 0, y: 0, a: 0, b: 0, c: 0 });
+  rebuildFlow(s);
   return s;
 }
 
@@ -276,8 +250,13 @@ export function emit(s: RunState, type: GameEventType, x = 0, y = 0, a = 0, b = 
   e.type = type; e.x = x; e.y = y; e.a = a; e.b = b; e.c = c;
 }
 
-export const tileAt = (s: RunState, tx: number, ty: number): number =>
-  tx < 0 || ty < 0 || tx >= WORLD.cols || ty >= WORLD.rows ? 255 : s.tiles[ty * WORLD.cols + tx];
-
-export const towerAt = (s: RunState, tx: number, ty: number): Tower | undefined =>
-  s.towers.find((t) => t.tx === tx && t.ty === ty);
+export const tileIndex = (s: RunState, col: number, row: number): number => row * s.terrain.cols + col;
+export const inBoard = (s: RunState, col: number, row: number): boolean =>
+  col >= 0 && row >= 0 && col < s.terrain.cols && row < s.terrain.rows;
+export const heightAt = (s: RunState, col: number, row: number): number =>
+  inBoard(s, col, row) ? s.terrain.height[tileIndex(s, col, row)] : -1;
+export const towerAt = (s: RunState, col: number, row: number): Tower | undefined => {
+  if (!inBoard(s, col, row)) return undefined;
+  const uid = s.occ[tileIndex(s, col, row)];
+  return uid ? s.towers.find((t) => t.uid === uid) : undefined;
+};

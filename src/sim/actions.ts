@@ -1,53 +1,70 @@
-// Everything the player can do. Each action returns true if it happened.
-import {
-  AbilityKind, HERO, HEROES, HeroId, RUN, TowerId, WAVES, WORLD,
-} from '../data/balance';
+// Everything the player can do. Each action returns true (or the new tower) if it happened.
+import { AbilityKind, HERO, HEROES, HeroId, RUN, TowerId, WAVES } from '../data/balance';
 import { hurt, onHitEffects } from './combat';
+import { pixelToTile, tileCenter } from './hex';
+import { FEATURE } from './mapgen';
+import { rebuildFlow } from './path';
 import {
-  buildCost, computeStats, isHeroType, sellValue, skillCode, skillCost, skillState, upgradeOptions,
+  buildCost, computeStats, isHeroType, maxHpOf, refreshStats, sellValue, skillCode, skillCost, skillState, upgradeOptions,
 } from './stats';
-import { emit, emptyStats, RunState, TARGET_MODES, tileAt, Tower } from './state';
+import { emit, emptyStats, inBoard, RunState, TARGET_MODES, tileIndex, Tower } from './state';
 
-export const heroSlots = (s: RunState): number => s.cfg.heroes.length;
+export type BuildCheck = 'ok' | 'offBoard' | 'blocked' | 'gate' | 'occupied' | 'enemy' | 'gold' | 'heroTaken' | 'heroNotInLoadout' | 'over';
 
-export type BuildCheck = 'ok' | 'blocked' | 'occupied' | 'gold' | 'heroTaken' | 'heroNotInLoadout' | 'over';
-
-export function canBuild(s: RunState, type: TowerId | HeroId, tx: number, ty: number): BuildCheck {
+/** Why a tower can or can't go on a tile. Forest, rocks, gates and the keep can't be built on. */
+export function canBuild(s: RunState, type: TowerId | HeroId, col: number, row: number): BuildCheck {
   if (s.outcome) return 'over';
-  const tile = tileAt(s, tx, ty);
-  if (tile === 3) return 'occupied';
-  if (tile !== 0) return 'blocked';
+  if (!inBoard(s, col, row)) return 'offBoard';
+  const i = tileIndex(s, col, row);
+  if (s.occ[i]) return 'occupied';
+  if (s.terrain.feature[i] !== FEATURE.none) return 'blocked';
+  const { spawns, goal } = s.terrain;
+  if ((goal[0] === col && goal[1] === row) || spawns.some(([x, y]) => x === col && y === row)) return 'gate';
   if (isHeroType(type)) {
     if (!s.cfg.heroes.includes(type)) return 'heroNotInLoadout';
     if (s.heroesPlaced.includes(type)) return 'heroTaken';
   }
+  if (s.terrain.height[i] === 0 && enemyOnTile(s, col, row)) return 'enemy';
   if (s.gold < buildCost(type, s.mods)) return 'gold';
   return 'ok';
 }
 
-export function build(s: RunState, type: TowerId | HeroId, tx: number, ty: number): Tower | null {
-  if (canBuild(s, type, tx, ty) !== 'ok') return null;
+function enemyOnTile(s: RunState, col: number, row: number): boolean {
+  const E = s.enemies;
+  const { cols, rows } = s.terrain;
+  for (let k = 0; k < E.count; k++) {
+    const e = E.items[k];
+    if (e.dead || e.def.flying) continue;
+    const t = pixelToTile(e.x, e.y, cols, rows);
+    if (t && t.col === col && t.row === row) return true;
+  }
+  return false;
+}
+
+export function build(s: RunState, type: TowerId | HeroId, col: number, row: number): Tower | null {
+  if (canBuild(s, type, col, row) !== 'ok') return null;
   const cost = buildCost(type, s.mods);
   const hero = isHeroType(type);
-  const T = WORLD.tile;
+  const c = tileCenter(col, row);
+  const i = tileIndex(s, col, row);
   const t: Tower = {
-    uid: s.nextUid++, type, hero, tx, ty, x: (tx + 0.5) * T, y: (ty + 0.5) * T,
-    tier: 1, fork: 0, forkTier: 0, heroLevel: hero ? s.mods.heroStartLevel : 1, heroXp: 0, skills: [],
-    stats: emptyStats(), cd: 0.3, abilityCd: 0, target: 'first', angle: -Math.PI / 2,
-    invested: cost, kills: 0, dealt: 0, dimT: 0, snuffT: 0, lightNow: 0, buffDamage: 0, buffRate: 0,
-    beamUid: 0, beamRamp: 1, beamX: 0, beamY: 0, fired: 1,
+    uid: s.nextUid++, type, hero, tx: col, ty: row, height: s.terrain.height[i], x: c.x, y: c.y,
+    tier: 1, fork: 0, forkTier: 0, heroLevel: hero ? Math.min(HERO.maxLevel, s.mods.heroStartLevel) : 1, heroXp: 0, skills: [],
+    stats: emptyStats(), hp: 1, maxHp: 1, cd: 0.3, abilityCd: 0, target: 'first', angle: -Math.PI / 2,
+    invested: cost, kills: 0, dealt: 0, jinxT: 0, silenceT: 0, buffDamage: 0, buffRate: 0,
+    beamUid: 0, beamRamp: 1, beamX: 0, beamY: 0, fired: 1, hurt: 9,
   };
-  t.heroLevel = Math.min(t.heroLevel, HERO.maxLevel);
   t.stats = computeStats(t, s.mods);
-  t.lightNow = t.stats.light;
+  t.hp = t.maxHp = maxHpOf(t);
   if (hero) {
     s.heroesPlaced.push(type);
-    // Start with a short wait so the ability isn't spent by accident on placement.
+    // A short wait so the ability isn't spent by accident on placement.
     t.abilityCd = Math.min(10, t.stats.abilityCd);
   }
   s.gold -= cost;
-  s.tiles[ty * WORLD.cols + tx] = 3;
+  s.occ[i] = t.uid;
   s.towers.push(t);
+  if (t.height === 0) rebuildFlow(s);
   emit(s, 'build', t.x, t.y, hero ? 1 : 0);
   return t;
 }
@@ -67,23 +84,36 @@ export function upgrade(s: RunState, uid: number, path?: 'a' | 'b'): boolean {
   t.invested += opt.cost;
   if (opt.path === 'tier') t.tier++;
   else { t.fork = opt.path; t.forkTier++; }
-  t.stats = computeStats(t, s.mods);
+  refreshStats(t, s.mods);
   emit(s, 'upgrade', t.x, t.y, t.tier + t.forkTier);
   return true;
 }
 
+/** Removes a tower from the board, with no refund. Used for selling and for smashed towers. */
+function removeTower(s: RunState, t: Tower): void {
+  const i = s.towers.indexOf(t);
+  if (i < 0) return;
+  s.towers.splice(i, 1);
+  s.occ[tileIndex(s, t.tx, t.ty)] = 0;
+  if (t.hero) s.heroesPlaced = s.heroesPlaced.filter((h) => h !== t.type);
+  for (let m = s.pets.count - 1; m >= 0; m--) if (s.pets.items[m].owner === t) s.pets.removeAt(m);
+  if (t.height === 0) rebuildFlow(s);
+}
+
 export function sell(s: RunState, uid: number): boolean {
-  const i = s.towers.findIndex((t) => t.uid === uid);
-  if (i < 0 || s.outcome) return false;
-  const t = s.towers[i];
+  const t = findTower(s, uid);
+  if (!t || s.outcome) return false;
   const value = sellValue(t, s.mods);
   s.gold += value;
-  s.towers.splice(i, 1);
-  s.tiles[t.ty * WORLD.cols + t.tx] = 0;
-  // Its moths go with it.
-  for (let m = s.moths.count - 1; m >= 0; m--) if (s.moths.items[m].owner === t) s.moths.removeAt(m);
+  removeTower(s, t);
   emit(s, 'sell', t.x, t.y, value);
   return true;
+}
+
+/** A tower smashed by enemies. Heroes can be placed again, from level 1 of their start level. */
+export function destroyTower(s: RunState, t: Tower): void {
+  removeTower(s, t);
+  emit(s, 'destroyed', t.x, t.y, t.hero ? 1 : 0);
 }
 
 export function learnSkill(s: RunState, uid: number, branch: number, node: number): boolean {
@@ -94,7 +124,7 @@ export function learnSkill(s: RunState, uid: number, branch: number, node: numbe
   s.gold -= cost;
   t.invested += cost;
   t.skills.push(skillCode(branch, node));
-  t.stats = computeStats(t, s.mods);
+  refreshStats(t, s.mods);
   emit(s, 'skill', t.x, t.y, branch, node);
   return true;
 }
@@ -108,16 +138,20 @@ export function cycleTarget(s: RunState, uid: number): boolean {
 
 /** Starts the next wave now. Calling early pays gold for the time left on the countdown. */
 export function callWave(s: RunState): boolean {
-  if (s.outcome || s.wave >= RUN.waves) return false;
-  // Only while the current wave has finished spawning (or before the first).
-  if (!s.waiting && s.spawnIdx < s.spawns.length) return false;
+  if (!canCallWave(s)) return false;
   if (!s.waiting && s.nextIn > 0) {
-    const bonus = Math.floor(s.nextIn * RUN.earlyBonusPerSec * s.mods.earlyMul);
+    const bonus = earlyBonus(s);
     if (bonus > 0) { s.gold += bonus; s.goldEarned += bonus; emit(s, 'gold', 0, 0, bonus); }
   }
   startWave(s);
   return true;
 }
+
+export const earlyBonus = (s: RunState): number =>
+  s.waiting ? 0 : Math.floor(Math.max(0, s.nextIn) * RUN.earlyBonusPerSec * s.mods.earlyMul);
+
+export const canCallWave = (s: RunState): boolean =>
+  !s.outcome && s.wave < RUN.waves && (s.waiting || s.spawnIdx >= s.spawns.length);
 
 export function startWave(s: RunState): void {
   s.waiting = false;
@@ -128,7 +162,7 @@ export function startWave(s: RunState): void {
   const groups = WAVES[s.wave - 1] ?? [];
   let gi = 0;
   for (const [kind, count, gap, delay] of groups) {
-    for (let i = 0; i < count; i++) s.spawns.push({ t: delay + i * gap, kind, path: gi + i });
+    for (let i = 0; i < count; i++) s.spawns.push({ t: delay + i * gap, kind, gate: gi + i });
     gi++;
   }
   s.spawns.sort((a, b) => a.t - b.t);
@@ -137,14 +171,11 @@ export function startWave(s: RunState): void {
   emit(s, 'wave', 0, 0, s.wave);
 }
 
-export const canCallWave = (s: RunState): boolean =>
-  !s.outcome && s.wave < RUN.waves && (s.waiting || s.spawnIdx >= s.spawns.length);
-
 // ---------------------------------------------------------------------------------------------
 // Hero abilities
 // ---------------------------------------------------------------------------------------------
 
-export const ABILITY_INDEX: Record<AbilityKind, number> = { flare: 0, toll: 1, shatter: 2, vigil: 3, swarm: 4 };
+export const ABILITY_INDEX: Record<AbilityKind, number> = { charge: 0, sanctify: 1, barrage: 2, rally: 3, wildhunt: 4 };
 
 export function useAbility(s: RunState, uid: number): boolean {
   const t = findTower(s, uid);
@@ -154,30 +185,32 @@ export function useAbility(s: RunState, uid: number): boolean {
   const dmgMul = 1 + t.buffDamage;
   const E = s.enemies;
   switch (kind) {
-    case 'flare': case 'toll': {
+    case 'charge': case 'sanctify': {
       const r2 = st.abilityRadius * st.abilityRadius;
-      const type = kind === 'flare' ? 'fire' : 'sound';
-      for (let i = 0; i < E.count; i++) {
+      const type = kind === 'charge' ? 'physical' : 'magic';
+      const n = E.count;
+      for (let i = 0; i < n; i++) {
         const e = E.items[i];
         if (e.dead || (e.x - t.x) ** 2 + (e.y - t.y) ** 2 > r2) continue;
         if (!e.def.boss) e.stunT = Math.max(e.stunT, st.abilityTime);
         hurt(s, e, st.abilityDamage * dmgMul, type, t);
-        if (!e.dead && kind === 'toll') onHitEffects(s, e, t);
+        if (!e.dead && kind === 'sanctify') onHitEffects(s, e, t);
       }
-      if (kind === 'flare' && st.poolDps > 0) addPool(s, t.x, t.y, st.abilityRadius * 0.6, st.poolDps * 2, st.poolTime, t);
+      if (kind === 'charge' && st.poolDps > 0) addPool(s, t.x, t.y, st.abilityRadius * 0.6, st.poolDps * 2, st.poolTime, t);
       emit(s, 'ability', t.x, t.y, st.abilityRadius, ABILITY_INDEX[kind]);
       break;
     }
-    case 'shatter': {
+    case 'barrage': {
       const r = st.range * 1.5;
       // Pick the strongest enemies in reach without sorting the whole pool.
       const picked: number[] = [];
-      for (let n = 0; n < st.abilityTargets; n++) {
+      for (let k = 0; k < st.abilityTargets; k++) {
         let best = -1;
         let bestHp = -1;
         for (let i = 0; i < E.count; i++) {
           const e = E.items[i];
           if (e.dead || picked.includes(i) || (e.x - t.x) ** 2 + (e.y - t.y) ** 2 > r * r) continue;
+          if (e.def.stealth && !e.revealed) continue;
           if (e.hp > bestHp) { bestHp = e.hp; best = i; }
         }
         if (best < 0) break;
@@ -186,21 +219,21 @@ export function useAbility(s: RunState, uid: number): boolean {
       for (const i of picked) {
         const e = E.items[i];
         emit(s, 'chain', t.x, t.y, e.x, e.y, 1);
-        hurt(s, e, st.abilityDamage * dmgMul, 'pierce', t);
+        hurt(s, e, st.abilityDamage * dmgMul, 'magic', t);
       }
       emit(s, 'ability', t.x, t.y, r, ABILITY_INDEX[kind]);
       break;
     }
-    case 'vigil':
-      s.vigilT = st.abilityTime;
-      s.vigilPower = st.abilityPower;
+    case 'rally':
+      s.rallyT = st.abilityTime;
+      s.rallyPower = st.abilityPower;
       emit(s, 'ability', t.x, t.y, 0, ABILITY_INDEX[kind]);
       break;
-    case 'swarm':
+    case 'wildhunt':
       for (let i = 0; i < st.abilityTargets; i++) {
-        const m = s.moths.add();
+        const m = s.pets.add();
         if (!m) break;
-        m.owner = t; m.ownerUid = t.uid; m.x = m.px = t.x; m.y = m.py = t.y;
+        m.owner = t; m.x = m.px = t.x; m.y = m.py = t.y;
         m.target = null; m.targetUid = 0; m.cd = 0; m.phase = (i / st.abilityTargets) * Math.PI * 2;
         m.life = st.abilityTime; m.temp = true;
       }
@@ -221,6 +254,6 @@ export function addPool(s: RunState, x: number, y: number, r: number, dps: numbe
 export function debugSkipTo(s: RunState, wave: number): void {
   s.wave = Math.max(0, Math.min(RUN.waves - 1, wave - 1));
   for (let i = 0; i <= s.wave; i++) s.waveLeft[i] = 0;
-  s.gold += s.wave * 120;
+  s.gold += s.wave * 150;
   s.waiting = true;
 }
