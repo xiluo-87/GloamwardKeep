@@ -5,7 +5,7 @@ import {
 import { addPool, destroyTower, startWave } from './actions';
 import { hurt, onHitEffects, spawnAtGate, spawnNear } from './combat';
 import { HEX_W, pixelToTile, tileCenter } from './hex';
-import { nextTile } from './path';
+import { nextAirTile, nextTile } from './path';
 import { dmgTypeOf, kindOf } from './stats';
 import { emit, Enemy, RunState, Tower } from './state';
 
@@ -165,16 +165,31 @@ function leak(s: RunState, e: Enemy): void {
   emit(s, 'leak', e.x, e.y, e.def.lives, ENEMY_IDS.indexOf(e.def.id));
 }
 
-/** Flyers ignore the terrain and head straight for the keep. */
+/** Flyers follow the road like walkers, but over walls: towers never block or reroute them. */
 function fly(s: RunState, e: Enemy, dt: number): void {
-  const g = tileCenter(s.terrain.goal[0], s.terrain.goal[1]);
-  const dx = g.x - e.x;
-  const dy = g.y - e.y;
-  const d = Math.hypot(dx, dy);
-  e.dist = d / HEX_W;
-  const step = e.speed * (1 - e.slow) * dt;
-  if (d <= step + 4) { leak(s, e); return; }
-  move(e, dx / d, dy / d, step, dt);
+  const { cols, rows, goal } = s.terrain;
+  const goalIdx = goal[1] * cols + goal[0];
+  if (e.next < 0) {
+    const here = pixelToTile(e.x, e.y, cols, rows);
+    if (!here) return;
+    e.next = here.row * cols + here.col;
+  }
+  let budget = e.speed * (1 - e.slow) * dt;
+  for (let guard = 0; guard < 4 && budget > 0; guard++) {
+    const nc = tileCenter(e.next % cols, (e.next - (e.next % cols)) / cols);
+    const dx = nc.x - e.x;
+    const dy = nc.y - e.y;
+    const d = Math.hypot(dx, dy);
+    if (d > budget) { move(e, dx / d, dy / d, budget, dt); break; }
+    if (d > 0) move(e, dx / d, dy / d, d, dt);
+    budget -= d;
+    if (e.next === goalIdx) { leak(s, e); return; }
+    const after = nextAirTile(s, e.next);
+    if (after < 0) break;
+    e.next = after;
+  }
+  const nc = tileCenter(e.next % cols, (e.next - (e.next % cols)) / cols);
+  e.dist = s.airFlow[e.next] + Math.hypot(nc.x - e.x, nc.y - e.y) / HEX_W;
 }
 
 /** Ground enemies walk from tile centre to tile centre along the flow field. */

@@ -27,7 +27,7 @@ const IDLE_HTML = `<h3>The Keep</h3>
   <h4>Controls</h4>
   <dl class="stats keys"><dt>1–${TOWER_IDS.length}</dt><dd>Build tower here</dd><dt>Q / W</dt><dd>Place hero here</dd><dt>Space</dt><dd>Call next wave</dd>
   <dt>U / I</dt><dd>Upgrade (fork A / B)</dd><dt>S</dt><dd>Sell</dd><dt>T</dt><dd>Target mode</dd><dt>A</dt><dd>Hero ability</dd>
-  <dt>K</dt><dd>Raise the keep</dd><dt>C</dt><dd>Clear forest / rocks</dd><dt>F</dt><dd>Fit whole map</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
+  <dt>K</dt><dd>Raise the keep</dd><dt>C</dt><dd>Clear forest / rocks</dd><dt>F</dt><dd>Fit whole map</dd><dt>V</dt><dd>Show / hide enemy paths</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
   <p class="sub">Build walls on the road to steer enemies onto longer routes. Higher ground gives more range.</p>`;
 
 export function towerName(t: Tower): string {

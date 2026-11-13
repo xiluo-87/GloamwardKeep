@@ -30,7 +30,7 @@ Phones and desktop share one model: **tap a tile to select it, tap it again for 
 - **Selling** gives a full refund for gold spent since the current wave started ("Undo"); otherwise it needs a press-and-hold.
 - **Bottom row:** Call wave (with countdown), speed, hero abilities, fit map. **Top bar:** gold, lives, wave, pause.
 - **Slow time while a menu is open:** Normal, Half speed (default) or Pause.
-- **Flight lines.** A dashed pale-blue line with arrows shows the straight path flyers take from each gate to the keep (they skip the road). It brightens while the current or next wave has flyers, and while placing a tower that hits flyers.
+- **Enemy paths** (toggle in the bottom row, V on desktop, default on). Shows the current ground route and the flyers' route: the road as it would be with no towers, since flyers pass over walls. The flyers' route brightens while the current or next wave has flyers, and while placing a tower that hits flyers.
 - **Edge arrows** point at off-screen threats near the keep, bosses and leaks; tap one to jump there.
 
 | Keyboard (desktop) | Action |
@@ -86,7 +86,7 @@ Consequences:
 - If another route exists, enemies walk around the tower, even if it is much longer.
 - A tower on high ground never changes the field.
 - Towers cannot be built on a road tile while a walking enemy stands on it.
-- **Flyers (bats) ignore the terrain** and fly straight to the keep.
+- **Flyers (bats) follow the road but fly over towers.** Their route is the road computed with every tower ignored (`airFlow`), so walls never block, reroute or get smashed by them.
 
 ### 5.2 Smashing
 

@@ -2,7 +2,7 @@
 // ground), upgrades, learns skills, and calls waves.
 import { HEROES, HeroId, TowerId } from '../data/balance';
 import { build, callWave, canBuild, canCallWave, learnSkill, upgrade, upgradeKeep, useAbility } from './actions';
-import { HEX_W, hexDistance, tileCenter } from './hex';
+import { hexDistance } from './hex';
 import { FEATURE } from './mapgen';
 import { buildCost, keepForTower, skillState, upgradeOptions } from './stats';
 import { RunState } from './state';
@@ -49,14 +49,6 @@ export function rankSpots(s: RunState): [number, number][] {
         if (Math.abs(ry - y) > 3) continue;
         const d = hexDistance(x, y, rx, ry);
         if (d <= 3) v += d <= 2 ? 1 : 0.4;
-      }
-      // Flyers go straight from each gate to the keep: spots near that line also cover them.
-      const c = tileCenter(x, y);
-      for (const [gx, gy] of s.terrain.spawns) {
-        const a = tileCenter(gx, gy);
-        const b = tileCenter(s.terrain.goal[0], s.terrain.goal[1]);
-        const d = distToSegment(c.x, c.y, a.x, a.y, b.x, b.y) / HEX_W;
-        if (d <= 3) v += (3 - d) * 1.5;
       }
       if (v > 0) spots.push({ x, y, v: v * (1 + 0.15 * height[i]) });
     }
@@ -164,9 +156,3 @@ export class Bot {
   }
 }
 
-function distToSegment(px: number, py: number, ax: number, ay: number, bx: number, by: number): number {
-  const dx = bx - ax;
-  const dy = by - ay;
-  const k = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy || 1)));
-  return Math.hypot(px - (ax + dx * k), py - (ay + dy * k));
-}

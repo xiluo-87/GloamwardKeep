@@ -41,6 +41,7 @@ export const ACTION_ICONS = {
   clear: wrap('<path d="M5 20L15 6M13 4l7 5-3 2-6-4z" fill="#cfd5dc" stroke="#4d5662"/><path d="M5 20l3-1" />'),
   keep: wrap('<path d="M4 21V9l2-2v-3h3v3h2V4h2v3h2V4h3v3l2 2v12z" fill="#cfd5dc" stroke="#4d5662"/><path d="M10 21v-6a2 2 0 014 0v6" fill="#6b4527" stroke="#4a2f18"/><path d="M12 1v3M12 1h4" stroke="#a2352d"/>'),
   lock: wrap('<rect x="5" y="11" width="14" height="10" rx="2" fill="#8a8577" stroke="#3d3a33"/><path d="M8 11V8a4 4 0 018 0v3" stroke="#3d3a33" stroke-width="2"/>'),
+  paths: wrap('<path d="M5 20c0-5 4-4 4-8s-3-3-3-7M14 21c0-4 5-3 5-8" stroke-dasharray="2.5 3" stroke-width="2.2"/><circle cx="6" cy="5" r="1.6" fill="currentColor"/><path d="M17 11l2 2 2-2" stroke-width="2"/>'),
   fit: wrap('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="9" y="9" width="6" height="6" rx="1"/>'),
 };
 

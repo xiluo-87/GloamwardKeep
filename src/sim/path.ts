@@ -5,8 +5,38 @@ import { PATHING } from '../data/balance';
 import { hexNeighbours } from './hex';
 import { RunState } from './state';
 
-/** Cost of stepping onto tile `j`, treating `extra` (a tile index, or -1) as if a tower stood there. */
-const enterCost = (s: RunState, j: number, extra = -1): number => 1 + (s.occ[j] || j === extra ? PATHING.towerCost : 0);
+/**
+ * Cost of stepping onto tile `j`, treating `extra` (a tile index, or -1) as if a tower stood there.
+ * extra = -2 means "ignore towers entirely" (the flyers' route over walls).
+ */
+const enterCost = (s: RunState, j: number, extra = -1): number =>
+  extra === -2 ? 1 : 1 + (s.occ[j] || j === extra ? PATHING.towerCost : 0);
+
+/** The flyers' field: the road with every tower ignored. Terrain never changes on level 0, so it's built once. */
+export function buildAirFlow(s: RunState): void {
+  computeFlow(s, s.airFlow, -2);
+}
+
+/** The next tile for a flyer at tile `i`: along the road, flying over walls. */
+export function nextAirTile(s: RunState, i: number): number {
+  return nextTileIn(s, s.airFlow, i, -2);
+}
+
+/** Tiles of the flyers' route from each gate to the keep (gates concatenated). */
+export function airRoute(s: RunState): number[] {
+  const { cols, goal } = s.terrain;
+  const goalIdx = goal[1] * cols + goal[0];
+  const tiles: number[] = [];
+  for (const [gx, gy] of s.terrain.spawns) {
+    let i = gy * cols + gx;
+    for (let guard = 0; guard < s.airFlow.length && i >= 0; guard++) {
+      tiles.push(i);
+      if (i === goalIdx) break;
+      i = nextAirTile(s, i);
+    }
+  }
+  return tiles;
+}
 
 /** Rebuilds the flow field. Call after any change to towers on level 0. */
 export function rebuildFlow(s: RunState): void {

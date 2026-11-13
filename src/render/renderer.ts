@@ -7,6 +7,7 @@ import { Enemy, Pet, RunState, Tower } from '../sim/state';
 import { circ, clamp01, frame, glow, lerp, poly, setTint, TAU } from './art';
 import { drawEnemySprite } from './enemies';
 import { drawHero, drawHeroBadge } from './heroes';
+import { previewRoute } from '../sim/path';
 import { drawKeepSprite } from './keep';
 import { blitBake, hexSub, LIFT, TOP_MARGIN } from './terrain';
 import { drawTower, newLinks, towerHeight, WallLinks } from './towers';
@@ -59,6 +60,9 @@ export class Renderer implements CameraApi {
   private leakT = 0;
   private arrows: { x: number; y: number; ang: number; size: number; w: number; col: number; row: number; red: boolean }[] = [];
   private arrowCount = 0;
+  private routeCache: number[] = [];
+  private routeVer = -1;
+  private routeRun: RunState | null = null;
   private terrainNow: Terrain | null = null;
   private bg: HTMLCanvasElement | null = null;
   private fx: Fx[] = [];
@@ -769,7 +773,17 @@ export class Renderer implements CameraApi {
     // Burning ground.
     for (let i = 0; i < s.pools.count; i++) this.drawPool(g, s.pools.items[i], wallTime);
 
-    this.drawFlyLines(g, s, view, wallTime);
+    if (view.showPaths) {
+      this.drawFlyLines(g, s, view, wallTime);
+      if (!view.routePreview) {
+        if (this.routeRun !== s || this.routeVer !== s.flowVersion) {
+          this.routeRun = s;
+          this.routeVer = s.flowVersion;
+          this.routeCache = previewRoute(s, -1, -1).tiles;
+        }
+        this.drawRoute(g, s, this.routeCache, false, wallTime, true);
+      }
+    }
     this.drawGroundOverlays(g, s, view, wallTime);
 
     // Towers and walking enemies, back to front.
@@ -803,7 +817,7 @@ export class Renderer implements CameraApi {
     }
 
     this.U(g);
-    this.drawRoute(g, s, view, wallTime);
+    if (view.routePreview) this.drawRoute(g, s, view.routePreview, view.routeSealed, wallTime, false);
     this.drawFx(g);
 
     // Enemy and tower health bars on top of everything.
@@ -1029,13 +1043,11 @@ export class Renderer implements CameraApi {
     g.globalAlpha = 1;
   }
 
-  private drawRoute(g: CanvasRenderingContext2D, s: RunState, view: ViewState, time: number): void {
-    const route = view.routePreview;
-    if (!route || route.length < 2) return;
+  private drawRoute(g: CanvasRenderingContext2D, s: RunState, route: number[], sealed: boolean, time: number, faint: boolean): void {
+    if (route.length < 2) return;
     const cols = s.terrain.cols;
-    const sealed = view.routeSealed;
-    const pulse = sealed ? 0.65 + 0.35 * Math.sin(time * 7) : 1;
-    const colour = sealed ? '#ff4a3a' : '#ffffff';
+    const pulse = faint ? 0.5 : sealed ? 0.65 + 0.35 * Math.sin(time * 7) : 1;
+    const colour = faint ? '#fff0cc' : sealed ? '#ff4a3a' : '#ffffff';
     let smash = -1;
     g.lineCap = 'round';
     g.lineJoin = 'round';
@@ -1052,10 +1064,15 @@ export class Renderer implements CameraApi {
         const far = pi >= 0 && hexDist(i, pi, cols) > 1;
         if (k === 0 || far) g.moveTo(x, y); else g.lineTo(x, y);
       }
-      if (pass === 0) { g.strokeStyle = 'rgba(20,10,5,0.55)'; g.lineWidth = 4.2; g.setLineDash(NO_DASH); } else {
+      if (pass === 0) {
+        g.globalAlpha = faint ? 0.4 : 1;
+        g.strokeStyle = faint ? 'rgba(40,20,5,0.9)' : 'rgba(20,10,5,0.55)';
+        g.lineWidth = faint ? 3.6 : 4.2;
+        g.setLineDash(faint ? DOTS : NO_DASH);
+      } else {
         g.globalAlpha = pulse;
         g.strokeStyle = colour;
-        g.lineWidth = 2.4;
+        g.lineWidth = faint ? 2 : 2.4;
         g.setLineDash(DOTS);
       }
       g.stroke();
@@ -1064,7 +1081,8 @@ export class Renderer implements CameraApi {
     // Direction arrows every few tiles.
     g.fillStyle = colour;
     g.strokeStyle = 'rgba(20,10,5,0.7)';
-    g.lineWidth = 1;
+    g.lineWidth = faint ? 0 : 1;
+    g.globalAlpha = pulse;
     for (let k = 1; k < route.length; k++) {
       const i0 = route[k - 1];
       const i1 = route[k];
@@ -1087,10 +1105,10 @@ export class Renderer implements CameraApi {
       g.lineTo(mx - ca * 3.5 + sa * 4, my - sa * 3.5 - ca * 4);
       g.closePath();
       g.fill();
-      g.stroke();
+      if (!faint) g.stroke();
     }
     g.globalAlpha = 1;
-    if (smash >= 0) {
+    if (smash >= 0 && !faint) {
       const c = tileCenter(smash % cols, Math.floor(smash / cols));
       const x = this.sx(c.x, c.y);
       const y = this.sy(c.x, c.y) - s.terrain.height[smash] * LIFT - 4;

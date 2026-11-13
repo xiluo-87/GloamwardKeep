@@ -11,6 +11,7 @@ export interface ControlHooks {
   /** True while a run exists (even paused), for Esc handling. */
   inRun(): boolean;
   togglePause(): void;
+  togglePaths(): void;
   toggleDebug(): void;
   stepSpeed(dir: number): void;
   anyKey(): void;
@@ -163,6 +164,7 @@ export class Controls {
     else if (key === 't') ss.target();
     else if (key === 'a') { const h = ss.selected; if (h?.hero) ss.ability(h.uid); }
     else if (key === 'f') this.renderer.fitBoard();
+    else if (key === 'v') this.hooks.togglePaths();
     else if (key === '[') this.hooks.stepSpeed(-1);
     else if (key === ']') this.hooks.stepSpeed(1);
   }

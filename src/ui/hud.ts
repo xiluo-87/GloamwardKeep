@@ -12,7 +12,7 @@ import { keepUnlocks, roman } from './format';
 import { towerName } from './panel';
 import type { Session } from './session';
 
-export interface HudHooks { togglePause(): void; cycleSpeed(): void; fitMap(): void; focusKeep(): void }
+export interface HudHooks { togglePause(): void; cycleSpeed(): void; fitMap(): void; focusKeep(): void; togglePaths(): void; pathsOn(): boolean }
 
 const HEIGHT_NAME = ['Road', 'Field', 'Rise', 'Hill', 'Peak'];
 
@@ -28,6 +28,7 @@ export class Hud {
   private callSub!: HTMLElement;
   private speed!: HTMLButtonElement;
   private keepBtn!: HTMLButtonElement;
+  private pathsBtn!: HTMLButtonElement;
   private keepLabel!: HTMLElement;
   private toasts: HTMLElement;
   private card: HTMLElement;
@@ -56,6 +57,7 @@ export class Hud {
         <button class="call primary" data-k="call"><b>Start</b><small></small></button>
         <button class="small spd" data-k="speed" title="Game speed" aria-label="Game speed">1×</button>
         <div class="abilities"></div>
+        <button class="small pathbtn" data-k="paths" title="Show enemy paths (V)" aria-label="Show enemy paths" aria-pressed="true"><i class="ico">${ACTION_ICONS.paths}</i><s class="strike"></s></button>
         <button class="small fit" data-k="fit" title="Fit the whole map" aria-label="Fit map"><i class="ico">${ACTION_ICONS.fit}</i></button>
       </div>
       <div id="ring"></div>
@@ -77,6 +79,8 @@ export class Hud {
     this.keepBtn = q('keep') as HTMLButtonElement;
     this.keepLabel = this.keepBtn.querySelector('b') as HTMLElement;
     this.keepBtn.addEventListener('click', () => this.hooks.focusKeep());
+    this.pathsBtn = q('paths') as HTMLButtonElement;
+    this.pathsBtn.addEventListener('click', () => this.hooks.togglePaths());
     q('fit').addEventListener('click', () => this.hooks.fitMap());
     this.card.addEventListener('click', (e) => {
       const b = (e.target as HTMLElement).closest('[data-act]') as HTMLElement | null;
@@ -156,6 +160,8 @@ export class Hud {
     this.call.hidden = s.wave >= RUN.waves && !can;
     this.set('keep', this.keepLabel, `Keep ${roman(s.keep)}`);
     this.flag('keepReady', this.keepBtn, 'ready', keepCost(s) > 0 && s.gold >= keepCost(s));
+    const on = this.hooks.pathsOn();
+    if (this.cache.get('paths') !== on) { this.cache.set('paths', on); this.pathsBtn.classList.toggle('off', !on); this.pathsBtn.setAttribute('aria-pressed', String(on)); }
     this.set('speed', this.speed, `${this.session.speed}×`);
     this.updateAbilities(s);
     this.updateCard(s);

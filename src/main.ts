@@ -14,7 +14,7 @@ import { joinNames, keepTowers, roman } from './ui/format';
 import { Hud } from './ui/hud';
 import { Panel } from './ui/panel';
 import { Ring } from './ui/ring';
-import { loadUi, SLOW_FACTOR } from './ui/settings';
+import { loadUi, saveUi, SLOW_FACTOR } from './ui/settings';
 import { Screens } from './ui/screens';
 import { Session } from './ui/session';
 
@@ -84,6 +84,8 @@ const hud = new Hud(hudRoot, session, {
   togglePause: () => togglePause(),
   cycleSpeed: () => stepSpeed(1),
   fitMap: () => renderer.fitBoard(),
+  togglePaths: () => togglePaths(),
+  pathsOn: () => ui.paths,
   focusKeep: () => {
     if (!run || mode !== 'run') return;
     const [c, r] = run.terrain.goal;
@@ -160,6 +162,12 @@ function setPaused(p: boolean): void {
   if (p) { session.closeOverlays(); synth.stopRun(); screens.pause(); } else screens.hide();
 }
 
+function togglePaths(): void {
+  ui.paths = !ui.paths;
+  saveUi(ui);
+  session.onToast(ui.paths ? 'Enemy paths shown' : 'Enemy paths hidden');
+}
+
 const togglePause = (): void => { if (endAt === 0) setPaused(!session.paused); };
 
 function stepSpeed(dir: number): void {
@@ -174,6 +182,7 @@ const controls = new Controls(canvas, session, renderer, {
   active: () => mode === 'run' && !session.paused && endAt === 0,
   inRun: () => mode === 'run' && endAt === 0,
   togglePause,
+  togglePaths: () => togglePaths(),
   toggleDebug: () => { if (debugMode) session.view.debug = !session.view.debug; },
   stepSpeed: (d) => { if (debugMode) stepSpeed(d); },
   anyKey: () => synth.unlock(),
@@ -224,6 +233,7 @@ function frame(now: number): void {
       if (n >= 60) acc = 0;
       if (s.outcome) endAt = now + (bot ? 400 : 1800);
     }
+    session.view.showPaths = ui.paths;
     session.refreshView();
     renderer.consumeEvents(s);
     if (!paused) synth.update(s, dt);

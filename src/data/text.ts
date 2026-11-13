@@ -142,7 +142,7 @@ export const ENEMY_TEXT: Record<EnemyId, { name: string; blurb: string }> = {
   hexer: { name: 'Goblin Hexer', blurb: 'Fast. Jinxes towers it runs past so they attack slower.' },
   orc: { name: 'Orc Warrior', blurb: 'Slow and armoured. Fire and magic work best.' },
   stalker: { name: 'Shadow Stalker', blurb: 'Fast and unseen. Only a Watch Shrine or the Knight can detect it.' },
-  bat: { name: 'Giant Bat', blurb: 'Flies straight over the hills to the keep. Catapults and frost cannot hit it.' },
+  bat: { name: 'Giant Bat', blurb: 'Follows the road but flies over walls, so it can\'t be mazed. Catapults and frost cannot hit it.' },
   troll: { name: 'Troll', blurb: 'Huge and resistant to fire and magic. Arrows work best.' },
   wagon: { name: 'War Wagon', blurb: 'Spills goblins when destroyed.' },
   shaman: { name: 'Orc Shaman', blurb: 'Wraps nearby enemies in shields.' },

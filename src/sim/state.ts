@@ -2,7 +2,7 @@ import {
   EnemyDef, ENEMIES, EnemyId, HeroId, MapId, PERKS, PerkId, RUN, Stats, STAT_KEYS, TowerId,
 } from '../data/balance';
 import { generateMap, Terrain } from './mapgen';
-import { rebuildFlow } from './path';
+import { buildAirFlow, rebuildFlow } from './path';
 import { Rng } from './rng';
 
 export class Pool<T> {
@@ -201,6 +201,8 @@ export interface RunState {
   /** Walking cost from each tile to the keep (Infinity off the road). Rebuilt when level-0 towers change. */
   flow: Float32Array;
   flowVersion: number;
+  /** Flyers' field: the same road with towers ignored, so flyers follow the road but pass over walls. */
+  airFlow: Float32Array;
   towers: Tower[];
   enemies: Pool<Enemy>; projectiles: Pool<Projectile>; pets: Pool<Pet>; pools: Pool<BurnPool>;
   nextUid: number;
@@ -232,7 +234,7 @@ export function createRun(cfg: RunConfig): RunState {
     gold: mods.startGold, lives: mods.lives, keep: 1,
     wave: 0, waiting: true, nextIn: 0, spawns: [], spawnIdx: 0, waveT: 0, waveLeft: [0],
     outcome: null,
-    terrain, terrainVersion: 0, occ: new Int32Array(n), flow: new Float32Array(n), flowVersion: 0,
+    terrain, terrainVersion: 0, occ: new Int32Array(n), flow: new Float32Array(n), flowVersion: 0, airFlow: new Float32Array(n),
     towers: [],
     enemies: new Pool(RUN.enemyCap, createEnemy),
     projectiles: new Pool(RUN.projectileCap, (): Projectile => ({
@@ -248,6 +250,7 @@ export function createRun(cfg: RunConfig): RunState {
   };
   for (let i = 0; i < EVENT_CAP; i++) s.events.push({ type: 'hit', x: 0, y: 0, a: 0, b: 0, c: 0 });
   rebuildFlow(s);
+  buildAirFlow(s);
   return s;
 }
 

@@ -9,7 +9,7 @@ The game is playable from wave 1 to wave 30: 7 towers with forks, 5 heroes with 
 ## Next steps
 
 1. **Human playtesting.** Start with the early economy (waves 1–10), whether mazing with walls beats plain tower building, the stalker wave (8) without a detector, and Canyon with two gates.
-2. **Balance tuning with the bot.** Tune values in `src/data/balance.ts`. Last check (3 map seeds per preset, Knight only): Meadow won / 24 / 14, Highlands 26 / 28 / 21, Canyon 22 / 23 / 13. Flyers fly straight from gate to keep and skip the maze, so cover their line. `tests/docs.test.ts` keeps the price tables in DESIGN.md in sync with balance.ts.
+2. **Balance tuning with the bot.** Tune values in `src/data/balance.ts`. Last check (3 map seeds per preset, Knight only): Meadow won / 24 / 14, Highlands 26 / 28 / 21, Canyon 22 / 23 / 13. Flyers follow the road but fly over walls, so mazes do not slow them. `tests/docs.test.ts` keeps the price tables in DESIGN.md in sync with balance.ts.
 3. **Future work.** A 3D renderer with Three.js is planned; see `docs/3D-RENDERER.md`. The tech rules below stay Canvas 2D until that work starts.
 
 ## Tech rules

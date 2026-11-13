@@ -96,6 +96,11 @@ export class Screens {
         saveUi(this.ui);
         if (this.pauseOpen) this.pause(); else this.title();
         break;
+      case 'paths':
+        this.ui.paths = !this.ui.paths;
+        saveUi(this.ui);
+        if (this.pauseOpen) this.pause(); else this.title();
+        break;
       case 'shake': p.reduceMotion = !p.reduceMotion; this.h.saved(); this.title(); break;
       case 'map': if (mapUnlocked(level, arg as MapId)) { p.map = arg as MapId; this.h.saved(); this.play(); } break;
       case 'reroll': this.mapSeed = newSeed(); this.play(); break;
@@ -150,6 +155,7 @@ export class Screens {
       <div class="row">
         <button class="small" data-act="sound">Sound: ${p.muted ? 'Off' : 'On'}</button>
         <button class="small" data-act="shake">Screen shake: ${p.reduceMotion ? 'Off' : 'On'}</button>
+        <button class="small" data-act="paths">Enemy paths: ${this.ui.paths ? 'On' : 'Off'}</button>
         <button class="small" data-act="slow" title="How fast time runs while the action ring, a description or a sheet is open">Slow time in menus: ${SLOW_TEXT[this.ui.slow]}</button>
       </div>
     </div>`, 'center');
@@ -253,9 +259,10 @@ export class Screens {
       <h2>Paused</h2>
       <button class="primary" data-act="resume">Resume</button>
       <button data-act="restart">Restart this map</button>
+      <button data-act="paths">Enemy paths: ${this.ui.paths ? 'On' : 'Off'}</button>
       <button data-act="slow" title="How fast time runs while the action ring, a description or a sheet is open">Slow time in menus: ${SLOW_TEXT[this.ui.slow]}</button>
       <button data-act="giveup" class="${armed ? 'danger' : ''}">${armed ? 'Really give up?' : 'Give up'}</button>
-      <p class="hint">Tap a tile to select, tap again for actions · Space calls the next wave · 1–${TOWER_IDS.length} build, Q/W heroes on the selected tile · U/I upgrade · S sell · T target · A ability · F fit map · Esc pause</p>
+      <p class="hint">Tap a tile to select, tap again for actions · Space calls the next wave · 1–${TOWER_IDS.length} build, Q/W heroes on the selected tile · U/I upgrade · S sell · T target · A ability · F fit map · V enemy paths · Esc pause</p>
     </div>`, 'center dim');
   }
 

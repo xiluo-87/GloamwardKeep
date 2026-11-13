@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { ENEMIES, PATHING, TOWERS } from '../src/data/balance';
 import { build, sell, upgrade } from '../src/sim/actions';
 import { hurt, spawnAtGate } from '../src/sim/combat';
-import { hexNeighbours, tileCenter } from '../src/sim/hex';
-import { previewRoute, rebuildFlow, routeOpen } from '../src/sim/path';
+import { hexNeighbours, pixelToTile } from '../src/sim/hex';
+import { airRoute, previewRoute, rebuildFlow, routeOpen } from '../src/sim/path';
 import { RunState } from '../src/sim/state';
 import { buildUp, eventsOf, highTiles, idx, mk, roadTiles, stepSecs, stepUntil } from './helpers';
 
@@ -175,21 +175,32 @@ describe('smashing', () => {
     expect(t.hp).toBe(t.maxHp);
   });
 
-  it('flyers ignore walls and fly straight to the keep', () => {
+  it('flyers follow the road but fly over walls, never smashing them', () => {
     const s = mk();
     seal(s);
+    const towers = s.towers.length;
+    const route = new Set(airRoute(s));
+    const { cols, rows } = s.terrain;
     const bat = spawnAtGate(s, 'bat', 0, 1)!;
-    const g = tileCenter(s.terrain.goal[0], s.terrain.goal[1]);
-    let last = Math.hypot(bat.x - g.x, bat.y - g.y);
-    for (let i = 0; i < 60 * 30 && !bat.dead; i++) {
-      stepSecs(s, 1 / 60);
+    let maxSecs = 120;
+    while (!bat.dead && maxSecs-- > 0) {
+      stepSecs(s, 1);
       if (bat.dead) break;
-      const d = Math.hypot(bat.x - g.x, bat.y - g.y);
-      expect(d).toBeLessThan(last);
-      last = d;
+      const t = pixelToTile(bat.x, bat.y, cols, rows);
+      if (t) expect(route.has(t.row * cols + t.col)).toBe(true);
+      expect(bat.smashing).toBe(0);
     }
     expect(bat.dead).toBe(true);
     expect(s.lives).toBe(s.mods.lives - ENEMIES.bat.lives);
+    expect(s.towers).toHaveLength(towers);
+  });
+
+  it('the flyers route ignores towers and matches the open road', () => {
+    const s = mk();
+    const before = airRoute(s);
+    expect(before).toEqual(previewRoute(s, -1, -1).tiles);
+    seal(s);
+    expect(airRoute(s)).toEqual(before);
   });
 });
 

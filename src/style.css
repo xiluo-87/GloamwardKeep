@@ -250,3 +250,25 @@ ul.unlocks li.got { border-color: var(--green); color: var(--ink); }
 #desc .dh .di { width: 26px; height: 26px; flex: none; }
 #desc .dh h4 { flex: 1; }
 #desc .dh { align-items: center; }
+
+/* enemy-path toggle */
+#thumb .pathbtn { position: relative; width: 56px; min-height: 56px; background: linear-gradient(#f7ecd0, #e0c98f); color: #3d5a2a; }
+#thumb .pathbtn .ico { width: 28px; height: 28px; }
+#thumb .pathbtn .strike { display: none; position: absolute; left: 10px; right: 10px; top: 50%; height: 3px; background: #a2352d; border-radius: 2px; transform: rotate(-35deg); }
+#thumb .pathbtn.off { filter: grayscale(0.8) brightness(0.9); color: #7a6444; }
+#thumb .pathbtn.off .strike { display: block; }
+#thumb .pathbtn:not(.off) { outline: 2px solid var(--gold2); }
+@media (max-width: 380px) {
+  #thumb { gap: 5px; padding-left: max(6px, env(safe-area-inset-left)); padding-right: max(6px, env(safe-area-inset-right)); }
+  #thumb .spd, #thumb .fit, #thumb .pathbtn { width: 46px; min-height: 52px; }
+  #thumb .call b { font-size: 15px; }
+  #thumb .call small { font-size: 11px; }
+}
+@media (max-width: 380px) {
+  #topbar { gap: 4px 8px; flex-wrap: nowrap; }
+  #topbar .stat { font-size: 14px; gap: 3px; }
+  #topbar .stat b { font-size: 16px; }
+  #topbar .keepbtn { padding: 4px 8px; }
+  #topbar .keepbtn .ico { display: none; }
+  #topbar .stat .ico { width: 18px; height: 18px; }
+}
