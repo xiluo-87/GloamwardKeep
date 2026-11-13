@@ -641,9 +641,7 @@ function lightning(g: CanvasRenderingContext2D, t: Tower, time: number): void {
     for (const [dx, dy, r, c] of [[-8, 1, 6, '#4a5068'], [8, 1, 6, '#4a5068'], [0, -2, 8, '#5a6280'], [-3.5, 3, 6, '#3a4058'], [4, 3, 6, '#3a4058']] as [number, number, number, string][]) {
       circ(g, dx * sc, cy + dy * sc, r * sc, c, 1.1);
     }
-    g.globalAlpha = 0.25 + 0.6 * (Math.sin(time * 9 + t.uid) > 0.55 ? 1 : 0) + rc * 0.3;
-    glow(g, 0, cy, 12 * sc, '#fff0a0', 0.5);
-    g.globalAlpha = 1;
+    if (Math.sin(time * 9 + t.uid) > 0.6 || rc > 0) glow(g, 0, cy, 12 * sc, '#fff0a0', 0.5);
     poly(g, [-2, cy + 4 * sc, 1, cy + 8 * sc, -1, cy + 9 * sc, 2, cy + 14 * sc, -2.4, cy + 10 * sc, 0, cy + 9 * sc], '#ffe890', 0.6);
   }
 }
