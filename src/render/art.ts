@@ -1,5 +1,7 @@
 // Shared drawing helpers for the code-drawn sprites. Sprites draw in local units (world pixels)
 // with the origin at the foot of the figure and y pointing down.
+/** Draw-time angle offset: sprites stay upright while the board may be rotated 90 degrees. */
+export const frame = { angle: 0 };
 export const TAU = Math.PI * 2;
 export const OUT = '#2b2218';
 

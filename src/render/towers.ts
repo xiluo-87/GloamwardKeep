@@ -1,6 +1,6 @@
 // Code-drawn towers. Origin = tile centre at the tile's top face; y points down.
 import { Tower } from '../sim/state';
-import { circ, ell, glow, poly, rect, seg, stick, TAU, C, fs, OUT } from './art';
+import { circ, ell, frame, glow, poly, rect, seg, stick, TAU, C, fs, OUT } from './art';
 
 const WOOD = '#8a5a2c';
 const WOOD_L = '#a8743a';
@@ -146,8 +146,8 @@ function palisade(g: CanvasRenderingContext2D, t: Tower, time: number, links: Wa
   } else if (guard) {
     // Battlement with an archer behind it.
     const ay = gy - H - 4;
-    archerFigure(g, -3.5, ay, t.angle, 1, '#3f7a3a', rc, time);
-    if (t.forkTier >= 2) archerFigure(g, 4, ay + 1, t.angle, 1, '#8a2d2a', rc, time);
+    archerFigure(g, -3.5, ay, (t.angle + frame.angle), 1, '#3f7a3a', rc, time);
+    if (t.forkTier >= 2) archerFigure(g, 4, ay + 1, (t.angle + frame.angle), 1, '#8a2d2a', rc, time);
     merlons(g, -w - 1, w + 1, gy - H + 0.5, 4, STONE_L);
     rect(g, -1, gy - H - 16, 1.4, 12, '#4a3420', 0.5);
     poly(g, [0.4, gy - H - 16, 7, gy - H - 14, 0.4, gy - H - 11], '#2f5fb8', 0.8);
@@ -203,7 +203,7 @@ function archer(g: CanvasRenderingContext2D, t: Tower, time: number): void {
     // Platform and roof.
     rect(g, -9, top - 2, 18, 4, STONE_D, 1);
     merlons(g, -9, 9, top - 2, 4, STONE_L);
-    archerFigure(g, 0, top - 2, t.angle, 1.15, '#2f6a45', rc, time);
+    archerFigure(g, 0, top - 2, (t.angle + frame.angle), 1.15, '#2f6a45', rc, time);
     if (t.forkTier >= 2) {
       rect(g, -0.7, top - 22, 1.4, 12, '#4a3420', 0.5);
       poly(g, [0.7, top - 22, 9, top - 19, 0.7, top - 15], GOLD, 0.8);
@@ -220,9 +220,9 @@ function archer(g: CanvasRenderingContext2D, t: Tower, time: number): void {
     rect(g, -3, -10, 6, 15, '#4a3420', 1);
     rect(g, -17, top - 3, 34, 4, STONE_D, 1);
     merlons(g, -17, 17, top - 3, 6, STONE_L);
-    archerFigure(g, -10, top - 3, t.angle, 1, '#3f7a3a', rc, time);
-    archerFigure(g, 0, top - 3, t.angle, 1, '#8a2d2a', rc, time);
-    archerFigure(g, 10, top - 3, t.angle, 1, '#2f5fb8', rc, time);
+    archerFigure(g, -10, top - 3, (t.angle + frame.angle), 1, '#3f7a3a', rc, time);
+    archerFigure(g, 0, top - 3, (t.angle + frame.angle), 1, '#8a2d2a', rc, time);
+    archerFigure(g, 10, top - 3, (t.angle + frame.angle), 1, '#2f5fb8', rc, time);
     if (t.forkTier >= 2) {
       for (const bx of [-14, 14]) {
         rect(g, bx - 0.7, top - 20, 1.4, 17, '#4a3420', 0.5);
@@ -240,7 +240,7 @@ function archer(g: CanvasRenderingContext2D, t: Tower, time: number): void {
     stick(g, 7, gy - 1, -6, -10, WOOD_D, 1.2);
     rect(g, -10, -15, 20, 4, WOOD_L, 1.1);
     rect(g, -9, -21, 18, 2, WOOD, 0.9);
-    archerFigure(g, 0, -15, t.angle, 1, '#3f7a3a', rc, time);
+    archerFigure(g, 0, -15, (t.angle + frame.angle), 1, '#3f7a3a', rc, time);
   } else if (t.tier === 2) {
     stick(g, -9, gy, -7, -20, WOOD_D, 2.4);
     stick(g, 9, gy, 7, -20, WOOD_D, 2.4);
@@ -250,7 +250,7 @@ function archer(g: CanvasRenderingContext2D, t: Tower, time: number): void {
     stick(g, -9, -23, -9, -33, WOOD_D, 1.6);
     stick(g, 9, -23, 9, -33, WOOD_D, 1.6);
     poly(g, [-13, -32, 0, -42, 13, -32], ROOF, 1.2);
-    archerFigure(g, 0, -23, t.angle, 1, '#3f7a3a', rc, time);
+    archerFigure(g, 0, -23, (t.angle + frame.angle), 1, '#3f7a3a', rc, time);
   } else {
     // Stone tower.
     rect(g, -11, -26, 22, gy + 26, STONE, 1.2);
@@ -261,8 +261,8 @@ function archer(g: CanvasRenderingContext2D, t: Tower, time: number): void {
     rect(g, -1, -20, 2, 6, '#2a2630', 0.6);
     rect(g, -13, -29, 26, 4, STONE_D, 1);
     merlons(g, -13, 13, -29, 5, STONE_L);
-    archerFigure(g, -4, -29, t.angle, 1, '#3f7a3a', rc, time);
-    archerFigure(g, 5, -29, t.angle, 1, '#8a2d2a', rc, time);
+    archerFigure(g, -4, -29, (t.angle + frame.angle), 1, '#3f7a3a', rc, time);
+    archerFigure(g, 5, -29, (t.angle + frame.angle), 1, '#8a2d2a', rc, time);
   }
 }
 
@@ -270,7 +270,7 @@ function archer(g: CanvasRenderingContext2D, t: Tower, time: number): void {
 // Catapult
 // ---------------------------------------------------------------------------------------------
 function catapult(g: CanvasRenderingContext2D, t: Tower, time: number): void {
-  const f = Math.cos(t.angle) < -0.05 ? -1 : 1;
+  const f = Math.cos((t.angle + frame.angle)) < -0.05 ? -1 : 1;
   g.save();
   g.scale(f, 1);
   const fire = t.fork === 'a';

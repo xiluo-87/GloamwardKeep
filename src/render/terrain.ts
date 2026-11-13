@@ -24,62 +24,92 @@ for (let i = 0; i < 6; i++) {
   CY.push(R * Math.sin(a));
 }
 
-export function hexPath(g: CanvasRenderingContext2D, cx: number, cy: number, r = 1): void {
+// Rotated (flat-top) corners: the pointy layout turned 90 degrees clockwise.
+const RX = CY.map((v) => -v);
+const RY = CX.slice();
+const HXS = [CX, RX];
+const HYS = [CY, RY];
+
+export function hexPath(g: CanvasRenderingContext2D, cx: number, cy: number, r = 1, rot = false): void {
   g.beginPath();
-  for (let i = 0; i < 6; i++) g.lineTo(cx + CX[i] * r, cy + CY[i] * r);
+  const hx = HXS[rot ? 1 : 0];
+  const hy = HYS[rot ? 1 : 0];
+  for (let i = 0; i < 6; i++) g.lineTo(cx + hx[i] * r, cy + hy[i] * r);
   g.closePath();
 }
 
 /** Adds a hex as a subpath (no beginPath) so many hexes can share one stroke. */
-export function hexSub(g: CanvasRenderingContext2D, cx: number, cy: number, r = 1): void {
-  g.moveTo(cx + CX[0] * r, cy + CY[0] * r);
-  for (let i = 1; i < 6; i++) g.lineTo(cx + CX[i] * r, cy + CY[i] * r);
+export function hexSub(g: CanvasRenderingContext2D, cx: number, cy: number, r = 1, rot = false): void {
+  const hx = HXS[rot ? 1 : 0];
+  const hy = HYS[rot ? 1 : 0];
+  g.moveTo(cx + hx[0] * r, cy + hy[0] * r);
+  for (let i = 1; i < 6; i++) g.lineTo(cx + hx[i] * r, cy + hy[i] * r);
   g.closePath();
 }
 
 export interface Bake { canvas: HTMLCanvasElement; scale: number; version: number }
-const bakes = new WeakMap<Terrain, Bake>();
+const bakes = new WeakMap<Terrain, [Bake | null, Bake | null]>();
 
 const bucket = (s: number): number => (s <= 0.5 ? 0.5 : s <= 1 ? 1 : s <= 1.5 ? 1.5 : s <= 2 ? 2 : s <= 3 ? 3 : 4);
 
-/** Returns the baked canvas for a terrain at roughly the requested pixel scale. */
-export function getBake(t: Terrain, scale: number, version = 0): Bake {
+/** Returns the baked canvas for a terrain at roughly the requested pixel scale, upright or rotated 90 degrees. */
+export function getBake(t: Terrain, scale: number, version = 0, rot = false): Bake {
   const b = bucket(scale);
-  let bk = bakes.get(t);
+  let slots = bakes.get(t);
+  if (!slots) { slots = [null, null]; bakes.set(t, slots); }
+  const i = rot ? 1 : 0;
+  let bk = slots[i];
   if (!bk || bk.scale !== b || bk.version !== version) {
-    bk = { canvas: bakeTerrain(t, b), scale: b, version };
-    bakes.set(t, bk);
+    bk = { canvas: bakeTerrain(t, b, rot), scale: b, version };
+    slots[i] = bk;
   }
   return bk;
 }
 
-/** Draws the baked terrain with world origin at (ox, oy) device px and k device px per world px. */
-export function blitBake(g: CanvasRenderingContext2D, t: Terrain, ox: number, oy: number, k: number, scaleHint: number, version = 0): void {
-  const bk = getBake(t, scaleHint, version);
+/** Draws the baked terrain with the design origin at (ox, oy) device px and k device px per world px. */
+export function blitBake(g: CanvasRenderingContext2D, t: Terrain, ox: number, oy: number, k: number, scaleHint: number, version = 0, rot = false): void {
+  const bk = getBake(t, scaleHint, version, rot);
   g.drawImage(bk.canvas, ox - PAD_X * k, oy - TOP_MARGIN * k, bk.canvas.width / bk.scale * k, bk.canvas.height / bk.scale * k);
 }
 
-export function bakeTerrain(t: Terrain, scale: number): HTMLCanvasElement {
-  const w = boardWidth(t.cols) + PAD_X * 2;
-  const h = boardHeight(t.rows) + TOP_MARGIN + PAD_BOTTOM;
+// Projection used while baking: upright, or turned 90 degrees clockwise (gates at the top).
+let ROT = false;
+let BOARD_H = 0;
+const pt = { x: 0, y: 0 };
+function P(x: number, y: number): void {
+  if (ROT) { pt.x = BOARD_H - y; pt.y = x; } else { pt.x = x; pt.y = y; }
+}
+
+export function bakeTerrain(t: Terrain, scale: number, rot = false): HTMLCanvasElement {
+  ROT = rot;
+  BOARD_H = boardHeight(t.rows);
+  const dw = rot ? BOARD_H : boardWidth(t.cols);
+  const dh = rot ? boardWidth(t.cols) : BOARD_H;
+  const w = dw + PAD_X * 2;
+  const h = dh + TOP_MARGIN + PAD_BOTTOM;
   const c = document.createElement('canvas');
   c.width = Math.ceil(w * scale);
   c.height = Math.ceil(h * scale);
   const g = c.getContext('2d') as CanvasRenderingContext2D;
   g.setTransform(scale, 0, 0, scale, PAD_X * scale, TOP_MARGIN * scale);
-  // Soft ground shadow under the board edge so it sits on the vignette.
   const hAt = (col: number, row: number): number => (col < 0 || row < 0 || col >= t.cols || row >= t.rows ? -1 : t.height[row * t.cols + col]);
-  for (let row = 0; row < t.rows; row++) {
-    for (let col = 0; col < t.cols; col++) drawTile(g, t, col, row, hAt);
+  // Painter's order: back (top of the screen) to front.
+  const idx: number[] = [];
+  for (let i = 0; i < t.cols * t.rows; i++) idx.push(i);
+  if (rot) {
+    const key = (i: number): number => tileCenter(i % t.cols, Math.floor(i / t.cols)).x;
+    idx.sort((a, b) => key(a) - key(b) || a - b);
   }
-  // Gates and the keep sit on top of their tiles.
+  for (const i of idx) drawTile(g, t, i % t.cols, Math.floor(i / t.cols), hAt);
   for (const [col, row] of t.spawns) {
     const p = tileCenter(col, row);
-    drawGate(g, p.x, p.y - t.height[row * t.cols + col] * LIFT);
+    P(p.x, p.y);
+    drawGate(g, pt.x, pt.y - t.height[row * t.cols + col] * LIFT);
   }
   const [gc, gr] = t.goal;
   const gp = tileCenter(gc, gr);
-  drawKeep(g, gp.x, gp.y - t.height[gr * t.cols + gc] * LIFT);
+  P(gp.x, gp.y);
+  drawKeep(g, pt.x, pt.y - t.height[gr * t.cols + gc] * LIFT);
   return c;
 }
 
@@ -96,63 +126,63 @@ function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: num
   const i = row * t.cols + col;
   const h = t.height[i];
   const p = tileCenter(col, row);
-  const cx = p.x;
-  const cy = p.y - h * LIFT;
+  P(p.x, p.y);
+  const cx = pt.x;
+  const cy = pt.y - h * LIFT;
+  const hx = HXS[ROT ? 1 : 0];
+  const hy = HYS[ROT ? 1 : 0];
   const v = hash3(col, row, 11);
   const v2 = hash3(col, row, 23);
   const var_ = (v - 0.5) * 0.12;
 
-  // Side faces (the two lower edges, extruded down to the ground).
+  // Side faces: the lower edges, extruded down to the ground.
+  const pairs = ROT ? [[5, 0], [0, 1], [1, 2]] : [[1, 2], [2, 3]];
+  const shades = ROT ? [-0.17, -0.07, 0.04] : [-0.14, 0.04];
+  const prof = ROT ? [2, 1, 0, 5] : [3, 2, 1];
+  const upper = ROT ? [2, 3, 4, 5] : [3, 4, 5];
   if (h > 0) {
     const d = h * LIFT;
-    g.beginPath();
-    g.moveTo(cx + CX[1], cy + CY[1]);
-    g.lineTo(cx + CX[2], cy + CY[2]);
-    g.lineTo(cx + CX[2], cy + CY[2] + d);
-    g.lineTo(cx + CX[1], cy + CY[1] + d);
-    g.closePath();
-    g.fillStyle = tint(SIDES[h], -0.14 + var_ * 0.5);
-    g.fill();
-    g.beginPath();
-    g.moveTo(cx + CX[2], cy + CY[2]);
-    g.lineTo(cx + CX[3], cy + CY[3]);
-    g.lineTo(cx + CX[3], cy + CY[3] + d);
-    g.lineTo(cx + CX[2], cy + CY[2] + d);
-    g.closePath();
-    g.fillStyle = tint(SIDES[h], 0.04 + var_ * 0.5);
-    g.fill();
-    // Strata lines on rock and snow, grass roots on the green terraces.
+    for (let k = 0; k < pairs.length; k++) {
+      const a = pairs[k][0];
+      const b = pairs[k][1];
+      g.beginPath();
+      g.moveTo(cx + hx[a], cy + hy[a]);
+      g.lineTo(cx + hx[b], cy + hy[b]);
+      g.lineTo(cx + hx[b], cy + hy[b] + d);
+      g.lineTo(cx + hx[a], cy + hy[a] + d);
+      g.closePath();
+      g.fillStyle = tint(SIDES[h], shades[k] + var_ * 0.5);
+      g.fill();
+    }
+    // Strata lines on rock and snow.
     g.strokeStyle = h >= 3 ? 'rgba(0,0,0,0.18)' : 'rgba(0,0,0,0.12)';
     g.lineWidth = 0.8;
     for (let s = 1; s < h; s++) {
-      const y = cy + s * LIFT;
       g.beginPath();
-      g.moveTo(cx + CX[3], y + CY[3]);
-      g.lineTo(cx + CX[2], y + CY[2]);
-      g.lineTo(cx + CX[1], y + CY[1]);
+      for (let k = 0; k < prof.length; k++) g.lineTo(cx + hx[prof[k]], cy + hy[prof[k]] + s * LIFT);
       g.stroke();
     }
-    // Dark base line.
+    // Dark base line and the vertical edges at the ends.
     g.strokeStyle = 'rgba(20,16,10,0.55)';
     g.lineWidth = 1.2;
     g.beginPath();
-    g.moveTo(cx + CX[3], cy + CY[3] + d);
-    g.lineTo(cx + CX[2], cy + CY[2] + d);
-    g.lineTo(cx + CX[1], cy + CY[1] + d);
-    g.moveTo(cx + CX[1], cy + CY[1]);
-    g.lineTo(cx + CX[1], cy + CY[1] + d);
-    g.moveTo(cx + CX[3], cy + CY[3]);
-    g.lineTo(cx + CX[3], cy + CY[3] + d);
+    for (let k = 0; k < prof.length; k++) g.lineTo(cx + hx[prof[k]], cy + hy[prof[k]] + d);
+    const e0 = prof[0];
+    const e1 = prof[prof.length - 1];
+    g.moveTo(cx + hx[e1], cy + hy[e1]);
+    g.lineTo(cx + hx[e1], cy + hy[e1] + d);
+    g.moveTo(cx + hx[e0], cy + hy[e0]);
+    g.lineTo(cx + hx[e0], cy + hy[e0] + d);
     g.stroke();
   }
 
   // Top face.
-  hexPath(g, cx, cy, 0.995);
+  hexPath(g, cx, cy, 0.995, ROT);
   g.fillStyle = tint(TOPS[h], var_);
   g.fill();
 
   g.save();
-  hexPath(g, cx, cy, 1);
+  hexPath(g, cx, cy, 1, ROT);
   g.clip();
   if (h === 0) roadTexture(g, cx, cy, col, row);
   else groundTexture(g, cx, cy, h, col, row, v2);
@@ -167,6 +197,7 @@ function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: num
     const q = tileCenter(nc, nr);
     let dx = q.x - p.x;
     let dy = q.y - p.y;
+    if (ROT) { const tx = -dy; dy = dx; dx = tx; }
     const len = Math.hypot(dx, dy) || 1;
     dx /= len;
     dy /= len;
@@ -186,12 +217,10 @@ function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: num
     g.strokeStyle = 'rgba(255,255,230,0.22)';
     g.lineWidth = 1.2;
     g.beginPath();
-    g.moveTo(cx + CX[3] + 1, cy + CY[3] - 1);
-    g.lineTo(cx + CX[4], cy + CY[4] + 1);
-    g.lineTo(cx + CX[5], cy + CY[5] + 1);
+    for (let k = 0; k < upper.length; k++) g.lineTo(cx + hx[upper[k]] * (k === 0 ? 1 : 1) + (k === 0 ? 1 : 0), cy + hy[upper[k]] + 1);
     g.stroke();
   }
-  hexPath(g, cx, cy, 0.995);
+  hexPath(g, cx, cy, 0.995, ROT);
   g.strokeStyle = h === 0 ? 'rgba(70,52,26,0.35)' : 'rgba(10,20,5,0.3)';
   g.lineWidth = 0.9;
   g.stroke();

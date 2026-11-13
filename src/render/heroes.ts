@@ -1,7 +1,7 @@
 // Code-drawn heroes: small figures on a round plinth with a gold ring.
 import { HeroId } from '../data/balance';
 import { Tower } from '../sim/state';
-import { circ, ell, glow, poly, rect, stick, TAU, C, fs, OUT } from './art';
+import { circ, ell, frame, glow, poly, rect, stick, TAU, C, fs, OUT } from './art';
 
 const GOLD = '#e8b830';
 const SKIN = '#f0c8a0';
@@ -19,7 +19,7 @@ export function drawHero(g: CanvasRenderingContext2D, t: Tower, time: number): v
   const bob = Math.sin(time * 2 + t.uid) * 0.5;
   g.save();
   g.translate(0, bob);
-  const face = Math.cos(t.angle) < -0.1 ? -1 : 1;
+  const face = Math.cos((t.angle + frame.angle)) < -0.1 ? -1 : 1;
   g.scale(face, 1);
   switch (t.type as HeroId) {
     case 'knight': knight(g, rc); break;
@@ -125,7 +125,7 @@ function ranger(g: CanvasRenderingContext2D, t: Tower, face: number, rc: number)
   fs(g, '#2f6a32', 1.1);
   circ(g, 1, -21.2, 2.4, SKIN, 0.6);
   // Bow aimed at the target (angle taken in the flipped frame).
-  const ang = Math.atan2(Math.sin(t.angle), Math.cos(t.angle) * face);
+  const ang = Math.atan2(Math.sin((t.angle + frame.angle)), Math.cos((t.angle + frame.angle)) * face);
   const bx = 5 + Math.cos(ang) * 2;
   const by = -15 + Math.sin(ang) * 2;
   const px = -Math.sin(ang);
