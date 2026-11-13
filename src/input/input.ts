@@ -1,73 +1,133 @@
-import type { Input } from '../sim/state';
+// Pointer (mouse and touch) and keyboard. Both only talk to the Session; the simulation is never touched here.
+import type { Renderer } from '../render/renderer';
+import { towerAt } from '../sim/state';
+import type { Session } from '../ui/session';
+import { CHECK_TEXT } from '../ui/session';
+import { canBuild } from '../sim/actions';
 
-/** Keyboard and touch both feed one Input object, so a controller could be added here later. */
+export interface ControlHooks {
+  /** True while a run is on screen and not paused. */
+  active(): boolean;
+  /** True while a run exists (even paused), for Esc handling. */
+  inRun(): boolean;
+  togglePause(): void;
+  toggleDebug(): void;
+  stepSpeed(dir: number): void;
+  anyKey(): void;
+}
+
 export class Controls {
-  readonly state: Input = { mx: 0, my: 0, dim: false };
-  private keys = new Set<string>();
-  private moveId: number | null = null;
-  private dimId: number | null = null;
-  joystick: { x: number; y: number; dx: number; dy: number } | null = null;
-  onKey: (key: string) => void = () => undefined;
+  private pending: { col: number; row: number } | null = null;
+  private down: { x: number; y: number; id: number } | null = null;
 
-  constructor(el: HTMLElement) {
-    window.addEventListener('keydown', (e) => {
-      if (['F3', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
-      if (!e.repeat) this.onKey(e.key);
-      this.keys.add(e.code);
+  constructor(private canvas: HTMLCanvasElement, private session: Session, private renderer: Renderer, private hooks: ControlHooks) {
+    canvas.addEventListener('pointerdown', (e) => this.onDown(e));
+    canvas.addEventListener('pointermove', (e) => this.onMove(e));
+    canvas.addEventListener('pointerup', (e) => this.onUp(e));
+    canvas.addEventListener('pointercancel', () => { this.down = null; });
+    canvas.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse') this.session.view.hoverTile = null;
     });
-    window.addEventListener('keyup', (e) => this.keys.delete(e.code));
-    window.addEventListener('blur', () => this.clear());
-    el.addEventListener('pointerdown', (e) => this.down(e));
-    el.addEventListener('pointermove', (e) => this.moved(e));
-    el.addEventListener('pointerup', (e) => this.up(e));
-    el.addEventListener('pointercancel', (e) => this.up(e));
+    canvas.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      if (this.hooks.active()) this.session.cancel();
+    });
+    window.addEventListener('keydown', (e) => this.onKey(e));
   }
 
-  clear(): void {
-    this.keys.clear();
-    this.moveId = null;
-    this.dimId = null;
-    this.joystick = null;
+  /** Forget a half-confirmed touch placement (placing mode ended, new run, ...). */
+  reset(): void {
+    this.pending = null;
+    this.down = null;
   }
 
-  private down(e: PointerEvent): void {
-    if (e.pointerType === 'mouse') return;
-    if (e.clientX < window.innerWidth / 2) {
-      this.moveId = e.pointerId;
-      this.joystick = { x: e.clientX, y: e.clientY, dx: 0, dy: 0 };
-    } else {
-      this.dimId = e.pointerId;
+  private onDown(e: PointerEvent): void {
+    this.hooks.anyKey();
+    if (e.button === 2) return;
+    this.down = { x: e.clientX, y: e.clientY, id: e.pointerId };
+  }
+
+  private onMove(e: PointerEvent): void {
+    if (e.pointerType !== 'mouse' || !this.hooks.active()) return;
+    this.session.view.hoverTile = this.renderer.screenToTile(e.clientX, e.clientY);
+  }
+
+  private onUp(e: PointerEvent): void {
+    const d = this.down;
+    this.down = null;
+    if (!d || d.id !== e.pointerId || !this.hooks.active() || e.button === 2) return;
+    if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 14) return;
+    this.tap(this.renderer.screenToTile(e.clientX, e.clientY), e.pointerType === 'mouse');
+  }
+
+  private tap(tile: { col: number; row: number } | null, mouse: boolean): void {
+    const ss = this.session;
+    const s = ss.run;
+    if (!s) return;
+    const v = ss.view;
+    if (!tile) {
+      this.pending = null;
+      ss.cancel();
+      return;
     }
-    try {
-      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-    } catch {
-      // Capture is only a nicety: moves still arrive while the finger stays over the canvas.
+    const tower = towerAt(s, tile.col, tile.row);
+    if (v.placing) {
+      if (tower) {
+        this.pending = null;
+        ss.select(tower.uid);
+        return;
+      }
+      if (mouse) {
+        v.hoverTile = tile;
+        ss.placeAt(tile.col, tile.row, true);
+        ss.refreshView();
+        return;
+      }
+      // Touch: the first tap previews, a second tap on the same tile confirms.
+      if (this.pending && this.pending.col === tile.col && this.pending.row === tile.row) {
+        this.pending = null;
+        ss.placeAt(tile.col, tile.row, false);
+        v.hoverTile = null;
+        return;
+      }
+      this.pending = tile;
+      v.hoverTile = tile;
+      const check = canBuild(s, v.placing, tile.col, tile.row);
+      if (check !== 'ok') ss.onToast(CHECK_TEXT[check], true);
+      ss.refreshView();
+      return;
     }
+    this.pending = null;
+    ss.select(tower ? tower.uid : 0);
   }
 
-  private moved(e: PointerEvent): void {
-    if (e.pointerId !== this.moveId || !this.joystick) return;
-    const dx = (e.clientX - this.joystick.x) / 46;
-    const dy = (e.clientY - this.joystick.y) / 46;
-    const m = Math.hypot(dx, dy);
-    const k = m > 1 ? 1 / m : 1;
-    this.joystick.dx = dx * k;
-    this.joystick.dy = dy * k;
-  }
-
-  private up(e: PointerEvent): void {
-    if (e.pointerId === this.moveId) { this.moveId = null; this.joystick = null; }
-    if (e.pointerId === this.dimId) this.dimId = null;
-  }
-
-  poll(): Input {
-    const k = this.keys;
-    let mx = (k.has('KeyD') || k.has('ArrowRight') ? 1 : 0) - (k.has('KeyA') || k.has('ArrowLeft') ? 1 : 0);
-    let my = (k.has('KeyS') || k.has('ArrowDown') ? 1 : 0) - (k.has('KeyW') || k.has('ArrowUp') ? 1 : 0);
-    if (this.joystick) { mx = this.joystick.dx; my = this.joystick.dy; }
-    this.state.mx = mx;
-    this.state.my = my;
-    this.state.dim = k.has('Space') || this.dimId !== null;
-    return this.state;
+  private onKey(e: KeyboardEvent): void {
+    this.hooks.anyKey();
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target as HTMLElement | null;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    const key = e.key.toLowerCase();
+    if (e.code === 'Space' || key === 'f3') e.preventDefault();
+    if (key === 'escape') {
+      if (!this.hooks.inRun()) return;
+      if (this.hooks.active() && this.session.cancel()) { this.pending = null; return; }
+      this.hooks.togglePause();
+      return;
+    }
+    if (key === 'p' && this.hooks.inRun()) { this.hooks.togglePause(); return; }
+    if (key === 'f3' || key === '`') { this.hooks.toggleDebug(); return; }
+    if (!this.hooks.active()) return;
+    const ss = this.session;
+    if (key >= '1' && key <= '7') ss.towerSlot(Number(key) - 1);
+    else if (key === 'q') ss.heroSlot(0);
+    else if (key === 'w') ss.heroSlot(1);
+    else if (e.code === 'Space') ss.call();
+    else if (key === 'u') ss.upgradeSelected('a');
+    else if (key === 'i') ss.upgradeSelected('b');
+    else if (key === 's') ss.sellSelected(performance.now());
+    else if (key === 't') ss.target();
+    else if (key === 'a') { const h = ss.selected; if (h?.hero) ss.ability(h.uid); }
+    else if (key === '[') this.hooks.stepSpeed(-1);
+    else if (key === ']') this.hooks.stepSpeed(1);
   }
 }
