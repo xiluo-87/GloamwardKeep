@@ -7,7 +7,8 @@ import { Enemy, Pet, RunState, Tower } from '../sim/state';
 import { circ, clamp01, frame, glow, lerp, poly, setTint, TAU } from './art';
 import { drawEnemySprite } from './enemies';
 import { drawHero, drawHeroBadge } from './heroes';
-import { blitBake, drawKeepBanner, hexSub, LIFT, TOP_MARGIN } from './terrain';
+import { drawKeepSprite } from './keep';
+import { blitBake, hexSub, LIFT, TOP_MARGIN } from './terrain';
 import { drawTower, newLinks, towerHeight, WallLinks } from './towers';
 import { CameraApi, ViewState } from './view';
 
@@ -471,6 +472,19 @@ export class Renderer implements CameraApi {
           if (e.b > 0) this.text(X, y - 10, '-' + Math.round(e.b), '#e0c070', 11, 1);
           break;
         }
+        case 'keep': {
+          const y = Y - this.liftAt(s, e.x, e.y);
+          this.ring(X, y - 10, 70, '#ffd24a', 0.8, true);
+          this.ring(X, y - 10, 40, '#fff0a0', 0.5);
+          this.sparks(X, y - 14, 26, '#ffd24a', 150, 2.6, 0.8);
+          for (let k = 0; k < 14; k++) {
+            const f = this.alloc(STAR, X + (Math.random() - 0.5) * 50, y - Math.random() * 40, 0.9 + Math.random() * 0.6, '#ffe680');
+            if (f) { f.vy = -26; f.size = 3 + Math.random() * 2.5; }
+          }
+          this.text(X, y - 50, e.a >= 3 ? 'Keep III' : 'Keep II', '#ffe680', 16, 1.8);
+          this.shake = Math.max(this.shake, 5);
+          break;
+        }
         case 'boss': this.shake = Math.max(this.shake, 10); break;
         default: break;
       }
@@ -669,7 +683,8 @@ export class Renderer implements CameraApi {
     g.setTransform(ka, 0, 0, ka, ox * this.dpr, oy * this.dpr);
     const [gc, gr] = t.goal;
     const gp = tileCenter(gc, gr);
-    drawKeepBanner(g, gp.x, gp.y - t.height[gr * t.cols + gc] * LIFT, time);
+    g.translate(gp.x, gp.y - t.height[gr * t.cols + gc] * LIFT);
+    drawKeepSprite(g, 1, time);
     g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
     g.fillStyle = 'rgba(8,14,6,0.45)';
     g.fillRect(0, 0, this.w, this.h);
@@ -688,6 +703,12 @@ export class Renderer implements CameraApi {
     const oy = (h - wh * k) / 2 + TOP_MARGIN * k;
     const dprc = ctx.getTransform().a || 1;
     blitBake(ctx, terrain, ox, oy, k, k * dprc);
+    const gp = tileCenter(terrain.goal[0], terrain.goal[1]);
+    ctx.save();
+    ctx.translate(ox + gp.x * k, oy + (gp.y - terrain.height[terrain.goal[1] * terrain.cols + terrain.goal[0]] * LIFT) * k);
+    ctx.scale(k, k);
+    drawKeepSprite(ctx, 1, 0);
+    ctx.restore();
   }
 
   // -------------------------------------------------------------------------------------------
@@ -741,7 +762,7 @@ export class Renderer implements CameraApi {
     const [gc, gr] = terrain.goal;
     const gp = tileCenter(gc, gr);
     this.at(g, gp.x, gp.y, terrain.height[gr * cols + gc] * LIFT);
-    drawKeepBanner(g, 0, 0, wallTime);
+    drawKeepSprite(g, s.keep, wallTime);
     this.U(g);
 
     // Burning ground.

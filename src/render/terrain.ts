@@ -2,7 +2,7 @@
 import { WORLD } from '../data/balance';
 import { boardHeight, boardWidth, hexNeighbours, tileCenter } from '../sim/hex';
 import { FEATURE, Terrain } from '../sim/mapgen';
-import { circ, ell, hash3, poly, rect, shade, TAU } from './art';
+import { ell, hash3, poly, rect, shade, TAU } from './art';
 
 /** Pixels each height level lifts a tile. */
 export const LIFT = 5;
@@ -106,10 +106,7 @@ export function bakeTerrain(t: Terrain, scale: number, rot = false): HTMLCanvasE
     P(p.x, p.y);
     drawGate(g, pt.x, pt.y - t.height[row * t.cols + col] * LIFT);
   }
-  const [gc, gr] = t.goal;
-  const gp = tileCenter(gc, gr);
-  P(gp.x, gp.y);
-  drawKeep(g, pt.x, pt.y - t.height[gr * t.cols + gc] * LIFT);
+  // The keep is drawn live (its level changes during a run).
   return c;
 }
 
@@ -391,62 +388,4 @@ export function drawGate(g: CanvasRenderingContext2D, x: number, y: number): voi
   g.fillRect(x + 2, y + 1, 2, 2);
   // Merlons on the top.
   for (let k = -2; k <= 2; k++) rect(g, x + k * 4.4 - 1.6, y - 17, 3.2, 3.5, '#6d6a74', 0.8);
-}
-
-export function drawKeep(g: CanvasRenderingContext2D, x: number, y: number): void {
-  ell(g, x, y + 8, 26, 9, '#2a2418', 0);
-  // Curtain wall and towers.
-  rect(g, x - 20, y - 14, 40, 22, '#b9b3a4');
-  for (let k = 0; k < 4; k++) rect(g, x - 18 + k * 10, y - 18, 6, 5, '#b9b3a4', 0.9);
-  g.strokeStyle = 'rgba(0,0,0,0.2)';
-  g.lineWidth = 0.7;
-  for (let r = 0; r < 3; r++) {
-    g.beginPath();
-    g.moveTo(x - 20, y - 8 + r * 6);
-    g.lineTo(x + 20, y - 8 + r * 6);
-    g.stroke();
-  }
-  for (const sx of [-1, 1]) {
-    const bx = x + sx * 19;
-    rect(g, bx - 6, y - 26, 12, 34, '#a9a393');
-    poly(g, [bx - 8, y - 26, bx, y - 38, bx + 8, y - 26], '#2f5fb8');
-    rect(g, bx - 1.5, y - 20, 3, 6, '#2a2630', 0.8);
-  }
-  // Central keep.
-  rect(g, x - 10, y - 32, 20, 40, '#c8c2b2');
-  for (let k = 0; k < 3; k++) rect(g, x - 9 + k * 7, y - 36, 5, 5, '#c8c2b2', 0.9);
-  g.beginPath();
-  g.moveTo(x - 6, y + 8);
-  g.lineTo(x - 6, y - 2);
-  g.arc(x, y - 2, 6, Math.PI, 0);
-  g.lineTo(x + 6, y + 8);
-  g.closePath();
-  g.fillStyle = '#5a3a1e';
-  g.fill();
-  g.strokeStyle = '#2b2218';
-  g.lineWidth = 1.2;
-  g.stroke();
-  rect(g, x - 1.5, y - 22, 3, 8, '#2a2630', 0.8);
-  circ(g, x + 3, y + 3, 0.9, '#e8b830', 0);
-  // Pole (banner is animated live).
-  g.fillStyle = '#4a3420';
-  g.fillRect(x - 0.7, y - 52, 1.4, 17);
-}
-
-/** Waving banner for the keep, drawn live. */
-export function drawKeepBanner(g: CanvasRenderingContext2D, x: number, y: number, time: number): void {
-  const bx = x + 0.7;
-  const by = y - 52;
-  g.beginPath();
-  g.moveTo(bx, by);
-  for (let k = 0; k <= 6; k++) g.lineTo(bx + k * 2.4, by + Math.sin(time * 5 - k * 0.8) * 1.4 * (k / 6));
-  for (let k = 6; k >= 0; k--) g.lineTo(bx + k * 2.4, by + 8 - Math.sin(time * 5 - k * 0.8) * 0.4 + Math.sin(time * 5 - k * 0.8) * 1.4 * (k / 6) - (k === 6 ? 2 : 0));
-  g.closePath();
-  g.fillStyle = '#2f5fb8';
-  g.fill();
-  g.strokeStyle = '#2b2218';
-  g.lineWidth = 1;
-  g.stroke();
-  g.fillStyle = '#f0c030';
-  g.fillRect(bx + 3, by + 2.5, 5, 2.5);
 }
