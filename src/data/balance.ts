@@ -74,7 +74,7 @@ export type AttackKind = 'bolt' | 'lob' | 'pulse' | 'chain' | 'summon' | 'aura' 
 // Base towers: build, two linear tiers, then a fork into A or B with two tiers each.
 // ---------------------------------------------------------------------------------------------
 
-export type TowerId = 'palisade' | 'archer' | 'catapult' | 'frost' | 'mage' | 'aviary' | 'shrine';
+export type TowerId = 'palisade' | 'archer' | 'catapult' | 'frost' | 'mage' | 'lightning' | 'aviary' | 'shrine';
 
 /**
  * Build-menu groups. A group with only one available entry is shown as that entry directly, and
@@ -89,6 +89,7 @@ export const TOWER_GROUP: Record<TowerId, BuildGroup | null> = {
   // Frost is mostly about slowing, so it sits with the support towers.
   frost: 'support',
   mage: 'magic',
+  lightning: 'magic',
   shrine: 'support',
 };
 export interface Upgrade { cost: number; add: StatMod }
@@ -194,6 +195,27 @@ export const TOWERS: Record<TowerId, TowerDef> = {
       b: [
         { cost: 330, add: { beam: 1, damage: 10, ramp: 0.6, rampMax: 3 } },
         { cost: 500, add: { damage: 24, rampMax: 2, range: 20 } },
+      ],
+    },
+  },
+  // Single-target magic: one heavy strike from the sky (a chain with no jumps). Ignores armour.
+  lightning: {
+    id: 'lightning', kind: 'chain', dmgType: 'magic', cost: 110,
+    base: { damage: 40, rate: 0.6, range: 150, chains: 0, chainFalloff: 1, shots: 1, critMul: 2, hitsFlying: 1 },
+    tiers: [
+      { cost: 100, add: { damage: 18, range: 10 } },
+      { cost: 160, add: { damage: 24, rate: 0.1 } },
+    ],
+    forks: {
+      // Thunderhead: strikes can stun.
+      a: [
+        { cost: 260, add: { damage: 30, stunChance: 0.3, stun: 0.5 } },
+        { cost: 420, add: { damage: 50, stunChance: 0.2, stun: 0.3 } },
+      ],
+      // Thunder Lance: huge single strikes with crits, for bosses and brutes.
+      b: [
+        { cost: 280, add: { damage: 70, rate: -0.1, crit: 0.2, critMul: 1 } },
+        { cost: 450, add: { damage: 110, crit: 0.1, range: 30 } },
       ],
     },
   },

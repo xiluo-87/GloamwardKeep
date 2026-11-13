@@ -42,11 +42,19 @@ export const TOWER_TEXT: Record<TowerId, TowerText> = {
     },
   },
   mage: {
-    name: 'Mage Tower', blurb: 'Lightning that jumps between enemies. Hits flyers.',
+    name: 'Mage Tower', blurb: 'Arcane bolts that jump between enemies. Hits flyers.',
     tiers: ['Mage Tower', 'Adept Tower', 'Wizard Tower'],
     forks: {
       a: { name: 'Storm Spire', blurb: 'Longer chains that lose less on each jump.', tiers: ['Storm Spire', 'Tempest'] },
       b: { name: 'Arcane Beam', blurb: 'A held beam that grows stronger the longer it stays on one target.', tiers: ['Arcane Beam', 'Sunfire'] },
+    },
+  },
+  lightning: {
+    name: 'Lightning Tower', blurb: 'One heavy strike from the sky on a single target. Ignores armour. Hits flyers.',
+    tiers: ['Lightning Tower', 'Storm Rod', 'Thunder Spire'],
+    forks: {
+      a: { name: 'Thunderhead', blurb: 'Strikes can stun their target.', tiers: ['Thunderhead', 'Tempest Crown'] },
+      b: { name: 'Thunder Lance', blurb: 'Huge single strikes with deadly crits. Built for bosses.', tiers: ['Thunder Lance', 'Wrath of Heaven'] },
     },
   },
   aviary: {
@@ -69,7 +77,7 @@ export const TOWER_TEXT: Record<TowerId, TowerText> = {
 
 export const GROUP_TEXT: Record<BuildGroup | 'heroes', { name: string; blurb: string }> = {
   physical: { name: 'Physical', blurb: 'Arrows, stones and claws. Strong against unarmoured foes.' },
-  magic: { name: 'Magical', blurb: 'Lightning and arcane beams. Ignores armour; trolls resist it.' },
+  magic: { name: 'Magical', blurb: 'Arcane bolts and lightning strikes. Ignores armour; trolls resist it.' },
   support: { name: 'Support', blurb: 'Control and blessings: slow and freeze enemies, strengthen nearby towers or earn gold.' },
   heroes: { name: 'Heroes', blurb: 'Unique champions that level up and learn skills.' },
 };

@@ -18,18 +18,29 @@ A run starts with 300 gold and 20 lives. The player starts the first wave; later
 
 ## 3. Controls
 
-| Action | Keyboard | Touch |
-|---|---|---|
-| Choose a tower to build | 1 to 7 | Tap a tower in the bar |
-| Choose a hero to place | Q, W | Tap a hero in the bar |
-| Place | Click a tile | Tap a tile to select, tap it again to place |
-| Select a placed tower | Click it | Tap it |
-| Call the next wave | Space | Call button |
-| Upgrade (first or second option) | U, I | Panel buttons |
-| Sell | S | Panel button |
-| Change target mode | T | Panel button |
-| Hero ability | A | Panel button |
-| Cancel or pause | Esc | Back button |
+Phones and desktop share one model: **tap a tile to select it, tap it again for its actions.**
+
+- **Camera.** Drag to pan (a drag is never a tap), pinch or mouse wheel to zoom, and a fit-map button. In portrait the board is turned 90°: gates at the top, the keep at the bottom.
+- **First tap** selects the tile and shows a short corner card: terrain, height and range bonus, the tower and its HP, and a Clear button on forest or rocks.
+- **Second tap** opens the **action ring** around the tile. Its icons sit on arcs centred on the tile and turned away from screen edges.
+  - Empty tile: the build menu (see below). Tower: upgrade (both fork options at the fork), target, sell. Hero: ability, skills, target, sell. Forest or rocks: clear.
+  - Pressing an icon shows a description card (and the ghost, range and, on the road, the enemies' new route) before buying; releasing buys, sliding off cancels. On desktop, hover shows the card and click buys.
+- **Build menu groups** (`TOWER_GROUP` in balance.ts). The top level shows ungrouped towers (Palisade), one folder per group and a Heroes folder. A group with a single available entry shows that entry directly. Folders look different from direct builds (stacked circles and a count badge such as "3 ›" instead of a price), and open a second ring with a Back item.
+  - Physical: Archer Tower, Catapult, Aviary. Magical: Mage Tower, Lightning Tower. Support: Frost Tower, Shrine.
+- **Selling** gives a full refund for gold spent since the current wave started ("Undo"); otherwise it needs a press-and-hold.
+- **Bottom row:** Call wave (with countdown), speed, hero abilities, fit map. **Top bar:** gold, lives, wave, pause.
+- **Slow time while a menu is open:** Normal, Half speed (default) or Pause.
+- **Edge arrows** point at off-screen threats near the keep, bosses and leaks; tap one to jump there.
+
+| Keyboard (desktop) | Action |
+|---|---|
+| 1–8 | Build that tower on the selected tile (in `TOWER_IDS` order) |
+| Q, W | Place a loadout hero on the selected tile |
+| U, I | Upgrade (first or second fork option) |
+| S, T, A, C | Sell, target mode, hero ability, clear forest or rocks |
+| Space | Call the next wave |
+| F | Fit the map |
+| Esc | Close the ring or folder, cancel, or pause |
 
 Targeting modes cycle through first, last, strong and close.
 
@@ -130,7 +141,8 @@ Every tower is built, upgraded along two linear tiers, then forked into A or B w
 | Archer Tower | Single target, hits flyers | 70 | Bowmen 75, Marksmen 130 | Longbow 240, Eagle Eye 400 | Volley 230, Arrow Storm 380 | 13 dmg, 1.25/s, range 150 |
 | Catapult | Fire splash, ground only | 110 | Heavy Catapult 110, Siege Catapult 170 | Fire Pot 300, Inferno 460 | Scatter Shot 290, Hailstorm 440 | 22 dmg, 0.5/s, range 170, splash 46 |
 | Frost Tower | Slowing pulse, ground only | 90 | Ice Spire 100, Winter Spire 150 | Deep Freeze 270, Glacier 410 | Shatter 250, Frostbite 400 | 10 magic, 0.45/s, range 105, 35% slow |
-| Mage Tower | Chain lightning, hits flyers | 120 | Adept Tower 140, Wizard Tower 210 | Storm Spire 310, Tempest 470 | Arcane Beam 330, Sunfire 500 | 16 magic, 0.8/s, range 140, 2 jumps |
+| Mage Tower | Arcane bolts that jump, hits flyers | 120 | Adept Tower 140, Wizard Tower 210 | Storm Spire 310, Tempest 470 | Arcane Beam 330, Sunfire 500 | 16 magic, 0.8/s, range 140, 2 jumps |
+| Lightning Tower | Single heavy strike, hits flyers | 110 | Storm Rod 100, Thunder Spire 160 | Thunderhead 260, Tempest Crown 420 | Thunder Lance 280, Wrath of Heaven 450 | 40 magic, 0.6/s, range 150, single target |
 | Aviary | Hawks, hit flyers | 100 | Hawk Roost 100, Falconry 170 | Fire Hawks 290, Phoenix Roost 450 | War Eagles 310, Royal Eagles 470 | 2 hawks, 9 dmg, range 160 |
 | Shrine | Aura, no attack | 80 | Blessed Shrine 100, Watch Shrine 150 | War Banner 260, Royal Standard 400 | Treasury 240, Royal Mint 380 | +10% damage to towers in range 150 |
 
@@ -140,6 +152,7 @@ What each upgrade does, from the data:
 - **Archer.** Tiers add damage and speed. Longbow: +120 range, +40 damage, slower, 15% crit; Eagle Eye adds damage, crit and 8% armour shred. Volley: +1 arrow, then another.
 - **Catapult.** Fire Pot leaves burning ground (18 then 22 fire/s for 3 s) and bigger splash. Scatter Shot adds 4 then 3 cluster bursts at 45% damage.
 - **Frost.** Deep Freeze adds a 25% then 15% chance to stun. Shatter adds damage and armour shred.
+- **Lightning.** A chain with no jumps: one instant magic strike on one target, which ignores armour. Thunderhead adds damage and a 30% (then 50%) chance to stun for 0.5 s (0.8 s). Thunder Lance adds big damage and crits (20%, then 30%, at x3) for bosses and brutes.
 - **Mage.** Storm Spire adds 3 jumps and stronger jumps, then a second bolt. Arcane Beam is a held beam: damage x2 per second, ramping 0.6 per second up to x3 (x5 with Sunfire).
 - **Aviary.** Fire Hawks set targets alight (14 then 26 burn/s). War Eagles hit hard and break armour, and Royal Eagles can stun.
 - **Shrine.** Tier 2 +25 range and +5% damage. Tier 3 adds detection. War Banner adds range, damage and attack speed, and Royal Standard makes towers jinx-immune. Treasury pays gold per wave.
