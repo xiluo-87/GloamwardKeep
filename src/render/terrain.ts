@@ -30,6 +30,13 @@ export function hexPath(g: CanvasRenderingContext2D, cx: number, cy: number, r =
   g.closePath();
 }
 
+/** Adds a hex as a subpath (no beginPath) so many hexes can share one stroke. */
+export function hexSub(g: CanvasRenderingContext2D, cx: number, cy: number, r = 1): void {
+  g.moveTo(cx + CX[0] * r, cy + CY[0] * r);
+  for (let i = 1; i < 6; i++) g.lineTo(cx + CX[i] * r, cy + CY[i] * r);
+  g.closePath();
+}
+
 export interface Bake { canvas: HTMLCanvasElement; scale: number; version: number }
 const bakes = new WeakMap<Terrain, Bake>();
 

@@ -20,6 +20,15 @@ const SKILL_LABEL: Record<SkillState, string> = {
   capstoneTaken: 'Capstone taken', tooExpensive: 'Too expensive',
 };
 
+const WIDE = window.matchMedia('(min-width: 820px)');
+const IDLE_HTML = `<h3>The Keep</h3>
+  <p class="sub">Click a tower or hero to see its stats and upgrades. Click forest or rocks to clear them for gold.</p>
+  <h4>Controls</h4>
+  <dl class="stats keys"><dt>1–7</dt><dd>Build tower</dd><dt>Q / W</dt><dd>Place hero</dd><dt>Space</dt><dd>Call next wave</dd>
+  <dt>U / I</dt><dd>Upgrade (fork A / B)</dd><dt>S</dt><dd>Sell</dd><dt>T</dt><dd>Target mode</dd><dt>A</dt><dd>Hero ability</dd>
+  <dt>C</dt><dd>Clear hovered tile</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
+  <p class="sub">Build walls on the road to steer enemies onto longer routes. Higher ground gives more range.</p>`;
+
 export function towerName(t: Tower): string {
   if (t.hero) return HERO_TEXT[t.type as HeroId].name;
   const tx = TOWER_TEXT[t.type as TowerId];
@@ -69,11 +78,17 @@ export class Panel {
       const cost = clearCost(s, tile.col, tile.row);
       if (cost === 0) { ss.selectedTile = null; sig = ''; } else sig = `F|${tile.col},${tile.row}|${cost}|${canClear(s, tile.col, tile.row)}`;
     }
+    // On wide screens the panel stays put (so the board never shifts under the pointer) and shows help when idle.
+    if (!sig && WIDE.matches) sig = 'idle';
     if (sig !== this.sig) {
       const wasVisible = this.visible;
       this.sig = sig;
       if (!sig) { this.el.hidden = true; this.el.innerHTML = ''; }
-      else {
+      else if (sig === 'idle') {
+        this.el.innerHTML = IDLE_HTML;
+        this.el.hidden = false;
+        this.fields = []; this.bars = []; this.cds = []; this.poorEls = [];
+      } else {
         this.el.innerHTML = t ? (t.hero ? this.heroHtml(s, t) : this.towerHtml(s, t, now)) : this.tileHtml(s);
         this.el.hidden = false;
         this.fields = [...this.el.querySelectorAll<HTMLElement>('[data-f]')];
@@ -83,7 +98,7 @@ export class Panel {
       }
       if (wasVisible !== this.visible || sig) this.onLayout();
     }
-    if (t && sig) this.patch(s, t);
+    if (t && sig && sig !== 'idle') this.patch(s, t);
     for (const p of this.poorEls) p.el.classList.toggle('poor', s.gold < p.cost);
   }
 

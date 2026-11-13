@@ -68,7 +68,7 @@ function layout(): void {
   let right = 0;
   if (panel.visible) {
     const r = panelEl.getBoundingClientRect();
-    if (r.width < W * 0.85) right = W - r.left;
+    if (W >= 820) right = W - r.left;
     else bottom = Math.max(bottom, H - r.top);
   }
   const rs = document.documentElement.style;
