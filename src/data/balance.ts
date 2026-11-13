@@ -75,6 +75,21 @@ export type AttackKind = 'bolt' | 'lob' | 'pulse' | 'chain' | 'summon' | 'aura' 
 // ---------------------------------------------------------------------------------------------
 
 export type TowerId = 'palisade' | 'archer' | 'catapult' | 'frost' | 'mage' | 'aviary' | 'shrine';
+
+/**
+ * Build-menu groups. A group with only one available entry is shown as that entry directly, and
+ * towers with no group are always shown directly. Heroes form their own group in the build menu.
+ */
+export type BuildGroup = 'physical' | 'magic' | 'support';
+export const TOWER_GROUP: Record<TowerId, BuildGroup | null> = {
+  palisade: null,
+  archer: 'physical',
+  catapult: 'physical',
+  aviary: 'physical',
+  frost: 'magic',
+  mage: 'magic',
+  shrine: 'support',
+};
 export interface Upgrade { cost: number; add: StatMod }
 export interface TowerDef {
   id: TowerId; kind: AttackKind; dmgType: DamageType; cost: number; base: StatMod;

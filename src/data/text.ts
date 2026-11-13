@@ -1,6 +1,6 @@
 // Names and descriptions. No balance numbers here: upgrade text is built from the stat changes
 // in balance.ts by describeMod(), so the two can't drift apart.
-import type { AbilityKind, EnemyId, HeroId, MapId, PerkId, StatKey, StatMod, TowerId } from './balance';
+import type { AbilityKind, BuildGroup, EnemyId, HeroId, MapId, PerkId, StatKey, StatMod, TowerId } from './balance';
 
 export const GAME_NAME = 'Gloamward Keep';
 export const GAME_TAG = 'Hold the keep through thirty waves.';
@@ -65,6 +65,13 @@ export const TOWER_TEXT: Record<TowerId, TowerText> = {
       b: { name: 'Treasury', blurb: 'Brings in gold after every wave.', tiers: ['Treasury', 'Royal Mint'] },
     },
   },
+};
+
+export const GROUP_TEXT: Record<BuildGroup | 'heroes', { name: string; blurb: string }> = {
+  physical: { name: 'Physical', blurb: 'Arrows, stones and claws. Strong against unarmoured foes.' },
+  magic: { name: 'Magical', blurb: 'Frost and lightning. Ignores armour; trolls resist it.' },
+  support: { name: 'Support', blurb: 'No attack of its own: makes nearby towers stronger, or earns gold.' },
+  heroes: { name: 'Heroes', blurb: 'Unique champions that level up and learn skills.' },
 };
 
 export interface HeroText { name: string; title: string; blurb: string; ability: string; abilityDesc: string; branches: [BranchText, BranchText, BranchText] }
