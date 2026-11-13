@@ -1,6 +1,6 @@
 // Pure helpers for tower stats, prices and the hero skill tree. No state changes here.
 import {
-  AttackKind, DamageType, HEIGHT, HERO, HEROES, HeroDef, HeroId, heroXpNeed, StatMod, Stats, STAT_KEYS, TOWER_HP, TowerDef, TOWERS, TowerId, Upgrade,
+  AttackKind, DamageType, HEIGHT, HERO, KEEP, HEROES, HeroDef, HeroId, heroXpNeed, StatMod, Stats, STAT_KEYS, TOWER_HP, TowerDef, TOWERS, TowerId, Upgrade,
 } from '../data/balance';
 import { emptyStats, Mods, RunState, Tower } from './state';
 
@@ -68,6 +68,9 @@ export const price = (base: number, mods: Mods): number => Math.round(base * mod
 export const buildCost = (type: TowerId | HeroId, mods: Mods): number =>
   price(isHeroType(type) ? HEROES[type].cost : TOWERS[type].cost, mods);
 
+/** Keep level a base tower type needs before it can be built. */
+export const keepForTower = (type: TowerId): number => KEEP.tower[type] ?? 1;
+
 export interface UpgradeOption {
   /** 'tier' for the linear tiers, otherwise the fork the option buys into or along. */
   path: 'tier' | 'a' | 'b';
@@ -75,6 +78,8 @@ export interface UpgradeOption {
   level: number;
   cost: number;
   upgrade: Upgrade;
+  /** Keep level this upgrade needs. */
+  keep: number;
 }
 
 /** What the tower can buy next. Two options at the fork, one otherwise, none when finished or for heroes. */
@@ -83,14 +88,14 @@ export function upgradeOptions(t: Tower, mods: Mods): UpgradeOption[] {
   const d = TOWERS[t.type];
   if (t.tier < 3) {
     const u = d.tiers[t.tier - 1];
-    return [{ path: 'tier', level: t.tier + 1, cost: price(u.cost, mods), upgrade: u }];
+    return [{ path: 'tier', level: t.tier + 1, cost: price(u.cost, mods), upgrade: u, keep: KEEP.tier[t.tier] }];
   }
   if (!t.fork) {
-    return (['a', 'b'] as const).map((f) => ({ path: f, level: 1, cost: price(d.forks[f][0].cost, mods), upgrade: d.forks[f][0] }));
+    return (['a', 'b'] as const).map((f) => ({ path: f, level: 1, cost: price(d.forks[f][0].cost, mods), upgrade: d.forks[f][0], keep: KEEP.forkTier[0] }));
   }
   if (t.forkTier < 2) {
     const u = d.forks[t.fork][t.forkTier];
-    return [{ path: t.fork, level: t.forkTier + 1, cost: price(u.cost, mods), upgrade: u }];
+    return [{ path: t.fork, level: t.forkTier + 1, cost: price(u.cost, mods), upgrade: u, keep: KEEP.forkTier[t.forkTier] }];
   }
   return [];
 }
@@ -102,7 +107,7 @@ export const sellValue = (t: Tower, mods: Mods): number => t.fresh + Math.floor(
 // Skill tree
 // ---------------------------------------------------------------------------------------------
 
-export type SkillState = 'learned' | 'available' | 'needsLevel' | 'needsPrevious' | 'capstoneTaken' | 'tooExpensive';
+export type SkillState = 'learned' | 'available' | 'needsLevel' | 'needsKeep' | 'needsPrevious' | 'capstoneTaken' | 'tooExpensive';
 
 export const skillCode = (branch: number, node: number): number => branch * 4 + node;
 export const skillCost = (node: number, mods: Mods): number => price(HERO.nodeCost[node], mods);
@@ -112,9 +117,13 @@ export function skillState(s: RunState, t: Tower, branch: number, node: number):
   if (node > 0 && !t.skills.includes(skillCode(branch, node - 1))) return 'needsPrevious';
   if (node === 3 && t.skills.some((c) => c % 4 === 3)) return 'capstoneTaken';
   if (t.heroLevel < HERO.nodeLevel[node]) return 'needsLevel';
+  if (s.keep < KEEP.skillNode[node]) return 'needsKeep';
   if (s.gold < skillCost(node, s.mods)) return 'tooExpensive';
   return 'available';
 }
+
+/** Gold to raise the keep one level, or 0 at the top. */
+export const keepCost = (s: RunState): number => (s.keep >= KEEP.max ? 0 : price(KEEP.cost[s.keep], s.mods));
 
 /** XP progress of a hero toward its next level, from 0 to 1. 1 at max level. */
 export function heroProgress(t: Tower): number {

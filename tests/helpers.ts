@@ -1,5 +1,5 @@
 // Shared builders for the simulation tests. Not a test file itself.
-import { HERO_IDS, HeroId, MapId, PerkId, TowerId } from '../src/data/balance';
+import { HERO_IDS, HeroId, KEEP, MapId, PerkId, TowerId } from '../src/data/balance';
 import { build, upgrade } from '../src/sim/actions';
 import { spawnAtGate } from '../src/sim/combat';
 import { tileCenter } from '../src/sim/hex';
@@ -8,14 +8,15 @@ import { Enemy, GameEventType, RunState, createRun } from '../src/sim/state';
 import { clearEvents, stepRun } from '../src/sim/step';
 import { EnemyId } from '../src/data/balance';
 
-export interface MkOpts { map?: MapId; mapSeed?: number; seed?: number; heroes?: HeroId[]; perks?: PerkId[]; gold?: number }
+export interface MkOpts { map?: MapId; mapSeed?: number; seed?: number; heroes?: HeroId[]; perks?: PerkId[]; gold?: number; keep?: number }
 
-/** A fresh run with plenty of gold and every hero in the loadout, unless told otherwise. */
+/** A fresh run with plenty of gold, every hero in the loadout and the keep fully raised, unless told otherwise. */
 export function mk(o: MkOpts = {}): RunState {
   const s = createRun({
     seed: o.seed ?? 1, map: o.map ?? 'meadow', mapSeed: o.mapSeed ?? 3, heroes: o.heroes ?? [...HERO_IDS], perks: o.perks ?? [],
   });
   s.gold = o.gold ?? 5000;
+  s.keep = o.keep ?? KEEP.max;
   return s;
 }
 

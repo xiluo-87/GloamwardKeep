@@ -120,7 +120,7 @@ export interface BurnPool { x: number; y: number; r: number; t: number; life: nu
 export type GameEventType =
   | 'shot' | 'hit' | 'kill' | 'leak' | 'splash' | 'cluster' | 'pulse' | 'chain' | 'cleave' | 'bite'
   | 'build' | 'upgrade' | 'sell' | 'skill' | 'wave' | 'waveClear' | 'heroLevel' | 'ability'
-  | 'shield' | 'silence' | 'jinx' | 'boss' | 'win' | 'lose' | 'gold' | 'shed' | 'smash' | 'destroyed' | 'clear';
+  | 'shield' | 'silence' | 'jinx' | 'boss' | 'win' | 'lose' | 'gold' | 'shed' | 'smash' | 'destroyed' | 'clear' | 'keep';
 /**
  * Fields by type:
  * shot: x,y from, a angle, b tower uid · hit: x,y · kill: x,y, a gold, b radius, c 1 if boss
@@ -129,7 +129,7 @@ export type GameEventType =
  * wave: a wave number · waveClear: a wave, b gold · heroLevel: x,y, a level
  * ability: x,y, a radius, b ability index · shield: x,y, a radius · silence: x,y, a radius · jinx: x,y (tower)
  * smash: x,y of the tower being hit (throttled) · destroyed: x,y, a 1 if hero · build: x,y, a 1 if hero
- * clear: x,y of the cleared tile, a FEATURE that was removed, b gold spent
+ * clear: x,y of the cleared tile, a FEATURE that was removed, b gold spent · keep: x,y of the keep, a new keep level
  */
 export interface GameEvent { type: GameEventType; x: number; y: number; a: number; b: number; c: number }
 export const EVENT_CAP = 512;
@@ -181,6 +181,8 @@ export interface SpawnEntry { t: number; kind: EnemyId; gate: number }
 export interface RunState {
   cfg: RunConfig; mods: Mods; rng: Rng; t: number;
   gold: number; lives: number;
+  /** Keep level this run (1..KEEP.max): unlocks tower types and deeper upgrades. */
+  keep: number;
   /** Waves started so far. 0 before the first call. */
   wave: number;
   /** True until the player calls the first wave. */
@@ -227,7 +229,7 @@ export function createRun(cfg: RunConfig): RunState {
   const n = terrain.cols * terrain.rows;
   const s: RunState = {
     cfg, mods, rng: new Rng(cfg.seed), t: 0,
-    gold: mods.startGold, lives: mods.lives,
+    gold: mods.startGold, lives: mods.lives, keep: 1,
     wave: 0, waiting: true, nextIn: 0, spawns: [], spawnIdx: 0, waveT: 0, waveLeft: [0],
     outcome: null,
     terrain, terrainVersion: 0, occ: new Int32Array(n), flow: new Float32Array(n), flowVersion: 0,

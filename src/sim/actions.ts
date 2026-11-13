@@ -5,11 +5,11 @@ import { pixelToTile, tileCenter } from './hex';
 import { FEATURE } from './mapgen';
 import { rebuildFlow } from './path';
 import {
-  buildCost, computeStats, isHeroType, maxHpOf, refreshStats, sellValue, skillCode, skillCost, skillState, upgradeOptions,
+  buildCost, computeStats, isHeroType, keepCost, keepForTower, maxHpOf, refreshStats, sellValue, skillCode, skillCost, skillState, upgradeOptions,
 } from './stats';
 import { emit, emptyStats, inBoard, RunState, TARGET_MODES, tileIndex, Tower } from './state';
 
-export type BuildCheck = 'ok' | 'offBoard' | 'blocked' | 'gate' | 'occupied' | 'enemy' | 'gold' | 'heroTaken' | 'heroNotInLoadout' | 'over';
+export type BuildCheck = 'ok' | 'locked' | 'offBoard' | 'blocked' | 'gate' | 'occupied' | 'enemy' | 'gold' | 'heroTaken' | 'heroNotInLoadout' | 'over';
 
 /** Why a tower can or can't go on a tile. Forest, rocks, gates and the keep can't be built on. */
 export function canBuild(s: RunState, type: TowerId | HeroId, col: number, row: number): BuildCheck {
@@ -20,6 +20,7 @@ export function canBuild(s: RunState, type: TowerId | HeroId, col: number, row: 
   if (s.terrain.feature[i] !== FEATURE.none) return 'blocked';
   const { spawns, goal } = s.terrain;
   if ((goal[0] === col && goal[1] === row) || spawns.some(([x, y]) => x === col && y === row)) return 'gate';
+  if (!isHeroType(type) && s.keep < keepForTower(type)) return 'locked';
   if (isHeroType(type)) {
     if (!s.cfg.heroes.includes(type)) return 'heroNotInLoadout';
     if (s.heroesPlaced.includes(type)) return 'heroTaken';
@@ -102,6 +103,17 @@ export function clearTile(s: RunState, col: number, row: number): boolean {
   return true;
 }
 
+/** Raises the keep one level for gold, unlocking more towers and deeper upgrades. */
+export function upgradeKeep(s: RunState): boolean {
+  const cost = keepCost(s);
+  if (s.outcome || cost === 0 || s.gold < cost) return false;
+  s.gold -= cost;
+  s.keep++;
+  const c = tileCenter(s.terrain.goal[0], s.terrain.goal[1]);
+  emit(s, 'keep', c.x, c.y, s.keep);
+  return true;
+}
+
 export function findTower(s: RunState, uid: number): Tower | undefined {
   return s.towers.find((t) => t.uid === uid);
 }
@@ -112,7 +124,7 @@ export function upgrade(s: RunState, uid: number, path?: 'a' | 'b'): boolean {
   if (!t || s.outcome) return false;
   const opts = upgradeOptions(t, s.mods);
   const opt = opts.length === 2 ? opts.find((o) => o.path === path) : opts[0];
-  if (!opt || s.gold < opt.cost) return false;
+  if (!opt || s.gold < opt.cost || s.keep < opt.keep) return false;
   s.gold -= opt.cost;
   t.invested += opt.cost;
   t.fresh += opt.cost;

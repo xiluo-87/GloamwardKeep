@@ -57,7 +57,6 @@ export class Session {
   onToast: (msg: string, bad?: boolean) => void = () => undefined;
   private sellArm = { uid: 0, at: 0 };
   private histPushed = false;
-  private skipPop = false;
 
   begin(run: RunState): void {
     this.run = run;
@@ -100,16 +99,14 @@ export class Session {
     try { window.history.pushState({ gk: 1 }, ''); this.histPushed = true; } catch { /* history may be unavailable */ }
   }
 
-  private dropHistory(): void {
-    if (!this.histPushed) return;
-    this.histPushed = false;
-    this.skipPop = true;
-    try { window.history.back(); } catch { this.skipPop = false; }
-  }
+  /**
+   * Closing a layer from the UI leaves its history entry in place (navigating back from code races with new
+   * pushes). The entry is reused by the next layer; a back press with nothing open just consumes it.
+   */
+  private dropHistory(): void { /* intentionally empty */ }
 
   /** Called from the popstate listener. */
   handlePop(): void {
-    if (this.skipPop) { this.skipPop = false; return; }
     this.histPushed = false;
     // Back inside a build folder goes up one level and keeps the history entry for the next press.
     if (this.ring && this.ringGroup) {

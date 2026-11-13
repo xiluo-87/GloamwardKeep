@@ -1,10 +1,10 @@
 // A simple player for balance tests: plugs shortcut gaps, builds near the road (preferring high
 // ground), upgrades, learns skills, and calls waves.
 import { HEROES, HeroId, TowerId } from '../data/balance';
-import { build, callWave, canBuild, canCallWave, learnSkill, upgrade, useAbility } from './actions';
+import { build, callWave, canBuild, canCallWave, learnSkill, upgrade, upgradeKeep, useAbility } from './actions';
 import { hexDistance } from './hex';
 import { FEATURE } from './mapgen';
-import { buildCost, skillState, upgradeOptions } from './stats';
+import { buildCost, keepForTower, skillState, upgradeOptions } from './stats';
 import { RunState } from './state';
 
 export interface BotPlan {
@@ -18,6 +18,8 @@ export interface BotPlan {
   heroBranch: number;
   /** Plug the map's shortcut gaps with palisades. */
   plugGaps: boolean;
+  /** Raise the keep once this many towers stand, per level (keep 2, keep 3). */
+  keepAt: [number, number];
 }
 
 export const DEFAULT_PLAN: BotPlan = {
@@ -26,6 +28,7 @@ export const DEFAULT_PLAN: BotPlan = {
   upgradeBias: 0.5,
   heroBranch: 0,
   plugGaps: true,
+  keepAt: [5, 12],
 };
 
 /** Buildable tiles off the road, ranked by how much road lies within 2.5 hexes, then by height. */
@@ -86,8 +89,16 @@ export class Bot {
         for (let n = 0; n < 4; n++) if (skillState(s, t, branch, n) === 'available') learnSkill(s, t.uid, branch, n);
       }
     }
+    // Save for the keep once the defence has a few towers.
+    const keepGoal = s.keep < 3 ? this.plan.keepAt[s.keep - 1] : Infinity;
+    if (s.towers.length >= keepGoal) {
+      if (!upgradeKeep(s)) { if (canCallWave(s) && (s.waiting || s.enemies.count === 0)) callWave(s); return; }
+    }
     for (let guard = 0; guard < 8; guard++) {
-      const type = this.plan.mix[this.next % this.plan.mix.length];
+      // Skip tower types the keep hasn't unlocked yet.
+      let type = this.plan.mix[this.next % this.plan.mix.length];
+      for (let k = 0; k < this.plan.mix.length && keepForTower(type) > s.keep; k++) type = this.plan.mix[++this.next % this.plan.mix.length];
+      if (keepForTower(type) > s.keep) break;
       const cost = buildCost(type, s.mods);
       const up = this.cheapestUpgrade();
       const wantUpgrade = up && s.towers.length >= 4 && (up.cost <= cost * (1 + this.plan.upgradeBias) || !this.freeSpot(type));
@@ -117,7 +128,7 @@ export class Bot {
     for (const t of this.s.towers) {
       if (t.type in HEROES || t.type === 'palisade') continue;
       const opts = upgradeOptions(t, this.s.mods);
-      if (opts.length === 0) continue;
+      if (opts.length === 0 || opts[0].keep > this.s.keep) continue;
       const pick = opts.length === 2 ? opts.find((o) => o.path === (this.plan.forks[t.type as TowerId] ?? 'a')) ?? opts[0] : opts[0];
       if (!best || pick.cost < best.cost) best = { uid: t.uid, cost: pick.cost, path: pick.path === 'tier' ? undefined : pick.path };
     }

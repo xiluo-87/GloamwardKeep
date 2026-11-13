@@ -77,6 +77,27 @@ export type AttackKind = 'bolt' | 'lob' | 'pulse' | 'chain' | 'summon' | 'aura' 
 export type TowerId = 'palisade' | 'archer' | 'catapult' | 'frost' | 'mage' | 'lightning' | 'aviary' | 'shrine';
 
 /**
+ * The Keep: a per-run unlock track bought with gold. Each level unlocks tower types and deeper
+ * upgrades. Level 1 is where every run starts; `cost[n]` is the price of reaching level n + 1.
+ */
+export const KEEP = {
+  max: 3,
+  cost: [0, 250, 600],
+  /** Keep level needed to build each tower type. */
+  tower: {
+    palisade: 1, archer: 1, frost: 1, mage: 1,
+    catapult: 2, aviary: 2, lightning: 2,
+    shrine: 3,
+  } as Record<TowerId, number>,
+  /** Keep level needed for linear tier 2 and 3 of any tower. */
+  tier: [1, 1, 2],
+  /** Keep level needed for fork tier 1 and 2. */
+  forkTier: [2, 3],
+  /** Keep level needed for hero skill node 1..4 of a branch. */
+  skillNode: [2, 2, 3, 3],
+};
+
+/**
  * Build-menu groups. A group with only one available entry is shown as that entry directly, and
  * towers with no group are always shown directly. Heroes form their own group in the build menu.
  */

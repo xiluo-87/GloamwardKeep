@@ -103,19 +103,31 @@ Gold is the only currency.
 - **Treasury** (Shrine fork B) pays gold per wave: +40, then +65.
 - **Repairs** are free and happen on wave clear.
 
-### 5.4 Lives and winning
+### 5.4 The Keep (per-run unlocks)
+
+Every run starts at Keep level I. Raising the keep costs gold (250 for II, 600 for III, before Thrift) and unlocks tower types and deeper upgrades for the rest of the run. Values are in `KEEP` in balance.ts.
+
+| Keep | Towers | Upgrades | Hero skills |
+|---|---|---|---|
+| I | Palisade, Archer, Frost, Mage | Tiers 1–2 | none |
+| II | + Catapult, Aviary, Lightning | + Tier 3, first fork tier | Nodes 1–2 |
+| III | + Shrine | + Second fork tier | Nodes 3–4 (capstones) |
+
+Locked entries still appear in the build menu and upgrade ring, marked with the keep level they need. The keep upgrade is in the keep's own ring (tap the keep tile).
+
+### 5.5 Lives and winning
 
 Each leaking enemy costs its `lives` value (1 for most, 2 for orcs and wagons, 3 for trolls, 15 for the Ogre King, 20 for the Lich). At 0 lives the run is lost. Surviving wave 30 and killing everything wins. Clearing wave w pays profile XP (section 11).
 
-### 5.5 Building rules
+### 5.6 Building rules
 
 A tile can't be built on if it holds forest or rocks, the keep or a gate, or another tower. Building needs the gold. A hero must be in the run's loadout, and only one of each hero can stand at a time. A sold or destroyed hero can be placed again (at its start level; skills are lost).
 
-### 5.6 Hit points of enemies
+### 5.7 Hit points of enemies
 
 Enemy HP is multiplied by the map's HP multiplier and, for everything except bosses, by `waveHpScale(w) = 1 + 0.08 (w - 1) + 0.005 (w - 1)^2` (wave 10: x2.1, wave 20: x4.3, wave 30: x7.5).
 
-### 5.7 Clearing forest and rocks
+### 5.8 Clearing forest and rocks
 
 Paying gold removes the forest or rocks from a tile and makes it buildable. Price is `base x (1 + 0.25 x height) x costMul`, rounded, with base 35 for forest and 60 for rocks. Clearing a bare tile fails, as does clearing without enough gold. Cleared tiles stay cleared for the run, and the terrain version counter lets the renderer redraw them. Because forest and rocks only exist above level 0, clearing never changes enemy pathing.
 
