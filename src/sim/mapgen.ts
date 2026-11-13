@@ -14,6 +14,8 @@ export interface Terrain {
   /** Spawn gates (tiles on the left edge) and the keep (a tile on the right edge). */
   spawns: [number, number][];
   goal: [number, number];
+  /** Shortcut gaps through the hills, as lists of tile indexes. Enemies use them unless blocked. */
+  gaps: number[][];
   /** Seed that produced this map, after any rejected attempts. */
   seed: number;
 }
@@ -121,8 +123,58 @@ function tryGenerate(p: MapGenParams, seed: number): Terrain | null {
   }
   if (routeReach(dist, cols, rows, spawns, p.reachRadius) < p.minReach) return null;
 
+  // 9. Shortcuts: a few short level-0 gaps through the hills between two stretches of road. Enemies
+  //    take them unless the player plugs them with towers. Checks above use the road without gaps.
+  const gaps = punchGaps(p, height, dist, cols, rows, rng);
+  if (gaps.length > 0) terrace(height, cols, rows, p.maxStep);
+
   const feature = placeFeatures(p, height, cols, rows, rng);
-  return { cols, rows, height, feature, spawns, goal, seed };
+  return { cols, rows, height, feature, spawns, goal, seed, gaps };
+}
+
+/**
+ * Finds pairs of road tiles that are close on the board but far apart along the road, and carves a
+ * straight level-0 channel between them. Returns the tiles of each gap.
+ */
+function punchGaps(p: MapGenParams, height: Uint8Array, dist: Float32Array, cols: number, rows: number, rng: Rng): number[][] {
+  const want = p.gaps[0] + rng.int(p.gaps[1] - p.gaps[0] + 1);
+  const road: number[] = [];
+  for (let i = 0; i < height.length; i++) if (height[i] === 0 && Number.isFinite(dist[i])) road.push(i);
+  const candidates: [number, number][] = [];
+  for (const a of road) {
+    for (const b of road) {
+      if (b <= a) continue;
+      const ax = a % cols; const ay = Math.floor(a / cols);
+      const bx = b % cols; const by = Math.floor(b / cols);
+      const d = hexDistance(ax, ay, bx, by);
+      if (d < 2 || d > p.gapMaxLength + 1) continue;
+      if (Math.abs(dist[a] - dist[b]) < p.gapMinSave) continue;
+      candidates.push([a, b]);
+    }
+  }
+  const gaps: number[][] = [];
+  const used = new Uint8Array(height.length);
+  while (gaps.length < want && candidates.length > 0) {
+    const [a, b] = candidates.splice(rng.int(candidates.length), 1)[0];
+    const ax = a % cols; const ay = Math.floor(a / cols);
+    const bx = b % cols; const by = Math.floor(b / cols);
+    // Keep gaps apart, so each one is a separate decision for the player.
+    if (used[a] || used[b]) continue;
+    const line = new Uint8Array(height.length);
+    carveLine(line, cols, rows, [ax, ay], [bx, by], 0, rng);
+    const tiles: number[] = [];
+    for (let i = 0; i < line.length; i++) if (line[i] && height[i] > 0) tiles.push(i);
+    if (tiles.length === 0) continue;
+    for (const i of tiles) height[i] = 0;
+    for (const i of [a, b, ...tiles]) {
+      const x = i % cols; const y = Math.floor(i / cols);
+      for (let ty = y - 3; ty <= y + 3; ty++) for (let tx = x - 4; tx <= x + 4; tx++) {
+        if (tx >= 0 && ty >= 0 && tx < cols && ty < rows && hexDistance(x, y, tx, ty) <= 3) used[ty * cols + tx] = 1;
+      }
+    }
+    gaps.push(tiles);
+  }
+  return gaps;
 }
 
 /**

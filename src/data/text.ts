@@ -9,6 +9,14 @@ export interface TowerText { name: string; blurb: string; tiers: [string, string
 export interface ForkText { name: string; blurb: string; tiers: [string, string] }
 
 export const TOWER_TEXT: Record<TowerId, TowerText> = {
+  palisade: {
+    name: 'Palisade', blurb: 'Cheap and weak. Build it to plug gaps and steer enemies into longer paths.',
+    tiers: ['Palisade', 'Braced Palisade', 'Tall Palisade'],
+    forks: {
+      a: { name: 'Spiked Palisade', blurb: 'Hurts enemies that try to smash through it.', tiers: ['Spiked Palisade', 'Thorn Wall'] },
+      b: { name: 'Stone Wall', blurb: 'Very sturdy. For maze walls that must hold.', tiers: ['Stone Wall', 'Rampart'] },
+    },
+  },
   wick: {
     name: 'Wick Post', blurb: 'Fires quick bolts of flame at one target. Hits flyers.',
     tiers: ['Wick Post', 'Trimmed Wick', 'Steady Wick'],
@@ -128,9 +136,9 @@ export const ENEMY_TEXT: Record<EnemyId, { name: string; blurb: string }> = {
 };
 
 export const MAP_TEXT: Record<MapId, { name: string; blurb: string }> = {
-  lane: { name: 'Cobble Lane', blurb: 'One long, winding street.' },
-  crossing: { name: 'The Crossing', blurb: 'Two roads that meet before the hearth.' },
-  row: { name: 'Lantern Row', blurb: 'A short road with tougher enemies.' },
+  meadow: { name: 'Meadow', blurb: 'Gentle hills, a long road and roomy bends for mazes.' },
+  highlands: { name: 'Highlands', blurb: 'A winding road between high cliffs.' },
+  canyon: { name: 'Canyon', blurb: 'Two gates, rocky heights and tougher enemies.' },
 };
 
 export const PERK_TEXT: Record<PerkId, { name: string; desc: string }> = {
@@ -150,7 +158,7 @@ export const PERK_TEXT: Record<PerkId, { name: string; desc: string }> = {
 
 /** How each stat reads in upgrade descriptions. `pct` shows the value as a percentage. */
 export const STAT_TEXT: Record<StatKey, { label: string; pct?: boolean; flag?: string; unit?: string }> = {
-  damage: { label: 'damage' }, rate: { label: 'attacks/s' }, range: { label: 'range' }, light: { label: 'light' },
+  damage: { label: 'damage' }, rate: { label: 'attacks/s' }, range: { label: 'range' },
   splash: { label: 'splash' }, burnDps: { label: 'burn/s' }, burnTime: { label: 'burn time', unit: 's' },
   poolDps: { label: 'burning ground/s' }, poolTime: { label: 'ground burn time', unit: 's' },
   slow: { label: 'slow', pct: true }, slowTime: { label: 'slow time', unit: 's' },
@@ -165,6 +173,7 @@ export const STAT_TEXT: Record<StatKey, { label: string; pct?: boolean; flag?: s
   income: { label: 'gold per wave' }, bounty: { label: 'kill gold', pct: true },
   hitsFlying: { label: 'flyers', flag: 'Can hit flyers' }, dimImmune: { label: 'dim', flag: 'Snuffers can no longer dim it' },
   lifeRegen: { label: 'lives per wave' },
+  hp: { label: 'hit points' }, thorns: { label: 'damage/s to attackers' },
   abilityDamage: { label: 'ability damage' }, abilityRadius: { label: 'ability radius' },
   abilityCd: { label: 'ability cooldown', unit: 's' }, abilityTime: { label: 'ability duration', unit: 's' },
   abilityTargets: { label: 'ability targets' }, abilityPower: { label: 'ability strength', pct: true },

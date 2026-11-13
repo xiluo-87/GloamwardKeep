@@ -61,7 +61,7 @@ export const STAT_KEYS = [
   'slow', 'slowTime', 'stunChance', 'stun', 'chains', 'chainRange', 'chainFalloff', 'shots',
   'crit', 'critMul', 'shred', 'beam', 'ramp', 'rampMax', 'cluster', 'moths', 'mothSpeed',
   'cleave', 'reveal', 'buffDamage', 'buffRate', 'income', 'bounty', 'hitsFlying', 'dimImmune',
-  'lifeRegen', 'abilityDamage', 'abilityRadius', 'abilityCd', 'abilityTime', 'abilityTargets', 'abilityPower',
+  'lifeRegen', 'hp', 'thorns', 'abilityDamage', 'abilityRadius', 'abilityCd', 'abilityTime', 'abilityTargets', 'abilityPower',
 ] as const;
 export type StatKey = (typeof STAT_KEYS)[number];
 export type Stats = Record<StatKey, number>;
@@ -74,7 +74,7 @@ export type AttackKind = 'bolt' | 'lob' | 'pulse' | 'chain' | 'summon' | 'aura' 
 // Base towers: build, two linear tiers, then a fork into A or B with two tiers each.
 // ---------------------------------------------------------------------------------------------
 
-export type TowerId = 'wick' | 'kiln' | 'bell' | 'prism' | 'moth' | 'lamp';
+export type TowerId = 'palisade' | 'wick' | 'kiln' | 'bell' | 'prism' | 'moth' | 'lamp';
 export interface Upgrade { cost: number; add: StatMod }
 export interface TowerDef {
   id: TowerId; kind: AttackKind; dmgType: DamageType; cost: number; base: StatMod;
@@ -83,6 +83,27 @@ export interface TowerDef {
 }
 
 export const TOWERS: Record<TowerId, TowerDef> = {
+  // The cheap blocker: weak, short jabs, built to plug shortcut gaps and steer enemies into mazes.
+  palisade: {
+    id: 'palisade', kind: 'bolt', dmgType: 'pierce', cost: 20,
+    base: { damage: 4, rate: 0.8, range: 70, shots: 1, critMul: 2, hp: 80 },
+    tiers: [
+      { cost: 25, add: { hp: 120, damage: 2 } },
+      { cost: 40, add: { hp: 180, damage: 3, range: 10 } },
+    ],
+    forks: {
+      // Spiked: hurts whatever smashes it.
+      a: [
+        { cost: 70, add: { thorns: 25, damage: 4 } },
+        { cost: 120, add: { thorns: 45, slow: 0.3, slowTime: 1 } },
+      ],
+      // Stone: very sturdy, for long-term maze walls.
+      b: [
+        { cost: 70, add: { hp: 600 } },
+        { cost: 120, add: { hp: 1200, damage: 4 } },
+      ],
+    },
+  },
   wick: {
     id: 'wick', kind: 'bolt', dmgType: 'pierce', cost: 70,
     base: { damage: 13, rate: 1.25, range: 150, shots: 1, critMul: 2, hitsFlying: 1 },
@@ -405,6 +426,15 @@ export interface MapGenParams {
    */
   reachRadius: number;
   minReach: number;
+  /**
+   * Shortcut gaps: short level-0 channels through the hills between two stretches of road, at most
+   * gapMaxLength hexes long, each saving enemies at least gapMinSave hexes of walking. Players plug
+   * them with towers (or leave them open and defend the shortcut). Reach and length are checked
+   * on the road before the gaps are cut.
+   */
+  gaps: [number, number];
+  gapMaxLength: number;
+  gapMinSave: number;
   /** Reject maps whose shortest walk is shorter than this, in tiles. */
   minPathTiles: number;
 }
@@ -415,6 +445,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     gen: {
       heightShare: [0.38, 0.28, 0.2, 0.14], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
       spawns: 1, legs: [3, 4], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [4, 6], clearingRadius: [2, 2], minPathTiles: 22,
+      gaps: [2, 3], gapMaxLength: 3, gapMinSave: 10,
       forest: { share: 0.22, heights: [1, 2], scale: 3 }, rocks: { share: 0.06, heights: [2, 4], cliffBonus: 0.15 },
     },
   },
@@ -423,6 +454,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     gen: {
       heightShare: [0.22, 0.28, 0.27, 0.23], noiseScales: [6, 3], noiseWeights: [0.7, 0.3], maxStep: 2,
       spawns: 1, legs: [4, 5], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 26,
+      gaps: [1, 2], gapMaxLength: 3, gapMinSave: 12,
       forest: { share: 0.16, heights: [1, 3], scale: 3 }, rocks: { share: 0.12, heights: [2, 4], cliffBonus: 0.25 },
     },
   },
@@ -431,6 +463,7 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
     gen: {
       heightShare: [0.16, 0.22, 0.3, 0.32], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
       spawns: 2, legs: [3, 4], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 22,
+      gaps: [1, 2], gapMaxLength: 3, gapMinSave: 12,
       forest: { share: 0.1, heights: [1, 2], scale: 2.5 }, rocks: { share: 0.18, heights: [2, 4], cliffBonus: 0.35 },
     },
   },
@@ -442,7 +475,7 @@ export const PATHING = {
   towerCost: 60,
 };
 
-/** Tower hit points, for when enemies have to smash a way through: base + perGold × gold invested. */
+/** Tower hit points, for when enemies have to smash a way through: base + perGold × gold invested + the tower's hp stat. */
 export const TOWER_HP = { base: 120, perGold: 1.2, heroBase: 500, heroPerLevel: 60 };
 
 // ---------------------------------------------------------------------------------------------

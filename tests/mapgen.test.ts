@@ -29,6 +29,7 @@ describe('map generator', () => {
     });
 
     it(`${preset}: follows the generator rules on many seeds`, () => {
+      let gapCount = 0;
       for (const seed of SEEDS) {
         const t = generateMap(preset, seed);
         const dist = walkDistance(t.height, t.cols, t.rows, t.goal);
@@ -48,16 +49,24 @@ describe('map generator', () => {
             expect(Math.abs(t.height[y * t.cols + x] - t.height[ty * t.cols + tx])).toBeLessThanOrEqual(gen.maxStep);
           }
         }
-        // Gates and keep on the edges, on level 0, with a long enough walk.
+        // Gates and keep on the edges.
         expect(t.spawns).toHaveLength(gen.spawns);
-        for (const [x, y] of t.spawns) {
-          expect(x).toBe(0);
-          expect(dist[y * t.cols + x]).toBeGreaterThanOrEqual(gen.minPathTiles);
-        }
+        for (const [x] of t.spawns) expect(x).toBe(0);
         expect(t.goal[0]).toBe(t.cols - 1);
-        // The route passes within reach of at least minReach of the board.
-        expect(routeReach(dist, t.cols, t.rows, t.spawns, gen.reachRadius)).toBeGreaterThanOrEqual(gen.minReach);
+        // With the shortcut gaps plugged, the route passes within reach of at least minReach of the board.
+        const plugged = Uint8Array.from(t.height);
+        for (const gap of t.gaps) for (const i of gap) plugged[i] = 1;
+        const roadDist = walkDistance(plugged, t.cols, t.rows, t.goal);
+        for (const [x, y] of t.spawns) expect(roadDist[y * t.cols + x]).toBeGreaterThanOrEqual(gen.minPathTiles);
+        expect(routeReach(roadDist, t.cols, t.rows, t.spawns, gen.reachRadius)).toBeGreaterThanOrEqual(gen.minReach);
+        // Gaps are short and really are shortcuts.
+        expect(t.gaps.length).toBeLessThanOrEqual(gen.gaps[1]);
+        for (const gap of t.gaps) expect(gap.length).toBeLessThanOrEqual(gen.gapMaxLength);
+        for (const [x, y] of t.spawns) expect(dist[y * t.cols + x]).toBeLessThanOrEqual(roadDist[y * t.cols + x]);
+        gapCount += t.gaps.length;
       }
+      // Most maps get at least their minimum number of gaps.
+      expect(gapCount).toBeGreaterThanOrEqual(SEEDS.length * gen.gaps[0] * 0.8);
     });
   }
 });
