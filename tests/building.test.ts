@@ -139,9 +139,8 @@ describe('clearing forest and rocks', () => {
     const thrifty = mk({ perks: ['thrift'] });
     const [x, y] = first(plain, FEATURE.forest);
     expect(clearCost(thrifty, x, y)).toBeLessThan(clearCost(plain, x, y));
-    expect(clearCost(thrifty, x, y)).toBe(Math.round(clearCost(plain, x, y) * 0.92 + 0) === clearCost(thrifty, x, y)
-      ? clearCost(thrifty, x, y)
-      : -1);
+    const h = thrifty.terrain.height[y * thrifty.terrain.cols + x];
+    expect(clearCost(thrifty, x, y)).toBe(Math.round(CLEAR.forest * (1 + CLEAR.perHeight * h) * thrifty.mods.costMul));
   });
 
   it('deducts gold, makes the tile buildable and emits an event', () => {

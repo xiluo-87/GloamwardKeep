@@ -47,9 +47,9 @@ export class Hud {
         <button class="small" data-k="speed" title="Game speed ([ ] in debug)">1×</button>
         <button class="small" data-k="pause" title="Pause (Esc)" aria-label="Pause">II</button>
       </div>
-      <div id="toast"></div>
-      <div id="placing" hidden></div>
       <div id="bottom">
+        <div id="toast"></div>
+        <div id="placing" hidden></div>
         <div id="buildbar"><div class="group towers"></div><div class="group heroes"></div><div class="group abilities"></div></div>
       </div>
       <div id="tip" hidden></div>`;

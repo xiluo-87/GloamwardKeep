@@ -21,7 +21,7 @@ export class Controls {
   private pending: { col: number; row: number } | null = null;
   private down: { x: number; y: number; id: number } | null = null;
 
-  constructor(private canvas: HTMLCanvasElement, private session: Session, private renderer: Renderer, private hooks: ControlHooks) {
+  constructor(canvas: HTMLCanvasElement, private session: Session, private renderer: Renderer, private hooks: ControlHooks) {
     canvas.addEventListener('pointerdown', (e) => this.onDown(e));
     canvas.addEventListener('pointermove', (e) => this.onMove(e));
     canvas.addEventListener('pointerup', (e) => this.onUp(e));
