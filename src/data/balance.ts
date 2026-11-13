@@ -83,24 +83,27 @@ export interface TowerDef {
 }
 
 export const TOWERS: Record<TowerId, TowerDef> = {
-  // The cheap blocker: weak, short jabs, built to plug shortcut gaps and steer enemies into mazes.
+  // The cheap blocker. Its main line turns it into a wall, so building mazes on the road is a real
+  // strategy: enemies walk around walls and only smash them when every route is sealed.
   palisade: {
     id: 'palisade', kind: 'bolt', dmgType: 'physical', cost: 20,
     base: { damage: 4, rate: 0.8, range: 70, shots: 1, critMul: 2, hp: 80 },
     tiers: [
-      { cost: 25, add: { hp: 120, damage: 2 } },
-      { cost: 40, add: { hp: 180, damage: 3, range: 10 } },
+      // Stone Wall: cheap and sturdy, the backbone of a maze.
+      { cost: 30, add: { hp: 500, damage: 2 } },
+      // Fortified Wall: sturdier still, with a slightly longer reach.
+      { cost: 50, add: { hp: 900, damage: 4, range: 20 } },
     ],
     forks: {
-      // Spiked: hurts whatever smashes it.
+      // Spiked Wall: hurts and slows whatever walks past or smashes it.
       a: [
-        { cost: 70, add: { thorns: 25, damage: 4 } },
-        { cost: 120, add: { thorns: 45, slow: 0.3, slowTime: 1 } },
+        { cost: 90, add: { thorns: 30, damage: 6, slow: 0.25, slowTime: 1 } },
+        { cost: 150, add: { thorns: 50, slow: 0.15, hp: 600 } },
       ],
-      // Stone: very sturdy, for long-term maze walls.
+      // Guard Wall: archers on the battlements turn the maze into a killing ground.
       b: [
-        { cost: 70, add: { hp: 600 } },
-        { cost: 120, add: { hp: 1200, damage: 4 } },
+        { cost: 100, add: { damage: 10, rate: 0.5, range: 40, hitsFlying: 1 } },
+        { cost: 170, add: { damage: 14, rate: 0.4, shots: 1, hp: 600 } },
       ],
     },
   },

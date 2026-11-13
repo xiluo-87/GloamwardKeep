@@ -4,9 +4,10 @@ import type { GameEventType, RunState } from '../sim/state';
 
 /** Hard cap on simultaneously scheduled voices. */
 const MAX_VOICES = 16;
-const DRONE_GAIN = 0.55;
-/** The drone sinks and darkens over this many waves. */
-const DRONE_WAVES = 30;
+/** The pad is quiet and sits well under the effects. */
+const DRONE_GAIN = 0.12;
+/** Pad notes: C3 and G3, a perfect fifth apart. */
+const PAD_NOTES = [130.81, 196];
 /** Notes for the five ability indices (A2, D3, G3, C3, E3). */
 const ABILITY_NOTES = [110, 146.83, 196, 130.81, 164.81];
 
@@ -14,7 +15,6 @@ export class Synth {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private droneGain: GainNode | null = null;
-  private droneFilter: BiquadFilterNode | null = null;
   private osc: OscillatorNode[] = [];
   private noise: AudioBuffer | null = null;
   private voices = 0;
@@ -40,19 +40,18 @@ export class Synth {
     this.master.connect(ctx.destination);
     this.droneGain = ctx.createGain();
     this.droneGain.gain.value = 0;
+    // A warm lowpass keeps the pad soft.
     const lp = ctx.createBiquadFilter();
     lp.type = 'lowpass';
-    lp.frequency.value = 360;
-    this.droneFilter = lp;
+    lp.frequency.value = 700;
     lp.connect(this.droneGain);
     this.droneGain.connect(this.master);
-    for (const detune of [-7, 5, 1200]) {
+    for (const freq of PAD_NOTES) {
       const o = ctx.createOscillator();
-      o.type = 'sawtooth';
-      o.frequency.value = 62;
-      o.detune.value = detune;
+      o.type = 'triangle';
+      o.frequency.value = freq;
       const g = ctx.createGain();
-      g.gain.value = detune === 1200 ? 0.03 : 0.08;
+      g.gain.value = 0.5;
       o.connect(g);
       g.connect(lp);
       o.start();
@@ -164,16 +163,11 @@ export class Synth {
   update(s: RunState, frameDt: number): void {
     this.clock += frameDt;
     if (s.wave === 0) this.stopped = false;
-    if (!this.ctx || !this.droneGain || !this.droneFilter) return;
+    if (!this.ctx || !this.droneGain) return;
 
     const now = this.ctx.currentTime;
     const active = s.wave > 0 && !s.outcome && !this.stopped;
     this.droneGain.gain.setTargetAtTime(active ? DRONE_GAIN : 0, now, active ? 1.2 : 0.5);
-    // The drone sinks in pitch and darkens as the waves rise.
-    const k = Math.min(1, s.wave / DRONE_WAVES);
-    const f = 62 - 22 * k;
-    for (const o of this.osc) o.frequency.setTargetAtTime(f, now, 1.5);
-    this.droneFilter.frequency.setTargetAtTime(360 - 170 * k, now, 1.5);
 
     for (let i = 0; i < s.eventCount; i++) {
       const e = s.events[i];
@@ -184,7 +178,11 @@ export class Synth {
   private play(type: GameEventType, a: number, b: number): void {
     switch (type) {
       case 'shot':
-        if (this.ready('shot', 0.04)) this.tone(1100 + Math.random() * 300, 0.03, 0.025, 'triangle');
+        // Arrow twang: a short string pluck that drops in pitch.
+        if (this.ready('shot', 0.04)) {
+          this.tone(480 + Math.random() * 60, 0.12, 0.05, 'triangle', 0, 240);
+          this.burst(3500, 0.03, 0.012);
+        }
         break;
       case 'hit':
         if (this.ready('hit', 0.05)) this.burst(1400 + Math.random() * 1200, 0.04, 0.025);
@@ -214,19 +212,45 @@ export class Synth {
         }
         break;
       case 'pulse':
-        if (this.ready('pulse', 0.12)) this.bell(1);
-        break;
-      case 'chain':
-        if (this.ready('chain', 0.03)) {
-          this.tone(2093, 0.18, 0.035, 'triangle');
-          this.tone(3136, 0.1, 0.012, 'sine');
+        // Frost or holy shimmer: two close high sines beating, with a soft airy overtone.
+        if (this.ready('pulse', 0.12)) {
+          this.tone(1318.5, 0.55, 0.03, 'sine');
+          this.tone(1323.5, 0.55, 0.03, 'sine');
+          this.tone(1975.5, 0.4, 0.014, 'sine', 0.08);
         }
         break;
-      case 'lash':
-        if (this.ready('lash', 0.05)) this.burst(3000, 0.1, 0.06, 0, 1200);
+      case 'chain':
+        // Lightning: a crackly noise burst with a quick second crack.
+        if (this.ready('chain', 0.03)) {
+          this.burst(2500, 0.12, 0.07, 0, 600);
+          this.burst(4000, 0.05, 0.04, 0.04);
+        }
+        break;
+      case 'cleave':
+        // Sword swish: noise sweeping down.
+        if (this.ready('cleave', 0.05)) this.burst(2200, 0.14, 0.07, 0, 900);
         break;
       case 'bite':
-        if (this.ready('bite', 0.15)) this.tone(2400, 0.012, 0.012, 'triangle');
+        // Hawk strike: a tiny chirp that falls away, heavily throttled.
+        if (this.ready('bite', 0.3)) this.tone(2600, 0.05, 0.012, 'sine', 0, 1500);
+        break;
+      case 'smash':
+        // Wood or stone thud.
+        if (this.ready('smash', 0.15)) {
+          this.tone(90, 0.15, 0.2, 'sine', 0, 45);
+          this.burst(500, 0.08, 0.06, 0, 200);
+        }
+        break;
+      case 'destroyed':
+        // Crumbling burst and a low thud. A hero falling is heavier and always plays.
+        if (a === 1 || this.ready('destroyed', 0.05)) {
+          this.burst(900, 0.6, 0.12, 0, 150);
+          this.tone(60, 0.5, 0.25, 'sine', 0, 35);
+          if (a === 1) {
+            this.tone(45, 0.9, 0.22, 'sine', 0.05, 30);
+            this.burst(400, 0.9, 0.1, 0.1, 80);
+          }
+        }
         break;
       case 'build':
         this.tone(280, 0.09, 0.2, 'triangle', 0, 160);
@@ -272,12 +296,16 @@ export class Synth {
         this.tone(1576, 0.7, 0.025, 'sine');
         this.tone(2349, 0.5, 0.012, 'sine', 0.06);
         break;
-      case 'snuff':
-        // A breath: noise sweeping down.
-        this.burst(1600, 0.7, 0.09, 0, 200);
+      case 'silence':
+        // A low muffled swoosh: noise sweeping down into the mud.
+        this.burst(500, 0.6, 0.08, 0, 180);
         break;
-      case 'dim':
-        if (this.ready('dim', 0.2)) this.burst(4200, 0.3, 0.02, 0, 2600);
+      case 'jinx':
+        // Short eerie warble: two dissonant tones sliding down.
+        if (this.ready('jinx', 0.2)) {
+          this.tone(311, 0.3, 0.035, 'sine', 0, 220);
+          this.tone(370, 0.3, 0.02, 'sine', 0.05, 277);
+        }
         break;
       case 'boss':
         this.tone(41.2, 2.6, 0.07, 'sawtooth');

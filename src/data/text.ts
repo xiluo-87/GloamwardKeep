@@ -10,11 +10,11 @@ export interface ForkText { name: string; blurb: string; tiers: [string, string]
 
 export const TOWER_TEXT: Record<TowerId, TowerText> = {
   palisade: {
-    name: 'Palisade', blurb: 'Cheap and weak. Build it to plug gaps and steer enemies into longer paths.',
-    tiers: ['Palisade', 'Braced Palisade', 'Tall Palisade'],
+    name: 'Palisade', blurb: 'Cheap blocker. Upgrade it into walls and build mazes on the road: enemies walk around walls and only smash them if every route is sealed.',
+    tiers: ['Palisade', 'Stone Wall', 'Fortified Wall'],
     forks: {
-      a: { name: 'Spiked Palisade', blurb: 'Hurts enemies that try to smash through it.', tiers: ['Spiked Palisade', 'Thorn Wall'] },
-      b: { name: 'Stone Wall', blurb: 'Very sturdy. For maze walls that must hold.', tiers: ['Stone Wall', 'Rampart'] },
+      a: { name: 'Spiked Wall', blurb: 'Hurts and slows enemies near it, and hurts whatever smashes it.', tiers: ['Spiked Wall', 'Thorn Rampart'] },
+      b: { name: 'Guard Wall', blurb: 'Archers on the battlements. Hits flyers.', tiers: ['Guard Wall', 'Battlements'] },
     },
   },
   archer: {
