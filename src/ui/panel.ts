@@ -1,6 +1,6 @@
 // The selection panel: a side panel on wide screens, a bottom sheet on phones (CSS decides).
 // It rebuilds its DOM only when something discrete changes (signature) and patches numbers in place otherwise.
-import { HERO, HEROES, HEIGHT, HeroId, TowerId } from '../data/balance';
+import { HERO, HEROES, HEIGHT, HeroId, TOWER_IDS, TowerId } from '../data/balance';
 import { ABILITY_TEXT, CLEAR_TEXT, describeMod, HERO_TEXT, TOWER_TEXT } from '../data/text';
 import { canClear, clearCost } from '../sim/actions';
 import { isUndo } from './session';
@@ -25,7 +25,7 @@ const WIDE = window.matchMedia('(min-width: 820px)');
 const IDLE_HTML = `<h3>The Keep</h3>
   <p class="sub">Click a tile to select it, click it again for the action ring (build, upgrade, sell). Hotkeys act on the selected tile.</p>
   <h4>Controls</h4>
-  <dl class="stats keys"><dt>1–7</dt><dd>Build tower here</dd><dt>Q / W</dt><dd>Place hero here</dd><dt>Space</dt><dd>Call next wave</dd>
+  <dl class="stats keys"><dt>1–${TOWER_IDS.length}</dt><dd>Build tower here</dd><dt>Q / W</dt><dd>Place hero here</dd><dt>Space</dt><dd>Call next wave</dd>
   <dt>U / I</dt><dd>Upgrade (fork A / B)</dd><dt>S</dt><dd>Sell</dd><dt>T</dt><dd>Target mode</dd><dt>A</dt><dd>Hero ability</dd>
   <dt>C</dt><dd>Clear forest / rocks</dd><dt>F</dt><dd>Fit whole map</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
   <p class="sub">Build walls on the road to steer enemies onto longer routes. Higher ground gives more range.</p>`;

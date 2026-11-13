@@ -1,6 +1,6 @@
 // Menus: title, map and loadout, profile, pause and end screens. All DOM over the canvas.
 // Nothing here touches the simulation.
-import { ENEMIES, ENEMY_IDS, HERO_IDS, HEROES, MAP_BALANCE, MapId, PERK_IDS, PERKS, PROFILE, RUN } from '../data/balance';
+import { ENEMIES, ENEMY_IDS, HERO_IDS, HEROES, MAP_BALANCE, MapId, PERK_IDS, PERKS, PROFILE, RUN, TOWER_IDS } from '../data/balance';
 import { ENEMY_TEXT, GAME_NAME, GAME_TAG, HERO_TEXT, MAP_TEXT, PERK_TEXT } from '../data/text';
 import {
   heroSlots, heroUnlocked, levelOf, levelProgress, mapUnlocked, perkSlots, perkUnlocked, Profile, unlocksAt,
@@ -255,7 +255,7 @@ export class Screens {
       <button data-act="restart">Restart this map</button>
       <button data-act="slow" title="How fast time runs while the action ring, a description or a sheet is open">Slow time in menus: ${SLOW_TEXT[this.ui.slow]}</button>
       <button data-act="giveup" class="${armed ? 'danger' : ''}">${armed ? 'Really give up?' : 'Give up'}</button>
-      <p class="hint">Tap a tile to select, tap again for actions · Space calls the next wave · 1–7 build, Q/W heroes on the selected tile · U/I upgrade · S sell · T target · A ability · F fit map · Esc pause</p>
+      <p class="hint">Tap a tile to select, tap again for actions · Space calls the next wave · 1–${TOWER_IDS.length} build, Q/W heroes on the selected tile · U/I upgrade · S sell · T target · A ability · F fit map · Esc pause</p>
     </div>`, 'center dim');
   }
 

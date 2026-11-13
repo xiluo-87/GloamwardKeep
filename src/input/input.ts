@@ -1,6 +1,7 @@
 // Pointer (mouse and touch) and keyboard. Both only talk to the Session and the camera; the simulation
 // is never touched here. A drag over 8 px pans, two fingers pinch, a tap selects a tile and a second
 // tap on the same tile opens the action ring.
+import { TOWER_IDS } from '../data/balance';
 import type { Renderer } from '../render/renderer';
 import type { Session } from '../ui/session';
 
@@ -150,7 +151,7 @@ export class Controls {
     if (key === 'f3' || key === '`') { this.hooks.toggleDebug(); return; }
     if (!this.hooks.active()) return;
     const ss = this.session;
-    if (key >= '1' && key <= '7') ss.towerSlot(Number(key) - 1);
+    if (key >= '1' && key <= String(TOWER_IDS.length)) ss.towerSlot(Number(key) - 1);
     else if (key === 'q') ss.heroSlot(0);
     else if (key === 'w') ss.heroSlot(1);
     else if (e.code === 'Space') ss.call();

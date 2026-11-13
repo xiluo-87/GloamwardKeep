@@ -9,6 +9,7 @@ const TOWER_ICONS: Record<TowerId, string> = {
   archer: wrap('<path d="M6 21V10h12v11M5 10V7h3v2h2V7h4v2h2V7h3v3M12 21v-4M9 15h6"/><path d="M12 2v4M10 4l2-2 2 2" stroke="#c9972b"/>'),
   catapult: wrap('<path d="M3 20h18M6 20l4-9M14 20l-3-9M4 11l12-6" /><circle cx="18" cy="5" r="2.4" fill="#c9972b" stroke="#8a4a14"/><circle cx="6" cy="20" r="1.4"/><circle cx="14" cy="20" r="1.4"/>'),
   frost: wrap('<path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9 4l3 2 3-2M9 20l3-2 3 2" stroke="#3d82b8"/>'),
+  lightning: wrap('<path d="M13 2L5 14h6l-1 8 9-13h-6z" fill="#f3d27a" stroke="#8a5a14"/><path d="M4 6l3 2M20 5l-3 2" stroke="#c9972b"/>'),
   mage: wrap('<path d="M12 21V9M9 21h6" /><path d="M12 2l2 4 4 .6-3 3 .8 4.2L12 11.7 8.2 13.8 9 9.6l-3-3L10 6z" fill="#9a63c9" stroke="#5c2f86"/>'),
   aviary: wrap('<path d="M3 13c3-5 6-6 9-2 3-4 6-3 9 2-3-1-5 0-6 2l-3 3-3-3c-1-2-3-3-6-2z" fill="#c9972b" stroke="#8a4a14"/>'),
   shrine: wrap('<path d="M6 21h12M8 21V11h8v10M7 11l5-8 5 8"/><path d="M12 14v4M10 16h4" stroke="#c9972b"/>'),
@@ -40,3 +41,11 @@ export const ACTION_ICONS = {
   clear: wrap('<path d="M5 20L15 6M13 4l7 5-3 2-6-4z" fill="#cfd5dc" stroke="#4d5662"/><path d="M5 20l3-1" />'),
   fit: wrap('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="9" y="9" width="6" height="6" rx="1"/>'),
 };
+
+export const GROUP_ICONS = {
+  physical: wrap('<path d="M5 19L17 7M14 5l5 5M6 15l3 3M3 21l3-3" stroke="#4d5662" stroke-width="2"/><path d="M19 19L8 8M6 6h4v4" stroke="#8a5a14" stroke-width="1.8"/>'),
+  magic: wrap('<path d="M12 2l2.4 6.2 6.6.4-5.1 4.2 1.7 6.4L12 15.6 6.4 19.2l1.7-6.4L3 8.6l6.6-.4z" fill="#cdb6ec" stroke="#5c2f86"/>'),
+  support: wrap('<path d="M6 21V3M6 4h13l-3.5 4.5L19 13H6" fill="#e2b04a" stroke="#7a4f0e"/>'),
+  heroes: wrap('<path d="M3 18l2-10 5 5 2-8 2 8 5-5 2 10z" fill="#f3d27a" stroke="#8a5a14"/><path d="M3 21h18"/>'),
+};
+export const BACK_ICON = wrap('<path d="M15 5l-7 7 7 7" stroke-width="3"/>');

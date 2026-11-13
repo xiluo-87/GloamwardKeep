@@ -214,3 +214,12 @@ ul.unlocks li.got { border-color: var(--green); color: var(--ink); }
 #panel > * { flex: none; }
 .xp.wideBar { flex: none; margin: 4px 0; }
 .panel.title { max-width: 760px; }
+
+/* build folders: stacked circles and a blue count badge, unlike the gold price badge of a direct build */
+.ri.folder::before, .ri.folder::after { content: ''; position: absolute; width: 46px; height: 46px; border-radius: 50%; background: #d8c28a; border: 2px solid #8a6a2a; box-shadow: 0 2px 4px rgba(0,0,0,0.35); z-index: -1; pointer-events: none; }
+.ri.folder::before { left: 6px; top: -5px; }
+.ri.folder::after { left: -6px; top: -2px; background: #cdb98a; }
+.ri.folder .cir { background: radial-gradient(circle at 35% 30%, #fffaf0, #d7e2ee); border-color: #3b6a9a; }
+.ri.folder .co { background: #2f5f8a; color: #fff; }
+.rg path { animation: rgin 0.14s ease-out; }
+@keyframes rgin { from { opacity: 0; } }

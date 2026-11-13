@@ -45,6 +45,8 @@ export class Session {
   speed = 1;
   /** The action ring is open around the selected tile. */
   ring = false;
+  /** Which build folder the ring shows (null = top level). */
+  ringGroup: string | null = null;
   /** A bottom sheet is open (the hero skill tree). */
   sheet: 'skills' | null = null;
   /** The player is pressing / hovering a ring item and reading its description card. */
@@ -109,6 +111,14 @@ export class Session {
   handlePop(): void {
     if (this.skipPop) { this.skipPop = false; return; }
     this.histPushed = false;
+    // Back inside a build folder goes up one level and keeps the history entry for the next press.
+    if (this.ring && this.ringGroup) {
+      this.ringGroup = null;
+      this.clearPreview();
+      this.pushHistory();
+      this.onChange();
+      return;
+    }
     this.closeOverlays(false);
   }
 
@@ -135,6 +145,7 @@ export class Session {
   openRing(): void {
     if (!this.view.selectedTile) return;
     this.ring = true;
+    this.ringGroup = null;
     this.pushHistory();
     this.onChange();
   }
@@ -152,6 +163,7 @@ export class Session {
   closeOverlays(touchHistory = true): boolean {
     const was = this.ring || this.sheet !== null || this.previewing;
     this.ring = false;
+    this.ringGroup = null;
     this.sheet = null;
     this.clearPreview();
     if (touchHistory) this.dropHistory();
@@ -161,6 +173,7 @@ export class Session {
 
   /** Esc: closes layers one by one, then the selection. */
   cancel(): boolean {
+    if (this.ring && this.ringGroup) { this.ringGroup = null; this.clearPreview(); this.onChange(); return true; }
     if (this.closeOverlays()) return true;
     if (this.view.selectedTile || this.view.selectedUid) {
       this.view.selectedTile = null;
@@ -229,7 +242,7 @@ export class Session {
     return true;
   }
 
-  /** Hotkeys 1–7 and Q/W: build on the selected tile, or the hovered one. */
+  /** Hotkeys 1–8 (one per tower type) and Q/W: build on the selected tile, or the hovered one. */
   hotkeyBuild(type: TowerId | HeroId | undefined): void {
     if (!type || !this.run) return;
     if (!this.view.selectedTile && this.view.hoverTile) this.selectTile(this.view.hoverTile.col, this.view.hoverTile.row);

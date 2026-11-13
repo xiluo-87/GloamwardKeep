@@ -1,8 +1,8 @@
 // The action ring around the selected tile, and the description card shown while an item is pressed
 // (touch) or hovered (mouse). Pressing shows the card and a ghost on the map; releasing on the item acts;
 // sliding off before release cancels.
-import { HEROES, HeroId, TOWERS, TOWER_IDS, TowerId } from '../data/balance';
-import { ABILITY_TEXT, CLEAR_TEXT, describeMod, HERO_TEXT, TOWER_TEXT } from '../data/text';
+import { BuildGroup, HEROES, HeroId, TOWERS, TOWER_GROUP, TOWER_IDS, TowerId } from '../data/balance';
+import { ABILITY_TEXT, CLEAR_TEXT, describeMod, GROUP_TEXT, HERO_TEXT, TOWER_TEXT } from '../data/text';
 import type { CameraApi } from '../render/view';
 import { canBuild, clearCost } from '../sim/actions';
 import { FEATURE } from '../sim/mapgen';
@@ -10,18 +10,23 @@ import { towerAt, Tower, TARGET_MODES } from '../sim/state';
 import type { RunState } from '../sim/state';
 import { sellValue, upgradeOptions } from '../sim/stats';
 import { esc, flagList, statLine } from './format';
-import { ACTION_ICONS, iconFor } from './icons';
+import { ACTION_ICONS, BACK_ICON, GROUP_ICONS, iconFor } from './icons';
 import { checkMessage, isUndo } from './session';
 import type { Session } from './session';
 
 const TARGET_TEXT: Record<string, string> = { first: 'First', last: 'Last', strong: 'Strongest', close: 'Closest' };
 const HOLD_MS = 600;
+/** Order of the build folders on the top level (palisade-like ungrouped towers come first, heroes last). */
+const GROUP_ORDER: BuildGroup[] = ['physical', 'magic', 'support'];
 
 export interface DescInfo { title: string; sub?: string; body: string; cost?: number; warn?: string }
 
 export interface RingItem {
   key: string;
   icon: string;
+  /** Folder: a build group that opens a second ring (shown with a count badge, not a price). */
+  folder?: boolean;
+  aria?: string;
   label: string;
   cost?: number;
   hold?: boolean;
@@ -81,10 +86,12 @@ export function buildItems(s: RunState, ss: Session): RingItem[] {
   }
   const { goal, spawns } = s.terrain;
   if ((goal[0] === col && goal[1] === row) || spawns.some(([x, y]) => x === col && y === row)) return [];
-  const items: RingItem[] = [];
-  const add = (id: TowerId | HeroId, desc: DescInfo, name: string): void => {
+  const direct = (id: TowerId | HeroId): RingItem => {
+    const isHero = id in HEROES;
+    const name = isHero ? HERO_TEXT[id as HeroId].name.replace('The ', '') : TOWER_TEXT[id as TowerId].name.replace(' Tower', '');
+    const desc = isHero ? heroDesc(id as HeroId) : towerDesc(id as TowerId);
     const cost = ss.costOf(id);
-    items.push({
+    return {
       key: id, icon: iconFor(id), label: name, cost, place: id,
       desc: (st) => {
         const d = { ...desc, cost };
@@ -96,10 +103,50 @@ export function buildItems(s: RunState, ss: Session): RingItem[] {
       },
       state: (st) => ({ poor: st.gold < cost }),
       run: () => { ss.buildHere(id); },
-    });
+    };
   };
-  for (const id of TOWER_IDS) add(id, towerDesc(id), TOWER_TEXT[id].name.replace(' Tower', ''));
-  for (const h of s.cfg.heroes) if (!s.heroesPlaced.includes(h)) add(h, heroDesc(h), HERO_TEXT[h].name.replace('The ', ''));
+  // Groups from data: ungrouped towers stay on the top level, each group (in order of appearance) is one entry,
+  // heroes not on the board form the last group. A group of one is shown as that entry; an empty one is omitted.
+  const groups = new Map<string, (TowerId | HeroId)[]>();
+  const order: ({ id: TowerId | HeroId } | { group: string })[] = [];
+  for (const id of TOWER_IDS) {
+    const g = TOWER_GROUP[id];
+    if (!g) { order.push({ id }); continue; }
+    if (!groups.has(g)) groups.set(g, []);
+    (groups.get(g) as (TowerId | HeroId)[]).push(id);
+  }
+  for (const g of GROUP_ORDER) if (groups.has(g)) order.push({ group: g });
+  const heroIds = s.cfg.heroes.filter((h) => !s.heroesPlaced.includes(h));
+  groups.set('heroes', heroIds);
+  order.push({ group: 'heroes' });
+
+  if (ss.ringGroup && groups.has(ss.ringGroup) && (groups.get(ss.ringGroup) as unknown[]).length > 1) {
+    const g = ss.ringGroup;
+    return [{
+      key: 'back', icon: BACK_ICON, label: 'Back', aria: 'Back',
+      desc: () => ({ title: 'Back', body: '<p>Return to the build list.</p>' }),
+      state: () => ({ poor: false }),
+      keepOpen: true,
+      run: () => { ss.ringGroup = null; ss.onChange(); },
+    }, ...(groups.get(g) as (TowerId | HeroId)[]).map(direct)];
+  }
+  const items: RingItem[] = [];
+  for (const e of order) {
+    if ('id' in e) { items.push(direct(e.id)); continue; }
+    const members = groups.get(e.group) as (TowerId | HeroId)[];
+    if (members.length === 0) continue;
+    if (members.length === 1) { items.push(direct(members[0])); continue; }
+    const gt = GROUP_TEXT[e.group as keyof typeof GROUP_TEXT];
+    const list = members.map((m) => `${m in HEROES ? HERO_TEXT[m as HeroId].name.replace('The ', '') : TOWER_TEXT[m as TowerId].name} ${ss.costOf(m)}`).join(' · ');
+    items.push({
+      key: `group-${e.group}`, folder: true, icon: GROUP_ICONS[e.group as keyof typeof GROUP_ICONS], label: gt.name,
+      aria: e.group === 'heroes' ? `${gt.name} (${members.length})` : `${gt.name} towers (${members.length})`,
+      desc: () => ({ title: gt.name, sub: `${members.length} to choose from — tap to open`, body: `<p>${esc(gt.blurb)}</p><p class="stats">${esc(list)}</p>` }),
+      state: () => ({ poor: false, sub: `${members.length} ›` }),
+      keepOpen: true,
+      run: () => { ss.ringGroup = e.group; ss.onChange(); },
+    });
+  }
   return items;
 }
 
@@ -270,8 +317,8 @@ export class Ring {
     this.guide = this.root.firstChild as SVGSVGElement;
     this.els = items.map((it, k) => {
       const b = document.createElement('button');
-      b.className = `ri${it.hold ? ' hold' : ''}`;
-      b.setAttribute('aria-label', it.desc(this.session.run as RunState).title);
+      b.className = `ri${it.hold ? ' hold' : ''}${it.folder ? ' folder' : ''}`;
+      b.setAttribute('aria-label', it.aria ?? it.desc(this.session.run as RunState).title);
       b.innerHTML = `<span class="cir"><span class="ic">${it.icon}</span></span><span class="co">${it.cost ?? ''}</span>`;
       b.dataset.i = String(k);
       this.root.appendChild(b);
@@ -289,7 +336,7 @@ export class Ring {
       return;
     }
     const t = towerAt(s, tile.col, tile.row);
-    const sig = `${tile.col},${tile.row}|${t ? `${t.uid}.${t.tier}.${t.fork}.${t.forkTier}.${t.target}.${isUndo(t) ? 1 : 0}` : 'e'}|${s.terrain.feature[tile.row * s.terrain.cols + tile.col]}|${s.heroesPlaced.join()}`;
+    const sig = `${tile.col},${tile.row}|${t ? `${t.uid}.${t.tier}.${t.fork}.${t.forkTier}.${t.target}.${isUndo(t) ? 1 : 0}` : 'e'}|${s.terrain.feature[tile.row * s.terrain.cols + tile.col]}|${s.heroesPlaced.join()}|${ss.ringGroup ?? ''}`;
     if (!this.shown || sig !== this.sig) {
       const items = buildItems(s, ss);
       if (items.length === 0) { ss.closeOverlays(); return; }

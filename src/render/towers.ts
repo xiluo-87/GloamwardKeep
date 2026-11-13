@@ -24,6 +24,7 @@ export function drawTower(g: CanvasRenderingContext2D, t: Tower, time: number, l
     case 'catapult': catapult(g, t, time); break;
     case 'frost': frost(g, t, time); break;
     case 'mage': mage(g, t, time); break;
+    case 'lightning': lightning(g, t, time); break;
     case 'aviary': aviary(g, t, time); break;
     case 'shrine': shrine(g, t, time); break;
     default: break;
@@ -38,6 +39,7 @@ export function towerHeight(t: Tower): number {
     case 'catapult': return 28;
     case 'frost': return 24 + t.tier * 5;
     case 'mage': return 38 + t.tier * 6;
+    case 'lightning': return (t.fork === 'b' ? 62 : t.fork === 'a' ? 56 : 40 + t.tier * 6) + 4;
     case 'aviary': return 32 + t.tier * 3;
     case 'shrine': return 30;
     default: return 34;
@@ -583,5 +585,65 @@ function shrine(g: CanvasRenderingContext2D, t: Tower, time: number): void {
     g.fillStyle = C('#fff4b0');
     g.fillRect(cx - 4 + k * 4, gy - 13 - k * 8, 2, 2);
     g.globalAlpha = 1;
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Lightning tower: slim dark spire with a rod; Thunderhead adds a storm cloud, Thunder Lance a golden rod.
+// ---------------------------------------------------------------------------------------------
+function lightning(g: CanvasRenderingContext2D, t: Tower, time: number): void {
+  const rc = recoilOf(t);
+  const gy = 5;
+  const a = t.fork === 'a';
+  const b = t.fork === 'b';
+  const th = 24 + t.tier * 6 + (t.fork ? 4 : 0);
+  const dark = '#4a4c58';
+  const darkL = '#6a6c7a';
+  // Tapering spire.
+  poly(g, [-9, gy, -4.5, -th, 4.5, -th, 9, gy], dark, 1.2);
+  poly(g, [-9, gy, -4.5, -th, -1, -th, -1, gy], darkL, 0);
+  g.strokeStyle = OUT; g.lineWidth = 1.2; g.beginPath(); g.moveTo(-9, gy); g.lineTo(-4.5, -th); g.lineTo(4.5, -th); g.lineTo(9, gy); g.closePath(); g.stroke();
+  blocks(g, -8, -th, 16, gy + th, 6);
+  rect(g, -2, gy - 8, 4, 8, '#1e1c26', 0.8);
+  // Copper coils.
+  const coils = t.tier + (t.fork ? 1 : 0);
+  for (let i = 0; i < coils; i++) {
+    const y = -th * 0.25 - i * (th * 0.55 / Math.max(1, coils));
+    const w = 6.5 - (i / Math.max(1, coils)) * 2.2;
+    ell(g, 0, y, w, 2.2, b ? GOLD : '#c8783a', 1);
+  }
+  // Cap and rod.
+  rect(g, -5.5, -th - 2, 11, 3, STONE_D, 1);
+  const rodH = b ? 24 + t.forkTier * 3 : 12;
+  const rodC = b ? '#f0c030' : '#c8783a';
+  stick(g, 0, -th - 1, 0, -th - rodH, rodC, b ? 2.8 : 1.8);
+  if (b) {
+    poly(g, [-2.4, -th - rodH + 1, 0, -th - rodH - 7, 2.4, -th - rodH + 1], '#fff0a0', 1);
+  }
+  const ty = -th - rodH - (b ? 7 : 0);
+  const flick = 0.5 + 0.5 * Math.sin(time * 17 + t.uid);
+  glow(g, 0, ty, (b ? 10 : 6) + rc * 8 + flick * 2, b ? '#fff0a0' : '#e8f0ff', 0.25 + rc * 0.4 + (b ? 0.12 : 0));
+  g.strokeStyle = C(b ? '#fff6c0' : '#f0f6ff');
+  g.lineWidth = 1.1;
+  const seed = Math.floor(time * 12 + t.uid);
+  for (let i = 0; i < 3; i++) {
+    const ang = ((seed * 2.3 + i * 2.1) % TAU);
+    g.beginPath();
+    g.moveTo(0, ty);
+    g.lineTo(Math.cos(ang) * 4 + Math.sin(seed + i) * 1.4, ty + Math.sin(ang) * 4);
+    g.lineTo(Math.cos(ang + 0.4) * 8, ty + Math.sin(ang + 0.4) * 8);
+    g.stroke();
+  }
+  if (a) {
+    // Small storm cloud hovering above, flickering from within.
+    const cy = ty - 12 + Math.sin(time * 2 + t.uid) * 1.5;
+    const sc = 1 + t.forkTier * 0.18;
+    for (const [dx, dy, r, c] of [[-8, 1, 6, '#4a5068'], [8, 1, 6, '#4a5068'], [0, -2, 8, '#5a6280'], [-3.5, 3, 6, '#3a4058'], [4, 3, 6, '#3a4058']] as [number, number, number, string][]) {
+      circ(g, dx * sc, cy + dy * sc, r * sc, c, 1.1);
+    }
+    g.globalAlpha = 0.25 + 0.6 * (Math.sin(time * 9 + t.uid) > 0.55 ? 1 : 0) + rc * 0.3;
+    glow(g, 0, cy, 12 * sc, '#fff0a0', 0.5);
+    g.globalAlpha = 1;
+    poly(g, [-2, cy + 4 * sc, 1, cy + 8 * sc, -1, cy + 9 * sc, 2, cy + 14 * sc, -2.4, cy + 10 * sc, 0, cy + 9 * sc], '#ffe890', 0.6);
   }
 }

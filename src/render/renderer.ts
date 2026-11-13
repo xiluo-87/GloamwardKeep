@@ -348,8 +348,22 @@ export class Renderer implements CameraApi {
       switch (e.type) {
         case 'hit': case 'bite': this.sparks(X, Y - 6, 2, '#fff1b0', 70, 1.6, 0.25); break;
         case 'chain': {
+          const ex = this.dX(e.a, e.b);
+          const ey = this.dY(e.a, e.b) - 8;
+          // A lightning tower strikes from the sky: its event starts at (tower.x, tower.y - 16).
+          let sky = false;
+          for (const t of s.towers) {
+            if (t.type === 'lightning' && Math.abs(t.x - e.x) < 1 && Math.abs(t.y - 16 - e.y) < 1) { sky = true; break; }
+          }
+          if (sky) {
+            const f = this.alloc(ARC, ex + (Math.random() - 0.5) * 14, ey - 120, 0.22, '#ffe070');
+            if (f) { f.x2 = ex; f.y2 = ey; }
+            this.ring(ex, ey + 6, 18, '#fff0a0', 0.3, true);
+            this.sparks(ex, ey, 6, '#fff6c0', 90, 1.8, 0.3);
+            break;
+          }
           const f = this.alloc(ARC, X, Y - 8, 0.16, '#d8b8ff');
-          if (f) { f.x2 = this.dX(e.a, e.b); f.y2 = this.dY(e.a, e.b) - 8; }
+          if (f) { f.x2 = ex; f.y2 = ey; }
           this.sparks(this.dX(e.a, e.b), this.dY(e.a, e.b) - 8, 2, '#e8d8ff', 60, 1.6, 0.25);
           break;
         }
