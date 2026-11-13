@@ -174,7 +174,7 @@ function keepItems(s: RunState, ss: Session): RingItem[] {
   const cost = keepCost(s);
   if (cost === 0) return [];
   return [{
-    key: 'raise-keep', icon: ACTION_ICONS.keep, label: 'Raise keep', cost, keepOpen: true,
+    key: 'raise-keep', icon: ACTION_ICONS.keep, label: 'Raise keep', aria: 'Raise keep', cost, keepOpen: true,
     desc: () => ({
       title: `Raise the keep to level ${roman(next)}`, cost,
       body: `<p>Unlocks:</p><ul class="unl">${keepUnlocks(next).map((u) => `<li>${esc(u)}</li>`).join('')}</ul>`,
