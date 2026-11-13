@@ -70,15 +70,19 @@ em { font-style: normal; }
 /* action ring */
 #ring { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 8; }
 #ring[hidden] { display: none; }
-.ri { position: absolute; left: -32px; top: -34px; width: 64px; height: 68px; padding: 2px 0; display: flex; flex-direction: column; align-items: center; justify-content: space-between; border-radius: 16px; background: linear-gradient(#fbf1d6, #e3cc92); border: 2px solid var(--gold); box-shadow: 0 3px 8px rgba(0,0,0,0.4); pointer-events: auto; touch-action: none; overflow: hidden; animation: pop 0.12s ease-out; }
-.ri .rl { font-size: 9.5px; line-height: 1; max-width: 100%; padding: 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+.rg { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
+.rg path { fill: none; stroke: rgba(255, 245, 210, 0.55); stroke-width: 2; stroke-dasharray: 3 6; stroke-linecap: round; filter: drop-shadow(0 0 2px rgba(0,0,0,0.6)); }
+.ri { position: absolute; left: -23px; top: -23px; width: 46px; height: 46px; padding: 0; min-height: 0; display: block; background: none; border: 0; box-shadow: none; pointer-events: none; touch-action: none; animation: fade 0.12s ease-out; }
+@keyframes fade { from { opacity: 0; } }
+.ri .cir { position: relative; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #fff6dc, #e3cc92); border: 2px solid var(--gold); box-shadow: 0 3px 8px rgba(0,0,0,0.45); overflow: hidden; pointer-events: auto; }
 .ri .ic { width: 26px; height: 26px; display: block; pointer-events: none; }
-.ri .co { font-size: 12px; font-weight: 700; color: #7a4f0e; min-height: 14px; }
-.ri.poor { filter: grayscale(0.7) brightness(0.9); }
-.ri.poor .co { color: var(--red); }
-.ri:hover, .ri:active { border-color: #fff; outline: 3px solid var(--gold2); }
-.ri.hold::after { content: ''; position: absolute; left: 0; bottom: 0; height: 5px; width: 0; background: var(--red); }
-.ri.holding::after { width: 100%; transition: width 0.6s linear; }
+.ri .co { position: absolute; top: 48px; left: 50%; transform: translateX(-50%); pointer-events: auto; min-width: 30px; height: 15px; padding: 0 5px; border-radius: 8px; background: rgba(47, 34, 20, 0.88); color: #ffe9a8; font-size: 12px; line-height: 15px; font-weight: 700; text-align: center; white-space: nowrap; }
+.ri .co:empty { visibility: hidden; }
+.ri.poor .cir { filter: grayscale(0.85) brightness(0.9); }
+.ri.poor .co { color: #ff9b8f; }
+.ri:hover .cir, .ri:active .cir { border-color: #fff; outline: 3px solid var(--gold2); }
+.ri.hold .cir::after { content: ''; position: absolute; left: 0; bottom: 0; height: 6px; width: 0; background: var(--red); }
+.ri.holding .cir::after { width: 100%; transition: width 0.6s linear; }
 
 /* description card while a ring item is pressed or hovered */
 #desc { position: absolute; left: 50%; transform: translateX(-50%); width: min(340px, calc(100vw - 16px)); background: var(--parch); border: 2px solid var(--gold); border-radius: 10px; padding: 8px 12px; font-size: 13px; line-height: 1.35; box-shadow: 0 4px 14px rgba(0,0,0,0.45); pointer-events: none; z-index: 9; }

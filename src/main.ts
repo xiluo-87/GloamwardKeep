@@ -222,7 +222,11 @@ function frame(now: number): void {
     toastEvents(s);
     hud.update(s);
     panel.update(s, now);
-    ring.update(s, { top: hud.top.getBoundingClientRect().bottom, bottom: hud.bar.getBoundingClientRect().top });
+    const pr = panelEl.getBoundingClientRect();
+    ring.update(s, {
+      left: 8, right: panel.visible && window.innerWidth >= 820 ? pr.left - 8 : window.innerWidth - 8,
+      top: hud.top.getBoundingClientRect().bottom + 6, bottom: hud.bar.getBoundingClientRect().top - 6,
+    });
     if (session.sheetFocus && panel.visible && session.tile) {
       session.sheetFocus = false;
       renderer.focusTile(session.tile.col, session.tile.row, panelEl.getBoundingClientRect().height);

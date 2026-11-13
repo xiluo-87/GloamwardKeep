@@ -176,13 +176,13 @@ function heroItems(s: RunState, ss: Session, t: Tower): RingItem[] {
 export class Ring {
   private items: RingItem[] = [];
   private els: HTMLElement[] = [];
-  private offsets: [number, number][] = [];
+  private lay = '';
+  private guide: SVGSVGElement | null = null;
   private sig = '';
   private shown = false;
   private cur = -1;
   private pressId: number | null = null;
   private holdTimer = 0;
-  private pos = '';
   private card: HTMLElement;
 
   constructor(private root: HTMLElement, card: HTMLElement, private session: Session, private cam: CameraApi) {
@@ -262,41 +262,24 @@ export class Ring {
     this.card.hidden = false;
   }
 
-  private rebuild(s: RunState, items: RingItem[]): void {
+  private rebuild(items: RingItem[]): void {
     this.items = items;
-    this.root.innerHTML = '';
+    this.root.innerHTML = '<svg class="rg" aria-hidden="true"></svg>';
+    this.guide = this.root.firstChild as SVGSVGElement;
     this.els = items.map((it, k) => {
       const b = document.createElement('button');
       b.className = `ri${it.hold ? ' hold' : ''}`;
-      b.setAttribute('aria-label', it.label);
-      b.innerHTML = `<span class="rl">${esc(it.label)}</span><span class="ic">${it.icon}</span><span class="co">${it.cost ?? ''}</span>`;
+      b.setAttribute('aria-label', it.desc(this.session.run as RunState).title);
+      b.innerHTML = `<span class="cir"><span class="ic">${it.icon}</span></span><span class="co">${it.cost ?? ''}</span>`;
       b.dataset.i = String(k);
       this.root.appendChild(b);
       return b;
     });
-    const n = items.length;
-    const offs: [number, number][] = [];
-    if (n <= 5) {
-      const r = 82;
-      for (let k = 0; k < n; k++) {
-        const th = n === 1 ? -Math.PI / 2 : -Math.PI - 0.2 + (k * (Math.PI + 0.4)) / (n - 1);
-        offs.push([r * Math.cos(th), r * Math.sin(th)]);
-      }
-    } else {
-      const r = Math.max(96, (74 * n) / (2 * Math.PI) + 8);
-      for (let k = 0; k < n; k++) {
-        const th = -Math.PI / 2 + (k * 2 * Math.PI) / n;
-        offs.push([r * Math.cos(th), r * Math.sin(th)]);
-      }
-    }
-    this.offsets = offs;
-    this.els.forEach((el, k) => { el.style.transform = `translate(${offs[k][0].toFixed(1)}px, ${offs[k][1].toFixed(1)}px)`; });
-    this.pos = '';
-    void s;
+    this.lay = '';
   }
 
-  /** Per-frame: rebuild on structural change, otherwise reposition and patch affordability. */
-  update(s: RunState, safe: { top: number; bottom: number }): void {
+  /** Per-frame: rebuild on structural change, otherwise lay out around the tile and patch affordability. */
+  update(s: RunState, free: Rect): void {
     const ss = this.session;
     const tile = ss.tile;
     if (!ss.ring || !tile) {
@@ -312,23 +295,18 @@ export class Ring {
       this.shown = true;
       this.root.hidden = false;
       if (this.pressId === null) this.cur = -1;
-      this.rebuild(s, items);
+      this.rebuild(items);
     }
     const c = this.cam.tileToScreen(tile.col, tile.row);
-    let minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
-    for (const [x, y] of this.offsets) {
-      minX = Math.min(minX, x - 34); maxX = Math.max(maxX, x + 34);
-      minY = Math.min(minY, y - 36); maxY = Math.max(maxY, y + 36);
+    const cardEl = document.getElementById('card');
+    const card = cardEl && !cardEl.hidden ? cardEl.getBoundingClientRect() : null;
+    const key = `${Math.round(c.x)},${Math.round(c.y)},${Math.round(c.r)}|${free.left},${free.top},${free.right},${free.bottom}|${card ? `${Math.round(card.right)},${Math.round(card.bottom)}` : ''}|${this.items.length}`;
+    if (key !== this.lay) {
+      this.lay = key;
+      const L = layoutRing(this.items.length, c.x, c.y, c.r, free, card ? { left: card.left - 4, top: card.top - 4, right: card.right + 4, bottom: card.bottom + 4 } : null);
+      this.els.forEach((el, k) => { el.style.transform = `translate(${Math.round(L.pts[k][0])}px, ${Math.round(L.pts[k][1])}px)`; });
+      this.drawGuide(c.x, c.y, L);
     }
-    let cx = c.x;
-    let cy = c.y;
-    const W = window.innerWidth;
-    if (cx + minX < 6) cx = 6 - minX;
-    if (cx + maxX > W - 6) cx = W - 6 - maxX;
-    if (cy + minY < safe.top + 6) cy = safe.top + 6 - minY;
-    if (cy + maxY > safe.bottom - 6) cy = safe.bottom - 6 - maxY;
-    const pos = `${Math.round(cx)},${Math.round(cy)}`;
-    if (pos !== this.pos) { this.pos = pos; this.root.style.transform = `translate(${Math.round(cx)}px, ${Math.round(cy)}px)`; }
     this.items.forEach((it, k) => {
       const st = it.state(s);
       const el = this.els[k];
@@ -338,4 +316,120 @@ export class Ring {
       if (co.textContent !== txt) co.textContent = txt;
     });
   }
+
+  private drawGuide(cx: number, cy: number, L: RingLayout): void {
+    if (!this.guide) return;
+    let d = '';
+    for (const row of L.rows) {
+      const { r, a0, a1, full } = row;
+      if (full) d += `M ${cx - r} ${cy} a ${r} ${r} 0 1 0 ${2 * r} 0 a ${r} ${r} 0 1 0 ${-2 * r} 0 `;
+      else {
+        const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0), x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+        d += `M ${x0.toFixed(1)} ${y0.toFixed(1)} A ${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1.toFixed(1)} ${y1.toFixed(1)} `;
+      }
+    }
+    this.guide.innerHTML = `<path d="${d}" />`;
+  }
+}
+
+// -- layout -------------------------------------------------------------------------------------
+
+export interface Rect { left: number; top: number; right: number; bottom: number }
+interface Row { r: number; a0: number; a1: number; full: boolean }
+export interface RingLayout { pts: [number, number][]; rows: Row[]; fits: boolean }
+
+const CIR = 46;
+const GAP = 4;
+const ROW_GAP = 70;
+
+type Pt = [number, number];
+/** Item shapes: the 46 px circle and, under it, the cost pill (about 40 x 15, 2 px below). */
+const circBox = (p: Pt): Rect => ({ left: p[0] - CIR / 2, top: p[1] - CIR / 2, right: p[0] + CIR / 2, bottom: p[1] + CIR / 2 });
+const pillBox = (p: Pt): Rect => ({ left: p[0] - 20, top: p[1] + CIR / 2 + 2, right: p[0] + 20, bottom: p[1] + CIR / 2 + 17 });
+const hits = (a: Rect, b: Rect, m = 0): boolean => a.left < b.right + m && a.right > b.left - m && a.top < b.bottom + m && a.bottom > b.top - m;
+const inside = (b: Rect, f: Rect): boolean => b.left >= f.left && b.right <= f.right && b.top >= f.top && b.bottom <= f.bottom;
+function circleHitsBox(c: Pt, b: Rect, m: number): boolean {
+  const dx = Math.max(b.left - c[0], 0, c[0] - b.right);
+  const dy = Math.max(b.top - c[1], 0, c[1] - b.bottom);
+  return Math.hypot(dx, dy) < CIR / 2 + m;
+}
+function itemsHit(a: Pt, b: Pt): boolean {
+  if (Math.hypot(a[0] - b[0], a[1] - b[1]) < CIR + GAP) return true;
+  const pa = pillBox(a), pb = pillBox(b);
+  return hits(pa, pb, 2) || circleHitsBox(a, pb, 2) || circleHitsBox(b, pa, 2);
+}
+
+function rowPoints(n: number, r: number, mid: number, span: number, phase: number, cx: number, cy: number): Pt[] {
+  const out: Pt[] = [];
+  const full = span >= Math.PI * 2 - 1e-6;
+  for (let k = 0; k < n; k++) {
+    let a: number;
+    if (n === 1) a = mid;
+    else if (full) a = mid + Math.PI + ((k + phase) * 2 * Math.PI) / n;
+    else a = mid - span / 2 + ((k + phase) * span) / (n - 1 + (phase ? 1 : 0));
+    out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+  }
+  return out;
+}
+
+function valid(pts: Pt[], free: Rect, card: Rect | null): boolean {
+  for (let i = 0; i < pts.length; i++) {
+    const c = circBox(pts[i]);
+    const pl = pillBox(pts[i]);
+    if (!inside(c, free) || !inside(pl, free)) return false;
+    if (card && (hits(c, card) || hits(pl, card))) return false;
+    for (let j = 0; j < i; j++) if (itemsHit(pts[i], pts[j])) return false;
+  }
+  return true;
+}
+
+/** Items per row, roughly in proportion to each row's radius (outer rows hold more). */
+function splitCounts(n: number, radii: number[]): number[] {
+  if (radii.length === 1) return [n];
+  const sum = radii.reduce((a, b) => a + b, 0);
+  const out = radii.map((r) => Math.max(1, Math.floor((n * r) / sum)));
+  let left = n - out.reduce((a, b) => a + b, 0);
+  for (let j = out.length - 1; left > 0; j = (j + out.length - 1) % out.length) { out[j]++; left--; }
+  while (left < 0) { const j = out.indexOf(Math.max(...out)); out[j]--; left++; }
+  return out;
+}
+
+/** Places n items evenly on an arc around (cx, cy), pointing away from the screen edges. */
+export function layoutRing(n: number, cx: number, cy: number, tileR: number, free: Rect, card: Rect | null): RingLayout {
+  const fx = (free.left + free.right) / 2;
+  const fy = (free.top + free.bottom) / 2;
+  // Away from the edges: toward the middle of the free area (any direction if the tile is near the middle).
+  const near = Math.hypot(fx - cx, fy - cy) < 8;
+  const mid = near ? -Math.PI / 2 : Math.atan2(fy - cy, fx - cx);
+  const r0 = Math.max(46, tileR) + 44;
+  const rMax = r0 * 2.2;
+  const TAU = Math.PI * 2;
+  // Nudges of the arc's middle direction, smallest first, for when its ends would poke off screen.
+  const MIN_SPAN = 0.5;
+  const nudges = [0];
+  for (let d = 8; d <= 96; d += 8) nudges.push((d * Math.PI) / 180, (-d * Math.PI) / 180);
+  // One row if it fits, then two concentric rows, then three (a tile squeezed into a corner).
+  const maxRows = n >= 6 ? 3 : n >= 3 ? 2 : 1;
+  for (let rows = 1; rows <= maxRows; rows++) {
+    for (let span = TAU; span >= MIN_SPAN - 1e-6; span -= (15 * Math.PI) / 180) {
+      const s = Math.min(span, TAU);
+      const full = s >= TAU - 1e-6;
+      for (let r = r0; r <= rMax + 0.1; r += 6) {
+        const radii = Array.from({ length: rows }, (_, j) => r + ROW_GAP * j);
+        const counts = splitCounts(n, radii);
+        for (const nd of full ? [0] : nudges) {
+          const m = mid + nd;
+          const pts: Pt[] = [];
+          radii.forEach((rr, j) => pts.push(...rowPoints(counts[j], rr, m, s, full && j % 2 ? 0.5 : 0, cx, cy)));
+          if (valid(pts, free, card)) return { pts, fits: true, rows: radii.map((rr) => ({ r: rr, a0: m - s / 2, a1: m + s / 2, full })) };
+        }
+      }
+    }
+  }
+  // Best effort: the base arc, each item clamped into the free area.
+  const pts = rowPoints(n, r0 + 20, mid, Math.PI, 0, cx, cy).map(([x, y]): Pt => [
+    Math.min(free.right - CIR / 2, Math.max(free.left + CIR / 2, x)),
+    Math.min(free.bottom - CIR / 2 - 17, Math.max(free.top + CIR / 2, y)),
+  ]);
+  return { pts, fits: false, rows: [{ r: r0 + 20, a0: mid - Math.PI / 2, a1: mid + Math.PI / 2, full: false }] };
 }
