@@ -13,7 +13,7 @@ export const TOWER_TEXT: Record<TowerId, TowerText> = {
     name: 'Palisade', blurb: 'Cheap blocker. Upgrade it into walls and build mazes on the road: enemies walk around walls and only smash them if every route is sealed.',
     tiers: ['Palisade', 'Stone Wall', 'Fortified Wall'],
     forks: {
-      a: { name: 'Spiked Wall', blurb: 'Hurts and slows enemies near it, and hurts whatever smashes it.', tiers: ['Spiked Wall', 'Thorn Rampart'] },
+      a: { name: 'Spiked Wall', blurb: 'Its jabs slow enemies, and its spikes hurt whatever smashes it.', tiers: ['Spiked Wall', 'Thorn Rampart'] },
       b: { name: 'Guard Wall', blurb: 'Archers on the battlements. Hits flyers.', tiers: ['Guard Wall', 'Battlements'] },
     },
   },

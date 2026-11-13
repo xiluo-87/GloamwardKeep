@@ -1,10 +1,16 @@
-# Gloamward
+# Gloamward Keep
 
-A browser survivor game built around a lantern whose light is the player's sight, damage and clock. `docs/DESIGN.md` is the source of truth for game behaviour. If you change a mechanic or a starting value on purpose, update that document in the same commit.
+A browser tower defence on generated hex maps with terrain heights 0–4, forked from Gloamward. Towers on high ground reach further, enemies walk only on the level-0 road, and the player steers them by building on it; sealing the road makes them smash through. `docs/DESIGN.md` is the source of truth for game behaviour. If you change a mechanic or a value on purpose, update that document in the same commit.
 
 ## Current state
 
-All milestones are built and the game is playable from dusk to dawn. Balance has only been checked with the bot in `src/sim/bot.ts` (see `tests/balance.test.ts`), so the next step is human playtesting, starting with the Milestone 2 oil tension.
+The game is playable from wave 1 to wave 30: 7 towers with forks, 5 heroes with skill trees, 3 map presets (meadow, highlands, canyon), profile XP, perks and unlocks, saves, audio and touch controls. Balance has only been checked with the bot in `src/sim/bot.ts` (see `tests/smoke.test.ts`).
+
+## Next steps
+
+1. **Human playtesting.** Start with the early economy (waves 1–10), whether mazing with walls beats plain tower building, the stalker wave (8) without a detector, and Canyon with two gates.
+2. **Balance tuning with the bot.** Tune values in `src/data/balance.ts`; the bot currently loses around wave 28 on Meadow and Highlands and around wave 13 on Canyon, which may be a bot limit (see the debug options below for starting at any wave).
+3. **Future work.** A 3D renderer with Three.js is planned; see `docs/3D-RENDERER.md`. The tech rules below stay Canvas 2D until that work starts.
 
 ## Tech rules
 
@@ -17,56 +23,41 @@ All milestones are built and the game is playable from dusk to dawn. Balance has
 
 ## Architecture
 
-- **Separate simulation from rendering.** The simulation runs on a fixed 60 Hz step with an accumulator, and rendering interpolates. Simulation code must not touch the DOM or canvas, so it can run in tests.
-- **Determinism.** All gameplay randomness goes through one seeded RNG, never `Math.random`. The same seed and inputs should give the same run.
-- **Data-driven content.** Weapons, enemies, passives, waves and balance values live in plain data files under `src/data/`, not scattered through logic.
-- **Performance target.** 60 fps with 1,000 enemies, 500 projectiles and 1,000 pickups on a mid-range laptop.
-  - Pool enemies, projectiles, pickups and particles, and avoid per-frame allocation in hot paths.
-  - Use a uniform spatial grid for collisions and targeting.
-  - Render the darkness layer at half resolution.
+- **Separate simulation from rendering.** The simulation runs on a fixed 60 Hz step and rendering interpolates. Code in `src/sim/` and `src/meta/` must not touch the DOM or canvas, so it can run in tests.
+- **Determinism.** All gameplay randomness goes through one seeded RNG, never `Math.random`. The same seed, map seed and inputs give the same run.
+- **Data-driven content.** Every number lives in `src/data/balance.ts` (towers, heroes, enemies, waves, map presets, perks, economy). Every name and description lives in `src/data/text.ts`. Do not scatter values through logic.
+- **Map generator.** `src/sim/mapgen.ts` builds the terrain from a preset and a seed. Its rules are in DESIGN.md section 4.3 and are enforced by tests.
+- **Performance target.** 60 fps at the enemy cap (600 enemies, 400 projectiles). Pool enemies, projectiles, pets and effects, and avoid per-frame allocation in hot paths. The flow field is rebuilt only when a level-0 tower changes.
 
-Suggested layout:
+Layout:
 
 ```
 src/
   main.ts       startup and main loop
-  sim/          player, enemies, weapons, lantern, spawning, collisions
-  render/       world, lighting, HUD, effects
+  sim/          hex, mapgen, path, state, stats, combat, actions, step, bot
+  render/       drawing
   audio/        Web Audio synth
   input/        keyboard and touch
-  data/         balance and content tables
-  ui/           menus, level-up, shop
-  save/         versioned persistence
+  data/         balance.ts and text.ts
+  meta/         profile, perks, unlocks, saves
+  ui/           menus, panels
 tests/
+docs/
 ```
 
-## Build order
+## Debug options
 
-Finish each milestone and leave the game playable before starting the next. Commit in small steps.
-
-1. **Milestone 0, scaffold.** Vite, TypeScript, Vitest, lint and a GitHub Actions workflow that tests, builds and deploys to Pages. Fixed-step loop and a resizable canvas.
-2. **Milestone 1, playable core.** Player movement, camera, cobble background, Soot Mites, Wick Lash, embers, level-up with 3 choices, death and restart. Debug overlay with FPS and entity counts behind a key.
-3. **Milestone 2, the lantern.** Oil, burning, dimming, guttering, the darkness layer, dark damage penalty, eyes in the dark, oil drops and Turn Up the Wick. **Stop and playtest here, because this is the point of the game.**
-4. **Milestone 3, lampposts and clock.** Lampposts, the no-oil rule, the 15:00 clock, the wave table, crates and elites.
-5. **Milestone 4, content.** All weapons, combinations, passives and enemies.
-6. **Milestone 5, the boss.** All three phases of The Long Night, including the Inversion, and the dawn ending. Do not spoil the Inversion in any UI text or the README.
-7. **Milestone 6, between runs.** Wax, shop, characters, New Moon mode and saves.
-8. **Milestone 7, audio and mobile.** Web Audio synth, touch controls and a responsive HUD.
-9. **Milestone 8, polish.** Screen shake with a reduce-motion setting, hit flashes, title screen, balance pass.
+URL parameters: `?debug` (FPS, entity counts, speed keys), `&bot`, `&wave=N` (jump to a wave), `&map=canyon&mapseed=5`, `&seed=N`. Use them for balance checks: start at any wave, speed up time, and let the bot play.
 
 ## Definition of done
 
-For every milestone:
+For every change:
 
 - `npm run lint`, `npm test` and `npm run build` all pass.
-- Unit tests cover the pure logic touched: oil burn, damage rules for light and dark, wick scaling, ember curve, wave selection and save migration.
-- You have actually run the game in a browser and played the new feature. Where a browser is available, check the console for errors and test at phone width too.
-- A headless simulation test runs a full 15-minute run at high speed without errors, once enough exists for this to mean something.
-- The README's status line is up to date.
-
-## Balance checks
-
-Add a debug option to start at any minute, and to speed up or slow down time. In the first few minutes, a player who simply moves around and fights should hold about 40–70% oil. If oil never runs low, the core tension is missing; if players routinely gutter before minute 3, it is too harsh. These are the first things to tune.
+- Unit tests cover the pure logic touched: damage rules (armour, ward, shred, shields, stealth, flyers), pathing and smashing, upgrades and forks, the hero skill tree, wave payouts, the map generator rules, and profile migration.
+- A headless simulation runs a full game on each map with the bot without errors (`tests/smoke.test.ts`), and the same seed gives the same result (`tests/determinism.test.ts`).
+- Where a browser is available, play the new feature, check the console for errors and test at phone width too.
+- The README's status line and `docs/DESIGN.md` are up to date.
 
 ## Deployment
 

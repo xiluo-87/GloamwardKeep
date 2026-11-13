@@ -1,49 +1,45 @@
-# Gloamward
+# Gloamward Keep
 
-*You are the last lamplighter in a town swallowed by dusk. Keep the flame alive until dawn.*
+*Hold the keep through thirty waves.*
 
-Gloamward is a browser survivor game. You move, your weapons fire on their own, and the swarm keeps growing. Your lantern is what makes it different: its light is your sight, your damage and your clock, and it runs on oil you can only get by fighting.
+Gloamward Keep is a classic-fantasy tower defence for the browser, forked from Gloamward. The map is generated on a hex grid with terrain heights 0 to 4. Enemies walk only on the low road, towers on the hills reach further, and you steer the enemy by building walls on the road. Seal the road completely and they smash their way through.
 
-**Status:** version 1 is built and playable from dusk to dawn. Balance has only been tested by a bot so far, so human playtesting comes next.
+All art is drawn in code and all sound comes from the Web Audio API. There are no image or audio files, no engine and no runtime dependencies.
 
-## The idea in four rules
-
-1. **Light is power.** Enemies outside your light are almost invisible and take much less damage.
-2. **Oil is time.** The lantern always burns oil, and most oil comes from kills.
-3. **Bigger is riskier.** A bigger flame reaches further and hits harder, but it burns faster and draws more enemies. You can dim it to save oil.
-4. **Safety doesn't pay.** Lampposts make safe pools of light, but kills inside them give no oil.
-
-Survive 15 minutes, from dusk to dawn.
-
-## Controls
-
-| Action | Keyboard | Touch |
-|---|---|---|
-| Move | WASD or arrow keys | Left thumb |
-| Dim the lantern | Hold Space | Hold the right side of the screen |
-| Choose an upgrade | 1, 2, 3 or click | Tap |
-| Reroll an upgrade | R | Tap |
-| Pause | Esc or P | Pause button |
+**Status:** playable tower defence on generated hex maps — 7 towers with forks, 5 heroes with skill trees, 3 map presets, profile XP and perks. Balance checked only with the bot so far.
 
 ## Run it
 
 ```bash
 npm install
-```
-
-```bash
 npm run dev
 ```
 
-`npm test`, `npm run lint` and `npm run build` are the checks. F3 or the backquote key shows FPS and entity counts.
+`npm test`, `npm run lint` and `npm run build` are the checks.
 
-Debug options go in the URL: `?debug&start=9&kit&speed=2&seed=5` starts at 9:00 with a full weapon kit, at double speed, on a fixed seed. Add `bot` to let the balance bot play. In debug mode `[` and `]` change speed, `N` skips a minute and `B` toggles the bot.
+Debug options go in the URL:
 
-## Tech
+- `?debug` shows FPS and entity counts and enables the speed keys
+- `&bot` lets the balance bot play
+- `&wave=N` jumps to wave N
+- `&map=canyon&mapseed=5` picks the preset and the map seed
+- `&seed=N` fixes gameplay randomness
 
-TypeScript, Vite and Canvas 2D with no game engine and no backend. All art is drawn in code and all sound is generated with the Web Audio API. Hosted on GitHub Pages.
+## Layout
+
+```
+src/sim/    simulation: hex grid, map generator, pathing, towers, combat, waves, bot
+src/data/   balance.ts (every number) and text.ts (every name and description)
+src/meta/   profile XP, perks, unlocks and saves
+src/render/ canvas drawing
+src/ui/     menus and panels
+src/audio/  Web Audio synth
+src/input/  keyboard and touch
+tests/      Vitest unit tests and headless runs
+docs/       DESIGN.md (the source of truth for behaviour)
+```
 
 ## Docs
 
-- [Game design](docs/DESIGN.md): mechanics, content and starting balance numbers
-- [CLAUDE.md](CLAUDE.md): build order and engineering rules for whoever writes the code
+- [Game design](docs/DESIGN.md): mechanics, content and every number
+- [CLAUDE.md](CLAUDE.md): engineering rules and next steps

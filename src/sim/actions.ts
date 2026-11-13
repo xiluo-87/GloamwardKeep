@@ -180,8 +180,9 @@ export function callWave(s: RunState): boolean {
   return true;
 }
 
+/** Gold for calling the next wave now; 0 when a call isn't possible or pays nothing. */
 export const earlyBonus = (s: RunState): number =>
-  s.waiting ? 0 : Math.floor(Math.max(0, s.nextIn) * RUN.earlyBonusPerSec * s.mods.earlyMul);
+  s.waiting || !canCallWave(s) ? 0 : Math.floor(Math.max(0, s.nextIn) * RUN.earlyBonusPerSec * s.mods.earlyMul);
 
 export const canCallWave = (s: RunState): boolean =>
   !s.outcome && s.wave < RUN.waves && (s.waiting || s.spawnIdx >= s.spawns.length);

@@ -1,263 +1,261 @@
-# Gloamward: game design
+# Gloamward Keep: game design
 
-All numbers are starting values to tune through playtesting. Distances are in world pixels at 1x zoom, and times are in seconds unless stated.
+This document is the source of truth for how the game behaves. **`src/data/balance.ts` holds every number**, `src/data/text.ts` holds every name and description, and `src/sim/mapgen.ts` holds the map generator. If you change a mechanic or a value on purpose, update this document in the same commit. Distances are world pixels at 1x zoom and times are seconds unless stated. There is no story mode.
 
 ## 1. Pillars
 
-1. **The light is the game.** Every major decision should touch the lantern: how big, how long, and where.
-2. **Greed against safety.** The strongest play is always a little more dangerous than the comfortable one.
-3. **Readable chaos.** With 1,000 enemies on screen, the player can still see themselves, the threats and the oil.
-4. **Moody, not grim.** A warm little light against a big soft dark, closer to a storybook than to horror.
+1. **High ground is power.** Terrain has heights 0 to 4. A tower's range grows 12% per height level, so the best spots are on the hills above the road.
+2. **Mazing is the strategy.** Enemies walk only on level 0, which is the road. You steer them by building walls and towers on it, so they take longer routes under your fire.
+3. **Seal it and they smash.** If every route is blocked, enemies walk to the cheapest blocker and smash it. Sealing is a bet, not a cheat.
+4. **Every map is new.** Maps are generated from a seed, so no two runs share a layout.
+5. **Classic fantasy, readable at a glance.** Towers, heroes and enemies are drawn in code and sound comes from Web Audio.
 
 ## 2. Core loop
 
-Move → weapons fire automatically → kills drop embers and oil → embers fill the level bar → choose 1 of 3 upgrades → the night gets harder → repeat until dawn or death.
+Build towers and place a hero with gold, call or wait for the next wave, earn gold from kills and wave bonuses, upgrade and fork towers, level the hero and learn skills, and hold the keep through 30 waves. Lives are lost when enemies reach the keep. After each run, profile XP unlocks heroes, perks and maps.
 
-Wax earned in each run buys permanent upgrades between runs.
+A run starts with 300 gold and 20 lives. The player starts the first wave; later waves start by themselves 14 seconds after the previous wave finished spawning, or sooner if called early.
 
 ## 3. Controls
 
 | Action | Keyboard | Touch |
 |---|---|---|
-| Move | WASD or arrow keys | Left-side floating joystick |
-| Dim the lantern (hold) | Space | Hold the right side of the screen |
-| Choose upgrade | 1, 2, 3 or click | Tap |
-| Pause | Esc or P | Pause button |
+| Choose a tower to build | 1 to 7 | Tap a tower in the bar |
+| Choose a hero to place | Q, W | Tap a hero in the bar |
+| Place | Click a tile | Tap a tile to select, tap it again to place |
+| Select a placed tower | Click it | Tap it |
+| Call the next wave | Space | Call button |
+| Upgrade (first or second option) | U, I | Panel buttons |
+| Sell | S | Panel button |
+| Change target mode | T | Panel button |
+| Hero ability | A | Panel button |
+| Cancel or pause | Esc | Back button |
 
-There is no aim button. Weapons choose their own targets.
+Targeting modes cycle through first, last, strong and close.
 
-## 4. The lantern
+## 4. Maps
 
-### 4.1 Player stats
+### 4.1 Board
 
-| Stat | Start |
-|---|---|
-| HP | 100 |
-| Move speed | 150 px/s |
-| Max oil | 100 |
-| Starting oil | 70 |
-| Pickup range | 60 px |
+The board is a hex grid of 24 columns by 14 rows (pointy-top hexes, odd rows shifted right, hex radius 28 px). Every tile has a height from 0 to 4. Enemies walk only on height 0. Towers can stand on any height. The keep is on the right edge and the gates are on the left edge.
 
-### 4.2 Flame states
+### 4.2 Presets
 
-| State | Light radius | Oil burn | Weapon damage | Spawn rate |
-|---|---|---|---|---|
-| Burning, Wick rank 0 | 220 | 1.0/s | ×1.00 | ×1.00 |
-| Dimmed (hold Space) | 90 | 0.2/s | ×0.70 | ×0.80 |
-| Guttering (oil at 0) | 50 | none | ×0.50 | ×1.00 |
-
-While guttering the player loses 4 HP/s. Any oil pickup relights the lantern immediately. Radius changes ease over 0.25 s so the light breathes instead of snapping.
-
-### 4.3 Wick rank
-
-*Turn Up the Wick* is an upgrade with 5 ranks. Each rank adds:
-
-- +30 light radius
-- +8% weapon damage
-- +0.35 oil/s burn
-- +8% spawn rate
-
-At rank 5 that is radius 370, ×1.40 damage, 2.75 oil/s and ×1.40 spawns. Dimming still uses the fixed values in the table above, so a high wick makes the dim button more valuable.
-
-### 4.4 Darkness
-
-Being "in the light" means an enemy's centre is inside the player's light radius or a lit lamppost's radius.
-
-- Enemies in the dark take **×0.4 damage**.
-- They are drawn only as a pair of faint eyes, which keeps threats fair but unsettling.
-- Pickups in the dark glow faintly so the player can always find them.
-- Weapons may target enemies in the dark, but prefer the nearest enemy in the light.
-
-### 4.5 Oil sources
-
-| Source | Oil |
-|---|---|
-| Droplet from a kill (common enemies, 9% chance, divided by `1 + minutes / 2.5`) | +4 |
-| Flask from an elite (always) | +25 |
-| Flask from a supply crate (one spawns every 90 s, off-screen) | +25 |
-
-**Kills inside a lamppost's light drop no oil.** They still drop embers.
-
-## 5. Lampposts
-
-Lampposts are scattered about 700 px apart across the map.
-
-| Property | Value |
-|---|---|
-| Light cost | 10 oil |
-| Light time | Stand within 40 px for 1.0 s |
-| Light radius | 180, shrinking evenly to 0 |
-| Lifetime | 45 s. It can be relit once it is out, at the same cost |
-
-A lit post damages nothing by itself. It lets the player fight at full damage, gives a safe view of the surroundings and allows dimming without going blind. Snuffers will attack lit posts and shorten their lifetime.
-
-## 6. Run structure
-
-The run lasts 15:00. The sky gradient at the edge of the darkness moves from dusk violet to deep night and then to a grey-pink dawn.
-
-| Time | Phase | New threats |
-|---|---|---|
-| 0:00 | Dusk | Soot Mites |
-| 2:00 | Early night | Hollow Ones |
-| 4:00 | | First elite wave, then one every 2:00 |
-| 5:00 | Night | Snuffers |
-| 8:00 | Deep night | Shade Hounds |
-| 11:00 | The small hours | Mixed waves and encircling rings |
-| 14:00 | Last dark | The Long Night (boss); normal spawns reduced by 70% |
-| 15:00 | Dawn | Automatic win if the boss is dead; otherwise it continues until it is |
-
-Spawn budget per second starts at 2 and grows linearly to 40 by 13:59. Spawns appear just outside the view. The simultaneous enemy cap is 1,000; when it is reached, the furthest common enemy is recycled.
-
-## 7. Levelling
-
-- Level *n* needs `5 + 4n + 0.4n²` embers, rounded down.
-- Embers are worth 1 (common), 5 (tough) or 25 (elite).
-- A level-up pauses the game and shows 3 choices.
-- Choices come from weapons not yet owned, ranks of owned weapons, passives and any available combination.
-- One reroll per run to begin with; more can be bought with wax.
-- When everything is maxed out, choices become +20 HP or +20 oil.
-
-## 8. Weapons
-
-Six slots. Each weapon has 5 ranks. Rank bonuses are +20% damage per rank, plus the listed special bonus at ranks 3 and 5.
-
-| Weapon | Behaviour | Damage | Cooldown | Rank 3 | Rank 5 |
+| Preset | Gates | Enemy HP | Profile XP | Unlock (profile level) | Character |
 |---|---|---|---|---|---|
-| Moth Swarm | 3 moths orbit at 70 px, hitting what they touch | 6 per hit | 0.5 per enemy | +1 moth | +2 moths |
-| Cinder Toss | Arcs to a random enemy and burns the ground for 3 s | 14 + 5/s burn | 1.8 | +1 throw | Larger pool |
-| Wick Lash | Short whip in the movement direction, with a wide arc | 18 | 1.0 | Hits behind too | +40% length |
-| Glass Shards | A shard bounces between enemies | 9 per hit, 4 bounces | 1.4 | +2 bounces | +1 shard |
-| Bell Toll | Expanding ring that damages and pushes back | 10 | 4.0 | +30% push | +25% radius |
-| Candle Sentry | Places a turret at your feet, firing at the nearest enemy; lasts 12 s | 7 per shot, 2 shots/s | 8.0 | +1 sentry | Sentries give a small light of radius 80 |
+| Meadow | 1 | x1.0 | x1.0 | 1 | Gentle hills (maxStep 1), 4 to 6 roomy clearings, 22% forest |
+| Highlands | 1 | x1.1 | x1.3 | 4 | Steeper (maxStep 2), more high ground, 1 to 2 clearings |
+| Canyon | 2 | x1.2 | x1.6 | 8 | Rocky heights, mostly height 3 and 4, two gates that merge |
 
-### Combinations
+Share of off-road tiles at heights 1 to 4: Meadow 38/28/20/14%, Highlands 22/28/27/23%, Canyon 16/22/30/32%.
 
-When both weapons are at rank 5, the next level-up offers the combination. It replaces both and frees a slot.
+### 4.3 Generator rules
 
-| Pair | Result | Effect |
-|---|---|---|
-| Moth Swarm + Cinder Toss | **Firemoths** | Moths leave burning trails and dive at distant enemies |
-| Wick Lash + Glass Shards | **Stained Lash** | The whip throws coloured shards along its whole length |
-| Bell Toll + Candle Sentry | **The Vigil** | Sentries toll bells, and each toll adds lifetime to nearby lit lampposts |
+The same preset and map seed always give the same map. The generator retries with derived seeds (up to 200 attempts) until a map passes every check, then falls back to a flat road map that cannot fail.
 
-## 9. Passives
+1. **Heights.** Layered value noise is ranked by quantile, so each preset gets its share of heights 1 to 4. Neighbouring tiles differ by at most `maxStep` (terracing).
+2. **Level 0 only on the road network.** The only level-0 tiles are the carved road, its clearings and the shortcut gaps. Any pocket cut off from the road is raised. Every level-0 tile is connected to the keep.
+3. **Serpentine road.** The road is a series of 3 to 5 legs sweeping between the top and bottom of the board, so it winds past most of it. Turns happen within 15% of the top or bottom edge.
+4. **Reach.** With shortcuts plugged, at least 2/3 of all tiles must lie within 2 hexes of the enemy route, and the shortest walk must be at least 22 tiles (Meadow, Canyon) or 26 (Highlands).
+5. **Clearings.** At turns near the top and bottom edges, level-0 blobs of radius 1 to 2 give room for mazes (4 to 6 on Meadow, 1 to 2 elsewhere).
+6. **Shortcut gaps.** Short level-0 channels (at most 3 tiles) are cut through the hills between two stretches of road, each saving enemies at least 10 hexes on Meadow and 12 elsewhere (1 to 3 on Meadow, 1 to 2 elsewhere). The player plugs them with towers or defends them. Reach and length checks are done on the road before the gaps are cut.
+7. **Forest and rocks only on heights 1 to 4,** never on level 0. Forest grows in groves on low hills (heights 1 to 2 on Meadow and Canyon, 1 to 3 on Highlands). Rocks sit on high ground (heights 2 to 4) and are more common on cliff edges (a drop of 2 or more to a neighbour). Covered tiles cannot be built on until cleared (section 5.7).
+8. **Canyon gates.** One gate sits in the top half of the left edge and one in the bottom half. Each has its own winding road, and the two roads merge at the middle of the board (50% of the width), then share one serpentine to the keep. Spawns alternate between the gates.
+9. **The keep** sits on the right edge, at least 2 rows from the top and bottom.
 
-Six slots, 5 ranks each.
+## 5. Pathing, smashing and economy
 
-| Passive | Per rank |
-|---|---|
-| Turn Up the Wick | See section 4.3 |
-| Deep Reservoir | +20 max oil, and +10 oil once |
-| Trimmed Wick | −8% oil burn |
-| Good Boots | +7% move speed |
-| Waxed Coat | −1 damage taken, minimum 1 |
-| Ember Hook | +25% pickup range |
-| Warm Heart | +20 max HP, and 0.2 HP/s regeneration |
+### 5.1 Pathing
 
-## 10. Enemies
+Enemies follow a flow field built outward from the keep over level-0 tiles. Every tile holds its walking cost to the keep, and tiles off the road cost Infinity. A tower on a level-0 tile adds 1000 to the cost of entering that tile, far more than any road. The field is rebuilt whenever a level-0 tower is built, sold or destroyed, and enemies re-pick their next tile at once.
 
-Damage is per touch, with a 0.5 s hit interval per enemy. After any hit the player has 0.35 s of grace in which further hits do nothing.
+Consequences:
 
-| Enemy | From | HP | Speed | Damage | Embers | Behaviour |
+- If another route exists, enemies walk around the tower, even if it is much longer.
+- A tower on high ground never changes the field.
+- Towers cannot be built on a road tile while a walking enemy stands on it.
+- **Flyers (bats) ignore the terrain** and fly straight to the keep.
+
+### 5.2 Smashing
+
+When every route is sealed, enemies take the route with the fewest blockers and walk to the first blocking tower. They stop at its edge and deal their `attack` damage per second to it. Tower hit points are 120 + 1.2 per gold invested, plus the tower's `hp` stat (heroes: 500 + 60 per level above 1, plus `hp`). When a tower reaches 0 hit points it is destroyed (a hero can be placed again), the field is rebuilt and enemies continue. Spiked Walls hurt whatever smashes them (thorns). All towers repair to full hit points when a wave is cleared.
+
+### 5.3 Gold
+
+Gold is the only currency.
+
+- **Kills** pay the enemy's gold, times the Bounty perk, times (1 + the sum of every placed tower's `bounty`).
+- **Wave bonus** when a wave is cleared (all its enemies spawned and dead or leaked): `35 + 5 x wave`, plus Treasury income, plus interest (section 12).
+- **Early call bonus**: calling the next wave while its countdown still runs pays `floor(seconds left x 2 x Eager multiplier)`. The first call pays nothing. A wave cannot be called while the current one is still spawning.
+- **Sell refund**: `floor(gold invested x 0.7)` (0.9 with Salvage). Invested gold counts the build price, every upgrade and every skill.
+- **Treasury** (Shrine fork B) pays gold per wave: +40, then +65.
+- **Repairs** are free and happen on wave clear.
+
+### 5.4 Lives and winning
+
+Each leaking enemy costs its `lives` value (1 for most, 2 for orcs and wagons, 3 for trolls, 15 for the Ogre King, 20 for the Lich). At 0 lives the run is lost. Surviving wave 30 and killing everything wins. Clearing wave w pays profile XP (section 11).
+
+### 5.5 Building rules
+
+A tile can't be built on if it holds forest or rocks, the keep or a gate, or another tower. Building needs the gold. A hero must be in the run's loadout, and only one of each hero can stand at a time. A sold or destroyed hero can be placed again (at its start level; skills are lost).
+
+### 5.6 Hit points of enemies
+
+Enemy HP is multiplied by the map's HP multiplier and, for everything except bosses, by `waveHpScale(w) = 1 + 0.08 (w - 1) + 0.005 (w - 1)^2` (wave 10: x2.1, wave 20: x4.3, wave 30: x7.5).
+
+### 5.7 Clearing forest and rocks
+
+Paying gold removes the forest or rocks from a tile and makes it buildable. Price is `base x (1 + 0.25 x height) x costMul`, rounded, with base 35 for forest and 60 for rocks. Clearing a bare tile fails, as does clearing without enough gold. Cleared tiles stay cleared for the run, and the terrain version counter lets the renderer redraw them. Because forest and rocks only exist above level 0, clearing never changes enemy pathing.
+
+## 6. Damage rules
+
+- Three damage types: physical (reduced by **armour**), fire and magic (both reduced by **ward**).
+- Armour minus accumulated **shred** is the physical resistance. Shred stacks per enemy up to 0.5 and never takes armour below 0.
+- Resistances are capped at 0.8, so nothing is immune.
+- **Shields** (from Orc Shamans) absorb damage after resistance and before hit points.
+- **Stalkers** cannot be targeted unless a tower with detection (the Knight, or a Shrine from tier 3) covers them.
+- **Flyers** can only be hit by towers with `hitsFlying`. Catapult splash and burning ground never hit flyers.
+- **Jinx** (Hexers) multiplies the attack speed of towers within 64 px by 0.6 for 2.5 seconds. **Silence** (the Lich) stops attacks for 3.5 seconds.
+- Bolts home on their target; lobs aim where the target will be; pulses hit everything in range; chains jump between enemies and lose strength per jump; the Arcane Beam holds one target and ramps up.
+- Stunned enemies freeze. Bosses cannot be stunned or slowed.
+
+## 7. Towers
+
+Every tower is built, upgraded along two linear tiers, then forked into A or B with two more tiers each. A fork can't be switched. `src/data/text.ts` has the names. Costs below are build, tier 2, tier 3, then fork tier 1 and 2. Ranges are base values before height.
+
+| Tower | Role | Build | Tiers (2, 3) | Fork A | Fork B | Base stats |
 |---|---|---|---|---|---|---|
-| Soot Mite | 0:00 | 8 | 70 | 4 | 1 | Swarms straight at the player |
-| Hollow One | 2:00 | 45 | 40 | 10 | 5 | Slow and heavy; resists push by 50% |
-| Snuffer | 5:00 | 20 | 110 | 3 | 1 | Flies to the nearest light. Touching the player drains 5 oil. Touching a post removes 5 s of its life and consumes the Snuffer, which drops nothing |
-| Shade Hound | 8:00 | 30 | 170 | 8 | 5 | Fully invisible in the dark, with no eyes. Hunts in packs of 6 |
-| Elite | 4:00 | ×12 | ×0.8 | ×2 | 25 | Larger version of the current toughest type, with a pale halo. Always drops a flask |
+| Palisade | Cheap blocker, walls | 20 | Stone Wall 30, Fortified Wall 50 | Spiked Wall 90, Thorn Rampart 150 | Guard Wall 100, Battlements 170 | 4 dmg, 0.8/s, range 70, 80 hp |
+| Archer Tower | Single target, hits flyers | 70 | Bowmen 75, Marksmen 130 | Longbow 240, Eagle Eye 400 | Volley 230, Arrow Storm 380 | 13 dmg, 1.25/s, range 150 |
+| Catapult | Fire splash, ground only | 110 | Heavy Catapult 110, Siege Catapult 170 | Fire Pot 300, Inferno 460 | Scatter Shot 290, Hailstorm 440 | 22 dmg, 0.5/s, range 170, splash 46 |
+| Frost Tower | Slowing pulse, ground only | 90 | Ice Spire 100, Winter Spire 150 | Deep Freeze 270, Glacier 410 | Shatter 250, Frostbite 400 | 10 magic, 0.45/s, range 105, 35% slow |
+| Mage Tower | Chain lightning, hits flyers | 120 | Adept Tower 140, Wizard Tower 210 | Storm Spire 310, Tempest 470 | Arcane Beam 330, Sunfire 500 | 16 magic, 0.8/s, range 140, 2 jumps |
+| Aviary | Hawks, hit flyers | 100 | Hawk Roost 100, Falconry 170 | Fire Hawks 290, Phoenix Roost 450 | War Eagles 310, Royal Eagles 470 | 2 hawks, 9 dmg, range 160 |
+| Shrine | Aura, no attack | 80 | Blessed Shrine 100, Watch Shrine 150 | War Banner 260, Royal Standard 400 | Treasury 240, Royal Mint 380 | +10% damage to towers in range 150 |
 
-Enemy HP is multiplied by `1 + minutes / 6` at spawn time.
+What each upgrade does, from the data:
 
-## 11. Boss: The Long Night
+- **Palisade.** Tiers add hit points (+500, then +900), a little damage and, at tier 3, +20 range. Spiked Wall adds thorns 30 (then 50), damage and a slow. Guard Wall adds damage, speed, range and `hitsFlying`, then hit points.
+- **Archer.** Tiers add damage and speed. Longbow: +120 range, +40 damage, slower, 15% crit; Eagle Eye adds damage, crit and 8% armour shred. Volley: +1 arrow, then another.
+- **Catapult.** Fire Pot leaves burning ground (18 then 22 fire/s for 3 s) and bigger splash. Scatter Shot adds 4 then 3 cluster bursts at 45% damage.
+- **Frost.** Deep Freeze adds a 25% then 15% chance to stun. Shatter adds damage and armour shred.
+- **Mage.** Storm Spire adds 3 jumps and stronger jumps, then a second bolt. Arcane Beam is a held beam: damage x2 per second, ramping 0.6 per second up to x3 (x5 with Sunfire).
+- **Aviary.** Fire Hawks set targets alight (14 then 26 burn/s). War Eagles hit hard and break armour, and Royal Eagles can stun.
+- **Shrine.** Tier 2 +25 range and +5% damage. Tier 3 adds detection. War Banner adds range, damage and attack speed, and Royal Standard makes towers jinx-immune. Treasury pays gold per wave.
 
-**Spoilers below.** The README stays quiet about this on purpose.
+Tower hit points are mostly irrelevant unless the road is sealed.
 
-The Long Night is a tall figure of solid dark, with a ring of pale eyes and 6,000 HP.
+## 8. Heroes
 
-| Phase | HP | Behaviour |
-|---|---|---|
-| 1. Tide | 100–60% | Walks slowly toward the player and sends waves of mites |
-| 2. Eclipse | 60–25% | Shrinks the player's maximum light radius by 8 px/s, down to 70, and blows out lampposts it passes |
-| 3. Inversion | 25–0% | **The rule flips.** See below |
+- Heroes are unique towers: one of each, and a run's loadout has 1 slot (2 from profile level 12).
+- They are built with gold like towers, stand on any height, and can be smashed like any road tower.
+- They level from XP: `heroXpNeed(level) = 12 + 12 level + 3 level^2`. Level 10 is the cap. A hero gets full XP for its own kills and 30% of the XP of every other kill. Veterans start heroes at level 3. XP comes from enemy `xp` times the Tutor perk.
+- Each level adds stats (Knight +4 damage, Cleric +3 damage and +3 range, Sorcerer +5 damage, Ranger +2 damage and +0.05 speed, Druid +2 damage and +0.25 hawks).
+- **Skill tree.** Three branches of four nodes. Node n of a branch needs hero level 1, 3, 5 and 8, needs the previous node of its branch, and costs 90, 170, 280 or 450 gold (before thrift). Node 4 of a branch is a capstone, and only one capstone may be learned per hero. Skills are paid with gold and count as invested gold for selling.
+- **Abilities** have a cooldown (reduced by skills, never below 5 seconds) and start on a 10 second delay when the hero is placed. Use with A.
 
-### The Inversion
+| Hero | Unlock level | Cost | Type | Ability | Branches |
+|---|---|---|---|---|---|
+| The Knight | 1 | 120 | Melee cleave (3 targets), detects stalkers, hits flyers | Charge: 120 damage and 1.5 s stun in radius 160, 40 s cooldown | Blade, Banner, Spoils |
+| The Cleric | 3 | 130 | Slowing holy pulse, hits flyers | Sanctify: 60 magic damage and 2.5 s stun in radius 220, 45 s | Stillness, Wrath, Sanctuary |
+| The Sorcerer | 6 | 140 | Chain lightning (3 jumps) | Arcane Barrage: 320 damage to the 8 strongest enemies in 1.5 x range, 35 s | Storm, Focus, Echo |
+| The Ranger | 10 | 130 | Rapid arrows, +8% attack speed to towers in range | Rally: every tower attacks 50% faster for 8 s, 50 s | Bow, Captain, Hunter |
+| The Druid | 15 | 140 | 4 hawks, range 200 | Wild Hunt: 16 temporary hawks for 10 s, 45 s | Flock, Flame, Talon |
 
-This is the game's one big surprise. Nothing in the game explains it directly.
+Stunning does not affect bosses. Branch names and node names are in `text.ts`. Hero branches range from damage (Blade, Bow, Storm, Focus), through support (Banner, Captain, Stillness, Sanctuary), to gold (Spoils, Hunter: bounty and income).
 
-When phase 3 begins, the lantern stutters, the music drops out, and the boss fades completely from the lit view. Its eyes close.
+## 9. Enemies
 
-- While the lantern is **burning**, the boss cannot be seen and takes ×0.1 damage.
-- While the lantern is **dimmed**, a burning core becomes visible in the boss's chest, and the boss takes ×2 damage. The dim damage penalty does not apply.
-- Oil stops burning for the whole phase, so holding the dim button is always possible.
-- The boss attacks with slow, telegraphed sweeps that are bright against the dark, so playing dim stays fair.
+| Enemy | HP | Speed | Armour | Ward | Gold | Lives | XP | Special |
+|---|---|---|---|---|---|---|---|---|
+| Goblin | 34 | 52 | 0 | 0 | 5 | 1 | 1 | Small and many |
+| Goblin Hexer | 55 | 84 | 0 | 0.2 | 7 | 1 | 2 | Jinxes towers within 64 px (attack speed x0.6 for 2.5 s) |
+| Orc Warrior | 190 | 36 | 0.35 | 0 | 15 | 2 | 4 | Armoured, smashes at 30/s |
+| Shadow Stalker | 95 | 108 | 0 | 0 | 11 | 1 | 3 | Stealth: needs detection |
+| Giant Bat | 62 | 74 | 0 | 0 | 7 | 1 | 2 | Flies straight to the keep |
+| Troll | 540 | 26 | 0.2 | 0.45 | 32 | 3 | 8 | Resists fire and magic, smashes at 70/s |
+| War Wagon | 270 | 34 | 0.1 | 0 | 18 | 2 | 6 | Spills 5 goblins on death |
+| Orc Shaman | 140 | 44 | 0 | 0.3 | 17 | 1 | 4 | Every 4 s shields allies within 95 px for 45 HP (up to 60% of their max) |
+| The Ogre King (boss) | 6500 | 20 | 0.3 | 0.3 | 300 | 15 | 120 | Sheds 6 goblins at every 10% of HP lost; smashes at 250/s |
+| The Lich (boss) | 17000 | 18 | 0.25 | 0.25 | 0 | 20 | 300 | Every 9 s silences towers within 200 px for 3.5 s; every 6 s raises 4 stalkers |
 
-When the phase begins the eclipse lifts and the light returns to full size, so burning looks safe for the first time in minutes. If the lantern was out it relights with 10 oil. Oil cannot be drained during this phase, and the boss no longer hurts by touch. The boss has no leash limit: if the player gets far away it speeds up to close the distance.
+Speeds are pixels per second (a hex is about 48 px wide). Each enemy's `attack` is its smashing damage per second: goblin 10, hexer 12, orc 30, stalker 18, bat 8, troll 70, wagon 30, shaman 14.
 
-The only hint is that the boss's core flickers visibly for a moment whenever the player's lantern dims. For the whole run the player has learned that light is safety; to finish the night they have to trust the dark.
+## 10. Waves
 
-Killing it plays the dawn at once, even if the clock has not reached 15:00: the darkness overlay fades over 4 s into pink-grey morning, enemies crumble to ash, and the lantern goes out on its own.
+There are 30 waves, defined as groups of `[enemy, count, seconds between spawns, start delay]` that run in parallel. Spawns alternate between gates on two-gate maps. Highlights:
 
-## 12. Between runs
+- Waves 1 to 4: goblins, then the first hexers and orcs.
+- Wave 7: bats arrive. Wave 8: stalkers, so build detection.
+- Wave 9: shamans. Wave 10: war wagons.
+- Wave 12: the first trolls.
+- Wave 15: **The Ogre King** with goblins and hexers.
+- Waves 16 to 29: mixes of everything, rising in numbers. Wave 21 sends 60 goblins in 12 seconds. Wave 29 is 16 trolls, 12 wagons, 12 shamans and 30 hexers.
+- Wave 30: **The Lich** with stalkers, trolls and bats.
 
-**Wax** is earned at `5 per minute survived + 1 per 100 kills + 50 for reaching dawn`.
+The next wave starts 14 seconds after the current one finishes spawning, whether or not enemies remain. Total enemies alive are capped at 600.
 
-| Upgrade | Ranks | Effect per rank |
-|---|---|---|
-| Better Glass | 5 | +10 starting light radius |
-| Full Flask | 5 | +5 starting oil |
-| Sturdy Frame | 5 | +10 max HP |
-| Second Thought | 3 | +1 reroll per run |
-| Long Memory | 5 | +4% embers |
+## 11. Profile XP and levels
 
-### Characters
+Nothing is spent. Level is derived from total XP, so there is nothing to lose.
 
-| Character | Unlock | Starting weapon | Trait |
-|---|---|---|---|
-| The Lamplighter | Default | Wick Lash | Lampposts cost half the oil |
-| The Chandler | Earn 300 wax in total | Candle Sentry | +30% wax earned |
-| The Sexton | Reach 10:00 | Bell Toll | Toll of the bell pushes oil and embers toward you |
-| The Moth Child | Reach dawn once | Moth Swarm | Radius −40, speed +15%, always 2 extra moths |
+- XP for clearing wave w: `6 + w`. Winning adds 150. The total is multiplied by the map's XP multiplier (1, 1.3, 1.6) and rounded.
+- XP to go from level L to L+1: `profileXpNeed(L) = 80 + 40 L + 6 L^2` (126 for level 1 to 2, 1,080 for 10 to 11). The maximum level is 25.
+- A full 30-wave Meadow win is worth 150 + sum of (6 + w) for 1 to 30 = 150 + 180 + 465 = 795 XP.
 
-### New Moon mode
+### Unlocks by level
 
-Unlocked by reaching dawn. Light radius is capped at 120, and everything else gives ×1.5 wax.
-
-## 13. Look and sound
-
-**Palette**
-
-| Use | Colour |
+| Level | Unlock |
 |---|---|
-| Night | `#0b0e1a` |
-| Cobbles | `#1a2030`, `#232a3d` |
-| Lantern glow | `#ffb347` to transparent |
-| Embers | `#ff7a2f` |
-| Oil | `#7ad7c2` |
-| Danger accents | `#d94f6a` |
-| Dawn | `#e8b7b0` |
+| 1 | The Knight, Meadow |
+| 2 | Full Purse, first perk slot |
+| 3 | The Cleric, Thick Walls |
+| 4 | Highlands, Thrift |
+| 5 | Salvage, second perk slot |
+| 6 | The Sorcerer, Eagle Eye |
+| 7 | Veterans |
+| 8 | Canyon |
+| 9 | Bounty, third perk slot |
+| 10 | The Ranger |
+| 11 | Eager |
+| 12 | Second hero slot |
+| 13 | Whetstone |
+| 14 | Fourth perk slot |
+| 15 | The Druid |
+| 16 | Tutor |
+| 18 | Interest |
+| 21 | High Ground |
 
-**Style:** simple flat shapes drawn in code. Enemies are dark silhouettes that gain rim-light on the side facing the lantern. The town is an endless street pattern of cobbles, doors, fences and dead trees that decorate the world without colliding.
+The loadout (up to the slot count) is chosen on the title screen. A profile that violates the unlock or slot rules is repaired on load.
 
-**Light rendering:** draw the world, then a darkness canvas filled with near-black, then cut holes with radial gradients using `destination-out`. Add warm glow on top with `lighter`. Render the darkness canvas at half resolution.
+## 12. Perks
 
-**Sound:** everything uses Web Audio, with no sample files:
+| Perk | Level | Effect |
+|---|---|---|
+| Full Purse | 2 | +70 starting gold |
+| Thick Walls | 3 | +6 lives |
+| Thrift | 4 | Towers, upgrades, skills, heroes and clearing cost 8% less |
+| Salvage | 5 | Selling refunds 90% |
+| Eagle Eye | 6 | All towers x1.08 range |
+| Veterans | 7 | Heroes start at level 3 |
+| Bounty | 9 | Kills give 12% more gold |
+| Eager | 11 | Early-call bonus x2.5 |
+| Whetstone | 13 | All damage +8% (towers, heroes and abilities) |
+| Tutor | 16 | Heroes gain 35% more XP |
+| Interest | 18 | After each wave, 5% of banked gold, up to 60 |
+| High Ground | 21 | +0.04 range per height level (0.16 instead of 0.12) |
 
-- A soft drone that drops in pitch through the night
-- A low heartbeat when oil is below 20
-- Short filtered noise for hits, with a capped number of voices
-- Pitch-varied plucks for pickups
-- Bell tones for level-ups and the Bell Toll
+## 13. Saves
 
-## 14. Screens
+The profile is stored in `localStorage` under the versioned key `gloamward-keep.save.v1`: total XP, perks, heroes, chosen map, per-map best wave and wins, run count, mute and reduce-motion. Loading survives missing, corrupt or odd data by falling back to defaults field by field, and a storage that throws.
 
-Title → character choice → run → pause or level-up overlay → death or dawn summary → wax shop → title.
+## 14. Balance checks
 
-The HUD shows HP, an oil gauge shaped like the lantern reservoir, the ember bar, the clock and the weapon slots. When oil is low the gauge pulses and the screen edge darkens.
+- Balance has only been tested with the bot in `src/sim/bot.ts` (`tests/smoke.test.ts` runs it on every map). It plugs shortcut gaps, builds on high ground near the road, upgrades and levels one hero. At the time of writing it loses around wave 28 on Meadow and Highlands and around wave 13 on Canyon, which is a bot limit, not a verdict.
+- Debug URL parameters: `?debug` shows FPS and entity counts and enables speed keys, `&bot` lets the bot play, `&wave=N` skips to wave N (with gold to match), `&map=canyon&mapseed=5` fixes the map, `&seed=N` fixes gameplay randomness.
+- Things to check first when playtesting: how tight gold is through waves 1 to 10, whether the 14 second wave gap and the early-call bonus make calling early worth the risk, whether Palisade mazing beats pure tower building, whether stalkers on wave 8 feel fair without a detector, and how the Canyon plays with two gates.
+- Healthy numbers: a decent player should end wave 10 with several upgraded towers on high ground and hold 20 lives through wave 15. If sealing the road is always right, smashing is too slow; if it is never right, smashing is too fast.
 
-## 15. Out of scope for version 1
+## 15. Future work
 
-- Multiplayer and online leaderboards
-- Accounts or any backend
-- Collision with buildings
-- Multiple maps
-- Controller support, which can come later if the input layer stays clean
+A 3D renderer with Three.js is planned; see [3D-RENDERER.md](3D-RENDERER.md). The simulation does not change for it.
