@@ -11,6 +11,8 @@ import { generateMap, Terrain } from '../sim/mapgen';
 import { WORLD } from '../data/balance';
 import { esc } from './format';
 import { iconFor } from './icons';
+import { SLOW_MODES, SLOW_TEXT, saveUi } from './settings';
+import type { UiSettings } from './settings';
 
 export interface EndInfo {
   won: boolean; gaveUp: boolean; cleared: number; kills: number; xp: number; before: number; after: number; map: MapId;
@@ -36,8 +38,9 @@ export class Screens {
   private terrainCache = new Map<string, Terrain>();
   private endInfo: EndInfo | null = null;
   private armedAt = 0;
+  private pauseOpen = false;
 
-  constructor(private profile: Profile, private renderer: Renderer, private h: ScreenHandlers) {
+  constructor(private profile: Profile, private renderer: Renderer, private ui: UiSettings, private h: ScreenHandlers) {
     this.root = document.getElementById('overlay') as HTMLElement;
     this.root.addEventListener('click', (e) => {
       const el = (e.target as HTMLElement).closest('[data-act]') as HTMLElement | null;
@@ -55,6 +58,7 @@ export class Screens {
   get visible(): boolean { return !this.root.hidden; }
 
   hide(): void {
+    this.pauseOpen = false;
     this.root.hidden = true;
     this.root.innerHTML = '';
   }
@@ -87,6 +91,11 @@ export class Screens {
       case 'play': this.mapSeed = this.mapSeed || newSeed(); this.play(); break;
       case 'profile': this.profileScreen(); break;
       case 'sound': p.muted = !p.muted; this.h.saved(); this.title(); break;
+      case 'slow':
+        this.ui.slow = SLOW_MODES[(SLOW_MODES.indexOf(this.ui.slow) + 1) % SLOW_MODES.length];
+        saveUi(this.ui);
+        if (this.pauseOpen) this.pause(); else this.title();
+        break;
       case 'shake': p.reduceMotion = !p.reduceMotion; this.h.saved(); this.title(); break;
       case 'map': if (mapUnlocked(level, arg as MapId)) { p.map = arg as MapId; this.h.saved(); this.play(); } break;
       case 'reroll': this.mapSeed = newSeed(); this.play(); break;
@@ -130,6 +139,7 @@ export class Screens {
   // -- title ------------------------------------------------------------------------------------
 
   title(): void {
+    this.pauseOpen = false;
     const p = this.profile;
     const lp = levelProgress(p.xp);
     this.set(`<div class="panel title">
@@ -140,6 +150,7 @@ export class Screens {
       <div class="row">
         <button class="small" data-act="sound">Sound: ${p.muted ? 'Off' : 'On'}</button>
         <button class="small" data-act="shake">Screen shake: ${p.reduceMotion ? 'Off' : 'On'}</button>
+        <button class="small" data-act="slow" title="How fast time runs while the action ring, a description or a sheet is open">Slow time in menus: ${SLOW_TEXT[this.ui.slow]}</button>
       </div>
     </div>`, 'center');
   }
@@ -237,12 +248,14 @@ export class Screens {
   // -- pause and end ----------------------------------------------------------------------------
 
   pause(armed = false): void {
+    this.pauseOpen = true;
     this.set(`<div class="panel">
       <h2>Paused</h2>
       <button class="primary" data-act="resume">Resume</button>
       <button data-act="restart">Restart this map</button>
+      <button data-act="slow" title="How fast time runs while the action ring, a description or a sheet is open">Slow time in menus: ${SLOW_TEXT[this.ui.slow]}</button>
       <button data-act="giveup" class="${armed ? 'danger' : ''}">${armed ? 'Really give up?' : 'Give up'}</button>
-      <p class="hint">Space calls the next wave · 1–7 build · Q/W heroes · U/I upgrade · S sell · T target · A ability · Esc pause</p>
+      <p class="hint">Tap a tile to select, tap again for actions · Space calls the next wave · 1–7 build, Q/W heroes on the selected tile · U/I upgrade · S sell · T target · A ability · F fit map · Esc pause</p>
     </div>`, 'center dim');
   }
 

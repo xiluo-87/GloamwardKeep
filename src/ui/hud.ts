@@ -1,16 +1,18 @@
-// The in-run HUD: top bar, build bar, hero ability buttons, placing hint, toasts and tooltips.
-import { HEROES, HeroId, RUN, TOWERS, TOWER_IDS, TowerId } from '../data/balance';
-import { ABILITY_TEXT, HERO_TEXT, TOWER_TEXT } from '../data/text';
-import { canCallWave, earlyBonus } from '../sim/actions';
-import { buildCost } from '../sim/stats';
+// The in-run HUD: a slim top bar, the corner card for the selected tile, toasts and the thumb-zone
+// bottom row (call wave, speed, hero abilities, fit map).
+import { HEIGHT, HEROES, HeroId, RUN } from '../data/balance';
+import { ABILITY_TEXT, CLEAR_TEXT } from '../data/text';
+import { canCallWave, clearCost, earlyBonus } from '../sim/actions';
+import { FEATURE } from '../sim/mapgen';
+import { towerAt } from '../sim/state';
 import type { RunState } from '../sim/state';
-import { flagList, statLine } from './format';
-import { GOLD_ICON, HEART_ICON, WAVE_ICON, iconFor } from './icons';
+import { ACTION_ICONS, GOLD_ICON, HEART_ICON, WAVE_ICON, iconFor } from './icons';
+import { towerName } from './panel';
 import type { Session } from './session';
 
-export interface HudHooks { togglePause(): void; cycleSpeed(): void }
+export interface HudHooks { togglePause(): void; cycleSpeed(): void; fitMap(): void }
 
-const HERO_KEYS = ['Q', 'W'];
+const HEIGHT_NAME = ['Road', 'Field', 'Rise', 'Hill', 'Peak'];
 
 export class Hud {
   readonly top: HTMLElement;
@@ -19,20 +21,18 @@ export class Hud {
   private gold!: HTMLElement;
   private lives!: HTMLElement;
   private wave!: HTMLElement;
-  private timer!: HTMLElement;
   private call!: HTMLButtonElement;
+  private callMain!: HTMLElement;
+  private callSub!: HTMLElement;
   private speed!: HTMLButtonElement;
-  private hint: HTMLElement;
   private toasts: HTMLElement;
-  private tip: HTMLElement;
-  private towerBtns: { id: TowerId; el: HTMLButtonElement; cost: number }[] = [];
-  private heroBtns: { id: HeroId; el: HTMLButtonElement; cost: number }[] = [];
+  private card: HTMLElement;
+  private cardSig = '';
+  private cardHp: HTMLElement | null = null;
   private abilityHost: HTMLElement;
   private abilityKey = '';
   private abilityBtns: { uid: number; el: HTMLButtonElement; label: HTMLElement }[] = [];
   private cache = new Map<string, string | number | boolean>();
-  private suppressClick = false;
-  private pressTimer = 0;
   private builtFor: RunState | null = null;
 
   constructor(root: HTMLElement, private session: Session, private hooks: HudHooks) {
@@ -42,52 +42,62 @@ export class Hud {
         <div class="stat" title="Gold"><i class="ico">${GOLD_ICON}</i><b data-k="gold">0</b></div>
         <div class="stat" title="Lives left"><i class="ico">${HEART_ICON}</i><b data-k="lives">0</b></div>
         <div class="stat" title="Wave"><i class="ico">${WAVE_ICON}</i><span>Wave <b data-k="wave">0</b>/${RUN.waves}</span></div>
-        <div class="timer" data-k="timer"></div>
-        <button class="call primary" data-k="call">Start</button>
-        <button class="small" data-k="speed" title="Game speed ([ ] in debug)">1×</button>
+        <span class="grow"></span>
         <button class="small" data-k="pause" title="Pause (Esc)" aria-label="Pause">II</button>
       </div>
-      <div id="bottom">
-        <div id="toast"></div>
-        <div id="placing" hidden></div>
-        <div id="buildbar"><div class="group towers"></div><div class="group heroes"></div><div class="group abilities"></div></div>
+      <div id="card" hidden></div>
+      <div id="toast"></div>
+      <div id="thumb">
+        <button class="call primary" data-k="call"><b>Start</b><small></small></button>
+        <button class="small spd" data-k="speed" title="Game speed" aria-label="Game speed">1×</button>
+        <div class="abilities"></div>
+        <button class="small fit" data-k="fit" title="Fit the whole map" aria-label="Fit map"><i class="ico">${ACTION_ICONS.fit}</i></button>
       </div>
-      <div id="tip" hidden></div>`;
+      <div id="ring"></div>
+      <div id="desc" hidden></div>`;
     this.top = root.querySelector('#topbar') as HTMLElement;
-    this.bar = root.querySelector('#buildbar') as HTMLElement;
-    this.hint = root.querySelector('#placing') as HTMLElement;
+    this.bar = root.querySelector('#thumb') as HTMLElement;
     this.toasts = root.querySelector('#toast') as HTMLElement;
-    this.tip = root.querySelector('#tip') as HTMLElement;
+    this.card = root.querySelector('#card') as HTMLElement;
     this.abilityHost = root.querySelector('.abilities') as HTMLElement;
     const q = (k: string): HTMLElement => root.querySelector(`[data-k="${k}"]`) as HTMLElement;
-    this.gold = q('gold'); this.lives = q('lives'); this.wave = q('wave'); this.timer = q('timer');
+    this.gold = q('gold'); this.lives = q('lives'); this.wave = q('wave');
     this.call = q('call') as HTMLButtonElement;
+    this.callMain = this.call.querySelector('b') as HTMLElement;
+    this.callSub = this.call.querySelector('small') as HTMLElement;
     this.speed = q('speed') as HTMLButtonElement;
     this.call.addEventListener('click', () => this.session.call());
     this.speed.addEventListener('click', () => this.hooks.cycleSpeed());
     q('pause').addEventListener('click', () => this.hooks.togglePause());
-    this.hint.addEventListener('click', () => this.session.cancel());
+    q('fit').addEventListener('click', () => this.hooks.fitMap());
+    this.card.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest('[data-act]') as HTMLElement | null;
+      if (!b || (b as HTMLButtonElement).disabled) return;
+      if (b.dataset.act === 'actions') this.session.openRing();
+      else if (b.dataset.act === 'clear') this.session.clearHere();
+    });
   }
+
+  get ringEl(): HTMLElement { return this.root.querySelector('#ring') as HTMLElement; }
+  get descEl(): HTMLElement { return this.root.querySelector('#desc') as HTMLElement; }
 
   show(run: RunState): void {
     this.root.hidden = false;
     this.cache.clear();
     this.abilityKey = '';
+    this.cardSig = '';
     this.toasts.innerHTML = '';
-    this.buildBar(run);
     this.builtFor = run;
   }
 
   hide(): void {
     this.root.hidden = true;
-    this.tip.hidden = true;
     this.builtFor = null;
   }
 
   toast(msg: string, bad = false): void {
     const last = this.toasts.lastElementChild as HTMLElement | null;
     if (last && last.textContent === msg) {
-      last.classList.remove('out');
       window.clearTimeout(Number(last.dataset.t));
       last.dataset.t = String(window.setTimeout(() => last.remove(), 2600));
       return;
@@ -99,82 +109,6 @@ export class Hud {
     this.toasts.appendChild(el);
     while (this.toasts.childElementCount > 3) this.toasts.firstElementChild?.remove();
   }
-
-  private buildBar(run: RunState): void {
-    const mods = run.mods;
-    const towers = this.bar.querySelector('.towers') as HTMLElement;
-    const heroes = this.bar.querySelector('.heroes') as HTMLElement;
-    towers.innerHTML = '';
-    heroes.innerHTML = '';
-    this.towerBtns = [];
-    this.heroBtns = [];
-    TOWER_IDS.forEach((id, n) => {
-      const cost = buildCost(id, mods);
-      const el = this.button(id, TOWER_TEXT[id].name, cost, String(n + 1), 'tower');
-      towers.appendChild(el);
-      this.towerBtns.push({ id, el, cost });
-    });
-    run.cfg.heroes.forEach((id, n) => {
-      const cost = buildCost(id, mods);
-      const el = this.button(id, HERO_TEXT[id].name.replace('The ', ''), cost, HERO_KEYS[n] ?? '', 'hero');
-      heroes.appendChild(el);
-      this.heroBtns.push({ id, el, cost });
-    });
-  }
-
-  private button(id: TowerId | HeroId, name: string, cost: number, key: string, kind: 'tower' | 'hero'): HTMLButtonElement {
-    const el = document.createElement('button');
-    el.className = `bb ${kind}`;
-    el.dataset.id = id;
-    el.innerHTML = `<span class="ic">${iconFor(id)}</span><span class="nm">${name}</span><span class="co">${cost}</span><kbd>${key}</kbd>`;
-    el.addEventListener('click', () => {
-      if (this.suppressClick) { this.suppressClick = false; return; }
-      this.session.setPlacing(id);
-    });
-    el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') this.showTip(id, el); });
-    el.addEventListener('pointerleave', () => { this.tip.hidden = true; window.clearTimeout(this.pressTimer); });
-    el.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'mouse') return;
-      window.clearTimeout(this.pressTimer);
-      this.pressTimer = window.setTimeout(() => { this.suppressClick = true; this.showTip(id, el); }, 420);
-    });
-    const stop = (): void => {
-      window.clearTimeout(this.pressTimer);
-      // After a long press the tip stays until the next touch elsewhere.
-    };
-    el.addEventListener('pointerup', stop);
-    el.addEventListener('pointercancel', stop);
-    el.addEventListener('contextmenu', (e) => e.preventDefault());
-    return el;
-  }
-
-  private showTip(id: TowerId | HeroId, el: HTMLElement): void {
-    const isHero = id in HEROES;
-    let html: string;
-    if (isHero) {
-      const d = HEROES[id as HeroId];
-      const t = HERO_TEXT[id as HeroId];
-      html = `<h4>${t.name}</h4><p class="sub">${t.title}</p><p>${t.blurb}</p>
-        <p class="stats">${statLine(d.base)}</p><p>${[...flagList(d.base)].join(' · ')}</p>
-        <p><b>${t.ability}:</b> ${t.abilityDesc}</p><p class="sub">Unique: one on the board at a time. Levels up from kills, learns skills for gold.</p>`;
-    } else {
-      const d = TOWERS[id as TowerId];
-      const t = TOWER_TEXT[id as TowerId];
-      html = `<h4>${t.name}</h4><p>${t.blurb}</p><p class="stats">${statLine(d.base)}</p><p>${flagList(d.base).join(' · ')}</p>
-        ${id === 'palisade' ? '<p><b>Mazing:</b> walls built on the road steer enemies onto longer routes. They only smash walls when every route is sealed.</p>' : ''}
-        <p class="sub">Upgrades twice, then forks into ${t.forks.a.name} or ${t.forks.b.name}. Higher ground gives more range.</p>`;
-    }
-    this.tip.innerHTML = html;
-    this.tip.hidden = false;
-    const r = el.getBoundingClientRect();
-    const w = Math.min(300, window.innerWidth - 16);
-    this.tip.style.width = `${w}px`;
-    const left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2));
-    this.tip.style.left = `${left}px`;
-    this.tip.style.bottom = `${window.innerHeight - r.top + 8}px`;
-  }
-
-  hideTip(): void { this.tip.hidden = true; }
 
   private set(k: string, el: HTMLElement, text: string): void {
     if (this.cache.get(k) === text) return;
@@ -196,50 +130,60 @@ export class Hud {
     this.flag('lowlives', this.lives, 'warn', s.lives <= 5);
 
     const spawning = s.spawnIdx < s.spawns.length;
-    let timer = '';
+    let timer: string;
     if (s.outcome) timer = s.outcome === 'won' ? 'Victory' : 'The keep has fallen';
     else if (s.waiting) timer = 'Prepare your defences';
     else if (s.wave >= RUN.waves) timer = spawning ? 'Final wave arriving' : 'Final wave — hold the keep';
     else if (spawning) timer = `Wave ${s.wave} arriving`;
     else timer = `Next wave in ${Math.max(0, Math.ceil(s.nextIn))}s`;
-    this.set('timer', this.timer, timer);
-
-    const can = canCallWave(s);
     let label = 'Start';
     if (!s.waiting) {
       const b = earlyBonus(s);
       label = b > 0 ? `Call wave (+${b} gold)` : 'Call wave';
     }
-    this.set('call', this.call, label);
+    this.set('callMain', this.callMain, label);
+    this.set('callSub', this.callSub, timer);
+    const can = canCallWave(s);
     if (this.cache.get('callOff') !== !can) { this.cache.set('callOff', !can); this.call.disabled = !can; }
-    this.call.hidden = s.wave >= RUN.waves || !!s.outcome;
+    this.call.hidden = s.wave >= RUN.waves && !can;
     this.set('speed', this.speed, `${this.session.speed}×`);
-
-    const placing = this.session.view.placing;
-    for (const b of this.towerBtns) this.refreshBtn(s, b, placing);
-    for (const b of this.heroBtns) {
-      const placed = s.heroesPlaced.includes(b.id);
-      if (this.cache.get(`h-${b.id}`) !== placed) { this.cache.set(`h-${b.id}`, placed); b.el.hidden = placed; }
-      if (!placed) this.refreshBtn(s, b, placing);
-    }
     this.updateAbilities(s);
-
-    const view = this.session.view;
-    const hintKey = view.placing ?? '';
-    if (this.cache.get('hint') !== hintKey) {
-      this.cache.set('hint', hintKey);
-      if (view.placing) {
-        const id = view.placing;
-        const name = id in HEROES ? HERO_TEXT[id as HeroId].name : TOWER_TEXT[id as TowerId].name;
-        this.hint.innerHTML = `Placing <b>${name}</b> — click a tile to build · right-click / Esc to cancel <button class="small">Cancel</button>`;
-        this.hint.hidden = false;
-      } else this.hint.hidden = true;
-    }
+    this.updateCard(s);
   }
 
-  private refreshBtn(s: RunState, b: { id: TowerId | HeroId; el: HTMLButtonElement; cost: number }, placing: string | null): void {
-    this.flag(`poor-${b.id}`, b.el, 'poor', s.gold < b.cost);
-    this.flag(`on-${b.id}`, b.el, 'on', placing === b.id);
+  private updateCard(s: RunState): void {
+    const ss = this.session;
+    const tile = ss.tile;
+    if (!tile || ss.previewing || ss.sheet) {
+      if (this.cardSig !== 'off') { this.cardSig = 'off'; this.card.hidden = true; }
+      return;
+    }
+    const i = tile.row * s.terrain.cols + tile.col;
+    const h = s.terrain.height[i];
+    const f = s.terrain.feature[i];
+    const t = towerAt(s, tile.col, tile.row);
+    const cost = f !== FEATURE.none ? clearCost(s, tile.col, tile.row) : 0;
+    const sig = `${tile.col},${tile.row}|${t ? `${t.uid}.${t.tier}.${t.fork}.${t.forkTier}.${t.heroLevel}` : 'e'}|${f}|${cost}|${s.gold >= cost ? 1 : 0}|${ss.ring ? 1 : 0}`;
+    if (sig !== this.cardSig) {
+      this.cardSig = sig;
+      const bonus = Math.round((HEIGHT.rangePerLevel + s.mods.heightRangeBonus) * h * 100);
+      const ter = f === FEATURE.forest ? CLEAR_TEXT.forest.name : f === FEATURE.rocks ? CLEAR_TEXT.rocks.name : HEIGHT_NAME[h] ?? 'Ground';
+      const l1 = `${ter} · height ${h}${bonus && f === FEATURE.none ? ` · +${bonus}% range` : ''}`;
+      let l2 = '';
+      if (t) {
+        const stage = t.hero ? `level ${t.heroLevel}` : t.fork ? `fork tier ${t.forkTier}` : `tier ${t.tier}`;
+        l2 = `<div class="l2"><strong>${towerName(t)}</strong> <span class="sub">${stage}</span><div class="hpbar"><i></i></div></div>`;
+      }
+      const clear = cost > 0 ? `<button class="small primary" data-act="clear" ${s.gold >= cost ? '' : 'disabled'}>${f === FEATURE.forest ? CLEAR_TEXT.forest.action : CLEAR_TEXT.rocks.action} — ${cost} gold</button>` : '';
+      const actions = ss.ring ? '' : `<button class="small" data-act="actions">Actions</button>`;
+      this.card.innerHTML = `<div class="l1">${l1}</div>${l2}<div class="btns">${clear}${actions}</div>`;
+      this.card.hidden = false;
+      this.cardHp = this.card.querySelector('.hpbar i');
+    }
+    if (t && this.cardHp) {
+      const w = `${Math.round(Math.max(0, Math.min(1, t.hp / t.maxHp)) * 100)}%`;
+      if (this.cardHp.style.width !== w) this.cardHp.style.width = w;
+    }
   }
 
   private updateAbilities(s: RunState): void {
@@ -253,8 +197,8 @@ export class Hud {
         const kind = HEROES[t.type as HeroId].ability;
         const el = document.createElement('button');
         el.className = 'bb ability';
-        el.innerHTML = `<span class="ic">${iconFor(t.type as HeroId)}</span><span class="nm">${ABILITY_TEXT[kind]}</span><span class="co" data-cd>Ready</span><kbd>A</kbd><i class="sweep"></i>`;
-        el.addEventListener('click', () => { this.session.select(t.uid); this.session.ability(t.uid); });
+        el.innerHTML = `<span class="ic">${iconFor(t.type as HeroId)}</span><span class="nm">${ABILITY_TEXT[kind]}</span><span class="co" data-cd>Ready</span><i class="sweep"></i>`;
+        el.addEventListener('click', () => { this.session.ability(t.uid); });
         this.abilityHost.appendChild(el);
         this.abilityBtns.push({ uid: t.uid, el, label: el.querySelector('[data-cd]') as HTMLElement });
       }
@@ -268,7 +212,6 @@ export class Hud {
       if (this.cache.get(`cdf-${b.uid}`) !== frac) { this.cache.set(`cdf-${b.uid}`, frac); b.el.style.setProperty('--cd', `${frac}%`); }
       this.set(`cdt-${b.uid}`, b.label, cd > 0 ? `${Math.ceil(cd)}s` : 'Ready');
       this.flag(`cdr-${b.uid}`, b.el, 'ready', cd <= 0);
-      this.flag(`cds-${b.uid}`, b.el, 'on', this.session.view.selectedUid === b.uid);
     }
   }
 }

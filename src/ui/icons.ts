@@ -29,3 +29,14 @@ export const iconFor = (id: TowerId | HeroId): string => (id in HERO_ICONS ? HER
 export const GOLD_ICON = wrap('<circle cx="12" cy="12" r="8.5" fill="#f3d27a" stroke="#8a5a14"/><path d="M12 7v10M9.5 9.5h4a1.6 1.6 0 010 3h-3a1.6 1.6 0 000 3h4" stroke="#8a5a14"/>');
 export const HEART_ICON = wrap('<path d="M12 21C4 15 2 11 2 8a5 5 0 0110-1 5 5 0 0110 1c0 3-2 7-10 13z" fill="#c8453d" stroke="#6e1d19"/>');
 export const WAVE_ICON = wrap('<path d="M5 21V3M5 4h13l-3 4 3 4H5" fill="#c9972b" stroke="#6e4a0e"/>');
+
+export const ACTION_ICONS = {
+  upgrade: wrap('<path d="M12 20V6M6 12l6-6 6 6" stroke="#3f6b2f" stroke-width="2.4"/><path d="M5 21h14"/>'),
+  target: wrap('<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="#a2352d" stroke="#a2352d"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>'),
+  sell: wrap('<circle cx="12" cy="12" r="8.5" fill="#f3d27a" stroke="#8a5a14"/><path d="M8 12h8M13 9l3 3-3 3" stroke="#8a5a14"/>'),
+  undo: wrap('<path d="M9 7L4 12l5 5M4 12h10a6 6 0 010 8h-3" stroke="#3f6b2f" stroke-width="2.2"/>'),
+  ability: wrap('<path d="M12 2l2.6 6 6.4.6-4.8 4.3 1.4 6.3L12 15.8 6.4 19.2l1.4-6.3L3 8.6 9.4 8z" fill="#cdb6ec" stroke="#5c2f86"/>'),
+  skills: wrap('<path d="M12 21V8M12 14c-4 0-6-2-6-6 4 0 6 2 6 6zM12 11c3 0 5-2 5-5-3 0-5 2-5 5z" fill="#9ec677" stroke="#3f6b2f"/><path d="M6 21h12"/>'),
+  clear: wrap('<path d="M5 20L15 6M13 4l7 5-3 2-6-4z" fill="#cfd5dc" stroke="#4d5662"/><path d="M5 20l3-1" />'),
+  fit: wrap('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="9" y="9" width="6" height="6" rx="1"/>'),
+};

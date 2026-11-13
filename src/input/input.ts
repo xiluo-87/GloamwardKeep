@@ -1,10 +1,8 @@
-// Pointer (mouse and touch) and keyboard. Both only talk to the Session; the simulation is never touched here.
+// Pointer (mouse and touch) and keyboard. Both only talk to the Session and the camera; the simulation
+// is never touched here. A drag over 8 px pans, two fingers pinch, a tap selects a tile and a second
+// tap on the same tile opens the action ring.
 import type { Renderer } from '../render/renderer';
-import { towerAt } from '../sim/state';
 import type { Session } from '../ui/session';
-import { checkMessage } from '../ui/session';
-import { clearCost } from '../sim/actions';
-import { canBuild } from '../sim/actions';
 
 export interface ControlHooks {
   /** True while a run is on screen and not paused. */
@@ -17,90 +15,122 @@ export interface ControlHooks {
   anyKey(): void;
 }
 
-export class Controls {
-  private pending: { col: number; row: number } | null = null;
-  private down: { x: number; y: number; id: number } | null = null;
+const DRAG = 8;
 
-  constructor(canvas: HTMLCanvasElement, private session: Session, private renderer: Renderer, private hooks: ControlHooks) {
+interface Ptr { x: number; y: number; sx: number; sy: number; moved: boolean }
+
+export class Controls {
+  private ptrs = new Map<number, Ptr>();
+  /** Set once a gesture became a pan or pinch, so lifting a finger never counts as a tap. */
+  private dead = false;
+  private pinch: { dist: number; cx: number; cy: number } | null = null;
+
+  constructor(private canvas: HTMLCanvasElement, private session: Session, private renderer: Renderer, private hooks: ControlHooks) {
     canvas.addEventListener('pointerdown', (e) => this.onDown(e));
     canvas.addEventListener('pointermove', (e) => this.onMove(e));
     canvas.addEventListener('pointerup', (e) => this.onUp(e));
-    canvas.addEventListener('pointercancel', () => { this.down = null; });
+    canvas.addEventListener('pointercancel', (e) => this.drop(e));
     canvas.addEventListener('pointerleave', (e) => {
-      if (e.pointerType === 'mouse') this.session.view.hoverTile = null;
+      if (e.pointerType === 'mouse' && !this.session.previewing) this.session.view.hoverTile = null;
     });
     canvas.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       if (this.hooks.active()) this.session.cancel();
     });
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (this.hooks.active()) this.renderer.zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015));
+    }, { passive: false });
     window.addEventListener('keydown', (e) => this.onKey(e));
   }
 
-  /** Forget a half-confirmed touch placement (placing mode ended, new run, ...). */
+  /** Forget any gesture in progress (new run, menu opened, ...). */
   reset(): void {
-    this.pending = null;
-    this.down = null;
+    this.ptrs.clear();
+    this.pinch = null;
+    this.dead = false;
   }
 
   private onDown(e: PointerEvent): void {
     this.hooks.anyKey();
     if (e.button === 2) return;
-    this.down = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    if (this.ptrs.size === 0) this.dead = false;
+    this.ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, moved: false });
+    try { this.canvas.setPointerCapture(e.pointerId); } catch { /* capture is a nicety */ }
+    if (this.ptrs.size === 2) {
+      this.dead = true;
+      this.pinch = this.measure();
+    }
+  }
+
+  private measure(): { dist: number; cx: number; cy: number } {
+    const [a, b] = [...this.ptrs.values()];
+    return { dist: Math.hypot(a.x - b.x, a.y - b.y) || 1, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 };
   }
 
   private onMove(e: PointerEvent): void {
-    if (e.pointerType !== 'mouse' || !this.hooks.active()) return;
-    this.session.view.hoverTile = this.renderer.screenToTile(e.clientX, e.clientY);
+    if (!this.hooks.active()) return;
+    const p = this.ptrs.get(e.pointerId);
+    if (!p) {
+      if (e.pointerType === 'mouse' && !this.session.previewing) this.session.view.hoverTile = this.renderer.screenToTile(e.clientX, e.clientY);
+      return;
+    }
+    const dx = e.clientX - p.x;
+    const dy = e.clientY - p.y;
+    p.x = e.clientX;
+    p.y = e.clientY;
+    if (this.ptrs.size >= 2 && this.pinch) {
+      const m = this.measure();
+      this.renderer.zoomAt(m.cx, m.cy, m.dist / this.pinch.dist);
+      this.renderer.panBy(m.cx - this.pinch.cx, m.cy - this.pinch.cy);
+      this.pinch = m;
+      return;
+    }
+    if (!p.moved && Math.hypot(e.clientX - p.sx, e.clientY - p.sy) > DRAG) {
+      p.moved = true;
+      this.dead = true;
+      // The finger already travelled DRAG px: carry that over so the map doesn't lag the finger.
+      this.renderer.panBy(e.clientX - p.sx, e.clientY - p.sy);
+      return;
+    }
+    if (p.moved) this.renderer.panBy(dx, dy);
+    else if (e.pointerType === 'mouse' && !this.session.previewing) this.session.view.hoverTile = this.renderer.screenToTile(e.clientX, e.clientY);
+  }
+
+  private drop(e: PointerEvent): void {
+    this.ptrs.delete(e.pointerId);
+    if (this.ptrs.size < 2) this.pinch = null;
   }
 
   private onUp(e: PointerEvent): void {
-    const d = this.down;
-    this.down = null;
-    if (!d || d.id !== e.pointerId || !this.hooks.active() || e.button === 2) return;
-    if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 14) return;
-    this.tap(this.renderer.screenToTile(e.clientX, e.clientY), e.pointerType === 'mouse');
+    const p = this.ptrs.get(e.pointerId);
+    this.drop(e);
+    if (!p || !this.hooks.active() || e.button === 2) return;
+    if (this.dead || p.moved) {
+      if (this.ptrs.size === 0) this.dead = false;
+      return;
+    }
+    this.tap(e.clientX, e.clientY, e.pointerType === 'mouse');
   }
 
-  private tap(tile: { col: number; row: number } | null, mouse: boolean): void {
+  private tap(x: number, y: number, mouse: boolean): void {
     const ss = this.session;
     const s = ss.run;
     if (!s) return;
-    const v = ss.view;
-    if (!tile) {
-      this.pending = null;
-      ss.cancel();
+    const arrow = this.renderer.edgeArrowAt(x, y);
+    if (arrow) {
+      ss.closeOverlays();
+      this.renderer.focusTile(arrow.col, arrow.row);
       return;
     }
-    const tower = towerAt(s, tile.col, tile.row);
-    if (v.placing) {
-      if (tower) {
-        this.pending = null;
-        ss.select(tower.uid);
-        return;
-      }
-      if (mouse) {
-        v.hoverTile = tile;
-        ss.placeAt(tile.col, tile.row, true);
-        ss.refreshView();
-        return;
-      }
-      // Touch: the first tap previews, a second tap on the same tile confirms.
-      if (this.pending && this.pending.col === tile.col && this.pending.row === tile.row) {
-        this.pending = null;
-        ss.placeAt(tile.col, tile.row, false);
-        v.hoverTile = null;
-        return;
-      }
-      this.pending = tile;
-      v.hoverTile = tile;
-      const check = canBuild(s, v.placing, tile.col, tile.row);
-      if (check !== 'ok') ss.onToast(checkMessage(s, check, tile.col, tile.row), true);
-      ss.refreshView();
-      return;
-    }
-    this.pending = null;
-    if (!tower && clearCost(s, tile.col, tile.row) > 0) ss.selectTile(tile.col, tile.row);
-    else ss.select(tower ? tower.uid : 0);
+    // A tap on the map while the ring or a sheet is open only closes it.
+    if (ss.ring || ss.sheet) { ss.closeOverlays(); return; }
+    const tile = this.renderer.screenToTile(x, y);
+    if (!tile) { ss.cancel(); return; }
+    if (mouse) ss.view.hoverTile = tile;
+    const cur = ss.tile;
+    if (cur && cur.col === tile.col && cur.row === tile.row) ss.openRing();
+    else ss.selectTile(tile.col, tile.row);
   }
 
   private onKey(e: KeyboardEvent): void {
@@ -112,7 +142,7 @@ export class Controls {
     if (e.code === 'Space' || key === 'f3') e.preventDefault();
     if (key === 'escape') {
       if (!this.hooks.inRun()) return;
-      if (this.hooks.active() && this.session.cancel()) { this.pending = null; return; }
+      if (this.hooks.active() && this.session.cancel()) return;
       this.hooks.togglePause();
       return;
     }
@@ -127,9 +157,10 @@ export class Controls {
     else if (key === 'u') ss.upgradeSelected('a');
     else if (key === 'i') ss.upgradeSelected('b');
     else if (key === 's') ss.sellSelected(performance.now());
-    else if (key === 'c') { const h = ss.view.hoverTile ?? ss.selectedTile; if (h) ss.clearAt(h.col, h.row); }
+    else if (key === 'c') ss.clearHere();
     else if (key === 't') ss.target();
     else if (key === 'a') { const h = ss.selected; if (h?.hero) ss.ability(h.uid); }
+    else if (key === 'f') this.renderer.fitBoard();
     else if (key === '[') this.hooks.stepSpeed(-1);
     else if (key === ']') this.hooks.stepSpeed(1);
   }

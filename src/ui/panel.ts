@@ -3,10 +3,11 @@
 import { HERO, HEROES, HEIGHT, HeroId, TowerId } from '../data/balance';
 import { ABILITY_TEXT, CLEAR_TEXT, describeMod, HERO_TEXT, TOWER_TEXT } from '../data/text';
 import { canClear, clearCost } from '../sim/actions';
+import { isUndo } from './session';
 import { FEATURE } from '../sim/mapgen';
 import { attackRate } from '../sim/step';
 import {
-  heroProgress, skillCost, skillState, SkillState, upgradeOptions,
+  heroProgress, sellValue, skillCost, skillState, SkillState, upgradeOptions,
 } from '../sim/stats';
 import type { RunState, Tower } from '../sim/state';
 import { esc, flagList, statRows } from './format';
@@ -22,11 +23,11 @@ const SKILL_LABEL: Record<SkillState, string> = {
 
 const WIDE = window.matchMedia('(min-width: 820px)');
 const IDLE_HTML = `<h3>The Keep</h3>
-  <p class="sub">Click a tower or hero to see its stats and upgrades. Click forest or rocks to clear them for gold.</p>
+  <p class="sub">Click a tile to select it, click it again for the action ring (build, upgrade, sell). Hotkeys act on the selected tile.</p>
   <h4>Controls</h4>
-  <dl class="stats keys"><dt>1–7</dt><dd>Build tower</dd><dt>Q / W</dt><dd>Place hero</dd><dt>Space</dt><dd>Call next wave</dd>
+  <dl class="stats keys"><dt>1–7</dt><dd>Build tower here</dd><dt>Q / W</dt><dd>Place hero here</dd><dt>Space</dt><dd>Call next wave</dd>
   <dt>U / I</dt><dd>Upgrade (fork A / B)</dd><dt>S</dt><dd>Sell</dd><dt>T</dt><dd>Target mode</dd><dt>A</dt><dd>Hero ability</dd>
-  <dt>C</dt><dd>Clear hovered tile</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
+  <dt>C</dt><dd>Clear forest / rocks</dd><dt>F</dt><dd>Fit whole map</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
   <p class="sub">Build walls on the road to steer enemies onto longer routes. Higher ground gives more range.</p>`;
 
 export function towerName(t: Tower): string {
@@ -55,13 +56,13 @@ export class Panel {
     const ss = this.session;
     const t = ss.selected;
     switch (act) {
-      case 'close': ss.cancel(); break;
+      case 'close': if (!ss.closeOverlays()) ss.cancel(); break;
       case 'up': ss.upgradeSelected((b.dataset.arg as 'a' | 'b' | '') || undefined); break;
       case 'sell': ss.sellSelected(performance.now()); break;
       case 'target': ss.target(); break;
       case 'ability': if (t) ss.ability(t.uid); break;
       case 'learn': if (t) ss.learn(t.uid, Number(b.dataset.b), Number(b.dataset.n)); break;
-      case 'clear': if (ss.selectedTile) ss.clearAt(ss.selectedTile.col, ss.selectedTile.row); break;
+      case 'clear': ss.clearHere(); break;
     }
   }
 
@@ -71,15 +72,17 @@ export class Panel {
     const ss = this.session;
     if (this.flatS !== s) { this.flatS = s; this.sig = ''; }
     const t = ss.selected;
-    const tile = ss.selectedTile;
+    const tile = ss.tile;
+    const wide = WIDE.matches;
     let sig = '';
-    if (t) sig = this.towerSig(s, t, now);
-    else if (tile) {
+    if (t && (wide || (ss.sheet === 'skills' && t.hero))) sig = this.towerSig(s, t, now);
+    else if (tile && wide && !t) {
       const cost = clearCost(s, tile.col, tile.row);
-      if (cost === 0) { ss.selectedTile = null; sig = ''; } else sig = `F|${tile.col},${tile.row}|${cost}|${canClear(s, tile.col, tile.row)}`;
+      if (cost > 0) sig = `F|${tile.col},${tile.row}|${cost}|${canClear(s, tile.col, tile.row)}`;
     }
+    this.el.classList.toggle('sheet', !wide);
     // On wide screens the panel stays put (so the board never shifts under the pointer) and shows help when idle.
-    if (!sig && WIDE.matches) sig = 'idle';
+    if (!sig && wide) sig = 'idle';
     if (sig !== this.sig) {
       const wasVisible = this.visible;
       this.sig = sig;
@@ -106,7 +109,7 @@ export class Panel {
 
   private towerSig(s: RunState, t: Tower, now: number): string {
     const labels = statRows(t.stats).map((r) => r[0]).join(',');
-    let sig = `${t.hero ? 'H' : 'T'}|${t.uid}|${t.tier}|${t.fork}|${t.forkTier}|${t.heroLevel}|${t.skills.join('.')}|${t.target}|${labels}|${this.session.sellArmed(now) ? 1 : 0}|${t.maxHp}`;
+    let sig = `${t.hero ? 'H' : 'T'}|${isUndo(t) ? 1 : 0}|${t.uid}|${t.tier}|${t.fork}|${t.forkTier}|${t.heroLevel}|${t.skills.join('.')}|${t.target}|${labels}|${this.session.sellArmed(now) ? 1 : 0}|${t.maxHp}`;
     if (t.hero) {
       for (let b = 0; b < 3; b++) for (let n = 0; n < 4; n++) sig += skillState(s, t, b, n)[0] + skillState(s, t, b, n).length;
     } else {
@@ -118,7 +121,7 @@ export class Panel {
   // -- html -------------------------------------------------------------------------------------
 
   private tileHtml(s: RunState): string {
-    const tile = this.session.selectedTile as { col: number; row: number };
+    const tile = this.session.tile as { col: number; row: number };
     const i = tile.row * s.terrain.cols + tile.col;
     const f = s.terrain.feature[i] === FEATURE.forest ? CLEAR_TEXT.forest : CLEAR_TEXT.rocks;
     const cost = clearCost(s, tile.col, tile.row);
@@ -155,7 +158,8 @@ export class Panel {
       up = `<button class="upgrade wide" data-act="up" data-cost="${o.cost}"><strong>Upgrade: ${esc(next)}</strong><span>${esc(describeMod(o.upgrade.add))}</span><b class="price">${o.cost} gold</b><kbd>U</kbd></button>`;
     } else up = '<p class="sub">Fully upgraded.</p>';
     const armed = this.session.sellArmed(now);
-    const value = Math.floor(t.invested * s.mods.sellRefund);
+    const value = sellValue(t, s.mods);
+    const undo = isUndo(t);
     return `${this.headerHtml(t, stage)}
       <p class="terrain">Height ${t.height}${bonus ? ` — +${bonus}% range` : ''}</p>
       ${this.statsHtml(t)}
@@ -163,7 +167,7 @@ export class Panel {
       <p class="sub" data-f="record"></p>
       <button class="wide" data-act="target">Target: <b>${TARGET_TEXT[t.target]}</b> <kbd>T</kbd></button>
       <h4>Upgrade</h4>${up}
-      <button class="wide sell ${armed ? 'armed' : ''}" data-act="sell">${armed ? `Confirm sell (+${value})` : `Sell for ${value} gold`} <kbd>S</kbd></button>`;
+      <button class="wide sell ${armed ? 'armed' : ''}" data-act="sell">${undo ? `Undo — full refund (+${value})` : armed ? `Confirm sell (+${value})` : `Sell for ${value} gold`} <kbd>S</kbd></button>`;
   }
 
   private heroHtml(s: RunState, t: Tower): string {
@@ -191,7 +195,7 @@ export class Panel {
       <button class="wide" data-act="target">Target: <b>${TARGET_TEXT[t.target]}</b> <kbd>T</kbd></button>
       <h4>Skills <span class="sub">one capstone only · level ${HERO.nodeLevel.join(' / ')}</span></h4>
       <div class="tree">${cols}</div>
-      <button class="wide sell ${this.session.sellArmed(performance.now()) ? 'armed' : ''}" data-act="sell">${this.session.sellArmed(performance.now()) ? 'Confirm dismiss' : 'Dismiss'} (+${Math.floor(t.invested * s.mods.sellRefund)}) <kbd>S</kbd></button>`;
+      <button class="wide sell ${this.session.sellArmed(performance.now()) ? 'armed' : ''}" data-act="sell">${isUndo(t) ? 'Undo — full refund' : this.session.sellArmed(performance.now()) ? 'Confirm dismiss' : 'Dismiss'} (+${sellValue(t, s.mods)}) <kbd>S</kbd></button>`;
   }
 
   // -- live numbers -----------------------------------------------------------------------------

@@ -12,6 +12,8 @@ import { clearEvents, runXp, stepRun } from './sim/step';
 import { MapId, MAP_BALANCE } from './data/balance';
 import { Hud } from './ui/hud';
 import { Panel } from './ui/panel';
+import { Ring } from './ui/ring';
+import { loadUi, SLOW_FACTOR } from './ui/settings';
 import { Screens } from './ui/screens';
 import { Session } from './ui/session';
 
@@ -29,6 +31,7 @@ const profile = loadProfile(store);
 const renderer = new Renderer(canvas);
 const synth = new Synth();
 const session = new Session();
+const ui = loadUi();
 const params = new URLSearchParams(window.location.search);
 const debugMode = params.has('debug');
 const speeds = debugMode ? DEBUG.speeds : [1, 2, 3];
@@ -64,12 +67,11 @@ function layout(): void {
   const H = window.innerHeight;
   const W = window.innerWidth;
   const top = hud.top.getBoundingClientRect().bottom;
-  let bottom = H - hud.bar.getBoundingClientRect().top;
+  const bottom = H - hud.bar.getBoundingClientRect().top;
   let right = 0;
   if (panel.visible) {
     const r = panelEl.getBoundingClientRect();
     if (W >= 820) right = W - r.left;
-    else bottom = Math.max(bottom, H - r.top);
   }
   const rs = document.documentElement.style;
   rs.setProperty('--top-h', `${Math.round(top)}px`);
@@ -80,19 +82,22 @@ function layout(): void {
 const hud = new Hud(hudRoot, session, {
   togglePause: () => togglePause(),
   cycleSpeed: () => stepSpeed(1),
+  fitMap: () => renderer.fitBoard(),
 });
+const ring = new Ring(hud.ringEl, hud.descEl, session, renderer);
 const panel = new Panel(panelEl, session, () => layout());
 hudRoot.hidden = true;
 panelEl.hidden = true;
 new ResizeObserver(() => layout()).observe(hud.top);
 new ResizeObserver(() => layout()).observe(hud.bar);
 window.addEventListener('resize', layout);
+window.addEventListener('popstate', () => session.handlePop());
 
 session.onToast = (m, bad) => hud.toast(m, bad);
 
 // -- screens ----------------------------------------------------------------------------------
 
-const screens = new Screens(profile, renderer, {
+const screens = new Screens(profile, renderer, ui, {
   start: (map, seed) => startRun(map, seed),
   resume: () => setPaused(false),
   restart: () => { if (run) startRun(run.cfg.map, run.cfg.mapSeed); },
@@ -145,7 +150,7 @@ function setPaused(p: boolean): void {
   if (mode !== 'run' || session.paused === p) return;
   session.paused = p;
   last = performance.now();
-  if (p) { synth.stopRun(); screens.pause(); } else screens.hide();
+  if (p) { session.closeOverlays(); synth.stopRun(); screens.pause(); } else screens.hide();
 }
 
 const togglePause = (): void => { if (endAt === 0) setPaused(!session.paused); };
@@ -176,9 +181,6 @@ document.addEventListener('click', (e) => {
   if (mode === 'run') b.blur();
 }, true);
 document.addEventListener('visibilitychange', () => { if (document.hidden) setPaused(true); });
-document.addEventListener('pointerdown', (e) => {
-  if (!(e.target as HTMLElement).closest('.bb')) hud.hideTip();
-});
 
 // -- main loop --------------------------------------------------------------------------------
 
@@ -202,7 +204,7 @@ function frame(now: number): void {
   if (mode === 'run' && s) {
     const paused = session.paused;
     if (!paused && endAt === 0) {
-      acc += dt * session.speed;
+      acc += dt * session.speed * (session.menuOpen ? SLOW_FACTOR[ui.slow] : 1);
       let n = 0;
       while (acc >= STEP && n < 60) {
         bot?.update(STEP);
@@ -220,6 +222,11 @@ function frame(now: number): void {
     toastEvents(s);
     hud.update(s);
     panel.update(s, now);
+    ring.update(s, { top: hud.top.getBoundingClientRect().bottom, bottom: hud.bar.getBoundingClientRect().top });
+    if (session.sheetFocus && panel.visible && session.tile) {
+      session.sheetFocus = false;
+      renderer.focusTile(session.tile.col, session.tile.row, panelEl.getBoundingClientRect().height);
+    }
     renderer.draw(s, Math.min(1, acc / STEP), paused ? 0 : dt, t, session.view);
     clearEvents(s);
     if (endAt && now >= endAt) finish(false);
