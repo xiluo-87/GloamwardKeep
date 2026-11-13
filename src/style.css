@@ -188,7 +188,7 @@ ul.unlocks li.got { border-color: var(--green); color: var(--ink); }
 
 /* ---------- phones and narrow windows ---------- */
 @media (max-width: 819px) {
-  #panel { top: auto; bottom: 0; left: 0; right: 0; width: auto; max-height: 90dvh; z-index: 12; padding-bottom: max(16px, env(safe-area-inset-bottom)); border-left: 0; border-top: 3px solid var(--gold); border-radius: 12px 12px 0 0; box-shadow: 0 -2px 8px rgba(0,0,0,0.3); }
+  #panel { top: auto; bottom: 0; left: 0; right: 0; width: auto; max-height: 70dvh; z-index: 12; padding-bottom: max(16px, env(safe-area-inset-bottom)); border-left: 0; border-top: 3px solid var(--gold); border-radius: 12px 12px 0 0; box-shadow: 0 -2px 8px rgba(0,0,0,0.3); }
   .cols { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {

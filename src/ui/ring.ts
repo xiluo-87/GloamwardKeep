@@ -162,7 +162,7 @@ function heroItems(s: RunState, ss: Session, t: Tower): RingItem[] {
     run: () => ss.ability(t.uid),
   });
   items.push({
-    key: 'skills', icon: ACTION_ICONS.skills, label: 'Skills',
+    key: 'skills', icon: ACTION_ICONS.skills, label: 'Skills', keepOpen: true,
     desc: () => ({ title: 'Skills', sub: `Level ${t.heroLevel}`, body: '<p>Three branches of four skills, bought with gold. Only one capstone.</p>' }),
     state: () => ({ poor: false }),
     run: () => ss.openSheet(),
