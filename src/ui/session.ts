@@ -2,8 +2,10 @@
 // HUD, panel and input all go through this, so rules (and messages) live in one place.
 import { HERO_IDS, HeroId, TOWER_IDS, TowerId } from '../data/balance';
 import {
-  BuildCheck, build, callWave, canBuild, canCallWave, cycleTarget, findTower, learnSkill, sell, upgrade, useAbility,
+  BuildCheck, build, callWave, canBuild, canCallWave, clearCost, clearTile, cycleTarget, findTower, learnSkill, sell, upgrade, useAbility,
 } from '../sim/actions';
+import { FEATURE } from '../sim/mapgen';
+import { CLEAR_TEXT } from '../data/text';
 import { buildCost, isHeroType, sellValue, upgradeOptions } from '../sim/stats';
 import { RunState, towerAt, Tower } from '../sim/state';
 import { defaultView, ViewState } from '../render/view';
@@ -21,7 +23,21 @@ export const CHECK_TEXT: Record<BuildCheck, string> = {
   over: 'The run is over',
 };
 
+/** Failure text for a placement, mentioning the clearing price when forest or rocks are in the way. */
+export function checkMessage(s: RunState, check: BuildCheck, col: number, row: number): string {
+  if (check === 'blocked') {
+    const cost = clearCost(s, col, row);
+    if (cost > 0) {
+      const f = s.terrain.feature[row * s.terrain.cols + col] === FEATURE.forest ? CLEAR_TEXT.forest : CLEAR_TEXT.rocks;
+      return `${f.name} — clear it for ${cost} gold first`;
+    }
+  }
+  return CHECK_TEXT[check];
+}
+
 export class Session {
+  /** A forest or rock tile the player tapped, shown in the panel with its clearing price. */
+  selectedTile: { col: number; row: number } | null = null;
   run: RunState | null = null;
   view: ViewState = defaultView();
   paused = false;
@@ -45,13 +61,32 @@ export class Session {
     this.view.placing = null;
     this.view.selectedUid = 0;
     this.view.hoverTile = null;
+    this.selectedTile = null;
   }
 
   get selected(): Tower | undefined {
     return this.run && this.view.selectedUid ? findTower(this.run, this.view.selectedUid) : undefined;
   }
 
+  selectTile(col: number, row: number): void {
+    this.select(0);
+    this.selectedTile = { col, row };
+    this.onChange();
+  }
+
+  clearAt(col: number, row: number): void {
+    const s = this.run;
+    if (!s) return;
+    const cost = clearCost(s, col, row);
+    if (cost > 0 && s.gold < cost) { this.onToast('Not enough gold', true); return; }
+    if (clearTile(s, col, row)) {
+      this.selectedTile = null;
+      this.onChange();
+    }
+  }
+
   select(uid: number): void {
+    this.selectedTile = null;
     this.view.selectedUid = uid;
     this.view.placing = null;
     this.sellArm.uid = 0;
@@ -60,12 +95,13 @@ export class Session {
 
   setPlacing(id: TowerId | HeroId | null): void {
     this.view.placing = this.view.placing === id ? null : id;
-    if (this.view.placing) this.view.selectedUid = 0;
+    if (this.view.placing) { this.view.selectedUid = 0; this.selectedTile = null; }
     this.onChange();
   }
 
   cancel(): boolean {
-    if (this.view.placing || this.view.selectedUid) {
+    if (this.view.placing || this.view.selectedUid || this.selectedTile) {
+      this.selectedTile = null;
       this.view.placing = null;
       this.view.selectedUid = 0;
       this.sellArm.uid = 0;
@@ -110,7 +146,7 @@ export class Session {
     if (!s || !type) return false;
     const check = canBuild(s, type, col, row);
     if (check !== 'ok') {
-      this.onToast(CHECK_TEXT[check], true);
+      this.onToast(checkMessage(s, check, col, row), true);
       return false;
     }
     const t = build(s, type, col, row);

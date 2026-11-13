@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { build, canBuild, destroyTower, sell } from '../src/sim/actions';
+import { CLEAR } from '../src/data/balance';
+import { build, canBuild, canClear, clearCost, clearTile, destroyTower, sell } from '../src/sim/actions';
 import { buildCost } from '../src/sim/stats';
 import { FEATURE } from '../src/sim/mapgen';
 import { tileCenter } from '../src/sim/hex';
-import { frozenEnemy, highTiles, mk, roadTiles, tilesWithFeature } from './helpers';
+import { eventsOf, frozenEnemy, highTiles, mk, roadTiles, tilesWithFeature } from './helpers';
 
 describe('canBuild', () => {
   it('allows a tower on open ground', () => {
@@ -112,5 +113,74 @@ describe('heroes', () => {
     expect(k.hero).toBe(true);
     expect(k.abilityCd).toBeGreaterThan(0);
     expect(k.abilityCd).toBeLessThanOrEqual(10);
+  });
+});
+
+describe('clearing forest and rocks', () => {
+  const first = (s: ReturnType<typeof mk>, f: number) => tilesWithFeature(s, f)[0];
+
+  it('costs base x (1 + perHeight x height), rounded', () => {
+    const s = mk();
+    for (const [f, base] of [[FEATURE.forest, CLEAR.forest], [FEATURE.rocks, CLEAR.rocks]] as const) {
+      const tile = first(s, f);
+      if (!tile) continue;
+      const h = s.terrain.height[tile[1] * s.terrain.cols + tile[0]];
+      expect(clearCost(s, tile[0], tile[1])).toBe(Math.round(base * (1 + CLEAR.perHeight * h)));
+    }
+  });
+
+  it('rocks cost more than forest at the same height, and cost grows with height', () => {
+    expect(CLEAR.rocks).toBeGreaterThan(CLEAR.forest);
+    expect(CLEAR.perHeight).toBeGreaterThan(0);
+  });
+
+  it('thrift lowers the price', () => {
+    const plain = mk();
+    const thrifty = mk({ perks: ['thrift'] });
+    const [x, y] = first(plain, FEATURE.forest);
+    expect(clearCost(thrifty, x, y)).toBeLessThan(clearCost(plain, x, y));
+    expect(clearCost(thrifty, x, y)).toBe(Math.round(clearCost(plain, x, y) * 0.92 + 0) === clearCost(thrifty, x, y)
+      ? clearCost(thrifty, x, y)
+      : -1);
+  });
+
+  it('deducts gold, makes the tile buildable and emits an event', () => {
+    const s = mk();
+    const [x, y] = first(s, FEATURE.forest);
+    const cost = clearCost(s, x, y);
+    const g = s.gold;
+    const v = s.terrainVersion;
+    expect(canBuild(s, 'archer', x, y)).toBe('blocked');
+    expect(clearTile(s, x, y)).toBe(true);
+    expect(s.gold).toBe(g - cost);
+    expect(s.terrainVersion).toBe(v + 1);
+    expect(eventsOf(s, 'clear')).toHaveLength(1);
+    expect(s.terrain.feature[y * s.terrain.cols + x]).toBe(FEATURE.none);
+    expect(canBuild(s, 'archer', x, y)).toBe('ok');
+    expect(build(s, 'archer', x, y)).not.toBeNull();
+  });
+
+  it('cannot clear twice, bare ground, or without gold', () => {
+    const s = mk();
+    const [x, y] = first(s, FEATURE.forest);
+    s.gold = clearCost(s, x, y) - 1;
+    expect(canClear(s, x, y)).toBe('gold');
+    expect(clearTile(s, x, y)).toBe(false);
+    expect(s.terrain.feature[y * s.terrain.cols + x]).toBe(FEATURE.forest);
+    s.gold = 5000;
+    expect(clearTile(s, x, y)).toBe(true);
+    expect(canClear(s, x, y)).toBe('nothing');
+    expect(clearTile(s, x, y)).toBe(false);
+    const [bx, by] = highTiles(s)[0];
+    expect(clearCost(s, bx, by)).toBe(0);
+    expect(clearTile(s, bx, by)).toBe(false);
+    expect(clearCost(s, -1, 0)).toBe(0);
+  });
+
+  it('is refused after the run ends', () => {
+    const s = mk();
+    const [x, y] = first(s, FEATURE.forest);
+    s.outcome = 'lost';
+    expect(canClear(s, x, y)).toBe('over');
   });
 });

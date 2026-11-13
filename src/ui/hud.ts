@@ -161,6 +161,7 @@ export class Hud {
       const d = TOWERS[id as TowerId];
       const t = TOWER_TEXT[id as TowerId];
       html = `<h4>${t.name}</h4><p>${t.blurb}</p><p class="stats">${statLine(d.base)}</p><p>${flagList(d.base).join(' · ')}</p>
+        ${id === 'palisade' ? '<p><b>Mazing:</b> walls built on the road steer enemies onto longer routes. They only smash walls when every route is sealed.</p>' : ''}
         <p class="sub">Upgrades twice, then forks into ${t.forks.a.name} or ${t.forks.b.name}. Higher ground gives more range.</p>`;
     }
     this.tip.innerHTML = html;

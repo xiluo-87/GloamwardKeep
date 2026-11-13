@@ -2,7 +2,8 @@
 import type { Renderer } from '../render/renderer';
 import { towerAt } from '../sim/state';
 import type { Session } from '../ui/session';
-import { CHECK_TEXT } from '../ui/session';
+import { checkMessage } from '../ui/session';
+import { clearCost } from '../sim/actions';
 import { canBuild } from '../sim/actions';
 
 export interface ControlHooks {
@@ -93,12 +94,13 @@ export class Controls {
       this.pending = tile;
       v.hoverTile = tile;
       const check = canBuild(s, v.placing, tile.col, tile.row);
-      if (check !== 'ok') ss.onToast(CHECK_TEXT[check], true);
+      if (check !== 'ok') ss.onToast(checkMessage(s, check, tile.col, tile.row), true);
       ss.refreshView();
       return;
     }
     this.pending = null;
-    ss.select(tower ? tower.uid : 0);
+    if (!tower && clearCost(s, tile.col, tile.row) > 0) ss.selectTile(tile.col, tile.row);
+    else ss.select(tower ? tower.uid : 0);
   }
 
   private onKey(e: KeyboardEvent): void {
@@ -125,6 +127,7 @@ export class Controls {
     else if (key === 'u') ss.upgradeSelected('a');
     else if (key === 'i') ss.upgradeSelected('b');
     else if (key === 's') ss.sellSelected(performance.now());
+    else if (key === 'c') { const h = ss.view.hoverTile ?? ss.selectedTile; if (h) ss.clearAt(h.col, h.row); }
     else if (key === 't') ss.target();
     else if (key === 'a') { const h = ss.selected; if (h?.hero) ss.ability(h.uid); }
     else if (key === '[') this.hooks.stepSpeed(-1);

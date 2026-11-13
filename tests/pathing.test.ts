@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ENEMIES, PATHING, TOWERS } from '../src/data/balance';
 import { build, sell, upgrade } from '../src/sim/actions';
-import { spawnAtGate } from '../src/sim/combat';
+import { hurt, spawnAtGate } from '../src/sim/combat';
 import { hexNeighbours, tileCenter } from '../src/sim/hex';
 import { rebuildFlow, routeOpen } from '../src/sim/path';
 import { RunState } from '../src/sim/state';
@@ -164,13 +164,12 @@ describe('smashing', () => {
     expect(stone.maxHp).toBeGreaterThan(plain.maxHp * 5);
   });
 
-  it('towers repair to full when a wave is cleared', async () => {
+  it('towers repair to full when a wave is cleared', () => {
     const s = mk();
     const [x, y] = highTiles(s)[0];
     const t = build(s, 'archer', x, y)!;
     t.hp = 1;
     const e = spawnAtGate(s, 'goblin', 0, 1)!;
-    const { hurt } = await import('../src/sim/combat');
     hurt(s, e, 1e6, 'physical', null);
     stepSecs(s, 0.1);
     expect(t.hp).toBe(t.maxHp);
