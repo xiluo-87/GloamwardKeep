@@ -6,7 +6,7 @@ export interface ViewState {
   /** uid of the selected tower or hero, or 0. */
   selectedUid: number;
   /** Tile under the pointer, or null when off the board. */
-  hoverTile: { x: number; y: number } | null;
+  hoverTile: { col: number; row: number } | null;
   /** Type being placed from the build bar, or null. */
   placing: TowerId | HeroId | null;
   /** Whether `placing` can go on `hoverTile` right now. */
