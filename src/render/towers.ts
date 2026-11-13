@@ -72,17 +72,17 @@ function palisade(g: CanvasRenderingContext2D, t: Tower, time: number, links: Wa
   const rc = recoilOf(t);
   if (t.tier === 1) {
     // Wooden stakes in a staggered row, lashed together.
-    const hs = [13, 17, 20, 17, 13];
+    const hs = [19, 24, 28, 24, 19];
     for (let row = 0; row < 2; row++) {
       for (let i = 0; i < 5; i++) {
-        const x = -14 + i * 7 + (row ? 3.5 : 0);
+        const x = -16 + i * 8 + (row ? 4 : 0);
         if (row && i === 4) continue;
         const y = row ? 0 : 5;
         const h = hs[i] - (row ? 3 : 0);
-        poly(g, [x - 3, y, x - 3, y - h + 5, x, y - h, x + 3, y - h + 5, x + 3, y], row ? WOOD_D : (i % 2 ? WOOD_L : WOOD), 1);
+        poly(g, [x - 3.6, y, x - 3.6, y - h + 6, x, y - h, x + 3.6, y - h + 6, x + 3.6, y], row ? WOOD_D : (i % 2 ? WOOD_L : WOOD), 1);
       }
     }
-    stick(g, -16, -3 - rc * 2, 16, -3 - rc * 2, '#d8c08a', 1.6);
+    stick(g, -18, -5 - rc * 2, 18, -5 - rc * 2, '#d8c08a', 1.6);
     return;
   }
   const spiked = t.fork === 'a';
@@ -115,7 +115,7 @@ function palisade(g: CanvasRenderingContext2D, t: Tower, time: number, links: Wa
     }
   }
   // Central post: a squat stone block.
-  const w = fort ? 11 : 10;
+  const w = fort ? 12 : 11;
   rect(g, -w, gy - H, w * 2, H + 1, STONE, 1.2);
   rect(g, -w, gy - H, w * 0.9, H + 1, STONE_L, 0);
   g.strokeStyle = OUT;

@@ -44,7 +44,7 @@ function knight(g: CanvasRenderingContext2D, rc: number): void {
   // Greatsword behind, swung on attack.
   g.save();
   g.translate(7, -11);
-  g.rotate(-0.5 + rc * 1.7);
+  g.rotate(0.55 + rc * 1.5);
   rect(g, -1.4, -26, 2.8, 24, '#d8dce4', 1);
   rect(g, -0.4, -25, 0.8, 21, '#ffffff', 0);
   rect(g, -4.5, -3, 9, 2.4, '#b8892a', 0.9);

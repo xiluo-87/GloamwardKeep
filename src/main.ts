@@ -236,6 +236,7 @@ function frame(now: number): void {
 if (debugMode) {
   (window as unknown as { __gk: unknown }).__gk = { session, profile, renderer, get run() { return run; }, startRun, screens };
 }
+if (debugMode && Number(params.get('speed'))) session.speed = Number(params.get('speed'));
 layout();
 const wantMap = params.get('map');
 if (debugMode && (params.has('bot') || params.has('autostart'))) {

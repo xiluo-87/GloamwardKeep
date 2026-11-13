@@ -130,7 +130,7 @@ export class Panel {
 
   private statsHtml(t: Tower): string {
     const rows = statRows(t.stats).map(([l, v]) => `<dt>${esc(l)}</dt><dd data-f="s:${esc(l)}">${esc(v)}</dd>`).join('');
-    const flags = flagList(t.stats).map((f) => `<span class="tag">${f}</span>`).join('');
+    const flags = flagList(t.stats).map((f) => `<span class="chip">${f}</span>`).join('');
     return `<dl class="stats">${rows}</dl><div class="tags">${flags}</div>`;
   }
 

@@ -1,5 +1,5 @@
 // Canvas 2D renderer for Gloamward Keep. Reads the simulation, never changes it.
-import { ENEMIES, EnemyId, HEIGHT, HEROES, PROJECTILE, TOWERS, WORLD } from '../data/balance';
+import { EnemyId, HEIGHT, HEROES, PROJECTILE, TOWERS, WORLD } from '../data/balance';
 import { boardHeight, boardWidth, hexNeighbours, pixelToTile, tileCenter } from '../sim/hex';
 import { FEATURE, generateMap, Terrain } from '../sim/mapgen';
 import { isHeroType } from '../sim/stats';

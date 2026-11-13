@@ -71,6 +71,12 @@ function orc(g: CanvasRenderingContext2D, ph: number, bob: number): void {
 }
 
 function stalker(g: CanvasRenderingContext2D, e: Enemy, ph: number): void {
+  const a0 = g.globalAlpha;
+  stalkerBody(g, e, ph);
+  g.globalAlpha = a0;
+}
+
+function stalkerBody(g: CanvasRenderingContext2D, e: Enemy, ph: number): void {
   const hidden = e.def.stealth && !e.revealed;
   const sh = Math.sin(ph * 0.7);
   const dark = '#2a2b3a';
@@ -123,14 +129,6 @@ function bat(g: CanvasRenderingContext2D, time: number, uid: number): void {
 function troll(g: CanvasRenderingContext2D, ph: number, bob: number, smash: boolean, time: number): void {
   legPair(g, ph, 0, 8, 6, '#58705a', 1.6);
   g.translate(0, -bob * 0.7);
-  // Club.
-  g.save();
-  g.translate(11, -14);
-  g.rotate(smash ? -1.2 + Math.abs(Math.sin(time * 8)) * 2 : -0.5 + Math.sin(ph) * 0.1);
-  stick(g, 0, 4, 0, -16, '#6a4220', 3.2);
-  ell(g, 0, -19, 5, 7, '#7a5230', 1.3);
-  for (const [dx, dy] of [[-3, -22], [3, -18], [-2, -15]]) poly(g, [dx, dy, dx + 2.6, dy + 1.2, dx, dy + 2.6], '#c8c0a8', 0.6);
-  g.restore();
   // Hunched hulking body.
   poly(g, [-13, -6, -16, -22, -9, -33, 6, -33, 14, -22, 12, -6], '#6a8a68', 1.4);
   poly(g, [-9, -7, -11, -20, -5, -28, 0, -26, -2, -8], '#7ea07a', 0);
@@ -147,6 +145,14 @@ function troll(g: CanvasRenderingContext2D, ph: number, bob: number, smash: bool
   poly(g, [9, -33, 10.4, -29.8, 11.2, -33.4], '#f0ead8', 0.7);
   circ(g, 5.4, -38.6, 1.1, '#f8d030', 0.4);
   poly(g, [-2, -41, -6, -44, -3, -39], '#6a8a68', 0.8);
+  // Club.
+  g.save();
+  g.translate(11, -14);
+  g.rotate(smash ? -1.2 + Math.abs(Math.sin(time * 8)) * 2 : 0.5 + Math.sin(ph) * 0.1);
+  stick(g, 0, 4, 0, -16, '#6a4220', 3.2);
+  ell(g, 0, -19, 5, 7, '#7a5230', 1.3);
+  for (const [dx, dy] of [[-3, -22], [3, -18], [-2, -15]]) poly(g, [dx, dy, dx + 2.6, dy + 1.2, dx, dy + 2.6], '#c8c0a8', 0.6);
+  g.restore();
   // Moss and warts.
   g.fillStyle = C('#4a6a3a');
   g.fillRect(-6, -30, 3, 2);
@@ -158,8 +164,8 @@ function wagon(g: CanvasRenderingContext2D, wheel: number, time: number): void {
   g.translate(0, bob);
   // Cargo of goblins peeking out.
   for (const [x, c] of [[-6, '#6aae4a'], [1, '#7aba54'], [7, '#6aae4a']] as [number, string][]) {
-    circ(g, x, -22 + Math.sin(time * 6 + x) * 1.2, 4, c, 1);
-    circ(g, x + 1.4, -22.6, 0.9, '#f8e04a', 0);
+    circ(g, x, -25 + Math.sin(time * 6 + x) * 1.2, 4, c, 1);
+    circ(g, x + 1.4, -25.6, 0.9, '#f8e04a', 0);
   }
   poly(g, [-15, -22, -13, -26, 15, -26, 14, -21], '#6a4220', 0.7);
   // Cart body.
@@ -225,14 +231,6 @@ function ogreking(g: CanvasRenderingContext2D, ph: number, time: number, smash: 
   rect(g, -18, -3, 15, 4, '#3a2a1a', 1);
   rect(g, 3, -3, 15, 4, '#3a2a1a', 1);
   g.translate(0, -bob);
-  // Giant spiked club.
-  g.save();
-  g.translate(20, -26);
-  g.rotate(smash ? -1.4 + Math.abs(Math.sin(time * 6)) * 2.4 : -0.35 + Math.sin(ph * 0.6) * 0.08);
-  stick(g, 0, 8, 0, -30, '#6a4220', 5);
-  ell(g, 0, -34, 9, 13, '#7a5230', 1.6);
-  for (const [dx, dy] of [[-8, -40], [8, -36], [-7, -29], [7, -29], [0, -47], [0, -23]]) poly(g, [dx - 2, dy, dx + (dx < 0 ? -4 : 4), dy - 2.4, dx + 2, dy + 2], '#c8c0a8', 0.9);
-  g.restore();
   // Big belly body.
   poly(g, [-22, -12, -27, -34, -17, -52, 17, -52, 27, -34, 23, -12], '#b88a60', 1.8);
   poly(g, [-18, -14, -23, -34, -15, -48, -4, -48, -7, -14], '#c8a078', 0);
@@ -256,6 +254,14 @@ function ogreking(g: CanvasRenderingContext2D, ph: number, time: number, smash: 
   poly(g, [-6, -63, -5.4, -72, -1.6, -66, 3, -75, 7, -66, 11, -74, 12, -63], '#f0c030', 1.4);
   circ(g, 3, -68, 1.5, '#d03a30', 0.6);
   circ(g, -4, -66, 1.1, '#3a8ac4', 0.5);
+  // Giant spiked club.
+  g.save();
+  g.translate(20, -26);
+  g.rotate(smash ? -1.4 + Math.abs(Math.sin(time * 6)) * 2.4 : 0.4 + Math.sin(ph * 0.6) * 0.08);
+  stick(g, 0, 8, 0, -30, '#6a4220', 5);
+  ell(g, 0, -34, 9, 13, '#7a5230', 1.6);
+  for (const [dx, dy] of [[-8, -40], [8, -36], [-7, -29], [7, -29], [0, -47], [0, -23]]) poly(g, [dx - 2, dy, dx + (dx < 0 ? -4 : 4), dy - 2.4, dx + 2, dy + 2], '#c8c0a8', 0.9);
+  g.restore();
   // Ear.
   circ(g, -6, -57, 2.8, '#b88a60', 1);
 }

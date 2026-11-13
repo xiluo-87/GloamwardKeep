@@ -82,7 +82,7 @@ dl.stats { display: grid; grid-template-columns: 1fr auto; gap: 2px 14px; margin
 dl.stats dt { color: var(--muted); }
 dl.stats dd { margin: 0; text-align: right; font-weight: 700; }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; }
-.tag { font-size: 11px; background: var(--parch2); border: 1px solid var(--parch-line); border-radius: 10px; padding: 1px 8px; }
+.chip { font-size: 11px; background: var(--parch2); border: 1px solid var(--parch-line); border-radius: 10px; padding: 1px 8px; }
 .hpbar, .xp { position: relative; height: 16px; background: rgba(0,0,0,0.18); border-radius: 8px; overflow: hidden; }
 .hpbar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(#6fb05a, #3f6b2f); }
 .hpbar span { position: relative; display: block; text-align: center; font-size: 11px; line-height: 16px; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,0.6); }
@@ -184,3 +184,6 @@ ul.unlocks li.got { border-color: var(--green); color: var(--ink); }
 @media (max-width: 819px) { .cards.grid { grid-template-columns: 1fr; } }
 #panel button { position: relative; }
 @media (hover: none) { kbd { display: none; } }
+#panel > * { flex: none; }
+.xp.wideBar { flex: none; margin: 4px 0; }
+.panel.title { max-width: 760px; }
