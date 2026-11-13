@@ -188,9 +188,9 @@ export class Screens {
         </section>
         <section>
           <h3>Heroes <span class="sub">${p.heroes.length}/${hs}${hs < 2 ? ` · second slot at level ${RUN.secondHeroSlotLevel}` : ''}</span></h3>
-          <div class="cards">${heroes}</div>
+          <div class="cards grid">${heroes}</div>
           <h3>Perks <span class="sub">${p.perks.length}/${ps}${ps === 0 ? ` · first slot at level ${PROFILE.perkSlotLevels[0]}` : ''}</span></h3>
-          <div class="cards">${perks}</div>
+          <div class="cards grid">${perks}</div>
         </section>
       </div>
       <div class="row"><button data-act="title">Back</button><button class="primary" data-act="go">Start</button></div>

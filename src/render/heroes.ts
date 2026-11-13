@@ -70,9 +70,6 @@ function cleric(g: CanvasRenderingContext2D, time: number, rc: number): void {
   rect(g, -9, 0, 18, 1.6, GOLD, 0.6);
   circ(g, 0, -22, 4, SKIN, 1.1);
   g.beginPath();
-  g.arc(0, -22.6, 4.8, Math.PI * 0.95, Math.PI * 0.05 + Math.PI * 2 - Math.PI * 2 + TAU, false);
-  g.closePath();
-  g.beginPath();
   g.arc(0, -23, 5, Math.PI, 0);
   g.lineTo(4.4, -19);
   g.lineTo(-4.4, -19);

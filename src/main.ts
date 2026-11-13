@@ -234,7 +234,7 @@ function frame(now: number): void {
 // -- boot -------------------------------------------------------------------------------------
 
 if (debugMode) {
-  (window as unknown as { __gk: unknown }).__gk = { session, profile, get run() { return run; }, startRun, screens };
+  (window as unknown as { __gk: unknown }).__gk = { session, profile, renderer, get run() { return run; }, startRun, screens };
 }
 layout();
 const wantMap = params.get('map');

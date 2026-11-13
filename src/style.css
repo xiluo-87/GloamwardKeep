@@ -178,3 +178,7 @@ ul.unlocks li.got { border-color: var(--green); color: var(--ink); }
   .fork { grid-template-columns: 1fr; }
   .tree .node { padding: 4px; font-size: 10.5px; }
 }
+
+.cards.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.panel.play > .row:last-child { position: sticky; bottom: -10px; padding: 8px 0 2px; background: linear-gradient(transparent, #ead9ad 30%); z-index: 2; }
+@media (max-width: 819px) { .cards.grid { grid-template-columns: 1fr; } }
