@@ -1,87 +1,112 @@
-import { flameRadius } from './lantern';
-import { Choice, Input, passiveRank, RunState } from './state';
+// A simple player for balance tests: builds near the path, upgrades, and calls waves.
+import { HEROES, HeroId, TowerId, WORLD } from '../data/balance';
+import { build, callWave, canBuild, canCallWave, learnSkill, upgrade, useAbility } from './actions';
+import { buildCost, skillState, upgradeOptions } from './stats';
+import { RunState, tileAt } from './state';
 
-/**
- * A stand-in player for balance checks and headless runs. It circles the swarm the way people
- * do in this kind of game, cuts in for pickups when it's safe, and backs off when hurt.
- */
-export function botInput(s: RunState, out: Input): Input {
-  const p = s.player;
-  let cx = 0;
-  let cy = 0;
-  let n = 0;
-  let rx = 0;
-  let ry = 0;
-  for (let i = 0; i < s.enemies.count; i++) {
-    const e = s.enemies.items[i];
-    const dx = p.x - e.x;
-    const dy = p.y - e.y;
-    const d2 = dx * dx + dy * dy;
-    if (d2 < 320 * 320) { cx += e.x; cy += e.y; n++; }
-    if (d2 < 70 * 70 && d2 > 1) {
-      rx += dx / d2;
-      ry += dy / d2;
-    }
-  }
-  let mx = 0;
-  let my = 0;
-  if (n > 0) {
-    // Orbit the swarm's centre at a distance that keeps it inside whip reach but off our back.
-    const ox = p.x - cx / n;
-    const oy = p.y - cy / n;
-    const d = Math.hypot(ox, oy) || 1;
-    const hurt = p.hp < p.maxHp * 0.5;
-    const radial = ((hurt ? 240 : 130) - d) / 130;
-    const dir = Math.sin(s.t * 0.09) > 0 ? 1 : -1;
-    mx = (ox / d) * radial + (-oy / d) * dir;
-    my = (oy / d) * radial + (ox / d) * dir;
-  }
-  // Fetch the most useful pickup in reach; oil matters more as the flask empties.
-  const wantOil = p.oil < p.maxOil * 0.6;
-  let best = Infinity;
-  let bx = 0;
-  let by = 0;
-  for (let i = 0; i < s.pickups.count; i++) {
-    const k = s.pickups.items[i];
-    const d = (k.x - p.x) ** 2 + (k.y - p.y) ** 2;
-    const score = k.kind === 'ember' ? d * (wantOil ? 3 : 1) : d * 0.3;
-    if (score < best) { best = score; bx = k.x - p.x; by = k.y - p.y; }
-  }
-  for (let i = 0; i < s.crates.count; i++) {
-    const c = s.crates.items[i];
-    const d = (c.x - p.x) ** 2 + (c.y - p.y) ** 2;
-    if (d * 0.1 < best) { best = d * 0.1; bx = c.x - p.x; by = c.y - p.y; }
-  }
-  const bl = Math.hypot(bx, by);
-  if (bl > 0) {
-    const pull = n === 0 ? 2 : 0.85;
-    mx += (bx / bl) * pull;
-    my += (by / bl) * pull;
-  }
-  out.mx = mx + rx * 90;
-  out.my = my + ry * 90;
-  out.dim = false;
-  if (s.bossEnemy && s.boss) {
-    // Circles the boss within weapon reach; in the last phase it knows the secret.
-    const e = s.bossEnemy;
-    const d = Math.hypot(p.x - e.x, p.y - e.y);
-    const a = Math.atan2(p.y - e.y, p.x - e.x) + (d > 170 ? 2.4 : 1.2);
-    out.mx = Math.cos(a) + rx * 60;
-    out.my = Math.sin(a) + ry * 60;
-    out.dim = s.boss.phase === 3;
-  }
-  return out;
+export interface BotPlan {
+  /** Towers to build, in rotation. */
+  mix: TowerId[];
+  /** Fork choice per tower type. */
+  forks: Partial<Record<TowerId, 'a' | 'b'>>;
+  /** Fraction of spare gold spent on upgrades rather than new towers. */
+  upgradeBias: number;
+  /** Skill branch the hero follows first. */
+  heroBranch: number;
 }
 
-export function botChoose(s: RunState, choices: Choice[]): number {
-  let best = 0;
-  let bestScore = -Infinity;
-  const r = flameRadius('burning', passiveRank(s, 'wick'), s.lightBonus, s.lightCap);
-  choices.forEach((c, i) => {
-    let score = c.kind === 'combo' ? 50 : c.kind === 'weapon' ? 10 + c.rank : 8;
-    if (c.id === 'wick') score = r < 280 && s.player.oil > 50 ? 12 : 3;
-    if (c.id === 'heart' || c.id === 'reservoir') score = 11;
-    if (score > bestScore) { bestScore = score; best = i; }
-  });
-  return best;
+export const DEFAULT_PLAN: BotPlan = {
+  mix: ['wick', 'bell', 'kiln', 'wick', 'prism', 'lamp', 'moth', 'kiln', 'wick', 'prism'],
+  forks: { wick: 'b', kiln: 'a', bell: 'a', prism: 'a', moth: 'a', lamp: 'a' },
+  upgradeBias: 0.5,
+  heroBranch: 0,
+};
+
+/** Free tiles ranked by how much path lies within 2.5 tiles of them. */
+export function rankSpots(s: RunState): [number, number][] {
+  const spots: { x: number; y: number; v: number }[] = [];
+  for (let y = 0; y < WORLD.rows; y++) {
+    for (let x = 0; x < WORLD.cols; x++) {
+      if (tileAt(s, x, y) !== 0) continue;
+      let v = 0;
+      for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) {
+        if (dx * dx + dy * dy > 6.25) continue;
+        if (tileAt(s, x + dx, y + dy) === 1) v++;
+      }
+      if (v > 0) spots.push({ x, y, v });
+    }
+  }
+  spots.sort((a, b) => b.v - a.v || a.y - b.y || a.x - b.x);
+  return spots.map((p) => [p.x, p.y]);
+}
+
+export class Bot {
+  private spots: [number, number][];
+  private next = 0;
+  private think = 0;
+  constructor(private s: RunState, private plan: BotPlan = DEFAULT_PLAN) {
+    this.spots = rankSpots(s);
+  }
+
+  update(dt: number): void {
+    const s = this.s;
+    this.think -= dt;
+    if (this.think > 0) return;
+    this.think = 0.5;
+    // Heroes first, on the best spots.
+    for (const h of s.cfg.heroes) {
+      if (s.heroesPlaced.includes(h)) continue;
+      const spot = this.freeSpot(h);
+      if (spot) build(s, h, spot[0], spot[1]);
+    }
+    for (const t of s.towers) {
+      if (!t.hero) continue;
+      if (t.abilityCd <= 0 && s.enemies.count > 6) useAbility(s, t.uid);
+      for (let b = 0; b < 3; b++) {
+        const branch = (this.plan.heroBranch + b) % 3;
+        for (let n = 0; n < 4; n++) if (skillState(s, t, branch, n) === 'available') learnSkill(s, t.uid, branch, n);
+      }
+    }
+    // Alternate between upgrading the cheapest option and building the next tower in the mix.
+    for (let guard = 0; guard < 8; guard++) {
+      const type = this.plan.mix[this.next % this.plan.mix.length];
+      const cost = buildCost(type, s.mods);
+      const up = this.cheapestUpgrade();
+      const wantUpgrade = up && (s.towers.length >= 4) && (up.cost <= cost * (1 + this.plan.upgradeBias) || this.spotsLeft() === 0);
+      if (wantUpgrade && up && s.gold >= up.cost) {
+        upgrade(s, up.uid, up.path);
+        continue;
+      }
+      if (!wantUpgrade && s.gold >= cost) {
+        const spot = this.freeSpot(type);
+        if (spot && build(s, type, spot[0], spot[1])) { this.next++; continue; }
+      }
+      break;
+    }
+    if (canCallWave(s) && (s.waiting || s.enemies.count === 0)) callWave(s);
+  }
+
+  private spotsLeft(): number {
+    return this.spots.filter(([x, y]) => tileAt(this.s, x, y) === 0).length;
+  }
+
+  private freeSpot(type: TowerId | HeroId): [number, number] | null {
+    for (const [x, y] of this.spots) {
+      const c = canBuild(this.s, type, x, y);
+      if (c === 'ok' || c === 'gold') return c === 'ok' ? [x, y] : null;
+    }
+    return null;
+  }
+
+  private cheapestUpgrade(): { uid: number; cost: number; path?: 'a' | 'b' } | null {
+    let best: { uid: number; cost: number; path?: 'a' | 'b' } | null = null;
+    for (const t of this.s.towers) {
+      if (t.type in HEROES) continue;
+      const opts = upgradeOptions(t, this.s.mods);
+      if (opts.length === 0) continue;
+      const pick = opts.length === 2 ? opts.find((o) => o.path === (this.plan.forks[t.type as TowerId] ?? 'a')) ?? opts[0] : opts[0];
+      if (!best || pick.cost < best.cost) best = { uid: t.uid, cost: pick.cost, path: pick.path === 'tier' ? undefined : pick.path };
+    }
+    return best;
+  }
 }
