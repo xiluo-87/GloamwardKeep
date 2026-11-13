@@ -7,7 +7,7 @@ export const STEP = 1 / 60;
 // World and run
 // ---------------------------------------------------------------------------------------------
 
-export const WORLD = { tile: 48, cols: 20, rows: 12 };
+export const WORLD = { tile: 48, cols: 24, rows: 14 };
 
 export const RUN = {
   startGold: 300,
@@ -56,7 +56,7 @@ export const BEAM = { dpsPerDamage: 2.0 };
 // ---------------------------------------------------------------------------------------------
 
 export const STAT_KEYS = [
-  'damage', 'rate', 'range', 'light', 'splash', 'burnDps', 'burnTime', 'poolDps', 'poolTime',
+  'damage', 'rate', 'range', 'splash', 'burnDps', 'burnTime', 'poolDps', 'poolTime',
   'slow', 'slowTime', 'stunChance', 'stun', 'chains', 'chainRange', 'chainFalloff', 'shots',
   'crit', 'critMul', 'shred', 'beam', 'ramp', 'rampMax', 'cluster', 'moths', 'mothSpeed',
   'cleave', 'reveal', 'buffDamage', 'buffRate', 'income', 'bounty', 'hitsFlying', 'dimImmune',
@@ -84,9 +84,9 @@ export interface TowerDef {
 export const TOWERS: Record<TowerId, TowerDef> = {
   wick: {
     id: 'wick', kind: 'bolt', dmgType: 'pierce', cost: 70,
-    base: { damage: 13, rate: 1.25, range: 150, light: 150, shots: 1, critMul: 2, hitsFlying: 1 },
+    base: { damage: 13, rate: 1.25, range: 150, shots: 1, critMul: 2, hitsFlying: 1 },
     tiers: [
-      { cost: 75, add: { damage: 7, rate: 0.25, range: 10, light: 10 } },
+      { cost: 75, add: { damage: 7, rate: 0.25, range: 10 } },
       { cost: 130, add: { damage: 10, rate: 0.3 } },
     ],
     forks: {
@@ -103,10 +103,10 @@ export const TOWERS: Record<TowerId, TowerDef> = {
   },
   kiln: {
     id: 'kiln', kind: 'lob', dmgType: 'fire', cost: 110,
-    base: { damage: 22, rate: 0.5, range: 170, light: 110, splash: 46 },
+    base: { damage: 22, rate: 0.5, range: 170, splash: 46 },
     tiers: [
       { cost: 110, add: { damage: 14, rate: 0.05, splash: 6 } },
-      { cost: 170, add: { damage: 18, rate: 0.1, range: 15, light: 10 } },
+      { cost: 170, add: { damage: 18, rate: 0.1, range: 15 } },
     ],
     forks: {
       a: [
@@ -121,10 +121,10 @@ export const TOWERS: Record<TowerId, TowerDef> = {
   },
   bell: {
     id: 'bell', kind: 'pulse', dmgType: 'sound', cost: 90,
-    base: { damage: 10, rate: 0.45, range: 105, light: 120, slow: 0.35, slowTime: 1.6 },
+    base: { damage: 10, rate: 0.45, range: 105, slow: 0.35, slowTime: 1.6 },
     tiers: [
       { cost: 100, add: { damage: 8, slow: 0.1 } },
-      { cost: 150, add: { damage: 6, range: 15, light: 10, rate: 0.1 } },
+      { cost: 150, add: { damage: 6, range: 15, rate: 0.1 } },
     ],
     forks: {
       a: [
@@ -139,7 +139,7 @@ export const TOWERS: Record<TowerId, TowerDef> = {
   },
   prism: {
     id: 'prism', kind: 'chain', dmgType: 'pierce', cost: 120,
-    base: { damage: 16, rate: 0.8, range: 140, light: 140, chains: 2, chainRange: 95, chainFalloff: 0.8, shots: 1, critMul: 2, hitsFlying: 1 },
+    base: { damage: 16, rate: 0.8, range: 140, chains: 2, chainRange: 95, chainFalloff: 0.8, shots: 1, critMul: 2, hitsFlying: 1 },
     tiers: [
       { cost: 140, add: { damage: 8, chains: 1 } },
       { cost: 210, add: { rate: 0.2, damage: 8 } },
@@ -158,7 +158,7 @@ export const TOWERS: Record<TowerId, TowerDef> = {
   },
   moth: {
     id: 'moth', kind: 'summon', dmgType: 'pierce', cost: 100,
-    base: { damage: 9, rate: 1.3, range: 160, light: 100, moths: 2, mothSpeed: 220, critMul: 2, hitsFlying: 1 },
+    base: { damage: 9, rate: 1.3, range: 160, moths: 2, mothSpeed: 220, critMul: 2, hitsFlying: 1 },
     tiers: [
       { cost: 100, add: { moths: 1 } },
       { cost: 170, add: { damage: 6, rate: 0.2, mothSpeed: 40 } },
@@ -176,15 +176,15 @@ export const TOWERS: Record<TowerId, TowerDef> = {
   },
   lamp: {
     id: 'lamp', kind: 'aura', dmgType: 'fire', cost: 80,
-    base: { light: 210, range: 0, buffDamage: 0.1 },
+    base: { range: 150, buffDamage: 0.1 },
     tiers: [
-      { cost: 100, add: { light: 40, buffDamage: 0.05 } },
-      { cost: 150, add: { reveal: 1, light: 20 } },
+      { cost: 100, add: { range: 25, buffDamage: 0.05 } },
+      { cost: 150, add: { reveal: 1, range: 15 } },
     ],
     forks: {
       a: [
-        { cost: 260, add: { light: 80, buffDamage: 0.1, buffRate: 0.1 } },
-        { cost: 400, add: { buffDamage: 0.1, buffRate: 0.05, light: 30, dimImmune: 1 } },
+        { cost: 260, add: { range: 50, buffDamage: 0.1, buffRate: 0.1 } },
+        { cost: 400, add: { buffDamage: 0.1, buffRate: 0.05, range: 20, dimImmune: 1 } },
       ],
       b: [
         { cost: 240, add: { income: 40 } },
@@ -227,51 +227,51 @@ export const heroXpNeed = (level: number): number => Math.floor(12 + 12 * level 
 export const HEROES: Record<HeroId, HeroDef> = {
   lamplighter: {
     id: 'lamplighter', kind: 'lash', dmgType: 'fire', cost: 120, ability: 'flare', unlock: 1,
-    base: { damage: 24, rate: 0.9, range: 115, light: 200, cleave: 3, reveal: 1, hitsFlying: 1, abilityDamage: 120, abilityRadius: 160, abilityCd: 40, abilityTime: 1.5 },
-    perLevel: { damage: 4, light: 5 },
+    base: { damage: 24, rate: 0.9, range: 115, cleave: 3, reveal: 1, hitsFlying: 1, abilityDamage: 120, abilityRadius: 160, abilityCd: 40, abilityTime: 1.5 },
+    perLevel: { damage: 4, range: 1 },
     branches: [
       [{ add: { damage: 10 } }, { add: { burnDps: 14, burnTime: 3 } }, { add: { cleave: 3, damage: 14 } }, { add: { abilityDamage: 260, poolDps: 40, poolTime: 4 } }],
-      [{ add: { light: 40, range: 15 } }, { add: { buffDamage: 0.12 } }, { add: { abilityRadius: 80, abilityCd: -10 } }, { add: { light: 120, buffDamage: 0.15, dimImmune: 1 } }],
+      [{ add: { range: 25 } }, { add: { buffDamage: 0.12 } }, { add: { abilityRadius: 80, abilityCd: -10 } }, { add: { range: 40, buffDamage: 0.15, dimImmune: 1 } }],
       [{ add: { bounty: 0.1 } }, { add: { income: 45 } }, { add: { bounty: 0.12 } }, { add: { income: 110, abilityCd: -12 } }],
     ],
   },
   sexton: {
     id: 'sexton', kind: 'pulse', dmgType: 'sound', cost: 130, ability: 'toll', unlock: 3,
-    base: { damage: 18, rate: 0.5, range: 130, light: 150, slow: 0.4, slowTime: 2, hitsFlying: 1, abilityDamage: 60, abilityRadius: 220, abilityCd: 45, abilityTime: 2.5 },
+    base: { damage: 18, rate: 0.5, range: 130, slow: 0.4, slowTime: 2, hitsFlying: 1, abilityDamage: 60, abilityRadius: 220, abilityCd: 45, abilityTime: 2.5 },
     perLevel: { damage: 3, range: 3 },
     branches: [
       [{ add: { slow: 0.1 } }, { add: { stunChance: 0.15, stun: 0.6 } }, { add: { slowTime: 1.5, stunChance: 0.1 } }, { add: { abilityTime: 2, abilityRadius: 120, abilityCd: -10 } }],
       [{ add: { damage: 10 } }, { add: { shred: 0.06 } }, { add: { damage: 20, rate: 0.15 } }, { add: { damage: 45, shred: 0.08, abilityDamage: 300 } }],
-      [{ add: { lifeRegen: 1 } }, { add: { buffRate: 0.1 } }, { add: { lifeRegen: 1, light: 40 } }, { add: { buffRate: 0.15, buffDamage: 0.1, lifeRegen: 2 } }],
+      [{ add: { lifeRegen: 1 } }, { add: { buffRate: 0.1 } }, { add: { lifeRegen: 1, range: 20 } }, { add: { buffRate: 0.15, buffDamage: 0.1, lifeRegen: 2 } }],
     ],
   },
   glazier: {
     id: 'glazier', kind: 'chain', dmgType: 'pierce', cost: 140, ability: 'shatter', unlock: 6,
-    base: { damage: 30, rate: 0.9, range: 160, light: 160, chains: 3, chainRange: 110, chainFalloff: 0.85, shots: 1, critMul: 2, hitsFlying: 1, abilityDamage: 320, abilityTargets: 8, abilityCd: 35 },
+    base: { damage: 30, rate: 0.9, range: 160, chains: 3, chainRange: 110, chainFalloff: 0.85, shots: 1, critMul: 2, hitsFlying: 1, abilityDamage: 320, abilityTargets: 8, abilityCd: 35 },
     perLevel: { damage: 5 },
     branches: [
       [{ add: { chains: 1 } }, { add: { chainFalloff: 0.08, chainRange: 30 } }, { add: { chains: 2 } }, { add: { chains: 4, chainFalloff: 0.05, abilityTargets: 8 } }],
       [{ add: { crit: 0.1 } }, { add: { critMul: 0.75 } }, { add: { crit: 0.1, damage: 15 } }, { add: { crit: 0.15, critMul: 1.5, abilityDamage: 500 } }],
-      [{ add: { range: 25, light: 25 } }, { add: { rate: 0.25 } }, { add: { shots: 1 } }, { add: { shots: 1, rate: 0.3, abilityCd: -12 } }],
+      [{ add: { range: 30 } }, { add: { rate: 0.25 } }, { add: { shots: 1 } }, { add: { shots: 1, rate: 0.3, abilityCd: -12 } }],
     ],
   },
   chandler: {
     id: 'chandler', kind: 'bolt', dmgType: 'fire', cost: 130, ability: 'vigil', unlock: 10,
-    base: { damage: 15, rate: 2.2, range: 170, light: 170, shots: 1, critMul: 2, buffRate: 0.08, hitsFlying: 1, abilityTime: 8, abilityPower: 0.5, abilityCd: 50 },
+    base: { damage: 15, rate: 2.2, range: 170, shots: 1, critMul: 2, buffRate: 0.08, hitsFlying: 1, abilityTime: 8, abilityPower: 0.5, abilityCd: 50 },
     perLevel: { damage: 2, rate: 0.05 },
     branches: [
       [{ add: { rate: 0.4 } }, { add: { shots: 1 } }, { add: { damage: 8, rate: 0.4 } }, { add: { shots: 2, burnDps: 12, burnTime: 2 } }],
-      [{ add: { buffRate: 0.06 } }, { add: { light: 50 } }, { add: { buffDamage: 0.1 } }, { add: { abilityPower: 0.5, abilityTime: 4, buffRate: 0.1 } }],
+      [{ add: { buffRate: 0.06 } }, { add: { range: 30 } }, { add: { buffDamage: 0.1 } }, { add: { abilityPower: 0.5, abilityTime: 4, buffRate: 0.1 } }],
       [{ add: { bounty: 0.08 } }, { add: { income: 40 } }, { add: { bounty: 0.1, income: 30 } }, { add: { income: 120, abilityCd: -15 } }],
     ],
   },
   mothchild: {
     id: 'mothchild', kind: 'summon', dmgType: 'pierce', cost: 140, ability: 'swarm', unlock: 15,
-    base: { damage: 12, rate: 1.5, range: 200, light: 140, moths: 4, mothSpeed: 280, critMul: 2, hitsFlying: 1, abilityTargets: 16, abilityTime: 10, abilityCd: 45 },
+    base: { damage: 12, rate: 1.5, range: 200, moths: 4, mothSpeed: 280, critMul: 2, hitsFlying: 1, abilityTargets: 16, abilityTime: 10, abilityCd: 45 },
     perLevel: { damage: 2, moths: 0.25 },
     branches: [
       [{ add: { moths: 1 } }, { add: { mothSpeed: 60 } }, { add: { moths: 2 } }, { add: { moths: 3, abilityTargets: 16 } }],
-      [{ add: { burnDps: 12, burnTime: 2.5 } }, { add: { burnDps: 10 } }, { add: { light: 40, range: 20 } }, { add: { burnDps: 30, burnTime: 1.5, abilityTime: 5 } }],
+      [{ add: { burnDps: 12, burnTime: 2.5 } }, { add: { burnDps: 10 } }, { add: { range: 30 } }, { add: { burnDps: 30, burnTime: 1.5, abilityTime: 5 } }],
       [{ add: { damage: 8 } }, { add: { shred: 0.05 } }, { add: { damage: 14, crit: 0.1 } }, { add: { damage: 30, stunChance: 0.12, stun: 0.6 } }],
     ],
   },
@@ -287,31 +287,34 @@ export type EnemyId = 'mite' | 'snuffer' | 'hollow' | 'hound' | 'bat' | 'brute' 
 
 export interface EnemyDef {
   id: EnemyId; hp: number; speed: number; armour: number; ward: number; gold: number; lives: number;
-  radius: number; xp: number; flying: boolean; stealth: boolean; boss: boolean;
+  radius: number; xp: number; flying: boolean;
+  /** Damage per second dealt to a tower blocking the road. */
+  attack: number; stealth: boolean; boss: boolean;
 }
 
 export const ENEMIES: Record<EnemyId, EnemyDef> = {
-  mite: { id: 'mite', hp: 34, speed: 52, armour: 0, ward: 0, gold: 5, lives: 1, radius: 9, xp: 1, flying: false, stealth: false, boss: false },
-  snuffer: { id: 'snuffer', hp: 55, speed: 84, armour: 0, ward: 0.2, gold: 7, lives: 1, radius: 9, xp: 2, flying: false, stealth: false, boss: false },
-  hollow: { id: 'hollow', hp: 190, speed: 36, armour: 0.35, ward: 0, gold: 15, lives: 2, radius: 14, xp: 4, flying: false, stealth: false, boss: false },
-  hound: { id: 'hound', hp: 95, speed: 108, armour: 0, ward: 0, gold: 11, lives: 1, radius: 11, xp: 3, flying: false, stealth: true, boss: false },
-  bat: { id: 'bat', hp: 62, speed: 74, armour: 0, ward: 0, gold: 7, lives: 1, radius: 10, xp: 2, flying: true, stealth: false, boss: false },
-  brute: { id: 'brute', hp: 540, speed: 26, armour: 0.2, ward: 0.45, gold: 32, lives: 3, radius: 17, xp: 8, flying: false, stealth: false, boss: false },
-  brood: { id: 'brood', hp: 270, speed: 34, armour: 0.1, ward: 0, gold: 18, lives: 2, radius: 16, xp: 6, flying: false, stealth: false, boss: false },
-  weaver: { id: 'weaver', hp: 140, speed: 44, armour: 0, ward: 0.3, gold: 17, lives: 1, radius: 12, xp: 4, flying: false, stealth: false, boss: false },
-  tallow: { id: 'tallow', hp: 6500, speed: 20, armour: 0.3, ward: 0.3, gold: 300, lives: 15, radius: 30, xp: 120, flying: false, stealth: false, boss: true },
-  longnight: { id: 'longnight', hp: 17000, speed: 18, armour: 0.25, ward: 0.25, gold: 0, lives: 20, radius: 40, xp: 300, flying: false, stealth: false, boss: true },
+  mite: { id: 'mite', hp: 34, speed: 52, armour: 0, ward: 0, gold: 5, lives: 1, radius: 9, xp: 1, attack: 10, flying: false, stealth: false, boss: false },
+  snuffer: { id: 'snuffer', hp: 55, speed: 84, armour: 0, ward: 0.2, gold: 7, lives: 1, radius: 9, xp: 2, attack: 12, flying: false, stealth: false, boss: false },
+  hollow: { id: 'hollow', hp: 190, speed: 36, armour: 0.35, ward: 0, gold: 15, lives: 2, radius: 14, xp: 4, attack: 30, flying: false, stealth: false, boss: false },
+  hound: { id: 'hound', hp: 95, speed: 108, armour: 0, ward: 0, gold: 11, lives: 1, radius: 11, xp: 3, attack: 18, flying: false, stealth: true, boss: false },
+  bat: { id: 'bat', hp: 62, speed: 74, armour: 0, ward: 0, gold: 7, lives: 1, radius: 10, xp: 2, attack: 8, flying: true, stealth: false, boss: false },
+  brute: { id: 'brute', hp: 540, speed: 26, armour: 0.2, ward: 0.45, gold: 32, lives: 3, radius: 17, xp: 8, attack: 70, flying: false, stealth: false, boss: false },
+  brood: { id: 'brood', hp: 270, speed: 34, armour: 0.1, ward: 0, gold: 18, lives: 2, radius: 16, xp: 6, attack: 30, flying: false, stealth: false, boss: false },
+  weaver: { id: 'weaver', hp: 140, speed: 44, armour: 0, ward: 0.3, gold: 17, lives: 1, radius: 12, xp: 4, attack: 14, flying: false, stealth: false, boss: false },
+  tallow: { id: 'tallow', hp: 6500, speed: 20, armour: 0.3, ward: 0.3, gold: 300, lives: 15, radius: 30, xp: 120, attack: 250, flying: false, stealth: false, boss: true },
+  longnight: { id: 'longnight', hp: 17000, speed: 18, armour: 0.25, ward: 0.25, gold: 0, lives: 20, radius: 40, xp: 300, attack: 400, flying: false, stealth: false, boss: true },
 };
 
 export const ENEMY_IDS = Object.keys(ENEMIES) as EnemyId[];
 
 export const SPECIAL = {
-  snuffer: { dimRadius: 64, dimAmount: 0.5, dimTime: 2.5 },
+  /** Snuffers jinx towers they pass: attack speed × (1 − dimAmount) for dimTime seconds. */
+  snuffer: { dimRadius: 64, dimAmount: 0.4, dimTime: 2.5 },
   brood: { count: 5, spawn: 'mite' as EnemyId, spread: 18 },
   weaver: { every: 4, radius: 95, shield: 45, shieldCap: 0.6 },
   tallow: { shedEvery: 0.1, shedCount: 6, shed: 'mite' as EnemyId },
   longnight: { snuffEvery: 9, snuffRadius: 230, snuffTime: 3.5, spawnEvery: 6, spawnCount: 4, spawn: 'hound' as EnemyId },
-  /** Sideways spread of walkers on the path, in pixels either side of the centre line. */
+  /** Sideways spread of walkers, in pixels, so crowds don't stack (render only). */
   laneSpread: 9,
 };
 
@@ -355,15 +358,74 @@ export const WAVES: WaveGroup[][] = [
 ];
 
 // ---------------------------------------------------------------------------------------------
-// Maps (layouts in maps.ts). hpMul scales every enemy, xpMul scales profile XP earned.
+// Maps are generated from a seed (src/sim/mapgen.ts). Each preset tunes the generator.
+// Heights run 0..4. Enemies walk on height 0 only; towers can stand on any height.
 // ---------------------------------------------------------------------------------------------
 
-export type MapId = 'lane' | 'crossing' | 'row';
-export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: number }> = {
-  lane: { hpMul: 1, xpMul: 1, unlock: 1 },
-  crossing: { hpMul: 1.1, xpMul: 1.3, unlock: 4 },
-  row: { hpMul: 1.2, xpMul: 1.6, unlock: 8 },
+export const HEIGHT = {
+  max: 4,
+  /** Tower range multiplier per height level: range × (1 + rangePerLevel × height). */
+  rangePerLevel: 0.12,
 };
+
+export type MapId = 'meadow' | 'highlands' | 'canyon';
+
+export interface MapGenParams {
+  /** Target share of tiles at each height 0..4 before the valley is carved. Sums to 1. */
+  heightShare: [number, number, number, number, number];
+  /** Value-noise cell sizes in tiles, coarse to fine, and their weights. */
+  noiseScales: number[];
+  noiseWeights: number[];
+  /** Number of spawn gates on the left edge. */
+  spawns: number;
+  /** Bends in the carved valley between a spawn and the keep. */
+  bends: [number, number];
+  /** Half-width of the carved valley in tiles (0 = one tile wide). */
+  valleyRadius: number;
+  /** Extra level-0 clearings joined to the valley, for building mazes. */
+  clearings: [number, number];
+  clearingRadius: [number, number];
+  /** Largest height difference between neighbouring tiles. 1 gives gentle terraces, 2 allows cliffs. */
+  maxStep: number;
+  /** Level-0 pockets smaller than this, cut off from the valley, are raised to level 1. */
+  minPocket: number;
+  /** Reject maps whose shortest walk is shorter than this, in tiles. */
+  minPathTiles: number;
+}
+
+export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: number; gen: MapGenParams }> = {
+  meadow: {
+    hpMul: 1, xpMul: 1, unlock: 1,
+    gen: {
+      heightShare: [0.3, 0.26, 0.2, 0.14, 0.1], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
+      spawns: 1, bends: [2, 3], valleyRadius: 1, clearings: [2, 3], clearingRadius: [2, 3], minPocket: 4, minPathTiles: 26,
+    },
+  },
+  highlands: {
+    hpMul: 1.1, xpMul: 1.3, unlock: 4,
+    gen: {
+      heightShare: [0.12, 0.2, 0.24, 0.24, 0.2], noiseScales: [6, 3], noiseWeights: [0.7, 0.3], maxStep: 2,
+      spawns: 1, bends: [3, 4], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 30,
+    },
+  },
+  canyon: {
+    hpMul: 1.2, xpMul: 1.6, unlock: 8,
+    gen: {
+      heightShare: [0.12, 0.14, 0.2, 0.26, 0.28], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
+      spawns: 2, bends: [2, 3], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 24,
+    },
+  },
+};
+
+/** Pathing costs, in tiles. Towers on the road can be walked "through" by smashing them. */
+export const PATHING = {
+  diagonal: Math.SQRT2,
+  /** Extra cost of a tile holding a tower, so enemies only smash through when no open road exists. */
+  towerCost: 60,
+};
+
+/** Tower hit points, for when enemies have to smash a way through: base + perGold × gold invested. */
+export const TOWER_HP = { base: 120, perGold: 1.2, heroBase: 500, heroPerLevel: 60 };
 
 // ---------------------------------------------------------------------------------------------
 // Profile XP, levels and perks
