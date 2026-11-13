@@ -1,6 +1,6 @@
 // One fixed simulation step. No DOM or canvas here, so it runs in tests.
 import {
-  BEAM, MAP_BALANCE, PROFILE, PROJECTILE, RUN, SPECIAL, STEP, waveBonus, waveHpScale,
+  BEAM, ENEMY_IDS, MAP_BALANCE, PROFILE, PROJECTILE, RUN, SPECIAL, STEP, waveBonus, waveHpScale,
 } from '../data/balance';
 import { addPool, startWave } from './actions';
 import { hurt, onHitEffects, placeEnemy, spawnEnemy } from './combat';
@@ -139,7 +139,7 @@ function moveEnemies(s: RunState, dt: number): void {
       e.dead = true;
       s.lives -= e.def.lives;
       s.leaked += e.def.lives;
-      emit(s, 'leak', e.x, e.y, e.def.lives);
+      emit(s, 'leak', e.x, e.y, e.def.lives, ENEMY_IDS.indexOf(e.def.id));
       continue;
     }
     placeEnemy(s, e);

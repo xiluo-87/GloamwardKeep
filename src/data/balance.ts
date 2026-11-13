@@ -10,7 +10,7 @@ export const STEP = 1 / 60;
 export const WORLD = { tile: 48, cols: 20, rows: 12 };
 
 export const RUN = {
-  startGold: 260,
+  startGold: 300,
   lives: 20,
   waves: 30,
   /** Seconds between the end of one wave's spawning and the next wave starting on its own. */
@@ -28,10 +28,10 @@ export const RUN = {
 };
 
 /** Gold paid when a wave is cleared. */
-export const waveBonus = (wave: number): number => 20 + 4 * wave;
+export const waveBonus = (wave: number): number => 35 + 5 * wave;
 
 /** Enemy HP multiplier for a wave, bosses excluded. */
-export const waveHpScale = (wave: number): number => 1 + 0.11 * (wave - 1) + 0.0045 * (wave - 1) ** 2;
+export const waveHpScale = (wave: number): number => 1 + 0.08 * (wave - 1) + 0.005 * (wave - 1) ** 2;
 
 export const PROJECTILE = {
   boltSpeed: 560,
@@ -86,18 +86,18 @@ export const TOWERS: Record<TowerId, TowerDef> = {
     id: 'wick', kind: 'bolt', dmgType: 'pierce', cost: 70,
     base: { damage: 13, rate: 1.25, range: 150, light: 150, shots: 1, critMul: 2, hitsFlying: 1 },
     tiers: [
-      { cost: 90, add: { damage: 6, range: 10, light: 10 } },
-      { cost: 150, add: { damage: 8, rate: 0.25 } },
+      { cost: 75, add: { damage: 7, rate: 0.25, range: 10, light: 10 } },
+      { cost: 130, add: { damage: 10, rate: 0.3 } },
     ],
     forks: {
       // Long Wick: reaches past its own light, so it wants a lamppost nearby.
       a: [
-        { cost: 240, add: { range: 120, damage: 34, rate: -0.55, crit: 0.15, critMul: 0.5 } },
+        { cost: 240, add: { range: 120, damage: 40, rate: -0.55, crit: 0.15, critMul: 0.5 } },
         { cost: 400, add: { damage: 50, crit: 0.1, critMul: 0.5, shred: 0.08 } },
       ],
       b: [
-        { cost: 230, add: { shots: 1, rate: 0.3 } },
-        { cost: 380, add: { shots: 1, damage: 7, rate: 0.35 } },
+        { cost: 230, add: { shots: 1, rate: 0.1 } },
+        { cost: 380, add: { shots: 1, damage: 5, rate: 0.2 } },
       ],
     },
   },
@@ -105,8 +105,8 @@ export const TOWERS: Record<TowerId, TowerDef> = {
     id: 'kiln', kind: 'lob', dmgType: 'fire', cost: 110,
     base: { damage: 22, rate: 0.5, range: 170, light: 110, splash: 46 },
     tiers: [
-      { cost: 130, add: { damage: 12, splash: 6 } },
-      { cost: 200, add: { damage: 16, range: 15, light: 10 } },
+      { cost: 110, add: { damage: 14, rate: 0.05, splash: 6 } },
+      { cost: 170, add: { damage: 18, rate: 0.1, range: 15, light: 10 } },
     ],
     forks: {
       a: [
@@ -121,10 +121,10 @@ export const TOWERS: Record<TowerId, TowerDef> = {
   },
   bell: {
     id: 'bell', kind: 'pulse', dmgType: 'sound', cost: 90,
-    base: { damage: 8, rate: 0.45, range: 105, light: 120, slow: 0.35, slowTime: 1.6 },
+    base: { damage: 10, rate: 0.45, range: 105, light: 120, slow: 0.35, slowTime: 1.6 },
     tiers: [
-      { cost: 110, add: { damage: 6, slow: 0.1 } },
-      { cost: 170, add: { range: 15, light: 10, rate: 0.1 } },
+      { cost: 100, add: { damage: 8, slow: 0.1 } },
+      { cost: 150, add: { damage: 6, range: 15, light: 10, rate: 0.1 } },
     ],
     forks: {
       a: [
@@ -158,10 +158,10 @@ export const TOWERS: Record<TowerId, TowerDef> = {
   },
   moth: {
     id: 'moth', kind: 'summon', dmgType: 'pierce', cost: 100,
-    base: { damage: 7, rate: 1.2, range: 160, light: 100, moths: 2, mothSpeed: 220, critMul: 2, hitsFlying: 1 },
+    base: { damage: 9, rate: 1.3, range: 160, light: 100, moths: 2, mothSpeed: 220, critMul: 2, hitsFlying: 1 },
     tiers: [
-      { cost: 120, add: { moths: 1 } },
-      { cost: 190, add: { damage: 5, mothSpeed: 40 } },
+      { cost: 100, add: { moths: 1 } },
+      { cost: 170, add: { damage: 6, rate: 0.2, mothSpeed: 40 } },
     ],
     forks: {
       a: [
@@ -291,14 +291,14 @@ export interface EnemyDef {
 }
 
 export const ENEMIES: Record<EnemyId, EnemyDef> = {
-  mite: { id: 'mite', hp: 34, speed: 52, armour: 0, ward: 0, gold: 4, lives: 1, radius: 9, xp: 1, flying: false, stealth: false, boss: false },
-  snuffer: { id: 'snuffer', hp: 55, speed: 84, armour: 0, ward: 0.2, gold: 6, lives: 1, radius: 9, xp: 2, flying: false, stealth: false, boss: false },
-  hollow: { id: 'hollow', hp: 190, speed: 36, armour: 0.35, ward: 0, gold: 12, lives: 2, radius: 14, xp: 4, flying: false, stealth: false, boss: false },
-  hound: { id: 'hound', hp: 95, speed: 108, armour: 0, ward: 0, gold: 9, lives: 1, radius: 11, xp: 3, flying: false, stealth: true, boss: false },
-  bat: { id: 'bat', hp: 62, speed: 74, armour: 0, ward: 0, gold: 6, lives: 1, radius: 10, xp: 2, flying: true, stealth: false, boss: false },
-  brute: { id: 'brute', hp: 540, speed: 26, armour: 0.2, ward: 0.45, gold: 26, lives: 3, radius: 17, xp: 8, flying: false, stealth: false, boss: false },
-  brood: { id: 'brood', hp: 270, speed: 34, armour: 0.1, ward: 0, gold: 16, lives: 2, radius: 16, xp: 6, flying: false, stealth: false, boss: false },
-  weaver: { id: 'weaver', hp: 140, speed: 44, armour: 0, ward: 0.3, gold: 14, lives: 1, radius: 12, xp: 4, flying: false, stealth: false, boss: false },
+  mite: { id: 'mite', hp: 34, speed: 52, armour: 0, ward: 0, gold: 5, lives: 1, radius: 9, xp: 1, flying: false, stealth: false, boss: false },
+  snuffer: { id: 'snuffer', hp: 55, speed: 84, armour: 0, ward: 0.2, gold: 7, lives: 1, radius: 9, xp: 2, flying: false, stealth: false, boss: false },
+  hollow: { id: 'hollow', hp: 190, speed: 36, armour: 0.35, ward: 0, gold: 15, lives: 2, radius: 14, xp: 4, flying: false, stealth: false, boss: false },
+  hound: { id: 'hound', hp: 95, speed: 108, armour: 0, ward: 0, gold: 11, lives: 1, radius: 11, xp: 3, flying: false, stealth: true, boss: false },
+  bat: { id: 'bat', hp: 62, speed: 74, armour: 0, ward: 0, gold: 7, lives: 1, radius: 10, xp: 2, flying: true, stealth: false, boss: false },
+  brute: { id: 'brute', hp: 540, speed: 26, armour: 0.2, ward: 0.45, gold: 32, lives: 3, radius: 17, xp: 8, flying: false, stealth: false, boss: false },
+  brood: { id: 'brood', hp: 270, speed: 34, armour: 0.1, ward: 0, gold: 18, lives: 2, radius: 16, xp: 6, flying: false, stealth: false, boss: false },
+  weaver: { id: 'weaver', hp: 140, speed: 44, armour: 0, ward: 0.3, gold: 17, lives: 1, radius: 12, xp: 4, flying: false, stealth: false, boss: false },
   tallow: { id: 'tallow', hp: 6500, speed: 20, armour: 0.3, ward: 0.3, gold: 300, lives: 15, radius: 30, xp: 120, flying: false, stealth: false, boss: true },
   longnight: { id: 'longnight', hp: 17000, speed: 18, armour: 0.25, ward: 0.25, gold: 0, lives: 20, radius: 40, xp: 300, flying: false, stealth: false, boss: true },
 };

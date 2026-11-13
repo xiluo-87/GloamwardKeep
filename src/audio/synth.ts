@@ -1,16 +1,28 @@
-import { RunState } from '../sim/state';
+import type { GameEventType, RunState } from '../sim/state';
 
 /** Everything is synthesised with Web Audio; there are no sample files. */
+
+/** Hard cap on simultaneously scheduled voices. */
+const MAX_VOICES = 16;
+const DRONE_GAIN = 0.55;
+/** The drone sinks and darkens over this many waves. */
+const DRONE_WAVES = 30;
+/** Notes for the five ability indices (A2, D3, G3, C3, E3). */
+const ABILITY_NOTES = [110, 146.83, 196, 130.81, 164.81];
+
 export class Synth {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private droneGain: GainNode | null = null;
+  private droneFilter: BiquadFilterNode | null = null;
   private osc: OscillatorNode[] = [];
   private noise: AudioBuffer | null = null;
   private voices = 0;
-  private lastPluck = 0;
-  private lastHit = 0;
-  private beat = 0;
+  /** Seconds of frame time seen so far. Throttles use this, so they work before audio starts. */
+  private clock = 0;
+  private last: Record<string, number> = {};
+  /** Set by stopRun; cleared when a fresh run reaches wave 0. */
+  private stopped = false;
   muted = false;
 
   /** Browsers only allow audio after a user gesture. */
@@ -30,7 +42,8 @@ export class Synth {
     this.droneGain.gain.value = 0;
     const lp = ctx.createBiquadFilter();
     lp.type = 'lowpass';
-    lp.frequency.value = 340;
+    lp.frequency.value = 360;
+    this.droneFilter = lp;
     lp.connect(this.droneGain);
     this.droneGain.connect(this.master);
     for (const detune of [-7, 5, 1200]) {
@@ -56,108 +69,240 @@ export class Synth {
     if (this.master && this.ctx) this.master.gain.setTargetAtTime(m ? 0 : 0.8, this.ctx.currentTime, 0.02);
   }
 
-  private tone(freq: number, dur: number, gain: number, type: OscillatorType = 'sine', delay = 0): void {
-    if (!this.ctx || !this.master || this.voices > 14) return;
-    const t = this.ctx.currentTime + delay;
-    const o = this.ctx.createOscillator();
+  /** Returns true, and starts the throttle window, if `key` has not played within `gap` seconds. */
+  private ready(key: string, gap: number): boolean {
+    const prev = this.last[key];
+    if (prev !== undefined && this.clock - prev < gap) return false;
+    this.last[key] = this.clock;
+    return true;
+  }
+
+  private schedule(src: AudioScheduledSourceNode, t: number, end: number): void {
+    this.voices++;
+    src.onended = () => { this.voices--; };
+    src.start(t);
+    src.stop(end);
+  }
+
+  /** A plain oscillator with an exponential decay. A non-zero glideTo sweeps the pitch down or up. */
+  private tone(freq: number, dur: number, gain: number, type: OscillatorType = 'sine', delay = 0, glideTo = 0): void {
+    const ctx = this.ctx;
+    const master = this.master;
+    if (!ctx || !master || this.voices >= MAX_VOICES) return;
+    const t = ctx.currentTime + delay;
+    const o = ctx.createOscillator();
     o.type = type;
-    o.frequency.value = freq;
-    const g = this.ctx.createGain();
+    o.frequency.setValueAtTime(freq, t);
+    if (glideTo > 0) o.frequency.exponentialRampToValueAtTime(glideTo, t + dur * 0.6);
+    const g = ctx.createGain();
     g.gain.setValueAtTime(gain, t);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.connect(g);
-    g.connect(this.master);
-    this.voices++;
-    o.onended = () => { this.voices--; };
-    o.start(t);
-    o.stop(t + dur);
+    g.connect(master);
+    this.schedule(o, t, t + dur);
   }
 
-  private burst(freq: number, dur: number, gain: number): void {
-    if (!this.ctx || !this.master || !this.noise || this.voices > 14) return;
-    const src = this.ctx.createBufferSource();
-    src.buffer = this.noise;
-    const f = this.ctx.createBiquadFilter();
+  /** A slow rise and fall, for big moments such as abilities. */
+  private swell(freq: number, dur: number, gain: number, delay = 0): void {
+    const ctx = this.ctx;
+    const master = this.master;
+    if (!ctx || !master || this.voices >= MAX_VOICES) return;
+    const t = ctx.currentTime + delay;
+    const o = ctx.createOscillator();
+    o.type = 'triangle';
+    o.frequency.value = freq;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain, t + dur * 0.4);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g);
+    g.connect(master);
+    this.schedule(o, t, t + dur);
+  }
+
+  /** Filtered noise. The filter can sweep from `freq` to `toFreq` over the duration. */
+  private burst(freq: number, dur: number, gain: number, delay = 0, toFreq = freq): void {
+    const ctx = this.ctx;
+    const master = this.master;
+    const noise = this.noise;
+    if (!ctx || !master || !noise || this.voices >= MAX_VOICES) return;
+    const t = ctx.currentTime + delay;
+    const src = ctx.createBufferSource();
+    src.buffer = noise;
+    const f = ctx.createBiquadFilter();
     f.type = 'bandpass';
-    f.frequency.value = freq;
-    const g = this.ctx.createGain();
-    const t = this.ctx.currentTime;
+    f.Q.value = 1.2;
+    f.frequency.setValueAtTime(freq, t);
+    if (toFreq !== freq) f.frequency.exponentialRampToValueAtTime(toFreq, t + dur);
+    const g = ctx.createGain();
     g.gain.setValueAtTime(gain, t);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     src.connect(f);
     f.connect(g);
-    g.connect(this.master);
-    this.voices++;
-    src.onended = () => { this.voices--; };
-    src.start(t, Math.random() * 0.3, dur);
+    g.connect(master);
+    this.schedule(src, t, t + dur);
   }
 
-  bell(pitch = 1): void {
-    for (const [m, g] of [[1, 0.16], [2.01, 0.09], [2.76, 0.06], [5.4, 0.025]]) this.tone(392 * pitch * m, 1.1 / Math.sqrt(m), g);
+  private bell(pitch = 1, delay = 0): void {
+    for (const [m, g] of [[1, 0.16], [2.01, 0.09], [2.76, 0.06], [5.4, 0.025]]) {
+      this.tone(392 * pitch * m, 1.1 / Math.sqrt(m), g, 'sine', delay);
+    }
   }
 
+  /** Soft UI click. */
   click(): void {
-    this.tone(520, 0.08, 0.08, 'triangle');
+    this.tone(620, 0.05, 0.06, 'triangle');
   }
 
+  /** Fades the drone out. It stays silent until a fresh run starts. */
   stopRun(): void {
+    this.stopped = true;
     if (this.droneGain && this.ctx) this.droneGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.3);
   }
 
   /** Called once per frame with the events the sim emitted since the last frame. */
   update(s: RunState, frameDt: number): void {
-    if (!this.ctx || !this.droneGain) return;
-    const now = this.ctx.currentTime;
-    const inversion = s.boss?.phase === 3 && !s.bossDead;
-    const quiet = inversion || s.bossDead;
-    // The drone drops in pitch through the night, and falls silent for the last phase.
-    this.droneGain.gain.setTargetAtTime(quiet ? 0 : 0.55, now, quiet ? 0.15 : 0.8);
-    const f = 66 - (s.t / 900) * 24;
-    for (const o of this.osc) o.frequency.setTargetAtTime(f, now, 1);
+    this.clock += frameDt;
+    if (s.wave === 0) this.stopped = false;
+    if (!this.ctx || !this.droneGain || !this.droneFilter) return;
 
-    // A low heartbeat when oil is below 20.
-    if (s.player.oil < 20 && !s.bossDead) {
-      this.beat -= frameDt;
-      if (this.beat <= 0) {
-        this.beat = 1.05;
-        this.tone(58, 0.16, 0.34);
-        this.tone(50, 0.2, 0.26, 'sine', 0.19);
-      }
-    }
+    const now = this.ctx.currentTime;
+    const active = s.wave > 0 && !s.outcome && !this.stopped;
+    this.droneGain.gain.setTargetAtTime(active ? DRONE_GAIN : 0, now, active ? 1.2 : 0.5);
+    // The drone sinks in pitch and darkens as the waves rise.
+    const k = Math.min(1, s.wave / DRONE_WAVES);
+    const f = 62 - 22 * k;
+    for (const o of this.osc) o.frequency.setTargetAtTime(f, now, 1.5);
+    this.droneFilter.frequency.setTargetAtTime(360 - 170 * k, now, 1.5);
 
     for (let i = 0; i < s.eventCount; i++) {
       const e = s.events[i];
-      switch (e.type) {
-        case 'hit':
-          if (now - this.lastHit > 0.05) {
-            this.lastHit = now;
-            this.burst(800 + Math.random() * 1600, 0.05, 0.035);
+      this.play(e.type, e.a, e.b);
+    }
+  }
+
+  private play(type: GameEventType, a: number, b: number): void {
+    switch (type) {
+      case 'shot':
+        if (this.ready('shot', 0.04)) this.tone(1100 + Math.random() * 300, 0.03, 0.025, 'triangle');
+        break;
+      case 'hit':
+        if (this.ready('hit', 0.05)) this.burst(1400 + Math.random() * 1200, 0.04, 0.025);
+        break;
+      case 'kill':
+        if (this.ready('kill', 0.03)) {
+          if (a > 0) {
+            // Gold drop: a brighter coin-like ping.
+            this.tone(1319, 0.16, 0.035, 'sine');
+            this.tone(1976, 0.22, 0.025, 'sine', 0.05);
+          } else {
+            this.tone(392 + Math.random() * 120, 0.22, 0.045, 'triangle');
           }
-          break;
-        case 'pickup':
-          if (now - this.lastPluck > 0.05) {
-            this.lastPluck = now;
-            this.tone(700 + Math.random() * 500, 0.07, 0.03, 'triangle');
-          }
-          break;
-        case 'oil':
-          this.tone(330 + Math.random() * 60, 0.22, 0.08, 'sine');
-          this.tone(660, 0.14, 0.05, 'sine', 0.05);
-          break;
-        case 'hurt': this.burst(240, 0.12, 0.16); break;
-        case 'level': this.bell(1.25); break;
-        case 'bell': this.bell(0.75); break;
-        case 'lash': case 'stainedlash': this.burst(2400, 0.07, 0.05); break;
-        case 'post': if (!e.a) this.tone(440, 0.45, 0.08, 'sine'); else this.tone(150, 0.2, 0.08, 'triangle'); break;
-        case 'crate': if (e.a) this.burst(500, 0.14, 0.12); break;
-        case 'elite': this.tone(82, 0.8, 0.22, 'sawtooth'); break;
-        case 'boss': this.tone(46, 1.8, 0.4, 'sawtooth'); break;
-        case 'inversion': this.tone(38, 2.4, 0.5, 'sine'); break;
-        case 'sweep': this.burst(180, 0.45, 0.3); break;
-        case 'gutter': this.tone(120, 0.5, 0.2, 'triangle'); break;
-        case 'dawn': this.bell(1); this.bell(1.5); this.bell(2); break;
-        default: break;
+        }
+        break;
+      case 'leak':
+        this.tone(58, 0.4, 0.3, 'sine');
+        // A tritone pair for the dissonance.
+        this.tone(146.83, 0.5, 0.05, 'triangle');
+        this.tone(207.65, 0.5, 0.05, 'triangle');
+        break;
+      case 'splash':
+      case 'cluster':
+        if (this.ready('boom', 0.06)) {
+          this.burst(260, 0.4, 0.16, 0, 90);
+          this.tone(55, 0.35, 0.12, 'sine');
+        }
+        break;
+      case 'pulse':
+        if (this.ready('pulse', 0.12)) this.bell(1);
+        break;
+      case 'chain':
+        if (this.ready('chain', 0.03)) {
+          this.tone(2093, 0.18, 0.035, 'triangle');
+          this.tone(3136, 0.1, 0.012, 'sine');
+        }
+        break;
+      case 'lash':
+        if (this.ready('lash', 0.05)) this.burst(3000, 0.1, 0.06, 0, 1200);
+        break;
+      case 'bite':
+        if (this.ready('bite', 0.15)) this.tone(2400, 0.012, 0.012, 'triangle');
+        break;
+      case 'build':
+        this.tone(280, 0.09, 0.2, 'triangle', 0, 160);
+        this.burst(1200, 0.02, 0.06);
+        break;
+      case 'upgrade':
+        this.tone(523.25, 0.16, 0.07, 'triangle');
+        this.tone(783.99, 0.24, 0.07, 'triangle', 0.09);
+        break;
+      case 'sell':
+        this.tone(783.99, 0.16, 0.06, 'triangle');
+        this.tone(523.25, 0.24, 0.06, 'triangle', 0.09);
+        break;
+      case 'skill':
+        this.tone(1046.5, 0.45, 0.045, 'sine');
+        this.tone(1568, 0.55, 0.025, 'sine', 0.06);
+        break;
+      case 'wave':
+        this.bell(0.5);
+        this.tone(65.41, 1.6, 0.12, 'sine');
+        break;
+      case 'waveClear':
+        this.tone(261.63, 1.4, 0.05, 'sine');
+        this.tone(329.63, 1.4, 0.04, 'sine', 0.04);
+        this.tone(392, 1.4, 0.04, 'sine', 0.08);
+        break;
+      case 'heroLevel':
+        this.tone(523.25, 0.35, 0.06, 'triangle');
+        this.tone(659.25, 0.35, 0.06, 'triangle', 0.09);
+        this.tone(783.99, 0.4, 0.06, 'triangle', 0.18);
+        break;
+      case 'ability': {
+        const idx = Math.min(ABILITY_NOTES.length - 1, Math.max(0, Math.floor(b)));
+        const note = ABILITY_NOTES[idx];
+        this.swell(note, 1.8, 0.1);
+        this.swell(note * 1.5, 1.6, 0.04, 0.12);
+        this.bell(note / 392, 0.15);
+        break;
       }
+      case 'shield':
+        // Two close tones beat against each other, which gives the shimmer.
+        this.tone(1568, 0.7, 0.025, 'sine');
+        this.tone(1576, 0.7, 0.025, 'sine');
+        this.tone(2349, 0.5, 0.012, 'sine', 0.06);
+        break;
+      case 'snuff':
+        // A breath: noise sweeping down.
+        this.burst(1600, 0.7, 0.09, 0, 200);
+        break;
+      case 'dim':
+        if (this.ready('dim', 0.2)) this.burst(4200, 0.3, 0.02, 0, 2600);
+        break;
+      case 'boss':
+        this.tone(41.2, 2.6, 0.07, 'sawtooth');
+        this.tone(43.65, 2.6, 0.05, 'sawtooth');
+        break;
+      case 'win':
+        this.bell(1.5);
+        this.bell(2, 0.25);
+        break;
+      case 'lose':
+        this.tone(220, 0.7, 0.09, 'triangle');
+        this.tone(174.61, 0.9, 0.09, 'triangle', 0.35);
+        this.tone(130.81, 1.4, 0.09, 'triangle', 0.75);
+        break;
+      case 'gold':
+        if (this.ready('gold', 0.06)) this.tone(1318.5, 0.08, 0.025, 'sine');
+        break;
+      case 'shed':
+        if (this.ready('shed', 0.08)) {
+          this.burst(700, 0.1, 0.05, 0, 400);
+          this.tone(196, 0.12, 0.05, 'triangle');
+        }
+        break;
+      default:
+        break;
     }
   }
 }

@@ -109,7 +109,7 @@ export type GameEventType =
   | 'shield' | 'snuff' | 'dim' | 'boss' | 'win' | 'lose' | 'gold' | 'shed';
 /**
  * Fields by type:
- * shot: x,y from, a angle, b tower uid · hit: x,y · kill: x,y, a gold, b radius · leak: a lives lost
+ * shot: x,y from, a angle, b tower uid · hit: x,y · kill: x,y, a gold, b radius · leak: a lives lost, b index in ENEMY_IDS
  * splash/pulse: x,y, a radius · cluster: x,y, a radius · chain: x,y → a,b · lash: x,y, a angle, b range
  * bite: x,y · gold: x,y, a amount · wave: a wave number · waveClear: a wave, b gold
  * heroLevel: x,y, a level · ability: x,y, a radius, b ability index · shield: x,y · snuff: x,y, a radius
