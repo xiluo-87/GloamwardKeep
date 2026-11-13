@@ -223,3 +223,14 @@ ul.unlocks li.got { border-color: var(--green); color: var(--ink); }
 .ri.folder .co { background: #2f5f8a; color: #fff; }
 .rg path { animation: rgin 0.14s ease-out; }
 @keyframes rgin { from { opacity: 0; } }
+
+/* the keep: top-bar badge, locked ring entries */
+#topbar .keepbtn { display: flex; align-items: center; gap: 4px; min-height: 36px; padding: 4px 10px; font-weight: 700; }
+#topbar .keepbtn .ico { width: 20px; height: 20px; }
+#topbar .keepbtn.ready { outline: 2px solid var(--gold2); animation: keepglow 1.4s ease-in-out infinite; }
+@keyframes keepglow { 50% { filter: brightness(1.2); } }
+.ri .lk { position: absolute; right: -4px; top: -4px; width: 20px; height: 20px; padding: 2px; border-radius: 50%; background: #e9e1cc; border: 1.5px solid #3d3a33; pointer-events: none; }
+.ri.locked .cir { filter: grayscale(0.9) brightness(0.8); opacity: 0.75; }
+.ri.locked .co { background: #555; color: #e9e1cc; }
+.ri.lockLook .cir { filter: grayscale(0.6) brightness(0.9); }
+#desc ul.unl { margin: 2px 0 0; padding-left: 18px; }

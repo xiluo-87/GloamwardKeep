@@ -1,16 +1,18 @@
 // The in-run HUD: a slim top bar, the corner card for the selected tile, toasts and the thumb-zone
 // bottom row (call wave, speed, hero abilities, fit map).
-import { HEIGHT, HEROES, HeroId, RUN } from '../data/balance';
+import { HEIGHT, HEROES, HeroId, KEEP, RUN } from '../data/balance';
 import { ABILITY_TEXT, CLEAR_TEXT } from '../data/text';
 import { canCallWave, clearCost, earlyBonus } from '../sim/actions';
+import { keepCost } from '../sim/stats';
 import { FEATURE } from '../sim/mapgen';
 import { towerAt } from '../sim/state';
 import type { RunState } from '../sim/state';
 import { ACTION_ICONS, GOLD_ICON, HEART_ICON, WAVE_ICON, iconFor } from './icons';
+import { keepUnlocks, roman } from './format';
 import { towerName } from './panel';
 import type { Session } from './session';
 
-export interface HudHooks { togglePause(): void; cycleSpeed(): void; fitMap(): void }
+export interface HudHooks { togglePause(): void; cycleSpeed(): void; fitMap(): void; focusKeep(): void }
 
 const HEIGHT_NAME = ['Road', 'Field', 'Rise', 'Hill', 'Peak'];
 
@@ -25,6 +27,8 @@ export class Hud {
   private callMain!: HTMLElement;
   private callSub!: HTMLElement;
   private speed!: HTMLButtonElement;
+  private keepBtn!: HTMLButtonElement;
+  private keepLabel!: HTMLElement;
   private toasts: HTMLElement;
   private card: HTMLElement;
   private cardSig = '';
@@ -42,6 +46,7 @@ export class Hud {
         <div class="stat" title="Gold"><i class="ico">${GOLD_ICON}</i><b data-k="gold">0</b></div>
         <div class="stat" title="Lives left"><i class="ico">${HEART_ICON}</i><b data-k="lives">0</b></div>
         <div class="stat" title="Wave"><i class="ico">${WAVE_ICON}</i><span>Wave <b data-k="wave">0</b>/${RUN.waves}</span></div>
+        <button class="small keepbtn" data-k="keep" title="The keep: raise it to unlock more towers"><i class="ico">${ACTION_ICONS.keep}</i><b>Keep I</b></button>
         <span class="grow"></span>
         <button class="small" data-k="pause" title="Pause (Esc)" aria-label="Pause">II</button>
       </div>
@@ -69,6 +74,9 @@ export class Hud {
     this.call.addEventListener('click', () => this.session.call());
     this.speed.addEventListener('click', () => this.hooks.cycleSpeed());
     q('pause').addEventListener('click', () => this.hooks.togglePause());
+    this.keepBtn = q('keep') as HTMLButtonElement;
+    this.keepLabel = this.keepBtn.querySelector('b') as HTMLElement;
+    this.keepBtn.addEventListener('click', () => this.hooks.focusKeep());
     q('fit').addEventListener('click', () => this.hooks.fitMap());
     this.card.addEventListener('click', (e) => {
       const b = (e.target as HTMLElement).closest('[data-act]') as HTMLElement | null;
@@ -146,6 +154,8 @@ export class Hud {
     const can = canCallWave(s);
     if (this.cache.get('callOff') !== !can) { this.cache.set('callOff', !can); this.call.disabled = !can; }
     this.call.hidden = s.wave >= RUN.waves && !can;
+    this.set('keep', this.keepLabel, `Keep ${roman(s.keep)}`);
+    this.flag('keepReady', this.keepBtn, 'ready', keepCost(s) > 0 && s.gold >= keepCost(s));
     this.set('speed', this.speed, `${this.session.speed}×`);
     this.updateAbilities(s);
     this.updateCard(s);
@@ -163,12 +173,18 @@ export class Hud {
     const f = s.terrain.feature[i];
     const t = towerAt(s, tile.col, tile.row);
     const cost = f !== FEATURE.none ? clearCost(s, tile.col, tile.row) : 0;
-    const sig = `${tile.col},${tile.row}|${t ? `${t.uid}.${t.tier}.${t.fork}.${t.forkTier}.${t.heroLevel}` : 'e'}|${f}|${cost}|${s.gold >= cost ? 1 : 0}|${ss.ring ? 1 : 0}`;
+    const isKeep = s.terrain.goal[0] === tile.col && s.terrain.goal[1] === tile.row;
+    const sig = `${s.keep}|${tile.col},${tile.row}|${t ? `${t.uid}.${t.tier}.${t.fork}.${t.forkTier}.${t.heroLevel}` : 'e'}|${f}|${cost}|${s.gold >= cost ? 1 : 0}|${ss.ring ? 1 : 0}`;
     if (sig !== this.cardSig) {
       this.cardSig = sig;
       const bonus = Math.round((HEIGHT.rangePerLevel + s.mods.heightRangeBonus) * h * 100);
       const ter = f === FEATURE.forest ? CLEAR_TEXT.forest.name : f === FEATURE.rocks ? CLEAR_TEXT.rocks.name : HEIGHT_NAME[h] ?? 'Ground';
-      const l1 = `${ter} · height ${h}${bonus && f === FEATURE.none ? ` · +${bonus}% range` : ''}`;
+      let l1 = `${ter} · height ${h}${bonus && f === FEATURE.none ? ` · +${bonus}% range` : ''}`;
+      let kl = '';
+      if (isKeep) {
+        l1 = `Keep · level ${roman(s.keep)}${s.keep >= KEEP.max ? ' (highest)' : ''}`;
+        if (s.keep < KEEP.max) kl = `<div class="l2 sub">Next: ${keepUnlocks(s.keep + 1).join(' · ')}</div>`;
+      }
       let l2 = '';
       if (t) {
         const stage = t.hero ? `level ${t.heroLevel}` : t.fork ? `fork tier ${t.forkTier}` : `tier ${t.tier}`;
@@ -176,7 +192,7 @@ export class Hud {
       }
       const clear = cost > 0 ? `<button class="small primary" data-act="clear" ${s.gold >= cost ? '' : 'disabled'}>${f === FEATURE.forest ? CLEAR_TEXT.forest.action : CLEAR_TEXT.rocks.action} — ${cost} gold</button>` : '';
       const actions = ss.ring ? '' : `<button class="small" data-act="actions">Actions</button>`;
-      this.card.innerHTML = `<div class="l1">${l1}</div>${l2}<div class="btns">${clear}${actions}</div>`;
+      this.card.innerHTML = `<div class="l1">${l1}</div>${kl}${l2}<div class="btns">${clear}${actions}</div>`;
       this.card.hidden = false;
       this.cardHp = this.card.querySelector('.hpbar i');
     }

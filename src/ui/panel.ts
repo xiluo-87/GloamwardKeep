@@ -1,6 +1,6 @@
 // The selection panel: a side panel on wide screens, a bottom sheet on phones (CSS decides).
 // It rebuilds its DOM only when something discrete changes (signature) and patches numbers in place otherwise.
-import { HERO, HEROES, HEIGHT, HeroId, TOWER_IDS, TowerId } from '../data/balance';
+import { HERO, HEROES, HEIGHT, HeroId, KEEP, TOWER_IDS, TowerId } from '../data/balance';
 import { ABILITY_TEXT, CLEAR_TEXT, describeMod, HERO_TEXT, TOWER_TEXT } from '../data/text';
 import { canClear, clearCost } from '../sim/actions';
 import { isUndo } from './session';
@@ -10,14 +10,14 @@ import {
   heroProgress, sellValue, skillCost, skillState, SkillState, upgradeOptions,
 } from '../sim/stats';
 import type { RunState, Tower } from '../sim/state';
-import { esc, flagList, statRows } from './format';
+import { esc, flagList, roman, statRows } from './format';
 import { iconFor } from './icons';
 import type { Session } from './session';
 
 const TARGET_TEXT: Record<string, string> = { first: 'First', last: 'Last', strong: 'Strongest', close: 'Closest' };
 
 const SKILL_LABEL: Record<SkillState, string> = {
-  learned: 'Learned', available: 'Learn', needsLevel: 'Needs level', needsPrevious: 'Needs previous',
+  learned: 'Learned', available: 'Learn', needsLevel: 'Needs level', needsKeep: 'Needs keep', needsPrevious: 'Needs previous',
   capstoneTaken: 'Capstone taken', tooExpensive: 'Too expensive',
 };
 
@@ -27,7 +27,7 @@ const IDLE_HTML = `<h3>The Keep</h3>
   <h4>Controls</h4>
   <dl class="stats keys"><dt>1–${TOWER_IDS.length}</dt><dd>Build tower here</dd><dt>Q / W</dt><dd>Place hero here</dd><dt>Space</dt><dd>Call next wave</dd>
   <dt>U / I</dt><dd>Upgrade (fork A / B)</dd><dt>S</dt><dd>Sell</dd><dt>T</dt><dd>Target mode</dd><dt>A</dt><dd>Hero ability</dd>
-  <dt>C</dt><dd>Clear forest / rocks</dd><dt>F</dt><dd>Fit whole map</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
+  <dt>K</dt><dd>Raise the keep</dd><dt>C</dt><dd>Clear forest / rocks</dd><dt>F</dt><dd>Fit whole map</dd><dt>Esc</dt><dd>Cancel / pause</dd></dl>
   <p class="sub">Build walls on the road to steer enemies onto longer routes. Higher ground gives more range.</p>`;
 
 export function towerName(t: Tower): string {
@@ -111,9 +111,9 @@ export class Panel {
     const labels = statRows(t.stats).map((r) => r[0]).join(',');
     let sig = `${t.hero ? 'H' : 'T'}|${isUndo(t) ? 1 : 0}|${t.uid}|${t.tier}|${t.fork}|${t.forkTier}|${t.heroLevel}|${t.skills.join('.')}|${t.target}|${labels}|${this.session.sellArmed(now) ? 1 : 0}|${t.maxHp}`;
     if (t.hero) {
-      for (let b = 0; b < 3; b++) for (let n = 0; n < 4; n++) sig += skillState(s, t, b, n)[0] + skillState(s, t, b, n).length;
+      for (let b = 0; b < 3; b++) for (let n = 0; n < 4; n++) sig += skillState(s, t, b, n) + ',';
     } else {
-      sig += '|' + upgradeOptions(t, s.mods).map((o) => (s.gold >= o.cost ? 1 : 0)).join('');
+      sig += '|' + s.keep + upgradeOptions(t, s.mods).map((o) => (s.gold >= o.cost ? 1 : 0)).join('');
     }
     return sig;
   }
@@ -150,12 +150,12 @@ export class Panel {
     if (opts.length === 2) {
       up = `<div class="fork">${opts.map((o) => {
         const ft = tx.forks[o.path as 'a' | 'b'];
-        return `<button class="forkopt" data-act="up" data-arg="${o.path}" data-cost="${o.cost}"><strong>${esc(ft.name)}</strong><em>${esc(ft.blurb)}</em><span>${esc(describeMod(o.upgrade.add))}</span><b class="price">${o.cost} gold</b><kbd>${o.path === 'a' ? 'U' : 'I'}</kbd></button>`;
+        return `<button class="forkopt" data-act="up" data-arg="${o.path}" data-cost="${o.cost}"><strong>${esc(ft.name)}</strong><em>${esc(ft.blurb)}</em><span>${esc(describeMod(o.upgrade.add))}</span><b class="price${o.keep > s.keep ? ' poor' : ''}">${o.keep > s.keep ? `Needs Keep ${roman(o.keep)}` : `${o.cost} gold`}</b><kbd>${o.path === 'a' ? 'U' : 'I'}</kbd></button>`;
       }).join('')}</div><p class="sub">Choose a path — it can't be changed later.</p>`;
     } else if (opts.length === 1) {
       const o = opts[0];
       const next = o.path === 'tier' ? tx.tiers[o.level - 1] : tx.forks[o.path].tiers[o.level - 1];
-      up = `<button class="upgrade wide" data-act="up" data-cost="${o.cost}"><strong>Upgrade: ${esc(next)}</strong><span>${esc(describeMod(o.upgrade.add))}</span><b class="price">${o.cost} gold</b><kbd>U</kbd></button>`;
+      up = `<button class="upgrade wide" data-act="up" data-cost="${o.cost}"><strong>Upgrade: ${esc(next)}</strong><span>${esc(describeMod(o.upgrade.add))}</span><b class="price${o.keep > s.keep ? ' poor' : ''}">${o.keep > s.keep ? `Needs Keep ${roman(o.keep)}` : `${o.cost} gold`}</b><kbd>U</kbd></button>`;
     } else up = '<p class="sub">Fully upgraded.</p>';
     const armed = this.session.sellArmed(now);
     const value = sellValue(t, s.mods);
@@ -177,7 +177,7 @@ export class Panel {
     const cols = tx.branches.map((br, b) => {
       const nodes = [0, 1, 2, 3].map((n) => {
         const st = skillState(s, t, b, n);
-        const label = st === 'needsLevel' ? `Needs level ${HERO.nodeLevel[n]}` : SKILL_LABEL[st];
+        const label = st === 'needsLevel' ? `Needs level ${HERO.nodeLevel[n]}` : st === 'needsKeep' ? `Needs Keep ${roman(KEEP.skillNode[n])}` : SKILL_LABEL[st];
         const cost = skillCost(n, s.mods);
         return `<button class="node ${st}${n === 3 ? ' cap' : ''}" data-act="learn" data-b="${b}" data-n="${n}" ${st === 'available' ? '' : 'disabled'} title="${esc(label)}">
           <strong>${esc(br.nodes[n])}</strong><span>${esc(describeMod(h.branches[b][n].add))}</span>

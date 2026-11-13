@@ -10,6 +10,7 @@ import { generateMap } from './sim/mapgen';
 import { createRun, RunState } from './sim/state';
 import { clearEvents, runXp, stepRun } from './sim/step';
 import { MapId, MAP_BALANCE } from './data/balance';
+import { joinNames, keepTowers, roman } from './ui/format';
 import { Hud } from './ui/hud';
 import { Panel } from './ui/panel';
 import { Ring } from './ui/ring';
@@ -83,6 +84,12 @@ const hud = new Hud(hudRoot, session, {
   togglePause: () => togglePause(),
   cycleSpeed: () => stepSpeed(1),
   fitMap: () => renderer.fitBoard(),
+  focusKeep: () => {
+    if (!run || mode !== 'run') return;
+    const [c, r] = run.terrain.goal;
+    session.selectTile(c, r);
+    renderer.focusTile(c, r);
+  },
 });
 const ring = new Ring(hud.ringEl, hud.descEl, session, renderer);
 const panel = new Panel(panelEl, session, () => layout());
@@ -189,6 +196,7 @@ function toastEvents(s: RunState): void {
     const e = s.events[i];
     if (e.type === 'destroyed') session.onToast(e.a ? 'Your hero was struck down' : 'A tower was destroyed', true);
     else if (e.type === 'heroLevel') session.onToast(`Hero reached level ${e.a}`);
+    else if (e.type === 'keep') session.onToast(`Keep raised to ${roman(e.a)} — ${joinNames(keepTowers(e.a)) || 'deeper upgrades and skills'} unlocked`);
     else if (e.type === 'waveClear') session.onToast(`Wave ${e.a} cleared +${e.b} gold`);
   }
 }

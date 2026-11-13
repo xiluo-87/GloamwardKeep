@@ -159,6 +159,7 @@ export class Controls {
     else if (key === 'i') ss.upgradeSelected('b');
     else if (key === 's') ss.sellSelected(performance.now());
     else if (key === 'c') ss.clearHere();
+    else if (key === 'k') ss.raiseKeep();
     else if (key === 't') ss.target();
     else if (key === 'a') { const h = ss.selected; if (h?.hero) ss.ability(h.uid); }
     else if (key === 'f') this.renderer.fitBoard();

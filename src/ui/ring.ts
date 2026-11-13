@@ -1,15 +1,15 @@
 // The action ring around the selected tile, and the description card shown while an item is pressed
 // (touch) or hovered (mouse). Pressing shows the card and a ghost on the map; releasing on the item acts;
 // sliding off before release cancels.
-import { BuildGroup, HEROES, HeroId, TOWERS, TOWER_GROUP, TOWER_IDS, TowerId } from '../data/balance';
+import { BuildGroup, HEROES, HeroId, KEEP, TOWERS, TOWER_GROUP, TOWER_IDS, TowerId } from '../data/balance';
 import { ABILITY_TEXT, CLEAR_TEXT, describeMod, GROUP_TEXT, HERO_TEXT, TOWER_TEXT } from '../data/text';
 import type { CameraApi } from '../render/view';
 import { canBuild, clearCost } from '../sim/actions';
 import { FEATURE } from '../sim/mapgen';
 import { towerAt, Tower, TARGET_MODES } from '../sim/state';
 import type { RunState } from '../sim/state';
-import { sellValue, upgradeOptions } from '../sim/stats';
-import { esc, flagList, statLine } from './format';
+import { keepCost, keepForTower, sellValue, upgradeOptions } from '../sim/stats';
+import { esc, flagList, keepUnlocks, roman, statLine } from './format';
 import { ACTION_ICONS, BACK_ICON, GROUP_ICONS, iconFor } from './icons';
 import { checkMessage, isUndo } from './session';
 import type { Session } from './session';
@@ -26,6 +26,10 @@ export interface RingItem {
   icon: string;
   /** Folder: a build group that opens a second ring (shown with a count badge, not a price). */
   folder?: boolean;
+  /** Shown dimmed with a lock; pressing shows the description, releasing does nothing. */
+  locked?: boolean;
+  /** Lock shown but still activatable (a folder whose members are all locked). */
+  lockLook?: boolean;
   aria?: string;
   label: string;
   cost?: number;
@@ -85,12 +89,27 @@ export function buildItems(s: RunState, ss: Session): RingItem[] {
     }];
   }
   const { goal, spawns } = s.terrain;
-  if ((goal[0] === col && goal[1] === row) || spawns.some(([x, y]) => x === col && y === row)) return [];
+  if (goal[0] === col && goal[1] === row) return keepItems(s, ss);
+  if (spawns.some(([x, y]) => x === col && y === row)) return [];
+  const goldToKeep = (need: number): number => {
+    let sum = 0;
+    for (let k = s.keep; k < need; k++) sum += Math.round(KEEP.cost[k] * s.mods.costMul);
+    return sum;
+  };
   const direct = (id: TowerId | HeroId): RingItem => {
     const isHero = id in HEROES;
     const name = isHero ? HERO_TEXT[id as HeroId].name.replace('The ', '') : TOWER_TEXT[id as TowerId].name.replace(' Tower', '');
     const desc = isHero ? heroDesc(id as HeroId) : towerDesc(id as TowerId);
     const cost = ss.costOf(id);
+    const need = isHero ? 1 : keepForTower(id as TowerId);
+    if (need > s.keep) {
+      return {
+        key: id, icon: iconFor(id), label: name, locked: true,
+        desc: () => ({ ...desc, cost, warn: `Unlocks at Keep ${roman(need)} — raise the keep (${goldToKeep(need)} gold)` }),
+        state: () => ({ poor: false, sub: `Keep ${roman(need)}` }),
+        run: () => undefined,
+      };
+    }
     return {
       key: id, icon: iconFor(id), label: name, cost, place: id,
       desc: (st) => {
@@ -139,7 +158,7 @@ export function buildItems(s: RunState, ss: Session): RingItem[] {
     const gt = GROUP_TEXT[e.group as keyof typeof GROUP_TEXT];
     const list = members.map((m) => `${m in HEROES ? HERO_TEXT[m as HeroId].name.replace('The ', '') : TOWER_TEXT[m as TowerId].name} ${ss.costOf(m)}`).join(' · ');
     items.push({
-      key: `group-${e.group}`, folder: true, icon: GROUP_ICONS[e.group as keyof typeof GROUP_ICONS], label: gt.name,
+      key: `group-${e.group}`, folder: true, lockLook: members.every((m) => !(m in HEROES) && keepForTower(m as TowerId) > s.keep), icon: GROUP_ICONS[e.group as keyof typeof GROUP_ICONS], label: gt.name,
       aria: e.group === 'heroes' ? `${gt.name} (${members.length})` : `${gt.name} towers (${members.length})`,
       desc: () => ({ title: gt.name, sub: `${members.length} to choose from — tap to open`, body: `<p>${esc(gt.blurb)}</p><p class="stats">${esc(list)}</p>` }),
       state: () => ({ poor: false, sub: `${members.length} ›` }),
@@ -148,6 +167,21 @@ export function buildItems(s: RunState, ss: Session): RingItem[] {
     });
   }
   return items;
+}
+
+function keepItems(s: RunState, ss: Session): RingItem[] {
+  const next = s.keep + 1;
+  const cost = keepCost(s);
+  if (cost === 0) return [];
+  return [{
+    key: 'raise-keep', icon: ACTION_ICONS.keep, label: 'Raise keep', cost, keepOpen: true,
+    desc: () => ({
+      title: `Raise the keep to level ${roman(next)}`, cost,
+      body: `<p>Unlocks:</p><ul class="unl">${keepUnlocks(next).map((u) => `<li>${esc(u)}</li>`).join('')}</ul>`,
+    }),
+    state: (st) => ({ poor: st.gold < cost }),
+    run: () => ss.raiseKeep(),
+  }];
 }
 
 function commonItems(s: RunState, ss: Session, t: Tower, items: RingItem[]): void {
@@ -182,6 +216,21 @@ function towerItems(s: RunState, ss: Session, t: Tower): RingItem[] {
   for (const o of opts) {
     const fork = o.path === 'tier' ? null : tx.forks[o.path];
     const next = o.path === 'tier' ? tx.tiers[o.level - 1] : tx.forks[o.path].tiers[o.level - 1];
+    if (o.keep > s.keep) {
+      const sum = (): number => { let g = 0; for (let k = s.keep; k < o.keep; k++) g += Math.round(KEEP.cost[k] * s.mods.costMul); return g; };
+      items.push({
+        key: `up-${o.path}`, icon: ACTION_ICONS.upgrade, label: fork && t.forkTier === 0 ? fork.name : 'Upgrade', locked: true,
+        desc: () => ({
+          title: fork && t.forkTier === 0 ? fork.name : `Upgrade: ${next}`,
+          sub: fork && t.forkTier === 0 ? `Fork ${o.path.toUpperCase()}` : next,
+          body: `${fork && t.forkTier === 0 ? `<p>${esc(fork.blurb)}</p>` : ''}<p class="mod">${esc(describeMod(o.upgrade.add))}</p>`,
+          cost: o.cost, warn: `Unlocks at Keep ${roman(o.keep)} — raise the keep (${sum()} gold)`,
+        }),
+        state: () => ({ poor: false, sub: `Keep ${roman(o.keep)}` }),
+        run: () => undefined,
+      });
+      continue;
+    }
     items.push({
       key: `up-${o.path}`, icon: ACTION_ICONS.upgrade, label: fork && t.forkTier === 0 ? fork.name : 'Upgrade', cost: o.cost, keepOpen: true,
       desc: () => ({
@@ -298,6 +347,7 @@ export class Ring {
 
   private activate(it: RingItem): void {
     this.leave();
+    if (it.locked) return;
     it.run();
     if (!it.keepOpen) this.session.closeOverlays();
   }
@@ -317,9 +367,9 @@ export class Ring {
     this.guide = this.root.firstChild as SVGSVGElement;
     this.els = items.map((it, k) => {
       const b = document.createElement('button');
-      b.className = `ri${it.hold ? ' hold' : ''}${it.folder ? ' folder' : ''}`;
+      b.className = `ri${it.hold ? ' hold' : ''}${it.folder ? ' folder' : ''}${it.locked ? ' locked' : ''}${it.lockLook ? ' lockLook' : ''}`;
       b.setAttribute('aria-label', it.aria ?? it.desc(this.session.run as RunState).title);
-      b.innerHTML = `<span class="cir"><span class="ic">${it.icon}</span></span><span class="co">${it.cost ?? ''}</span>`;
+      b.innerHTML = `<span class="cir"><span class="ic">${it.icon}</span></span>${it.locked || it.lockLook ? `<i class="lk">${ACTION_ICONS.lock}</i>` : ''}<span class="co">${it.cost ?? ''}</span>`;
       b.dataset.i = String(k);
       this.root.appendChild(b);
       return b;
@@ -336,7 +386,7 @@ export class Ring {
       return;
     }
     const t = towerAt(s, tile.col, tile.row);
-    const sig = `${tile.col},${tile.row}|${t ? `${t.uid}.${t.tier}.${t.fork}.${t.forkTier}.${t.target}.${isUndo(t) ? 1 : 0}` : 'e'}|${s.terrain.feature[tile.row * s.terrain.cols + tile.col]}|${s.heroesPlaced.join()}|${ss.ringGroup ?? ''}`;
+    const sig = `${tile.col},${tile.row}|${t ? `${t.uid}.${t.tier}.${t.fork}.${t.forkTier}.${t.target}.${isUndo(t) ? 1 : 0}` : 'e'}|${s.terrain.feature[tile.row * s.terrain.cols + tile.col]}|${s.heroesPlaced.join()}|${ss.ringGroup ?? ''}|${s.keep}`;
     if (!this.shown || sig !== this.sig) {
       const items = buildItems(s, ss);
       if (items.length === 0) { ss.closeOverlays(); return; }

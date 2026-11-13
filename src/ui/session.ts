@@ -3,12 +3,13 @@
 import { HeroId, TOWER_IDS, TowerId } from '../data/balance';
 import { CLEAR_TEXT } from '../data/text';
 import {
-  BuildCheck, build, callWave, canBuild, canCallWave, clearCost, clearTile, cycleTarget, findTower, learnSkill, sell, upgrade, useAbility,
+  BuildCheck, build, callWave, canBuild, canCallWave, clearCost, clearTile, cycleTarget, findTower, learnSkill, sell, upgrade, upgradeKeep, useAbility,
 } from '../sim/actions';
 import { FEATURE } from '../sim/mapgen';
 import { previewRoute } from '../sim/path';
 import { RunState, towerAt, Tower } from '../sim/state';
-import { buildCost, isHeroType, sellValue, upgradeOptions } from '../sim/stats';
+import { buildCost, isHeroType, keepCost, keepForTower, sellValue, upgradeOptions } from '../sim/stats';
+import { roman } from './format';
 import { defaultView, ViewState } from '../render/view';
 
 export const CHECK_TEXT: Record<BuildCheck, string> = {
@@ -21,6 +22,7 @@ export const CHECK_TEXT: Record<BuildCheck, string> = {
   gold: 'Not enough gold',
   heroTaken: 'That hero is already on the board',
   heroNotInLoadout: 'That hero is not in your loadout',
+  locked: 'Locked — raise the keep',
   over: 'The run is over',
 };
 
@@ -228,7 +230,7 @@ export class Session {
     if (!s || !tile) return false;
     const check = canBuild(s, type, tile.col, tile.row);
     if (check !== 'ok') {
-      this.onToast(checkMessage(s, check, tile.col, tile.row), true);
+      this.onToast(check === 'locked' && !isHeroType(type) ? `Unlocks at Keep ${roman(keepForTower(type))}` : checkMessage(s, check, tile.col, tile.row), true);
       return false;
     }
     const t = build(s, type, tile.col, tile.row);
@@ -279,6 +281,7 @@ export class Session {
     if (path === 'b' && opts.length !== 2) return false;
     if (opts.length === 2 && !path) path = 'a';
     const opt = opts.length === 2 ? opts.find((o) => o.path === path) : opts[0];
+    if (opt && s.keep < opt.keep) { this.onToast(`Unlocks at Keep ${roman(opt.keep)}`, true); return false; }
     if (opt && s.gold < opt.cost) { this.onToast('Not enough gold', true); return false; }
     const ok = upgrade(s, t.uid, path);
     if (ok) this.onChange();
@@ -336,6 +339,21 @@ export class Session {
     if (!s) return;
     if (!canCallWave(s)) { this.onToast('The current wave is still arriving'); return; }
     callWave(s);
+  }
+
+  /** Raises the keep one level (ring item, hotkey K). */
+  raiseKeep(): void {
+    const s = this.run;
+    if (!s) return;
+    const cost = keepCost(s);
+    if (cost === 0) { this.onToast('The keep is at its highest level'); return; }
+    if (s.gold < cost) { this.onToast(`Not enough gold — ${cost} to raise the keep`, true); return; }
+    if (upgradeKeep(s)) this.onChange();
+  }
+
+  selectKeep(): void {
+    const s = this.run;
+    if (s) this.selectTile(s.terrain.goal[0], s.terrain.goal[1]);
   }
 
   costOf(type: TowerId | HeroId): number {
