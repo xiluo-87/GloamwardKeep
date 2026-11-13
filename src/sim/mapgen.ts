@@ -18,7 +18,7 @@ export interface Terrain {
   seed: number;
 }
 
-const MAX_ATTEMPTS = 40;
+const MAX_ATTEMPTS = 200;
 
 export const FEATURE = { none: 0, forest: 1, rocks: 2 } as const;
 
@@ -29,8 +29,8 @@ export function generateMap(preset: MapId, seed: number): Terrain {
     const t = tryGenerate(p, s);
     if (t) return t;
   }
-  // Fallback that can't fail: a flat field.
-  const t = tryGenerate({ ...p, heightShare: [1, 0, 0, 0, 0], minPathTiles: 0 }, seed) as Terrain;
+  // Fallback that can't fail: the road on flat low ground, with no length or reach checks.
+  const t = tryGenerate({ ...p, heightShare: [1, 0, 0, 0], minPathTiles: 0, minReach: 0 }, seed) as Terrain;
   return t;
 }
 
@@ -54,46 +54,51 @@ function tryGenerate(p: MapGenParams, seed: number): Terrain | null {
   }
   const goal: [number, number] = [cols - 1, margin + rng.int(rows - margin * 2)];
 
-  // 3. Carve a winding valley from each spawn to the keep.
+  // 3. Carve the road as a serpentine: legs that sweep between the top and bottom bands, spread
+  //    across the board, so the route passes near most tiles. Extra gates join the first leg.
   const carved = new Uint8Array(n);
-  for (const sp of spawns) {
-    const bends = p.bends[0] + rng.int(p.bends[1] - p.bends[0] + 1);
-    const points: [number, number][] = [sp];
-    for (let b = 0; b < bends; b++) {
-      const x = Math.round(((b + 1) / (bends + 1)) * (cols - 1) + rng.range(-1.5, 1.5));
-      const y = 1 + rng.int(rows - 2);
-      points.push([Math.max(1, Math.min(cols - 2, x)), y]);
-    }
-    points.push(goal);
-    for (let i = 1; i < points.length; i++) carveLine(carved, cols, rows, points[i - 1], points[i], p.valleyRadius, rng);
+  const legs = p.legs[0] + rng.int(p.legs[1] - p.legs[0] + 1);
+  const band = Math.max(1, Math.round((rows - 2) * p.bendBand));
+  const topY = (): number => rng.int(band);
+  const bottomY = (): number => rows - 1 - rng.int(band);
+  const route: [number, number][] = [spawns[0]];
+  let down = rng.chance(0.5);
+  for (let k = 0; k < legs; k++) {
+    const x = Math.round(((k + 1) / (legs + 1)) * (cols - 1) + rng.range(-0.8, 0.8));
+    const clampX = (v: number): number => Math.max(1, Math.min(cols - 2, v));
+    route.push([clampX(x), down ? topY() : bottomY()]);
+    route.push([clampX(x + rng.int(3) - 1), down ? bottomY() : topY()]);
+    down = !down;
   }
+  route.push(goal);
+  for (let i = 1; i < route.length; i++) carveLine(carved, cols, rows, route[i - 1], route[i], p.valleyRadius, rng);
+  for (let g = 1; g < spawns.length; g++) carveLine(carved, cols, rows, spawns[g], route[1], p.valleyRadius, rng);
 
-  // 4. Clearings joined to the valley give room to build mazes.
-  const valleyTiles: number[] = [];
-  for (let i = 0; i < n; i++) if (carved[i]) valleyTiles.push(i);
-  const clearings = p.clearings[0] + rng.int(p.clearings[1] - p.clearings[0] + 1);
+  // 4. Clearings at the road's turns give room to build mazes. Turns sit near the top and bottom
+  //    edges, so a clearing there widens the bend without bridging two legs into a shortcut.
+  const turns = route.slice(1, -1);
+  const clearings = Math.min(turns.length, p.clearings[0] + rng.int(p.clearings[1] - p.clearings[0] + 1));
   for (let c = 0; c < clearings; c++) {
-    const at = valleyTiles[rng.int(valleyTiles.length)];
+    const [tx, ty] = turns.splice(rng.int(turns.length), 1)[0];
     const r = p.clearingRadius[0] + rng.int(p.clearingRadius[1] - p.clearingRadius[0] + 1);
-    const cx = (at % cols) + rng.int(3) - 1;
-    const cy = Math.floor(at / cols) + rng.int(3) - 1;
-    carveBlob(carved, cols, rows, cx, cy, r, rng);
+    // Push the centre toward the nearer edge, away from the neighbouring legs.
+    const cy = ty < rows / 2 ? Math.max(0, ty - 1) : Math.min(rows - 1, ty + 1);
+    carveBlob(carved, cols, rows, tx, cy, r, rng);
   }
 
-  // 5. Heights by quantile, so each preset gets its share of every level.
+  // 5. Off-road heights 1..4 by quantile, so each preset gets its share of every level.
   const height = new Uint8Array(n);
-  // Shares count only tiles outside the valley, so carving doesn't eat into the hills.
   const sorted = Array.from(noise).filter((_, i) => !carved[i]).sort((a, b) => a - b);
   const m = sorted.length;
   const cuts: number[] = [];
   let acc = 0;
-  for (let h = 0; h < HEIGHT.max; h++) {
+  for (let h = 0; h < HEIGHT.max - 1; h++) {
     acc += p.heightShare[h];
     cuts.push(m ? sorted[Math.min(m - 1, Math.floor(acc * m))] : 0);
   }
   for (let i = 0; i < n; i++) {
-    let h = 0;
-    while (h < HEIGHT.max && noise[i] > cuts[h]) h++;
+    let h = 1;
+    while (h < HEIGHT.max && noise[i] > cuts[h - 1]) h++;
     height[i] = carved[i] ? 0 : h;
   }
   for (const [x, y] of [...spawns, goal]) height[y * cols + x] = 0;
@@ -101,19 +106,21 @@ function tryGenerate(p: MapGenParams, seed: number): Terrain | null {
   // 6. Terraces: neighbours differ by at most maxStep levels. Only lowers tiles, so the valley survives.
   terrace(height, cols, rows, p.maxStep);
 
-  // 7. Raise small level-0 pockets that don't touch the valley, so the road reads clearly.
+  // 7. Every level-0 tile must be part of the road network: raise pockets cut off from it.
   const main = floodZero(height, cols, rows, spawns[0][1] * cols + spawns[0][0]);
   if (!main[goal[1] * cols + goal[0]]) return null;
   for (const [x, y] of spawns) if (!main[y * cols + x]) return null;
-  raisePockets(height, main, cols, rows, p.minPocket);
+  raisePockets(height, main);
   terraceUp(height, cols, rows, p.maxStep);
 
-  // 8. The walk must be long enough to defend.
+  // 8. The walk must be long enough, and the route must pass near enough of the board.
   const dist = walkDistance(height, cols, rows, goal);
   for (const [x, y] of spawns) {
     const d = dist[y * cols + x];
     if (!Number.isFinite(d) || d < p.minPathTiles) return null;
   }
+  if (routeReach(dist, cols, rows, spawns, p.reachRadius) < p.minReach) return null;
+
   const feature = placeFeatures(p, height, cols, rows, rng);
   return { cols, rows, height, feature, spawns, goal, seed };
 }
@@ -286,16 +293,8 @@ function floodZero(h: Uint8Array, cols: number, rows: number, start: number): Ui
   return seen;
 }
 
-function raisePockets(h: Uint8Array, main: Uint8Array, cols: number, rows: number, minPocket: number): void {
-  const seen = new Uint8Array(cols * rows);
-  for (let i = 0; i < h.length; i++) {
-    if (h[i] !== 0 || main[i] || seen[i]) continue;
-    const pocket = floodZero(h, cols, rows, i);
-    const tiles: number[] = [];
-    for (let j = 0; j < pocket.length; j++) if (pocket[j]) { tiles.push(j); seen[j] = 1; }
-    // Small pockets become low hills. Big ones stay as sunken fields: buildable, never walked.
-    if (tiles.length < minPocket) for (const j of tiles) h[j] = 1;
-  }
+function raisePockets(h: Uint8Array, main: Uint8Array): void {
+  for (let i = 0; i < h.length; i++) if (h[i] === 0 && !main[i]) h[i] = 1;
 }
 
 /** Shortest walk over level-0 hexes from every tile to the goal, in tiles. Infinity if unreachable. */
@@ -317,6 +316,46 @@ export function walkDistance(h: Uint8Array, cols: number, rows: number, goal: [n
     }
   }
   return dist;
+}
+
+/** Tiles on the shortest route from each spawn to the keep (following the walk distance downhill). */
+export function routeTiles(dist: Float32Array, cols: number, rows: number, spawns: [number, number][]): Uint8Array {
+  const on = new Uint8Array(cols * rows);
+  for (const [sx, sy] of spawns) {
+    let x = sx;
+    let y = sy;
+    on[y * cols + x] = 1;
+    while (dist[y * cols + x] > 0) {
+      let best = dist[y * cols + x];
+      let nx = x;
+      let ny = y;
+      for (const [dx, dy] of hexNeighbours(y)) {
+        const tx = x + dx;
+        const ty = y + dy;
+        if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
+        if (dist[ty * cols + tx] < best) { best = dist[ty * cols + tx]; nx = tx; ny = ty; }
+      }
+      if (nx === x && ny === y) break;
+      x = nx;
+      y = ny;
+      on[y * cols + x] = 1;
+    }
+  }
+  return on;
+}
+
+/** Share of all tiles within `radius` hexes of the route. */
+export function routeReach(dist: Float32Array, cols: number, rows: number, spawns: [number, number][], radius: number): number {
+  const on = routeTiles(dist, cols, rows, spawns);
+  const route: [number, number][] = [];
+  for (let i = 0; i < on.length; i++) if (on[i]) route.push([i % cols, Math.floor(i / cols)]);
+  let near = 0;
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (route.some(([rx, ry]) => Math.abs(ry - y) <= radius && hexDistance(rx, ry, x, y) <= radius)) near++;
+    }
+  }
+  return near / (cols * rows);
 }
 
 /** Text picture of a map for tests and debugging: digits are heights, f forest, r rocks, S spawns, K the keep. Odd rows are indented. */

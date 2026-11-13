@@ -372,30 +372,39 @@ export const HEIGHT = {
 export type MapId = 'meadow' | 'highlands' | 'canyon';
 
 export interface MapGenParams {
-  /** Target share of tiles at each height 0..4 before the valley is carved. Sums to 1. */
-  heightShare: [number, number, number, number, number];
+  /**
+   * Share of off-road tiles at heights 1..4. Sums to 1. Level 0 comes only from the carved road
+   * and its clearings, so every level-0 tile belongs to the road network.
+   */
+  heightShare: [number, number, number, number];
   /** Value-noise cell sizes in tiles, coarse to fine, and their weights. */
   noiseScales: number[];
   noiseWeights: number[];
   /** Number of spawn gates on the left edge. */
   spawns: number;
-  /** Bends in the carved valley between a spawn and the keep. */
-  bends: [number, number];
+  /** Number of road legs sweeping between the top and bottom of the board, spread from left to right. */
+  legs: [number, number];
+  /** How far from the top or bottom edge a leg may turn, as a share of the board height. */
+  bendBand: number;
   /** Half-width of the carved valley in hexes (0 = one hex wide). */
   valleyRadius: number;
-  /** Extra level-0 clearings joined to the valley, for building mazes. */
+  /** Level-0 clearings at the road's turns, for building mazes. */
   clearings: [number, number];
   clearingRadius: [number, number];
   /** Largest height difference between neighbouring tiles. 1 gives gentle terraces, 2 allows cliffs. */
   maxStep: number;
-  /** Level-0 pockets smaller than this, cut off from the valley, are raised to level 1. */
-  minPocket: number;
   /**
    * Forest and rocks only ever cover heights 1..4, never the level-0 road and fields. Covered tiles
    * can't be built on. Forest grows in groves on low hills; rocks sit on high ground and cliff edges.
    */
   forest: { share: number; heights: [number, number]; scale: number };
   rocks: { share: number; heights: [number, number]; cliffBonus: number };
+  /**
+   * Reject maps where fewer than minReach of all tiles lie within reachRadius hexes of the enemy route,
+   * so the road winds through most of the board.
+   */
+  reachRadius: number;
+  minReach: number;
   /** Reject maps whose shortest walk is shorter than this, in tiles. */
   minPathTiles: number;
 }
@@ -404,24 +413,24 @@ export const MAP_BALANCE: Record<MapId, { hpMul: number; xpMul: number; unlock: 
   meadow: {
     hpMul: 1, xpMul: 1, unlock: 1,
     gen: {
-      heightShare: [0.2, 0.28, 0.22, 0.17, 0.13], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
-      spawns: 1, bends: [2, 3], valleyRadius: 1, clearings: [2, 3], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 22,
+      heightShare: [0.38, 0.28, 0.2, 0.14], noiseScales: [7, 3.5], noiseWeights: [0.75, 0.25], maxStep: 1,
+      spawns: 1, legs: [3, 4], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [4, 6], clearingRadius: [2, 2], minPathTiles: 22,
       forest: { share: 0.22, heights: [1, 2], scale: 3 }, rocks: { share: 0.06, heights: [2, 4], cliffBonus: 0.15 },
     },
   },
   highlands: {
     hpMul: 1.1, xpMul: 1.3, unlock: 4,
     gen: {
-      heightShare: [0.12, 0.2, 0.24, 0.24, 0.2], noiseScales: [6, 3], noiseWeights: [0.7, 0.3], maxStep: 2,
-      spawns: 1, bends: [3, 4], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 26,
+      heightShare: [0.22, 0.28, 0.27, 0.23], noiseScales: [6, 3], noiseWeights: [0.7, 0.3], maxStep: 2,
+      spawns: 1, legs: [4, 5], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 26,
       forest: { share: 0.16, heights: [1, 3], scale: 3 }, rocks: { share: 0.12, heights: [2, 4], cliffBonus: 0.25 },
     },
   },
   canyon: {
     hpMul: 1.2, xpMul: 1.6, unlock: 8,
     gen: {
-      heightShare: [0.12, 0.14, 0.2, 0.26, 0.28], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
-      spawns: 2, bends: [2, 3], valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPocket: 4, minPathTiles: 22,
+      heightShare: [0.16, 0.22, 0.3, 0.32], noiseScales: [5, 2.5], noiseWeights: [0.65, 0.35], maxStep: 2,
+      spawns: 2, legs: [3, 4], bendBand: 0.15, reachRadius: 2, minReach: 0.67, valleyRadius: 0, clearings: [1, 2], clearingRadius: [1, 2], minPathTiles: 22,
       forest: { share: 0.1, heights: [1, 2], scale: 2.5 }, rocks: { share: 0.18, heights: [2, 4], cliffBonus: 0.35 },
     },
   },
