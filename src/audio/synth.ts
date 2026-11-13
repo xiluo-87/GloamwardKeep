@@ -252,6 +252,12 @@ export class Synth {
           }
         }
         break;
+      case 'clear':
+        // Chopping (forest) or cracking stone (rocks), then a soft rustle.
+        this.burst(a === 1 ? 700 : 300, 0.12, 0.12, 0, a === 1 ? 300 : 120);
+        this.burst(a === 1 ? 900 : 400, 0.12, 0.1, 0.14, a === 1 ? 300 : 120);
+        this.burst(2000, 0.35, 0.04, 0.3, 800);
+        break;
       case 'build':
         this.tone(280, 0.09, 0.2, 'triangle', 0, 160);
         this.burst(1200, 0.02, 0.06);

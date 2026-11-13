@@ -135,6 +135,12 @@ export const ENEMY_TEXT: Record<EnemyId, { name: string; blurb: string }> = {
   lich: { name: 'The Lich', blurb: 'Silences towers around it and raises stalkers.' },
 };
 
+export const CLEAR_TEXT = {
+  forest: { name: 'Forest', action: 'Clear forest' },
+  rocks: { name: 'Rocks', action: 'Clear rocks' },
+  hint: 'Clear it for gold to build here.',
+};
+
 export const MAP_TEXT: Record<MapId, { name: string; blurb: string }> = {
   meadow: { name: 'Meadow', blurb: 'Gentle hills, a long road and roomy bends for mazes.' },
   highlands: { name: 'Highlands', blurb: 'A winding road between high cliffs.' },

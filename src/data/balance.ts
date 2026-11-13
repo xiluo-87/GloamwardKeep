@@ -488,6 +488,12 @@ export const PATHING = {
   towerCost: 1000,
 };
 
+/**
+ * Clearing forest or rocks from a tile so it can be built on.
+ * Price = base × (1 + perHeight × tile height): high ground costs more because it's worth more.
+ */
+export const CLEAR = { forest: 35, rocks: 60, perHeight: 0.25 };
+
 /** Tower hit points, for when enemies have to smash a way through: base + perGold × gold invested + the tower's hp stat. */
 export const TOWER_HP = { base: 120, perGold: 1.2, heroBase: 500, heroPerLevel: 60 };
 

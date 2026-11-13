@@ -1,5 +1,5 @@
 // Everything the player can do. Each action returns true (or the new tower) if it happened.
-import { AbilityKind, HERO, HEROES, HeroId, RUN, TowerId, WAVES } from '../data/balance';
+import { AbilityKind, CLEAR, HERO, HEROES, HeroId, RUN, TowerId, WAVES } from '../data/balance';
 import { hurt, onHitEffects } from './combat';
 import { pixelToTile, tileCenter } from './hex';
 import { FEATURE } from './mapgen';
@@ -67,6 +67,39 @@ export function build(s: RunState, type: TowerId | HeroId, col: number, row: num
   if (t.height === 0) rebuildFlow(s);
   emit(s, 'build', t.x, t.y, hero ? 1 : 0);
   return t;
+}
+
+/** Gold to clear the forest or rocks on a tile, or 0 if there's nothing to clear. */
+export function clearCost(s: RunState, col: number, row: number): number {
+  if (!inBoard(s, col, row)) return 0;
+  const i = tileIndex(s, col, row);
+  const f = s.terrain.feature[i];
+  if (f === FEATURE.none) return 0;
+  const base = f === FEATURE.forest ? CLEAR.forest : CLEAR.rocks;
+  return Math.round(base * (1 + CLEAR.perHeight * s.terrain.height[i]) * s.mods.costMul);
+}
+
+export type ClearCheck = 'ok' | 'nothing' | 'gold' | 'over';
+
+export function canClear(s: RunState, col: number, row: number): ClearCheck {
+  if (s.outcome) return 'over';
+  const cost = clearCost(s, col, row);
+  if (cost === 0) return 'nothing';
+  return s.gold >= cost ? 'ok' : 'gold';
+}
+
+/** Pays to remove forest or rocks from a tile so a tower can be built there. */
+export function clearTile(s: RunState, col: number, row: number): boolean {
+  if (canClear(s, col, row) !== 'ok') return false;
+  const cost = clearCost(s, col, row);
+  const i = tileIndex(s, col, row);
+  const f = s.terrain.feature[i];
+  s.gold -= cost;
+  s.terrain.feature[i] = FEATURE.none;
+  s.terrainVersion++;
+  const c = tileCenter(col, row);
+  emit(s, 'clear', c.x, c.y, f, cost);
+  return true;
 }
 
 export function findTower(s: RunState, uid: number): Tower | undefined {
