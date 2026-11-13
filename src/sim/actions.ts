@@ -51,7 +51,7 @@ export function build(s: RunState, type: TowerId | HeroId, col: number, row: num
     uid: s.nextUid++, type, hero, tx: col, ty: row, height: s.terrain.height[i], x: c.x, y: c.y,
     tier: 1, fork: 0, forkTier: 0, heroLevel: hero ? Math.min(HERO.maxLevel, s.mods.heroStartLevel) : 1, heroXp: 0, skills: [],
     stats: emptyStats(), hp: 1, maxHp: 1, cd: 0.3, abilityCd: 0, target: 'first', angle: -Math.PI / 2,
-    invested: cost, kills: 0, dealt: 0, jinxT: 0, silenceT: 0, buffDamage: 0, buffRate: 0,
+    invested: cost, fresh: cost, kills: 0, dealt: 0, jinxT: 0, silenceT: 0, buffDamage: 0, buffRate: 0,
     beamUid: 0, beamRamp: 1, beamX: 0, beamY: 0, fired: 1, hurt: 9,
   };
   t.stats = computeStats(t, s.mods);
@@ -115,6 +115,7 @@ export function upgrade(s: RunState, uid: number, path?: 'a' | 'b'): boolean {
   if (!opt || s.gold < opt.cost) return false;
   s.gold -= opt.cost;
   t.invested += opt.cost;
+  t.fresh += opt.cost;
   if (opt.path === 'tier') t.tier++;
   else { t.fork = opt.path; t.forkTier++; }
   refreshStats(t, s.mods);
@@ -156,6 +157,7 @@ export function learnSkill(s: RunState, uid: number, branch: number, node: numbe
   const cost = skillCost(node, s.mods);
   s.gold -= cost;
   t.invested += cost;
+  t.fresh += cost;
   t.skills.push(skillCode(branch, node));
   refreshStats(t, s.mods);
   emit(s, 'skill', t.x, t.y, branch, node);
@@ -188,6 +190,8 @@ export const canCallWave = (s: RunState): boolean =>
   !s.outcome && s.wave < RUN.waves && (s.waiting || s.spawnIdx >= s.spawns.length);
 
 export function startWave(s: RunState): void {
+  // Free refunds end when the next wave starts.
+  for (const t of s.towers) t.fresh = 0;
   s.waiting = false;
   s.wave++;
   s.waveT = 0;

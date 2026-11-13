@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { HEIGHT, HERO, HEROES, StatMod, TOWERS, TOWER_HP } from '../src/data/balance';
-import { build, sell, upgrade } from '../src/sim/actions';
+import { build, sell, startWave, upgrade } from '../src/sim/actions';
 import { appliedMods, buildCost, computeStats, maxHpOf, price, sellValue, upgradeOptions } from '../src/sim/stats';
 import { perkMods } from '../src/sim/state';
 import { buildUp, highTiles, mk, roadTiles } from './helpers';
@@ -244,6 +244,7 @@ describe('upgrades and selling', () => {
     const s = mk();
     const [x, y] = highTiles(s)[0];
     const t = buildUp(s, 'archer', x, y, ['tier']);
+    startWave(s); // after a wave starts, the free undo refund is over
     const expected = Math.floor(t.invested * s.mods.sellRefund);
     expect(sellValue(t, s.mods)).toBe(expected);
     const g = s.gold;
@@ -258,7 +259,22 @@ describe('upgrades and selling', () => {
     const s = mk({ perks: ['salvage'] });
     const [x, y] = highTiles(s)[0];
     const t = build(s, 'archer', x, y)!;
+    startWave(s);
     expect(sellValue(t, s.mods)).toBe(Math.floor(TOWERS.archer.cost * 0.9));
+  });
+
+  it('gold spent since the wave started is refunded in full (undo)', () => {
+    const s = mk();
+    const [x, y] = highTiles(s)[0];
+    const t = build(s, 'archer', x, y)!;
+    expect(sellValue(t, s.mods)).toBe(TOWERS.archer.cost);
+    startWave(s);
+    expect(upgrade(s, t.uid)).toBe(true);
+    const tierCost = TOWERS.archer.tiers[0].cost;
+    expect(sellValue(t, s.mods)).toBe(tierCost + Math.floor(TOWERS.archer.cost * s.mods.sellRefund));
+    const g = s.gold;
+    sell(s, t.uid);
+    expect(s.gold).toBe(g + tierCost + Math.floor(TOWERS.archer.cost * s.mods.sellRefund));
   });
 
   it('selling a road tower rebuilds the flow field; a hill tower does not', () => {

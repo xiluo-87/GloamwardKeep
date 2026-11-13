@@ -87,7 +87,8 @@ Gold is the only currency.
 - **Kills** pay the enemy's gold, times the Bounty perk, times (1 + the sum of every placed tower's `bounty`).
 - **Wave bonus** when a wave is cleared (all its enemies spawned and dead or leaked): `35 + 5 x wave`, plus Treasury income, plus interest (section 12).
 - **Early call bonus**: calling the next wave while its countdown still runs pays `floor(seconds left x 2 x Eager multiplier)`. The first call pays nothing. A wave cannot be called while the current one is still spawning.
-- **Sell refund**: `floor(gold invested x 0.7)` (0.9 with Salvage). Invested gold counts the build price, every upgrade and every skill.
+- **Sell refund**: gold spent since the current wave started comes back in full (a free undo for misplaced towers); the rest refunds at `floor(gold x 0.7)` (0.9 with Salvage). Invested gold counts the build price, every upgrade and every skill.
+- **Route preview**: `previewRoute(s, col, row)` returns the route enemies would take if a tower stood on that tile, and whether it would seal the road. The UI draws it while you choose a tower for a road tile.
 - **Treasury** (Shrine fork B) pays gold per wave: +40, then +65.
 - **Repairs** are free and happen on wave clear.
 

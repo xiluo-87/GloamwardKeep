@@ -5,14 +5,19 @@ import { PATHING } from '../data/balance';
 import { hexNeighbours } from './hex';
 import { RunState } from './state';
 
-/** Cost of stepping onto tile `j`. */
-const enterCost = (s: RunState, j: number): number => 1 + (s.occ[j] ? PATHING.towerCost : 0);
+/** Cost of stepping onto tile `j`, treating `extra` (a tile index, or -1) as if a tower stood there. */
+const enterCost = (s: RunState, j: number, extra = -1): number => 1 + (s.occ[j] || j === extra ? PATHING.towerCost : 0);
 
 /** Rebuilds the flow field. Call after any change to towers on level 0. */
 export function rebuildFlow(s: RunState): void {
+  computeFlow(s, s.flow, -1);
+  s.flowVersion++;
+}
+
+/** Fills `flow` with walking costs to the keep, optionally pretending a tower stands on tile `extra`. */
+function computeFlow(s: RunState, flow: Float32Array, extra: number): void {
   const { cols, rows, height, goal } = s.terrain;
   const n = cols * rows;
-  const flow = s.flow;
   flow.fill(Infinity);
   const done = new Uint8Array(n);
   const start = goal[1] * cols + goal[0];
@@ -26,7 +31,7 @@ export function rebuildFlow(s: RunState): void {
     done[i] = 1;
     const x = i % cols;
     const y = (i - x) / cols;
-    const cost = enterCost(s, i);
+    const cost = enterCost(s, i, extra);
     for (const [dx, dy] of hexNeighbours(y)) {
       const tx = x + dx;
       const ty = y + dy;
@@ -38,11 +43,14 @@ export function rebuildFlow(s: RunState): void {
       if (d < flow[j]) flow[j] = d;
     }
   }
-  s.flowVersion++;
 }
 
 /** The neighbour of tile `i` an enemy should step to next, or -1 if none. */
 export function nextTile(s: RunState, i: number): number {
+  return nextTileIn(s, s.flow, i, -1);
+}
+
+function nextTileIn(s: RunState, flow: Float32Array, i: number, extra: number): number {
   const { cols, rows, height } = s.terrain;
   const x = i % cols;
   const y = (i - x) / cols;
@@ -54,7 +62,7 @@ export function nextTile(s: RunState, i: number): number {
     if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) continue;
     const j = ty * cols + tx;
     if (height[j] !== 0) continue;
-    const c = s.flow[j] + enterCost(s, j);
+    const c = flow[j] + enterCost(s, j, extra);
     if (c < bestCost) { bestCost = c; best = j; }
   }
   return best;
@@ -64,4 +72,35 @@ export function nextTile(s: RunState, i: number): number {
 export function routeOpen(s: RunState): boolean {
   const { cols } = s.terrain;
   return s.terrain.spawns.every(([x, y]) => s.flow[y * cols + x] < PATHING.towerCost);
+}
+
+export interface RoutePreview {
+  /** Tile indexes of the route from each gate to the keep, in walking order, gates concatenated. */
+  tiles: number[];
+  /** True if the route has to go through at least one tower (enemies would smash through). */
+  sealed: boolean;
+}
+
+/**
+ * The route enemies would walk if a tower were built on (col, row), for showing the effect of a
+ * wall before it's placed. Pass col = -1 for the current route.
+ */
+export function previewRoute(s: RunState, col: number, row: number): RoutePreview {
+  const { cols, goal } = s.terrain;
+  const extra = col < 0 ? -1 : row * cols + col;
+  const flow = new Float32Array(s.flow.length);
+  computeFlow(s, flow, extra);
+  const goalIdx = goal[1] * cols + goal[0];
+  const tiles: number[] = [];
+  let sealed = false;
+  for (const [gx, gy] of s.terrain.spawns) {
+    let i = gy * cols + gx;
+    if (flow[i] >= PATHING.towerCost) sealed = true;
+    for (let guard = 0; guard < flow.length && i >= 0; guard++) {
+      tiles.push(i);
+      if (i === goalIdx) break;
+      i = nextTileIn(s, flow, i, extra);
+    }
+  }
+  return { tiles, sealed };
 }

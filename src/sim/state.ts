@@ -81,6 +81,8 @@ export interface Tower {
   target: TargetMode; angle: number;
   /** Gold spent on this tower, for selling and for its hit points. */
   invested: number;
+  /** Gold spent on it since the current wave started: refunded in full when sold before the next wave. */
+  fresh: number;
   kills: number; dealt: number;
   /** Seconds left of a Hexer's jinx (slower attacks) and the Lich's silence (no attacks). */
   jinxT: number; silenceT: number;

@@ -95,7 +95,8 @@ export function upgradeOptions(t: Tower, mods: Mods): UpgradeOption[] {
   return [];
 }
 
-export const sellValue = (t: Tower, mods: Mods): number => Math.floor(t.invested * mods.sellRefund);
+/** Gold spent since the current wave started comes back in full (an undo); the rest at the sell rate. */
+export const sellValue = (t: Tower, mods: Mods): number => t.fresh + Math.floor((t.invested - t.fresh) * mods.sellRefund);
 
 // ---------------------------------------------------------------------------------------------
 // Skill tree

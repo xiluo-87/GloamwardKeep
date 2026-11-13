@@ -3,7 +3,7 @@ import { ENEMIES, PATHING, TOWERS } from '../src/data/balance';
 import { build, sell, upgrade } from '../src/sim/actions';
 import { hurt, spawnAtGate } from '../src/sim/combat';
 import { hexNeighbours, tileCenter } from '../src/sim/hex';
-import { rebuildFlow, routeOpen } from '../src/sim/path';
+import { previewRoute, rebuildFlow, routeOpen } from '../src/sim/path';
 import { RunState } from '../src/sim/state';
 import { buildUp, eventsOf, highTiles, idx, mk, roadTiles, stepSecs, stepUntil } from './helpers';
 
@@ -190,5 +190,45 @@ describe('smashing', () => {
     }
     expect(bat.dead).toBe(true);
     expect(s.lives).toBe(s.mods.lives - ENEMIES.bat.lives);
+  });
+});
+
+describe('route preview', () => {
+  it('shows the current route from every gate to the keep', () => {
+    const s = mk({ map: 'canyon' });
+    const r = previewRoute(s, -1, -1);
+    const { cols, goal, spawns } = s.terrain;
+    expect(r.sealed).toBe(false);
+    for (const [x, y] of spawns) expect(r.tiles).toContain(y * cols + x);
+    expect(r.tiles.filter((i) => i === goal[1] * cols + goal[0])).toHaveLength(spawns.length);
+  });
+
+  it('a wall on the route reroutes the preview without changing the game', () => {
+    const s = mk();
+    const before = previewRoute(s, -1, -1);
+    const { cols } = s.terrain;
+    // A road tile on the route with another road tile beside it, so a detour exists somewhere.
+    const tile = before.tiles[Math.floor(before.tiles.length / 2)];
+    const flow = Float32Array.from(s.flow);
+    const after = previewRoute(s, tile % cols, Math.floor(tile / cols));
+    expect(Array.from(s.flow)).toEqual(Array.from(flow));
+    if (!after.sealed) expect(after.tiles).not.toContain(tile);
+    else expect(after.tiles).toContain(tile);
+  });
+
+  it('reports sealed when the tile is the only way to the keep', () => {
+    const s = mk();
+    const { cols, rows, height, goal } = s.terrain;
+    // Every road neighbour of the keep but one gets a wall; previewing on the last one seals it.
+    const open: [number, number][] = [];
+    for (const [dx, dy] of hexNeighbours(goal[1])) {
+      const x = goal[0] + dx;
+      const y = goal[1] + dy;
+      if (x >= 0 && y >= 0 && x < cols && y < rows && height[y * cols + x] === 0) open.push([x, y]);
+    }
+    s.gold = 1e6;
+    for (const [x, y] of open.slice(1)) build(s, 'palisade', x, y);
+    expect(previewRoute(s, -1, -1).sealed).toBe(false);
+    expect(previewRoute(s, open[0][0], open[0][1]).sealed).toBe(true);
   });
 });
