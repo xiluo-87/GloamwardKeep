@@ -8,6 +8,8 @@ The default game uses Canvas 2D. Add `?renderer=3d` for the live Three.js render
 
 **Status:** playable tower defence on generated hex maps, with forked towers, five heroes, three map presets, profile XP and perks. Balance checked with the bot; final UI/art and target-device performance acceptance remain open.
 
+Generated hills now include small one-level patches and distributed groves to break up broad empty plateaus. All three presets have more forest; clustered cosmetic bushes/stones fill remaining bare interiors. The 3D level steps are 50% taller. Roads and entrances retain their seeded layout, and dressing still disappears when built over.
+
 Art direction is being replanned around a custom Goblin proof built directly from the voxel reference. The purchased-pack adaptations are preserved experiments with unresolved visual artifacts; they are not final accepted characters. Rig/animation reuse will be tested on that one custom model before expanding the roster.
 
 ## Run it

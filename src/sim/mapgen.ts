@@ -1,7 +1,7 @@
 // Seeded terrain generator on a hex grid (see hex.ts). Heights 0..4; enemies walk on height 0 only.
 // Same seed and preset always give the same map.
-import { HEIGHT, MAP_BALANCE, MapGenParams, MapId, WORLD } from '../data/balance';
-import { hexDistance, hexNeighbours } from './hex';
+import { HEIGHT, MAP_BALANCE, MAP_DETAIL, MapGenParams, MapId, WORLD } from '../data/balance';
+import { hexDistance, hexNeighbours, tilesWithinHexRadius } from './hex';
 import { Rng } from './rng';
 import { generateDecorations } from './decorations';
 
@@ -147,8 +147,42 @@ function tryGenerate(p: MapGenParams, seed: number): MapTerrain | null {
   const gaps = punchGaps(p, height, dist, cols, rows, rng);
   if (gaps.length > 0) terrace(height, cols, rows, p.maxStep);
 
+  // Off-road detail uses its own stream and cannot change accepted roads, gates or shortcuts.
+  breakUpPlateaus(height, cols, rows, p.maxStep, new Rng(seed ^ 0x6b7d3291));
   const feature = placeFeatures(p, height, cols, rows, rng);
   return { cols, rows, height, feature, spawns, goal, seed, gaps };
+}
+
+/** A few connected one-level patches interrupt deep, uniform plateaus without peppering every tile. */
+function breakUpPlateaus(height: Uint8Array, cols: number, rows: number, maxStep: number, rng: Rng): void {
+  const radius = MAP_DETAIL.plateauRadius;
+  const fullDisk = 1 + 3 * radius * (radius + 1);
+  const budget = Math.floor(height.reduce((sum, h) => sum + Number(h > 0), 0) * MAP_DETAIL.maxHeightPatchShare);
+  let changed = 0;
+  while (changed < budget) {
+    const candidates: number[] = [];
+    for (let i = 0; i < height.length; i++) {
+      if (!height[i]) continue;
+      const disk = tilesWithinHexRadius(i % cols, Math.floor(i / cols), radius, cols, rows);
+      if (disk.length === fullDisk && disk.every(tile => height[tile] === height[i])) candidates.push(i);
+    }
+    if (!candidates.length) break;
+    const center = candidates[rng.int(candidates.length)];
+    const base = height[center], target = base < HEIGHT.max ? base + 1 : base - 1;
+    const want = Math.min(budget - changed, MAP_DETAIL.patchSize[0] + rng.int(MAP_DETAIL.patchSize[1] - MAP_DETAIL.patchSize[0] + 1));
+    const patch: number[] = [];
+    const frontier = [center];
+    while (patch.length < want && frontier.length) {
+      const tile = frontier.splice(rng.int(frontier.length), 1)[0];
+      if (height[tile] !== base) continue;
+      const neighbours = tilesWithinHexRadius(tile % cols, Math.floor(tile / cols), 1, cols, rows).filter(i => i !== tile);
+      if (neighbours.some(i => Math.abs(height[i] - target) > maxStep)) continue;
+      height[tile] = target; patch.push(tile); changed++;
+      for (const next of neighbours) if (height[next] === base && !frontier.includes(next)) frontier.push(next);
+    }
+    // A complete uniform disk always has a safe interior first step.
+    if (!patch.length) break;
+  }
 }
 
 /**
@@ -205,14 +239,37 @@ function placeFeatures(p: MapGenParams, height: Uint8Array, cols: number, rows: 
   const feature = new Uint8Array(n);
   const inBand = (h: number, [lo, hi]: [number, number]): boolean => h >= Math.max(1, lo) && h <= hi;
 
-  // Forest: take the highest-noise share of eligible tiles, so trees clump into groves.
+  // Keep the preset's forest budget, but distribute small groves instead of spending it in one corner.
   const grove = new Float32Array(n);
   addValueNoise(grove, cols, rows, p.forest.scale, 1, rng);
   const forestCandidates: number[] = [];
   for (let i = 0; i < n; i++) if (inBand(height[i], p.forest.heights)) forestCandidates.push(i);
-  forestCandidates.sort((a, b) => grove[b] - grove[a]);
   const forestCount = Math.round(p.forest.share * forestCandidates.length);
-  for (let k = 0; k < forestCount; k++) feature[forestCandidates[k]] = FEATURE.forest;
+  const planted: number[] = [];
+  const eligible = new Uint8Array(n);
+  for (const tile of forestCandidates) eligible[tile] = 1;
+  while (planted.length < forestCount) {
+    let center = -1, best = -Infinity;
+    for (const tile of forestCandidates) {
+      if (feature[tile]) continue;
+      let distance = MAP_DETAIL.forestSpacing;
+      for (const tree of planted) distance = Math.min(distance, hexDistance(tile % cols, Math.floor(tile / cols), tree % cols, Math.floor(tree / cols)));
+      const score = distance + grove[tile];
+      if (score > best) { center = tile; best = score; }
+    }
+    if (center < 0) break;
+    const size = Math.min(forestCount - planted.length, MAP_DETAIL.forestClusterSize[0]
+      + rng.int(MAP_DETAIL.forestClusterSize[1] - MAP_DETAIL.forestClusterSize[0] + 1));
+    const frontier = [center];
+    for (let count = 0; count < size && frontier.length; count++) {
+      frontier.sort((a, b) => grove[b] - grove[a]);
+      const tile = frontier.shift()!;
+      feature[tile] = FEATURE.forest; planted.push(tile);
+      for (const next of tilesWithinHexRadius(tile % cols, Math.floor(tile / cols), 1, cols, rows)) {
+        if (eligible[next] && !feature[next] && !frontier.includes(next)) frontier.push(next);
+      }
+    }
+  }
 
   // Rocks: random picks among free high tiles, with extra weight where the ground drops away.
   for (let i = 0; i < n; i++) {

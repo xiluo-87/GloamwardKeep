@@ -1,6 +1,7 @@
 import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { WORLD } from '../src/data/balance';
+import { TERRAIN_RISE } from '../src/camera-preview/surface';
 import { currentProjectileTarget, enemyBodyCenterHeight, groundPoint, muzzleHeight, projectilePoint } from '../src/render3d/mapping';
 import { enemyGroundingOffset, enemyHeight } from '../src/render3d/model-scale';
 import { ROOMIER_SCENE } from '../src/render3d/scene-proportions';
@@ -23,8 +24,8 @@ describe('render coordinate mapping', () => {
   it('keeps tower elevation and legacy -14/-16 launch corrections out of simulation state', () => {
     const archer = owner('archer', 3);
     const catapult = owner('catapult', 1);
-    expect(muzzleHeight(archer)).toBeCloseTo(3 * 0.28 + 1.68);
-    expect(muzzleHeight(catapult)).toBeCloseTo(0.28 + 1.05);
+    expect(muzzleHeight(archer)).toBeCloseTo(3 * TERRAIN_RISE + 1.68);
+    expect(muzzleHeight(catapult)).toBeCloseTo(TERRAIN_RISE + 1.05);
     const p: Projectile = {
       kind: 'bolt', x: 70, y: 108.5, px: 56, py: 98, sx: 56, sy: 98,
       tx: 112, ty: 140, t: 0.1, life: 3, target: null, targetUid: 0, owner: archer, damage: 4,
@@ -78,7 +79,7 @@ describe('render coordinate mapping', () => {
 
     const archer = owner('archer', 3);
     expect(muzzleHeight(archer, undefined, ROOMIER_SCENE))
-      .toBeCloseTo((3 * 0.28 + 1.68 * ROOMIER_SCENE.buildings) / ROOMIER_SCENE.tile);
+      .toBeCloseTo((3 * TERRAIN_RISE + 1.68 * ROOMIER_SCENE.buildings) / ROOMIER_SCENE.tile);
     const p: Projectile = {
       kind: 'bolt', x: enemy.x + enemy.ox, y: enemy.y + enemy.oy,
       px: enemy.x + enemy.ox, py: enemy.y + enemy.oy,

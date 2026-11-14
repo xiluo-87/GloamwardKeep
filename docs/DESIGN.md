@@ -55,11 +55,11 @@ The board is a hex grid of 24 columns by 14 rows (pointy-top hexes, odd rows shi
 
 | Preset | Gates | Enemy HP | Profile XP | Unlock (profile level) | Character |
 |---|---|---|---|---|---|
-| Meadow | 1 | x1.0 | x1.0 | 1 | Gentle hills (maxStep 1), 4 to 6 roomy clearings, 22% forest |
-| Highlands | 1 | x1.1 | x1.3 | 4 | Steeper (maxStep 2), more high ground, 1 to 2 clearings |
-| Canyon | 2 | x1.15 | x1.6 | 8 | Rocky heights, mostly height 3 and 4, two gates that merge |
+| Meadow | 1 | x1.0 | x1.0 | 1 | Gentle hills (maxStep 1), 4 to 6 roomy clearings, 32% forest on eligible hills |
+| Highlands | 1 | x1.1 | x1.3 | 4 | Steeper (maxStep 2), 28% forest on eligible hills, 1 to 2 clearings |
+| Canyon | 2 | x1.15 | x1.6 | 8 | Rocky heights, 24% forest on eligible hills, two gates that merge |
 
-Share of off-road tiles at heights 1 to 4: Meadow 38/28/20/14%, Highlands 22/28/27/23%, Canyon 16/22/30/32%.
+Target shares of off-road tiles at heights 1 to 4 before terracing and local patches: Meadow 38/28/20/14%, Highlands 22/28/27/23%, Canyon 16/22/30/32%.
 
 ### 4.3 Generator rules
 
@@ -71,11 +71,12 @@ The same preset and map seed always give the same map. The generator retries wit
 4. **Reach.** With shortcuts plugged, at least 2/3 of all tiles must lie within 2 hexes of the enemy route, and the shortest walk must be at least 22 tiles (Meadow, Canyon) or 26 (Highlands).
 5. **Clearings.** At turns near the top and bottom edges, level-0 blobs of radius 1 to 2 give room for mazes (4 to 6 on Meadow, 1 to 2 elsewhere).
 6. **Shortcut gaps.** Short level-0 channels (at most 3 tiles) are cut through the hills between two stretches of road, each saving enemies at least 10 hexes on Meadow and 12 elsewhere (1 to 3 on Meadow, 1 to 2 elsewhere). The player plugs them with towers or defends them. Reach and length checks are done on the road before the gaps are cut.
-7. **Forest and rocks only on heights 1 to 4,** never on level 0. Forest grows in groves on low hills (heights 1 to 2 on Meadow and Canyon, 1 to 3 on Highlands). Rocks sit on high ground (heights 2 to 4) and are more common on cliff edges (a drop of 2 or more to a neighbour). Covered tiles cannot be built on until cleared (section 5.7).
+7. **Forest and rocks only on heights 1 to 4,** never on level 0. Forest grows in distributed small groves, seeded in groups of 2–4 eligible tiles (heights 1 to 2 on Meadow and Canyon, 1 to 3 on Highlands). Nearby groups may join naturally. Forest budgets are 32%, 28% and 24% of eligible tiles respectively. Rocks sit on high ground (heights 2 to 4) and are more common on cliff edges (a drop of 2 or more to a neighbour). Covered tiles cannot be built on until cleared (section 5.8).
 8. **Canyon gates.** One gate sits in the top half of the left edge and one in the bottom half. Each has its own winding road, and the two roads merge at the middle of the board (50% of the width), then share one serpentine to the keep. Spawns alternate between the gates.
 9. **The keep** sits on the right edge, at least 2 rows from the top and bottom.
+10. **Plateau variation.** After road acceptance, a separate seeded stream adds small connected one-level patches inside broad uniform raised areas, targeting 2–4 tiles per patch and spending at most 12% of raised tiles as height edits. Each edit stays within heights 1–4 and the preset's neighbour-step limit. The level-0 road, entrances and shortcut tiles remain unchanged. These are logical height changes, so towers use the resulting terrain level normally.
 
-The 3D renderer also shows small cosmetic bushes and stones on some otherwise bare raised tiles. A separate seed hash assigns these after map acceptance without changing any heights, blocking features, routes or gameplay RNG. They cost nothing to clear, never affect placement or movement, and disappear automatically when a building occupies their tile. Removed dressing stays gone for that run; new runs regenerate the same decoration for the same map seed. These small decorations are distinct from clearable forest/rock features.
+The 3D renderer also shows cosmetic bushes and stones in small clusters on otherwise bare raised tiles. A separate seed hash assigns these after map acceptance without changing heights, blocking features, routes or gameplay RNG. Cluster seeds occur at 5% of eligible tiles, then remaining wholly bare, same-height radius-1 interiors receive a cluster, within a 28% dressing budget. Roads, gates, the keep and clearable feature tiles are excluded. Dressing costs nothing to clear, never affects placement or movement, and disappears automatically when a building occupies its tile. Removed dressing stays gone for that run; new runs regenerate the same decoration for the same map seed. This dressing is distinct from clearable forest/rock features and the logical height patches above.
 
 ## 5. Pathing, smashing and economy
 
@@ -300,3 +301,5 @@ The 3D camera uses orthographic projection, defaults to southeast at 35.3°, and
 For 3D visibility, trees and rocks fade smoothly when they cover a mob, with trees anticipating an approaching overlap. Towers keep visual priority and remain opaque; only the covered portions of a hidden mob receive a faint, smoothly appearing silhouette. This presentation behavior is prototyped in the voxel study and does not change gameplay visibility or targeting.
 
 Visual terrain sampling adds small seeded surface offsets, intermediate ledges and prop size/shape variation. Simulation heights remain integer 0–4; this dressing does not change height bonuses, routes, targeting, feature rules or gameplay RNG.
+
+Each 3D terrain level has a visible rise of 0.42 model units, increased from 0.28 to make the steps more readable. The shared surface sampler seats buildings, vegetation, moving actors and overlays on that same elevation; scene profiles convert those units consistently. The visual rise does not change a tile's logical height or its gameplay bonus.

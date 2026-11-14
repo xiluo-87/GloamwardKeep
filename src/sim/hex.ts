@@ -37,6 +37,17 @@ export function hexDistance(c0: number, r0: number, c1: number, r1: number): num
   return Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1]), Math.abs(a[2] - b[2]));
 }
 
+/** In-bounds tile indices in a hex disk, in stable row-major order. */
+export function tilesWithinHexRadius(col: number, row: number, radius: number, cols: number, rows: number): number[] {
+  const tiles: number[] = [];
+  for (let y = Math.max(0, row - radius); y <= Math.min(rows - 1, row + radius); y++) {
+    for (let x = Math.max(0, col - radius - 1); x <= Math.min(cols - 1, col + radius + 1); x++) {
+      if (hexDistance(col, row, x, y) <= radius) tiles.push(y * cols + x);
+    }
+  }
+  return tiles;
+}
+
 /** Tile containing a world point, or null if off the board. */
 export function pixelToTile(px: number, py: number, cols: number, rows: number): { col: number; row: number } | null {
   // Fractional axial coordinates, then cube rounding.

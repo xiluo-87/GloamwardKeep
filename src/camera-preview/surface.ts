@@ -3,7 +3,7 @@ import { pixelToTile, tileCenter } from '../sim/hex';
 import type { Terrain } from '../sim/mapgen';
 
 /** Visual spacing between logical terrain levels. Simulation height values stay integer 0..4. */
-export const TERRAIN_RISE = 0.28;
+export const TERRAIN_RISE = 0.42;
 export const SURFACE_CELL = 0.14;
 /** Highest absolute offset from the nominal `logicalHeight * TERRAIN_RISE` surface. */
 export const SURFACE_MAX_OFFSET = 0.026;
