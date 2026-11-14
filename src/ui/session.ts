@@ -380,5 +380,3 @@ export class Session {
     return this.run ? buildCost(type, this.run.mods) : 0;
   }
 }
-
-export const isHeroId = (id: string): id is HeroId => isHeroType(id);

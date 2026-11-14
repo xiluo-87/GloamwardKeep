@@ -263,8 +263,6 @@ export function emit(s: RunState, type: GameEventType, x = 0, y = 0, a = 0, b = 
 export const tileIndex = (s: RunState, col: number, row: number): number => row * s.terrain.cols + col;
 export const inBoard = (s: RunState, col: number, row: number): boolean =>
   col >= 0 && row >= 0 && col < s.terrain.cols && row < s.terrain.rows;
-export const heightAt = (s: RunState, col: number, row: number): number =>
-  inBoard(s, col, row) ? s.terrain.height[tileIndex(s, col, row)] : -1;
 export const towerAt = (s: RunState, col: number, row: number): Tower | undefined => {
   if (!inBoard(s, col, row)) return undefined;
   const uid = s.occ[tileIndex(s, col, row)];

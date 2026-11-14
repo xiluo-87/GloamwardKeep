@@ -2,11 +2,6 @@ import type { Vector3 } from 'three';
 import type { Painter } from './voxel-model';
 
 /** First-artwork study, revised to a roofless platform with room for the bowman to turn. */
-export function paintArcherTower(p: Painter, origin: Vector3): void {
-  paintArcherPlatform(p, origin);
-  paintArcherBowman(p, origin);
-}
-
 export function paintArcherPlatform(p: Painter, origin: Vector3): void {
   const { x, y, z } = origin;
   const box = (dx: number, dy: number, dz: number, w: number, h: number, d: number, color: string): void =>

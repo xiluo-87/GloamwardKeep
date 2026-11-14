@@ -23,8 +23,6 @@ const HERO_ICONS: Record<HeroId, string> = {
   druid: wrap('<path d="M12 22V10M12 14c-5 0-8-3-8-8 5 0 8 3 8 8zM12 12c4 0 7-3 7-7-4 0-7 3-7 7z" fill="#7bb25f" stroke="#3f6b2f"/>'),
 };
 
-export const towerIcon = (id: TowerId): string => TOWER_ICONS[id];
-export const heroIcon = (id: HeroId): string => HERO_ICONS[id];
 export const iconFor = (id: TowerId | HeroId): string => (id in HERO_ICONS ? HERO_ICONS[id as HeroId] : TOWER_ICONS[id as TowerId]);
 
 export const GOLD_ICON = wrap('<circle cx="12" cy="12" r="8.5" fill="#f3d27a" stroke="#8a5a14"/><path d="M12 7v10M9.5 9.5h4a1.6 1.6 0 010 3h-3a1.6 1.6 0 000 3h4" stroke="#8a5a14"/>');

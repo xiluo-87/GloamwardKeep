@@ -1,12 +1,10 @@
 // Pure helpers for tower stats, prices and the hero skill tree. No state changes here.
 import {
-  AttackKind, DamageType, HEIGHT, HERO, KEEP, HEROES, HeroDef, HeroId, heroXpNeed, StatMod, Stats, STAT_KEYS, TOWER_HP, TowerDef, TOWERS, TowerId, Upgrade,
+  AttackKind, DamageType, HEIGHT, HERO, KEEP, HEROES, HeroId, heroXpNeed, StatMod, Stats, STAT_KEYS, TOWER_HP, TOWERS, TowerId, Upgrade,
 } from '../data/balance';
 import { emptyStats, Mods, RunState, Tower } from './state';
 
 export const isHeroType = (type: string): type is HeroId => type in HEROES;
-export const towerDef = (type: TowerId): TowerDef => TOWERS[type];
-export const heroDef = (type: HeroId): HeroDef => HEROES[type];
 export const kindOf = (t: Pick<Tower, 'type'>): AttackKind => (isHeroType(t.type) ? HEROES[t.type].kind : TOWERS[t.type].kind);
 export const dmgTypeOf = (t: Pick<Tower, 'type'>): DamageType => (isHeroType(t.type) ? HEROES[t.type].dmgType : TOWERS[t.type].dmgType);
 

@@ -2,6 +2,16 @@
 
 Status: the opt-in Three.js renderer has technical content coverage using provisional parameterized art, instanced animated crowds, combat effects, camera preference infrastructure and renderer switching/recovery. Canvas 2D remains the default and fallback. This is a reviewable implementation, not final art or target-device performance acceptance. The user delegated remaining non-UI work; menu, tooltip, HUD and mobile redesign/acceptance stay deferred.
 
+## 3D documents
+
+| Document | Status |
+|---|---|
+| This file | Current renderer architecture, confirmed choices and remaining work |
+| [3D-CUSTOM-PROOF.md](3D-CUSTOM-PROOF.md) | Current art review candidate: custom Goblin and seasonal scenery |
+| [3D-ART-REWORK.md](3D-ART-REWORK.md) | Approved rework scope (stages 1–2), seven archer designs, scene proportions |
+| [3D-MODEL-REFINEMENT.md](3D-MODEL-REFINEMENT.md) | Paused pack-mesh reduction experiment, kept for comparison |
+| [3D-BENCHMARK.md](3D-BENCHMARK.md) | Desktop measurements from 2026-11-13; 60 fps not yet verified |
+
 ## Confirmed choices and open decisions
 
 - Three.js renders the existing fixed-step simulation. Runtime dependencies and authored assets are allowed.
@@ -75,6 +85,8 @@ All 16 camera presets have automated framing and zoom/picking checks on Meadow, 
 ## Comparison study and reuse
 
 `camera-preview.html` remains a development study with four direction/tilt comparisons, real generated maps/seeds, 0/12/40/80-tower density fixtures and a close archer/goblin art pair. Its enemies follow open routes without combat. The art pair now uses the same Blender goblin export as the live game; its conventional skinned copy is for inspection rather than crowd rendering. Terrain look compares the artwork treatment with the earlier blockout. The crisp-neutral light and visibility policy are shared.
+
+Two study defects were fixed after review: skeleton bounds were measured before the hierarchy was initialized, which normalized the goblin about 100 times too small, and a separate legacy tower generator still drew old archer roofs. The study now uses the shared tower/hero builders, and a regression test measures skinned vertices across the walk clip.
 
 Camera math, world mapping, terrain sampling, procedural source builders, palettes, lighting, voxel assembly and visibility easing are reused. The Blender files/GLBs are production-editable sources and exports, not screenshots that must be rebuilt for the game. The fixture's extra budget and scripted movement stay in test infrastructure.
 
