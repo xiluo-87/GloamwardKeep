@@ -38,6 +38,8 @@ export function towerName(t: Tower): string {
 
 export class Panel {
   private sig = '';
+  private hoveredUpgrade: HTMLElement | null = null;
+  private focusedUpgrade: HTMLElement | null = null;
   private fields: HTMLElement[] = [];
   private bars: HTMLElement[] = [];
   private cds: HTMLElement[] = [];
@@ -50,6 +52,46 @@ export class Panel {
       if (!b || (b as HTMLButtonElement).disabled) return;
       this.act(b.dataset.act as string, b);
     });
+    el.addEventListener('pointerover', (e) => {
+      const b = (e.target as HTMLElement).closest('[data-act="up"]') as HTMLElement | null;
+      if (b && !b.contains(e.relatedTarget as Node | null)) {
+        this.hoveredUpgrade = b;
+        this.syncUpgradePreview();
+      }
+    });
+    el.addEventListener('pointerout', (e) => {
+      const b = (e.target as HTMLElement).closest('[data-act="up"]') as HTMLElement | null;
+      if (b && !b.contains(e.relatedTarget as Node | null) && this.hoveredUpgrade === b) {
+        this.hoveredUpgrade = null;
+        this.syncUpgradePreview();
+      }
+    });
+    el.addEventListener('focusin', (e) => {
+      const b = (e.target as HTMLElement).closest('[data-act="up"]') as HTMLElement | null;
+      if (b) {
+        this.focusedUpgrade = b;
+        this.syncUpgradePreview();
+      }
+    });
+    el.addEventListener('focusout', (e) => {
+      const b = (e.target as HTMLElement).closest('[data-act="up"]') as HTMLElement | null;
+      if (b && !b.contains(e.relatedTarget as Node | null) && this.focusedUpgrade === b) {
+        this.focusedUpgrade = null;
+        this.syncUpgradePreview();
+      }
+    });
+  }
+
+  private syncUpgradePreview(): void {
+    if (this.hoveredUpgrade && !this.hoveredUpgrade.isConnected) this.hoveredUpgrade = null;
+    if (this.focusedUpgrade && !this.focusedUpgrade.isConnected) this.focusedUpgrade = null;
+    const button = this.hoveredUpgrade ?? this.focusedUpgrade;
+    if (!button) {
+      this.session.previewUpgrade(null);
+      return;
+    }
+    const arg = button.dataset.arg;
+    this.session.previewUpgrade(arg === 'a' || arg === 'b' ? arg : 'tier');
   }
 
   private act(act: string, b: HTMLElement): void {
@@ -84,6 +126,9 @@ export class Panel {
     // On wide screens the panel stays put (so the board never shifts under the pointer) and shows help when idle.
     if (!sig && wide) sig = 'idle';
     if (sig !== this.sig) {
+      this.hoveredUpgrade = null;
+      this.focusedUpgrade = null;
+      this.session.previewUpgrade(null);
       const wasVisible = this.visible;
       this.sig = sig;
       if (!sig) { this.el.hidden = true; this.el.innerHTML = ''; }

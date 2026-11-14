@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-11-13T17:55:31.697Z",
+  "map": "meadow",
+  "seed": 0,
+  "direction": 0,
+  "tilt": 1,
+  "cycles": [
+    {
+      "cycle": 1,
+      "renderingSkipped": false,
+      "prepareMs": 720.5999999046326,
+      "firstDrawMs": 139.40000009536743,
+      "counts": {
+        "enemies": 0,
+        "projectiles": 0,
+        "pets": 0,
+        "pools": 0,
+        "towers": 0
+      },
+      "enemyKind": "mixed",
+      "warmupSeconds": 3,
+      "sampleSeconds": 10.000400000095368,
+      "frames": 299,
+      "rafIntervalMs": {
+        "mean": 33.33277591973244,
+        "p50": 33.399999999999636,
+        "p95": 34.79999999999927,
+        "p99": 35
+      },
+      "cpuDrawMs": {
+        "mean": 5.071237438099839,
+        "p50": 5.300000190734863,
+        "p95": 6.099999904632568,
+        "p99": 6.799999713897705
+      },
+      "diagnostics": {
+        "calls": 115,
+        "triangles": 812622,
+        "geometries": 55,
+        "textures": 23,
+        "programs": 15,
+        "width": 1280,
+        "height": 720,
+        "pixelRatio": 2,
+        "model": "ready",
+        "crowdPoseBytes": 74711040
+      },
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+      "hardwareConcurrency": 14,
+      "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)",
+      "assetStatus": "ready"
+    }
+  ]
+}

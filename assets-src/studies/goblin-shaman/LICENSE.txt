@@ -1,0 +1,31 @@
+Blocky Characters Pack — 3D Asset Royalty-Free License
+
+You bought a licence to use these files, not the files themselves.
+
+YOU MAY
+
+  - Use everything in this pack — the GLB files, the generated React Three
+    Fiber components, the palettes and the showroom — in personal and
+    commercial projects, with no limit on the number of projects, the size of
+    your team or the revenue you make.
+  - Modify, remesh, retexture, combine and build on the models.
+  - Ship them inside games, applications, films, renders, animations and
+    interactive experiences distributed to end users, including in a form
+    that end users can extract from your build.
+
+YOU MAY NOT
+
+  - Redistribute, resell, sublicense, publish or give away the files
+    themselves, modified or not, as an asset, a pack, a template, a scene, an
+    NFT or part of any collection whose value is the assets.
+  - Use them to train, fine-tune or evaluate a generative model.
+  - Present the models, renders of them or this pack as your own asset
+    product.
+
+The licence is granted to one person or one legal entity, is perpetual, and
+survives any later change to these terms. It ends if you redistribute the
+files.
+
+These files are provided as they are, without warranty of any kind.
+
+The current text is always at https://3d-asset.com/license/

@@ -3,6 +3,7 @@
 import { HEIGHT, MAP_BALANCE, MapGenParams, MapId, WORLD } from '../data/balance';
 import { hexDistance, hexNeighbours } from './hex';
 import { Rng } from './rng';
+import { generateDecorations } from './decorations';
 
 export interface Terrain {
   cols: number;
@@ -11,6 +12,8 @@ export interface Terrain {
   height: Uint8Array;
   /** Feature per tile: FEATURE.none, forest or rocks. Never set on height 0. */
   feature: Uint8Array;
+  /** Render-only sparse decor on otherwise bare raised tiles. */
+  decoration: Uint8Array;
   /** Spawn gates (tiles on the left edge) and the keep (a tile on the right edge). */
   spawns: [number, number][];
   goal: [number, number];
@@ -21,6 +24,7 @@ export interface Terrain {
 }
 
 const MAX_ATTEMPTS = 200;
+type MapTerrain = Omit<Terrain, 'decoration'>;
 
 export const FEATURE = { none: 0, forest: 1, rocks: 2 } as const;
 
@@ -29,14 +33,14 @@ export function generateMap(preset: MapId, seed: number): Terrain {
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const s = (seed + attempt * 7919) >>> 0;
     const t = tryGenerate(p, s);
-    if (t) return t;
+    if (t) return { ...t, decoration: generateDecorations(t) };
   }
   // Fallback that can't fail: the road on flat low ground, with no length or reach checks.
-  const t = tryGenerate({ ...p, heightShare: [1, 0, 0, 0], minPathTiles: 0, minReach: 0 }, seed) as Terrain;
-  return t;
+  const t = tryGenerate({ ...p, heightShare: [1, 0, 0, 0], minPathTiles: 0, minReach: 0 }, seed) as MapTerrain;
+  return { ...t, decoration: generateDecorations(t) };
 }
 
-function tryGenerate(p: MapGenParams, seed: number): Terrain | null {
+function tryGenerate(p: MapGenParams, seed: number): MapTerrain | null {
   const { cols, rows } = WORLD;
   const rng = new Rng(seed);
   const n = cols * rows;

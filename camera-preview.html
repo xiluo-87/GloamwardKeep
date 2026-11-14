@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111a1c" />
+    <title>Voxel map study · Gloamward Keep</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main>
+      <header class="intro">
+        <div><p class="eyebrow">Gloamward Keep / voxel map study</p><h1>A real battlefield.</h1></div>
+        <p class="intro-note">The game's actual hex map and building rules, with provisional voxel models.<br />Compare tower density and visibility from the chosen camera.</p>
+      </header>
+      <section class="toolbar" aria-label="Preview settings">
+        <div class="map-controls">
+          <label>Study<select id="study"><option value="density">Tower density</option><option value="art">Archer + goblin</option></select></label>
+          <label>Terrain look<select id="terrain-look"><option value="artwork">Artwork study</option><option value="blockout">Earlier blockout</option></select></label>
+          <label>Map<select id="map"><option value="meadow">Meadow</option><option value="highlands">Highlands</option><option value="canyon">Canyon</option></select></label>
+          <label>Seed<input id="seed" type="number" min="0" max="4294967295" step="1" value="5" /></label>
+          <button id="new-map" type="button">New seed</button>
+          <label>Towers<select id="density"><option value="0">None</option><option value="12">12</option><option value="40" selected>40</option><option value="80">80</option></select></label>
+          <label class="motion-control"><input id="motion" type="checkbox" checked />Moving enemies</label>
+          <label class="motion-control"><input id="visibility-aid" type="checkbox" checked />Visibility aid</label>
+        </div>
+        <div class="mode-controls" role="group" aria-label="Comparison mode">
+          <button id="directions-mode" type="button" aria-pressed="true">Compare directions</button>
+          <button id="tilts-mode" type="button" aria-pressed="false">Compare tilts</button>
+        </div>
+      </section>
+      <section class="angle-controls" aria-label="Camera candidates">
+        <div id="tilt-controls"><span class="control-label">Same tilt in all views</span><div id="tilt-buttons" class="choices" role="group" aria-label="Tilt angle"></div></div>
+        <div id="direction-controls" hidden><span class="control-label">Same direction in all views</span><div id="direction-buttons" class="choices" role="group" aria-label="Viewing direction"></div></div>
+        <div class="sample-controls"><button id="inspect-pair" type="button" hidden>Inspect pair</button><button id="fit" type="button">Fit all views</button></div>
+      </section>
+      <div class="study-info"><p id="comparison-description" aria-live="polite"></p><span id="selection">Click a tile to inspect it across views</span></div>
+      <p id="density-summary" class="density-summary" aria-live="polite"></p>
+      <p id="art-status" class="art-status" role="status" hidden></p><button id="retry-model" type="button" hidden>Retry model</button>
+      <section id="stage" aria-label="Camera comparison">
+        <canvas id="scene" aria-hidden="true"></canvas>
+        <div id="views"></div>
+        <p id="error" role="alert" hidden></p>
+      </section>
+      <footer><p>Wheel or pinch to zoom toward the pointer or touch midpoint. No drag panning.<br />Trees and rocks fade over mobs; opaque towers retain priority with faint hidden-mob silhouettes.<br />Readability scene: display-only enemies follow open road routes. Combat is not running.</p><p><span class="key gate-key"></span>G = gate <span class="key keep-key"></span>K = keep <span class="divider">/</span> Angles are measured above the ground.</p></footer>
+    </main>
+    <script type="module" src="/src/camera-preview/main.ts"></script>
+  </body>
+</html>

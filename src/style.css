@@ -10,6 +10,7 @@
 [hidden] { display: none !important; }
 html, body { margin: 0; height: 100%; overflow: hidden; background: #a9c27a; color: var(--ink); font-family: Georgia, var(--serif); overscroll-behavior: none; user-select: none; -webkit-user-select: none; }
 #game { position: fixed; inset: 0; width: 100vw; height: 100dvh; display: block; touch-action: none; }
+.graphics-notice { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 20; padding: 12px 18px; border-radius: 6px; background: #f3e6c4; color: #2f2214; }
 
 /* ---------- buttons ---------- */
 button { font: inherit; color: var(--ink); background: linear-gradient(#f7ecd0, #e5d19b); border: 1px solid var(--parch-line); border-bottom-width: 2px; border-radius: 7px; padding: 10px 14px; min-height: 42px; cursor: pointer; transition: filter 0.1s, transform 0.05s; touch-action: manipulation; }

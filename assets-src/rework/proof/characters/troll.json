@@ -1,0 +1,228 @@
+{
+  "asset": "troll",
+  "sourcePath": "blocky-pack/dcc/tiny-characters-blocky-hill-troll.glb",
+  "sourceSha256": "b66f6374eb769b33320fcb0bb70c941bbbe94eedec7bca1c19bed68cfa1bd628",
+  "pipeline": "assets-src/rework/pipeline/adapt_pack.py",
+  "pipelineSha256": "5a2df3640536e17f303a000a3718f06f7ac47e138595fce0d3eda8f985c69684",
+  "adaptation": "vertex-color-remap-only; original mesh topology, skin weights, rig hierarchy, transforms, and clips retained",
+  "palette": {
+    "cloth": "#6e5b40",
+    "cloth-light": "#927b55",
+    "cloth-shadow": "#453e31",
+    "eye": "#22251f",
+    "leather": "#79573a",
+    "leather-dark": "#4e3b2a",
+    "leather-light": "#9a7650",
+    "metal": "#929391",
+    "metal-dark": "#5d6565",
+    "skin": "#7c8350",
+    "skin-light": "#9a9b68",
+    "skin-shadow": "#596241",
+    "stone-light": "#b9b9b3",
+    "tooth": "#d8cba9"
+  },
+  "colorAttribute": {
+    "elements": 10644,
+    "mappedColors": 11,
+    "note": "color-paint output is read live; this baseline upgrade preserved the existing attribute",
+    "sourceColors": 38,
+    "currentColors": [
+      "#22251f",
+      "#4e3b2a",
+      "#596241",
+      "#5d6565",
+      "#79573a",
+      "#7c8350",
+      "#927b55",
+      "#9a7650",
+      "#9a9b68",
+      "#b9b9b3",
+      "#d8cba9"
+    ]
+  },
+  "sourceMetrics": {
+    "mesh": {
+      "meshName": "tiny-characters-blocky-hill-troll",
+      "vertices": 7090,
+      "triangles": 3548,
+      "joints": 72,
+      "weightedAssignments": 7744,
+      "clips": [
+        "Attack1",
+        "Attack2",
+        "Block",
+        "Death",
+        "Hit",
+        "Idle",
+        "Run",
+        "Special",
+        "Walk",
+        "Wave"
+      ]
+    },
+    "gltf": {
+      "clips": 10,
+      "clip_names": [
+        "Idle",
+        "Walk",
+        "Run",
+        "Wave",
+        "Attack1",
+        "Attack2",
+        "Hit",
+        "Death",
+        "Block",
+        "Special"
+      ],
+      "clip_durations": {
+        "Idle": 5.992495059967041,
+        "Walk": 1.7478110790252686,
+        "Run": 0.9597979784011841,
+        "Wave": 1.2000000476837158,
+        "Attack1": 2.0541000366210938,
+        "Attack2": 2.4015250205993652,
+        "Hit": 1.2479000091552734,
+        "Death": 3.3446500301361084,
+        "Block": 1.6749500036239624,
+        "Special": 2.759399890899658
+      },
+      "channels": 270,
+      "animation_samplers": 270,
+      "accessors": 350,
+      "buffer_views": 4,
+      "binary_bytes": 616632
+    },
+    "skin": {
+      "jointCounts": [
+        72
+      ],
+      "weightVertices": 7090,
+      "weightSumRange": [
+        1.0,
+        1.0000000298023224
+      ]
+    },
+    "triangles": 3548
+  },
+  "output": {
+    "gltf": {
+      "clips": 10,
+      "clip_names": [
+        "Idle",
+        "Walk",
+        "Run",
+        "Wave",
+        "Attack1",
+        "Attack2",
+        "Hit",
+        "Death",
+        "Block",
+        "Special"
+      ],
+      "clip_durations": {
+        "Idle": 5.992495059967041,
+        "Walk": 1.7478110790252686,
+        "Run": 0.9597979784011841,
+        "Wave": 1.2000000476837158,
+        "Attack1": 2.0541000366210938,
+        "Attack2": 2.4015250205993652,
+        "Hit": 1.2479000091552734,
+        "Death": 3.3446500301361084,
+        "Block": 1.6749500036239624,
+        "Special": 2.759399890899658
+      },
+      "channels": 270,
+      "animation_samplers": 270,
+      "accessors": 350,
+      "buffer_views": 4,
+      "binary_bytes": 616632
+    },
+    "skin": {
+      "jointCounts": [
+        72
+      ],
+      "weightVertices": 7090,
+      "weightSumRange": [
+        1.0,
+        1.0000000298023224
+      ]
+    },
+    "triangles": 3548,
+    "triangleCountMatchesSource": true,
+    "markerPresent": true,
+    "nonColorBinaryUnchanged": true,
+    "patch": {
+      "patchedColorValues": 7090,
+      "sourceColorsMapped": 11,
+      "binaryChangedBytes": 68047,
+      "nonColorBinaryUnchanged": true
+    }
+  },
+  "poseBoundsSeconds": {
+    "samples": {
+      "Walk@0.0": [
+        -1.2163848876953125,
+        -0.5621910095214844,
+        -0.0007240255363285542,
+        1.566650390625,
+        1.272491455078125,
+        2.077362060546875
+      ],
+      "Walk@0.2": [
+        -1.2813568115234375,
+        -0.5650405883789062,
+        -0.0005645751953125,
+        1.52081298828125,
+        1.25738525390625,
+        2.07049560546875
+      ],
+      "Walk@0.5": [
+        -1.39239501953125,
+        -0.5468254089355469,
+        -0.0010433197021484375,
+        1.3531036376953125,
+        1.3538742065429688,
+        2.066925048828125
+      ],
+      "Attack1@0.0": [
+        -1.215972900390625,
+        -0.5984153747558594,
+        -6.886421033414081e-08,
+        1.396148681640625,
+        1.3266448974609375,
+        2.0948333740234375
+      ],
+      "Attack1@0.2": [
+        -1.63348388671875,
+        -0.7549171447753906,
+        -3.248429857194424e-05,
+        2.137298583984375,
+        0.8730697631835938,
+        2.672882080078125
+      ],
+      "Attack1@0.5": [
+        -1.2437591552734375,
+        -1.4150009155273438,
+        -8.24473681859672e-06,
+        1.43585205078125,
+        0.7229995727539062,
+        3.1560821533203125
+      ]
+    },
+    "maxCoordinateError": {
+      "Walk@0.0": 0.0,
+      "Walk@0.2": 0.0,
+      "Walk@0.5": 0.0,
+      "Attack1@0.0": 0.0,
+      "Attack1@0.2": 0.0,
+      "Attack1@0.5": 0.0
+    }
+  },
+  "runtimeMethod": "source GLB COLOR_0 patch derived from current saved Blender vertex colors; gltf_tools parse/serialize validation only",
+  "limitation": "Blender 4.5.16 GLB re-export altered source mesh/root bind transforms. Runtime therefore patches the original source GLB; geometry edits/export remain unverified.",
+  "files": {
+    "blend": "troll.blend",
+    "glb": "troll.glb"
+  },
+  "editableBlend": "Current color attributes are read on each --export-existing run. Geometry, topology, rig, transforms, and clips must remain unchanged."
+}

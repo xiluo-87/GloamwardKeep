@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "provisional": true,
+  "canonicalSource": "assets-src/content-manifest.json",
+  "buildScript": "assets-src/pipeline/build_content.py",
+  "outputs": ["library.blend", "library.glb", "build.json"],
+  "nodeConvention": {
+    "root": "exact asset id, local origin at (0,0,0)",
+    "base": "joined visible base geometry",
+    "aim-bowman": "separate joined archer-only rotating attachment",
+    "materials": "one shared matte material driven by corner-domain vertex colors",
+    "editableBlocks": "source voxel blocks and colors retained as object custom properties"
+  },
+  "extraAssets": [
+    { "id": "nature/bush/small-1", "category": "nature", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "nature/bush/small-2", "category": "nature", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "nature/bush/small-3", "category": "nature", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "nature/stone/cluster-1", "category": "nature", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "nature/stone/cluster-2", "category": "nature", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "nature/stone/cluster-3", "category": "nature", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "terrain/kit-grass", "category": "terrain", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "terrain/kit-cliff", "category": "terrain", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "terrain/kit-snow", "category": "terrain", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" },
+    { "id": "terrain/kit-path", "category": "terrain", "builder": "extra_assets", "source": "assets-src/pipeline/build_content.py" }
+  ],
+  "license": "Original project-authored procedural art; no third-party source models or textures are included."
+}

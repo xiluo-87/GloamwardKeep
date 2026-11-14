@@ -11,7 +11,7 @@ import { airRoute, previewRoute } from '../sim/path';
 import { drawKeepSprite } from './keep';
 import { blitBake, hexSub, LIFT, TOP_MARGIN } from './terrain';
 import { drawTower, newLinks, towerHeight, WallLinks } from './towers';
-import { CameraApi, ViewState } from './view';
+import { GameRenderer, ViewState } from './view';
 
 // Effect kinds.
 const SPARK = 0, RING = 1, ARC = 2, CLEAVE = 3, TEXT = 4, PUFF = 5, CHIP = 6, STAR = 7;
@@ -47,7 +47,7 @@ function splitByGoal(route: number[], goalIdx: number): number[][] {
 const hexDist = (a: number, b: number, cols: number): number => hexDistance(a % cols, Math.floor(a / cols), b % cols, Math.floor(b / cols));
 const AURA_BUFF = (t: Tower): boolean => t.stats.buffDamage > 0 || t.stats.buffRate > 0;
 
-export class Renderer implements CameraApi {
+export class Renderer implements GameRenderer {
   private ctx: CanvasRenderingContext2D;
   w = 1;
   h = 1;
@@ -678,7 +678,7 @@ export class Renderer implements CameraApi {
   }
 
   // -------------------------------------------------------------------------------------------
-  // Title and preview (always upright)
+  // Title (always upright)
   // -------------------------------------------------------------------------------------------
 
   drawTitle(time: number, terrain?: Terrain): void {
@@ -711,22 +711,6 @@ export class Renderer implements CameraApi {
     vg.addColorStop(1, 'rgba(0,0,0,0.55)');
     g.fillStyle = vg;
     g.fillRect(0, 0, this.w, this.h);
-  }
-
-  drawPreview(ctx: CanvasRenderingContext2D, terrain: Terrain, w: number, h: number): void {
-    const ww = boardWidth(terrain.cols);
-    const wh = boardHeight(terrain.rows) + TOP_MARGIN;
-    const k = Math.min(w / ww, h / wh);
-    const ox = (w - ww * k) / 2;
-    const oy = (h - wh * k) / 2 + TOP_MARGIN * k;
-    const dprc = ctx.getTransform().a || 1;
-    blitBake(ctx, terrain, ox, oy, k, k * dprc);
-    const gp = tileCenter(terrain.goal[0], terrain.goal[1]);
-    ctx.save();
-    ctx.translate(ox + gp.x * k, oy + (gp.y - terrain.height[terrain.goal[1] * terrain.cols + terrain.goal[0]] * LIFT) * k);
-    ctx.scale(k, k);
-    drawKeepSprite(ctx, 1, 0);
-    ctx.restore();
   }
 
   // -------------------------------------------------------------------------------------------

@@ -1,0 +1,115 @@
+{
+  "blender": "4.5.16 LTS",
+  "source": "assets-src/studies/goblin-shaman/editor-preview.glb",
+  "source_triangles": 2846,
+  "triangles": 1848,
+  "vertices": 1008,
+  "blocks": 42,
+  "kind": "ogreking",
+  "palette": {
+    "skin": "#b49a68",
+    "shade": "#8a714c",
+    "cloth": "#914e36",
+    "leather": "#634331",
+    "steel": "#9fa9a5",
+    "dark": "#222d24",
+    "tooth": "#e1d6ae",
+    "trim": "#d6ad4c"
+  },
+  "changes": [
+    "coarse original body/face/hand voxel geometry",
+    "simple role-specific gear",
+    "subtle chamfered edges",
+    "purchased rig and ten clips preserved"
+  ],
+  "art_status": "Working adaptation for review; UI and final art acceptance remain open.",
+  "optimization": {
+    "before": {
+      "clips": 10,
+      "clip_names": [
+        "Special",
+        "Block",
+        "Death",
+        "Hit",
+        "Attack2",
+        "Attack1",
+        "Wave",
+        "Run",
+        "Walk",
+        "Idle"
+      ],
+      "clip_durations": {
+        "Special": 1.8333333730697632,
+        "Block": 1.2000000476837158,
+        "Death": 1.7666666507720947,
+        "Hit": 0.8666666746139526,
+        "Attack2": 1.2999999523162842,
+        "Attack1": 1.2000000476837158,
+        "Wave": 1.2000000476837158,
+        "Run": 0.6000000238418579,
+        "Walk": 1.0,
+        "Idle": 4.0
+      },
+      "channels": 2160,
+      "animation_samplers": 2160,
+      "accessors": 1436,
+      "buffer_views": 1436,
+      "binary_bytes": 377396,
+      "glb_bytes": 792524
+    },
+    "after": {
+      "clips": 10,
+      "clip_names": [
+        "Special",
+        "Block",
+        "Death",
+        "Hit",
+        "Attack2",
+        "Attack1",
+        "Wave",
+        "Run",
+        "Walk",
+        "Idle"
+      ],
+      "clip_durations": {
+        "Special": 1.850000023841858,
+        "Block": 1.2000000476837158,
+        "Death": 1.7899999618530273,
+        "Hit": 0.8700000047683716,
+        "Attack2": 1.3200000524520874,
+        "Attack1": 1.2000000476837158,
+        "Wave": 1.2000000476837158,
+        "Run": 0.6200000047683716,
+        "Walk": 1.0,
+        "Idle": 4.0
+      },
+      "channels": 884,
+      "animation_samplers": 884,
+      "accessors": 1198,
+      "buffer_views": 1198,
+      "binary_bytes": 383680,
+      "glb_bytes": 723528
+    },
+    "removed_constant_channels": 1276,
+    "trimmed_samplers": 450,
+    "preserved_cubic_samplers": 0,
+    "removed_accessors": 1138,
+    "removed_buffer_views": 1138,
+    "reference_durations": {
+      "Idle": 4.0,
+      "Walk": 1.0,
+      "Run": 0.6200000047683716,
+      "Wave": 1.2000000476837158,
+      "Attack1": 1.2000000476837158,
+      "Attack2": 1.3200000524520874,
+      "Hit": 0.8700000047683716,
+      "Death": 1.7899999618530273,
+      "Block": 1.2000000476837158,
+      "Special": 1.850000023841858
+    }
+  },
+  "sha256": "fb92f7d7d0c38a7b0938d1fad581000d78b15d2e2aac40f8901dcd613f87b58c",
+  "pipeline": "assets-src/pipeline/build_characters.py",
+  "pipeline_sha256": "8157a8f1362fc875b84299c7b59be6ed4afd10b4f28863df2c349249c5664924",
+  "source_sha256": "48d8a90968caac7011e6378addfd78a7238db7ad2cc3ea11f69c7464d73a88cb"
+}

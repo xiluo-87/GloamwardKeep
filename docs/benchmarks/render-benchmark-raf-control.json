@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-11-13T17:54:29.736Z",
+  "map": "meadow",
+  "seed": 0,
+  "direction": 0,
+  "tilt": 1,
+  "cycles": [
+    {
+      "cycle": 1,
+      "renderingSkipped": true,
+      "prepareMs": 735.9000000953674,
+      "firstDrawMs": 138.2999997138977,
+      "counts": {
+        "enemies": 0,
+        "projectiles": 0,
+        "pets": 0,
+        "pools": 0,
+        "towers": 0
+      },
+      "enemyKind": "mixed",
+      "warmupSeconds": 3,
+      "sampleSeconds": 10.000699999809266,
+      "frames": 299,
+      "rafIntervalMs": {
+        "mean": 33.338795986622074,
+        "p50": 33.30000000000109,
+        "p95": 34.600000000000364,
+        "p99": 35.099999999999454
+      },
+      "cpuDrawMs": {
+        "mean": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "diagnostics": {
+        "calls": 172,
+        "triangles": 854596,
+        "geometries": 55,
+        "textures": 23,
+        "programs": 15,
+        "width": 1280,
+        "height": 720,
+        "pixelRatio": 2,
+        "model": "ready",
+        "crowdPoseBytes": 74711040
+      },
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+      "hardwareConcurrency": 14,
+      "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)",
+      "assetStatus": "ready"
+    }
+  ]
+}

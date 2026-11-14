@@ -82,6 +82,7 @@ export class Session {
     this.view.selectedTile = null;
     this.view.hoverTile = null;
     this.view.routePreview = null;
+    this.view.upgradePreview = null;
     this.dropHistory();
   }
 
@@ -129,6 +130,7 @@ export class Session {
     this.view.routePreview = null;
     this.view.routeSealed = false;
     this.view.placeOk = false;
+    this.view.upgradePreview = null;
   }
 
   selectTile(col: number, row: number): void {
@@ -189,6 +191,7 @@ export class Session {
     const v = this.view;
     const s = this.run;
     if (v.selectedUid && s && !findTower(s, v.selectedUid)) { v.selectedUid = 0; if (this.sheet) this.closeOverlays(); this.onChange(); }
+    if (v.upgradePreview && (!s || !findTower(s, v.upgradePreview.uid))) v.upgradePreview = null;
     if (!s || !v.placing || !v.hoverTile) { v.placeOk = false; return; }
     v.placeOk = canBuild(s, v.placing, v.hoverTile.col, v.hoverTile.row) === 'ok';
   }
@@ -216,6 +219,21 @@ export class Session {
   previewPlain(on: boolean): void {
     if (on) this.previewing = true;
     else this.clearPreview();
+  }
+
+  /** Marks a real upgrade option for a renderer-only additional-range preview. */
+  previewUpgrade(path: 'tier' | 'a' | 'b' | null): void {
+    const t = this.selected;
+    const s = this.run;
+    if (path) {
+      this.view.placing = null;
+      this.view.routePreview = null;
+      this.view.routeSealed = false;
+      this.view.placeOk = false;
+    }
+    this.view.upgradePreview = path && t && s && !t.hero && upgradeOptions(t, s.mods).some(o => o.path === path)
+      ? { uid: t.uid, path }
+      : null;
   }
 
   /** Whether building here on the road would seal it (for the description card). */
@@ -273,6 +291,7 @@ export class Session {
   }
 
   upgradeSelected(path?: 'a' | 'b'): boolean {
+    this.view.upgradePreview = null;
     const s = this.run;
     const t = this.selected;
     if (!s || !t || t.hero) return false;
@@ -306,6 +325,7 @@ export class Session {
   sellSelected(now: number): void {
     const t = this.selected;
     if (!t) return;
+    this.view.upgradePreview = null;
     if (isUndo(t) || (this.sellArm.uid === t.uid && now - this.sellArm.at < 3000)) this.sellNow();
     else { this.sellArm.uid = t.uid; this.sellArm.at = now; this.onChange(); }
   }

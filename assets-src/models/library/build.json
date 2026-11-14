@@ -1,0 +1,1032 @@
+{
+  "blender": "4.5.16 LTS",
+  "command": "Blender --background --python assets-src/pipeline/build_content.py",
+  "source": "assets-src/content-manifest.json",
+  "sourceSha256": "5b5dcfe1369e47c0609defabaa64004f5ccaaadd4cbfdaccea96caf6020dd45a",
+  "scriptSha256": "bd8b05042afd7279918a22c815788c5aa8d7607f617d67199f8f5a686d56d114",
+  "license": "Original project-authored procedural artwork; no third-party model source or license is used.",
+  "provisional": true,
+  "models": [
+    {
+      "id": "tower/palisade/tier-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 150,
+      "faces": 104,
+      "sourceBlocks": 9,
+      "removedInternalArea": 0.789275
+    },
+    {
+      "id": "tower/palisade/tier-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 144,
+      "faces": 100,
+      "sourceBlocks": 9,
+      "removedInternalArea": 0.78945
+    },
+    {
+      "id": "tower/palisade/tier-3",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 144,
+      "faces": 100,
+      "sourceBlocks": 9,
+      "removedInternalArea": 0.7878
+    },
+    {
+      "id": "tower/palisade/fork-a-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 268,
+      "faces": 188,
+      "sourceBlocks": 16,
+      "removedInternalArea": 1.75935
+    },
+    {
+      "id": "tower/palisade/fork-a-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 276,
+      "faces": 194,
+      "sourceBlocks": 17,
+      "removedInternalArea": 1.7737
+    },
+    {
+      "id": "tower/palisade/fork-b-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 244,
+      "faces": 172,
+      "sourceBlocks": 16,
+      "removedInternalArea": 1.61815
+    },
+    {
+      "id": "tower/palisade/fork-b-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 252,
+      "faces": 178,
+      "sourceBlocks": 17,
+      "removedInternalArea": 1.6325
+    },
+    {
+      "id": "tower/archer/tier-1",
+      "category": "tower",
+      "nodes": 2,
+      "vertices": 1525,
+      "faces": 1039,
+      "sourceBlocks": 118,
+      "removedInternalArea": 9.829761
+    },
+    {
+      "id": "tower/archer/tier-2",
+      "category": "tower",
+      "nodes": 2,
+      "vertices": 1509,
+      "faces": 1031,
+      "sourceBlocks": 119,
+      "removedInternalArea": 9.869061
+    },
+    {
+      "id": "tower/archer/tier-3",
+      "category": "tower",
+      "nodes": 2,
+      "vertices": 1539,
+      "faces": 1051,
+      "sourceBlocks": 120,
+      "removedInternalArea": 9.898748
+    },
+    {
+      "id": "tower/archer/fork-a-1",
+      "category": "tower",
+      "nodes": 2,
+      "vertices": 1528,
+      "faces": 1044,
+      "sourceBlocks": 121,
+      "removedInternalArea": 9.935511
+    },
+    {
+      "id": "tower/archer/fork-a-2",
+      "category": "tower",
+      "nodes": 2,
+      "vertices": 1553,
+      "faces": 1060,
+      "sourceBlocks": 123,
+      "removedInternalArea": 10.024548
+    },
+    {
+      "id": "tower/archer/fork-b-1",
+      "category": "tower",
+      "nodes": 2,
+      "vertices": 1528,
+      "faces": 1044,
+      "sourceBlocks": 121,
+      "removedInternalArea": 9.935511
+    },
+    {
+      "id": "tower/archer/fork-b-2",
+      "category": "tower",
+      "nodes": 2,
+      "vertices": 1553,
+      "faces": 1060,
+      "sourceBlocks": 123,
+      "removedInternalArea": 10.024548
+    },
+    {
+      "id": "tower/catapult/tier-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 290,
+      "faces": 191,
+      "sourceBlocks": 18,
+      "removedInternalArea": 2.971162
+    },
+    {
+      "id": "tower/catapult/tier-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 306,
+      "faces": 201,
+      "sourceBlocks": 19,
+      "removedInternalArea": 3.045113
+    },
+    {
+      "id": "tower/catapult/tier-3",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 306,
+      "faces": 201,
+      "sourceBlocks": 19,
+      "removedInternalArea": 3.052237
+    },
+    {
+      "id": "tower/catapult/fork-a-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 336,
+      "faces": 221,
+      "sourceBlocks": 21,
+      "removedInternalArea": 3.089262
+    },
+    {
+      "id": "tower/catapult/fork-a-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 344,
+      "faces": 227,
+      "sourceBlocks": 22,
+      "removedInternalArea": 3.146288
+    },
+    {
+      "id": "tower/catapult/fork-b-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 312,
+      "faces": 205,
+      "sourceBlocks": 20,
+      "removedInternalArea": 3.139263
+    },
+    {
+      "id": "tower/catapult/fork-b-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 332,
+      "faces": 219,
+      "sourceBlocks": 22,
+      "removedInternalArea": 3.273888
+    },
+    {
+      "id": "tower/frost/tier-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 134,
+      "faces": 92,
+      "sourceBlocks": 12,
+      "removedInternalArea": 1.510575
+    },
+    {
+      "id": "tower/frost/tier-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 148,
+      "faces": 102,
+      "sourceBlocks": 14,
+      "removedInternalArea": 1.59155
+    },
+    {
+      "id": "tower/frost/tier-3",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 168,
+      "faces": 116,
+      "sourceBlocks": 16,
+      "removedInternalArea": 1.6707
+    },
+    {
+      "id": "tower/frost/fork-a-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 220,
+      "faces": 152,
+      "sourceBlocks": 20,
+      "removedInternalArea": 1.83945
+    },
+    {
+      "id": "tower/frost/fork-a-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 248,
+      "faces": 172,
+      "sourceBlocks": 23,
+      "removedInternalArea": 1.8738
+    },
+    {
+      "id": "tower/frost/fork-b-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 244,
+      "faces": 167,
+      "sourceBlocks": 21,
+      "removedInternalArea": 1.78655
+    },
+    {
+      "id": "tower/frost/fork-b-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 272,
+      "faces": 187,
+      "sourceBlocks": 24,
+      "removedInternalArea": 1.8209
+    },
+    {
+      "id": "tower/mage/tier-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 114,
+      "faces": 76,
+      "sourceBlocks": 9,
+      "removedInternalArea": 3.580025
+    },
+    {
+      "id": "tower/mage/tier-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 120,
+      "faces": 80,
+      "sourceBlocks": 10,
+      "removedInternalArea": 4.13215
+    },
+    {
+      "id": "tower/mage/tier-3",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 130,
+      "faces": 88,
+      "sourceBlocks": 10,
+      "removedInternalArea": 4.582225
+    },
+    {
+      "id": "tower/mage/fork-a-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 196,
+      "faces": 133,
+      "sourceBlocks": 13,
+      "removedInternalArea": 5.02675
+    },
+    {
+      "id": "tower/mage/fork-a-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 196,
+      "faces": 133,
+      "sourceBlocks": 14,
+      "removedInternalArea": 5.545775
+    },
+    {
+      "id": "tower/mage/fork-b-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 212,
+      "faces": 142,
+      "sourceBlocks": 13,
+      "removedInternalArea": 5.24565
+    },
+    {
+      "id": "tower/mage/fork-b-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 212,
+      "faces": 142,
+      "sourceBlocks": 14,
+      "removedInternalArea": 5.805975
+    },
+    {
+      "id": "tower/lightning/tier-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 126,
+      "faces": 86,
+      "sourceBlocks": 9,
+      "removedInternalArea": 0.564475
+    },
+    {
+      "id": "tower/lightning/tier-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 120,
+      "faces": 82,
+      "sourceBlocks": 9,
+      "removedInternalArea": 0.59585
+    },
+    {
+      "id": "tower/lightning/tier-3",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 132,
+      "faces": 90,
+      "sourceBlocks": 9,
+      "removedInternalArea": 0.615
+    },
+    {
+      "id": "tower/lightning/fork-a-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 148,
+      "faces": 102,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.61335
+    },
+    {
+      "id": "tower/lightning/fork-a-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 156,
+      "faces": 108,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.6277
+    },
+    {
+      "id": "tower/lightning/fork-b-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 148,
+      "faces": 102,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.61335
+    },
+    {
+      "id": "tower/lightning/fork-b-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 156,
+      "faces": 108,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.6277
+    },
+    {
+      "id": "tower/aviary/tier-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 206,
+      "faces": 140,
+      "sourceBlocks": 13,
+      "removedInternalArea": 0.567425
+    },
+    {
+      "id": "tower/aviary/tier-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 207,
+      "faces": 142,
+      "sourceBlocks": 15,
+      "removedInternalArea": 0.7036
+    },
+    {
+      "id": "tower/aviary/tier-3",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 207,
+      "faces": 142,
+      "sourceBlocks": 15,
+      "removedInternalArea": 0.67655
+    },
+    {
+      "id": "tower/aviary/fork-a-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 216,
+      "faces": 151,
+      "sourceBlocks": 18,
+      "removedInternalArea": 0.7515
+    },
+    {
+      "id": "tower/aviary/fork-a-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 227,
+      "faces": 159,
+      "sourceBlocks": 19,
+      "removedInternalArea": 0.80345
+    },
+    {
+      "id": "tower/aviary/fork-b-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 264,
+      "faces": 183,
+      "sourceBlocks": 19,
+      "removedInternalArea": 0.9051
+    },
+    {
+      "id": "tower/aviary/fork-b-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 275,
+      "faces": 191,
+      "sourceBlocks": 20,
+      "removedInternalArea": 0.99305
+    },
+    {
+      "id": "tower/shrine/tier-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 132,
+      "faces": 92,
+      "sourceBlocks": 10,
+      "removedInternalArea": 0.768625
+    },
+    {
+      "id": "tower/shrine/tier-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 122,
+      "faces": 86,
+      "sourceBlocks": 10,
+      "removedInternalArea": 0.77195
+    },
+    {
+      "id": "tower/shrine/tier-3",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 122,
+      "faces": 86,
+      "sourceBlocks": 10,
+      "removedInternalArea": 0.6956
+    },
+    {
+      "id": "tower/shrine/fork-a-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 142,
+      "faces": 100,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.79445
+    },
+    {
+      "id": "tower/shrine/fork-a-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 170,
+      "faces": 120,
+      "sourceBlocks": 13,
+      "removedInternalArea": 0.8088
+    },
+    {
+      "id": "tower/shrine/fork-b-1",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 142,
+      "faces": 100,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.91645
+    },
+    {
+      "id": "tower/shrine/fork-b-2",
+      "category": "tower",
+      "nodes": 1,
+      "vertices": 170,
+      "faces": 120,
+      "sourceBlocks": 13,
+      "removedInternalArea": 0.8912
+    },
+    {
+      "id": "hero/knight/base",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 98,
+      "faces": 68,
+      "sourceBlocks": 8,
+      "removedInternalArea": 0.6132
+    },
+    {
+      "id": "hero/knight/level-4",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 124,
+      "faces": 87,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.7056
+    },
+    {
+      "id": "hero/knight/skill-branch-0",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 132,
+      "faces": 93,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.7056
+    },
+    {
+      "id": "hero/knight/skill-branch-1",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 132,
+      "faces": 93,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.7056
+    },
+    {
+      "id": "hero/knight/skill-branch-2",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 132,
+      "faces": 93,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.7056
+    },
+    {
+      "id": "hero/cleric/base",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 88,
+      "faces": 60,
+      "sourceBlocks": 8,
+      "removedInternalArea": 0.6637
+    },
+    {
+      "id": "hero/cleric/level-4",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 126,
+      "faces": 86,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.7433
+    },
+    {
+      "id": "hero/cleric/skill-branch-0",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 144,
+      "faces": 98,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.76435
+    },
+    {
+      "id": "hero/cleric/skill-branch-1",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 144,
+      "faces": 98,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.76435
+    },
+    {
+      "id": "hero/cleric/skill-branch-2",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 147,
+      "faces": 100,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.760775
+    },
+    {
+      "id": "hero/sorcerer/base",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 72,
+      "faces": 50,
+      "sourceBlocks": 7,
+      "removedInternalArea": 0.3982
+    },
+    {
+      "id": "hero/sorcerer/level-4",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 108,
+      "faces": 75,
+      "sourceBlocks": 10,
+      "removedInternalArea": 0.4819
+    },
+    {
+      "id": "hero/sorcerer/skill-branch-0",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 116,
+      "faces": 81,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.4819
+    },
+    {
+      "id": "hero/sorcerer/skill-branch-1",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 116,
+      "faces": 81,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.4819
+    },
+    {
+      "id": "hero/sorcerer/skill-branch-2",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 116,
+      "faces": 81,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.4819
+    },
+    {
+      "id": "hero/ranger/base",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 80,
+      "faces": 56,
+      "sourceBlocks": 7,
+      "removedInternalArea": 0.4955
+    },
+    {
+      "id": "hero/ranger/level-4",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 122,
+      "faces": 86,
+      "sourceBlocks": 10,
+      "removedInternalArea": 0.5669
+    },
+    {
+      "id": "hero/ranger/skill-branch-0",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 130,
+      "faces": 92,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.5669
+    },
+    {
+      "id": "hero/ranger/skill-branch-1",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 130,
+      "faces": 92,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.5669
+    },
+    {
+      "id": "hero/ranger/skill-branch-2",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 130,
+      "faces": 92,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.5669
+    },
+    {
+      "id": "hero/druid/base",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 94,
+      "faces": 64,
+      "sourceBlocks": 8,
+      "removedInternalArea": 0.61405
+    },
+    {
+      "id": "hero/druid/level-4",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 132,
+      "faces": 90,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.69115
+    },
+    {
+      "id": "hero/druid/skill-branch-0",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 150,
+      "faces": 102,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.698013
+    },
+    {
+      "id": "hero/druid/skill-branch-1",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 150,
+      "faces": 102,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.698013
+    },
+    {
+      "id": "hero/druid/skill-branch-2",
+      "category": "hero",
+      "nodes": 1,
+      "vertices": 150,
+      "faces": 102,
+      "sourceBlocks": 12,
+      "removedInternalArea": 0.698013
+    },
+    {
+      "id": "keep/level-1",
+      "category": "keep",
+      "nodes": 1,
+      "vertices": 210,
+      "faces": 152,
+      "sourceBlocks": 22,
+      "removedInternalArea": 4.5643
+    },
+    {
+      "id": "gate/level-1",
+      "category": "gate",
+      "nodes": 1,
+      "vertices": 108,
+      "faces": 76,
+      "sourceBlocks": 11,
+      "removedInternalArea": 0.9936
+    },
+    {
+      "id": "keep/level-2",
+      "category": "keep",
+      "nodes": 1,
+      "vertices": 222,
+      "faces": 160,
+      "sourceBlocks": 23,
+      "removedInternalArea": 4.5819
+    },
+    {
+      "id": "gate/level-2",
+      "category": "gate",
+      "nodes": 1,
+      "vertices": 120,
+      "faces": 84,
+      "sourceBlocks": 12,
+      "removedInternalArea": 1.1624
+    },
+    {
+      "id": "keep/level-3",
+      "category": "keep",
+      "nodes": 1,
+      "vertices": 259,
+      "faces": 185,
+      "sourceBlocks": 25,
+      "removedInternalArea": 4.6813
+    },
+    {
+      "id": "gate/level-3",
+      "category": "gate",
+      "nodes": 1,
+      "vertices": 120,
+      "faces": 84,
+      "sourceBlocks": 12,
+      "removedInternalArea": 1.2448
+    },
+    {
+      "id": "keep/level-4",
+      "category": "keep",
+      "nodes": 1,
+      "vertices": 297,
+      "faces": 210,
+      "sourceBlocks": 27,
+      "removedInternalArea": 4.7953
+    },
+    {
+      "id": "gate/level-4",
+      "category": "gate",
+      "nodes": 1,
+      "vertices": 120,
+      "faces": 84,
+      "sourceBlocks": 12,
+      "removedInternalArea": 1.2696
+    },
+    {
+      "id": "terrain/level-0",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 8,
+      "faces": 6,
+      "sourceBlocks": 1,
+      "removedInternalArea": 0.0
+    },
+    {
+      "id": "terrain/level-1",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 12,
+      "faces": 10,
+      "sourceBlocks": 2,
+      "removedInternalArea": 1.9208
+    },
+    {
+      "id": "terrain/level-2",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 12,
+      "faces": 10,
+      "sourceBlocks": 2,
+      "removedInternalArea": 1.9208
+    },
+    {
+      "id": "terrain/level-3",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 12,
+      "faces": 10,
+      "sourceBlocks": 2,
+      "removedInternalArea": 1.9208
+    },
+    {
+      "id": "terrain/level-4",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 12,
+      "faces": 10,
+      "sourceBlocks": 2,
+      "removedInternalArea": 1.9208
+    },
+    {
+      "id": "nature/forest/sample-1",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 201,
+      "faces": 169,
+      "sourceBlocks": 59,
+      "removedInternalArea": 5.118692
+    },
+    {
+      "id": "nature/forest/sample-2",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 201,
+      "faces": 169,
+      "sourceBlocks": 59,
+      "removedInternalArea": 4.914439
+    },
+    {
+      "id": "nature/forest/sample-3",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 201,
+      "faces": 169,
+      "sourceBlocks": 59,
+      "removedInternalArea": 5.020528
+    },
+    {
+      "id": "nature/rocks/sample-1",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 113,
+      "faces": 75,
+      "sourceBlocks": 9,
+      "removedInternalArea": 1.311686
+    },
+    {
+      "id": "nature/rocks/sample-2",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 118,
+      "faces": 77,
+      "sourceBlocks": 8,
+      "removedInternalArea": 1.267649
+    },
+    {
+      "id": "nature/rocks/sample-3",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 107,
+      "faces": 71,
+      "sourceBlocks": 8,
+      "removedInternalArea": 0.662361
+    },
+    {
+      "id": "nature/bush/small-1",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 44,
+      "faces": 30,
+      "sourceBlocks": 4,
+      "removedInternalArea": 0.134178
+    },
+    {
+      "id": "nature/stone/cluster-1",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 60,
+      "faces": 41,
+      "sourceBlocks": 4,
+      "removedInternalArea": 0.1633
+    },
+    {
+      "id": "nature/bush/small-2",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 44,
+      "faces": 30,
+      "sourceBlocks": 4,
+      "removedInternalArea": 0.158165
+    },
+    {
+      "id": "nature/stone/cluster-2",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 42,
+      "faces": 29,
+      "sourceBlocks": 3,
+      "removedInternalArea": 0.178175
+    },
+    {
+      "id": "nature/bush/small-3",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 44,
+      "faces": 30,
+      "sourceBlocks": 4,
+      "removedInternalArea": 0.184125
+    },
+    {
+      "id": "nature/stone/cluster-3",
+      "category": "nature",
+      "nodes": 1,
+      "vertices": 57,
+      "faces": 39,
+      "sourceBlocks": 4,
+      "removedInternalArea": 0.27613
+    },
+    {
+      "id": "terrain/kit-grass",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 12,
+      "faces": 10,
+      "sourceBlocks": 2,
+      "removedInternalArea": 1.9208
+    },
+    {
+      "id": "terrain/kit-cliff",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 38,
+      "faces": 27,
+      "sourceBlocks": 3,
+      "removedInternalArea": 2.1424
+    },
+    {
+      "id": "terrain/kit-snow",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 12,
+      "faces": 10,
+      "sourceBlocks": 2,
+      "removedInternalArea": 1.9208
+    },
+    {
+      "id": "terrain/kit-path",
+      "category": "terrain",
+      "nodes": 1,
+      "vertices": 12,
+      "faces": 10,
+      "sourceBlocks": 2,
+      "removedInternalArea": 1.9208
+    }
+  ],
+  "totals": {
+    "assets": 110,
+    "nodes": 117,
+    "sourceBlocks": 2216,
+    "verticesBeforeBevel": 26522,
+    "facesBeforeBevel": 18291,
+    "removedInternalArea": 235.593218,
+    "glbBytes": 7017184,
+    "bevelWidth": 0.006
+  },
+  "extras": [
+    "nature/bush/small-1",
+    "nature/stone/cluster-1",
+    "nature/bush/small-2",
+    "nature/stone/cluster-2",
+    "nature/bush/small-3",
+    "nature/stone/cluster-3",
+    "terrain/kit-grass",
+    "terrain/kit-cliff",
+    "terrain/kit-snow",
+    "terrain/kit-path"
+  ],
+  "roundtripValidation": {
+    "rootNodes": 110,
+    "positionVertices": 497949,
+    "importedMeshes": 117
+  },
+  "files": [
+    "library.blend",
+    "library.glb"
+  ]
+}

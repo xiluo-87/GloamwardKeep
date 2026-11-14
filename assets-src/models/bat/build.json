@@ -1,0 +1,36 @@
+{
+  "design": "small night bat with charcoal square membrane wings",
+  "source": "original Blender geometry",
+  "blender": "4.5.16 LTS",
+  "kind": "bat",
+  "vertices": 360,
+  "triangles": 660,
+  "moving_parts": [
+    "paired square wings flap around shoulder pivots"
+  ],
+  "clips": [
+    "Idle",
+    "Walk",
+    "Run",
+    "Attack1",
+    "Hit",
+    "Death"
+  ],
+  "palette": {
+    "fur": "#383b3a",
+    "fur_light": "#56514a",
+    "wing": "#59464a",
+    "wing_dark": "#382e36",
+    "wood": "#765239",
+    "wood_light": "#987047",
+    "iron": "#515856",
+    "iron_light": "#78827c",
+    "cargo": "#9a7548",
+    "rope": "#c1a276",
+    "eye": "#d57b45"
+  },
+  "art_status": "Original working voxel model for review; art acceptance remains open.",
+  "pipeline": "assets-src/pipeline/build_misc.py",
+  "pipeline_sha256": "fc9460b01751a9b6b0a96dd34b0466834ca14c15276ca64f5a0f1ac36b64ad89",
+  "sha256": "8a91ffb7faa02fec2791979583b4d705caa3f139dc6af8c32bf198e7757d18c2"
+}

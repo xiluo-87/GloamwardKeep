@@ -1,0 +1,37 @@
+[
+  {
+    "id": "tower/archer/tier-1",
+    "label": "Timber lookout",
+    "design": "Four timber stilts with exposed X braces and a single open plank deck."
+  },
+  {
+    "id": "tower/archer/tier-2",
+    "label": "Stone-footed watchstand",
+    "design": "Low coursed stone plinth, cantilever braces, open timber upper frame and a front access ladder."
+  },
+  {
+    "id": "tower/archer/tier-3",
+    "label": "Masonry watchtower",
+    "design": "Square stone shaft, stepped corner buttresses and a broad wood fighting platform with low stone merlons."
+  },
+  {
+    "id": "tower/archer/fork-a-1",
+    "label": "Longbow perch",
+    "design": "Narrow tall braced timber lookout on two massive side trestles; one unobstructed firing position."
+  },
+  {
+    "id": "tower/archer/fork-a-2",
+    "label": "Eagle-eye gantry",
+    "design": "Offset stone observation pier and a cantilevered split-level timber perch, joined by a visible side stair."
+  },
+  {
+    "id": "tower/archer/fork-b-1",
+    "label": "Twin volley stand",
+    "design": "Two separated low firing bays with a central access notch and a shared stone-backed Y-braced trestle."
+  },
+  {
+    "id": "tower/archer/fork-b-2",
+    "label": "Arrow-storm battery",
+    "design": "Three staggered firing platforms: two low side bays and a raised rear centre bay, on a stone-and-timber gantry."
+  }
+]

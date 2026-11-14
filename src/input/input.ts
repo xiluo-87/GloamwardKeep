@@ -2,7 +2,7 @@
 // is never touched here. A drag over 8 px pans, two fingers pinch, a tap selects a tile and a second
 // tap on the same tile opens the action ring.
 import { TOWER_IDS } from '../data/balance';
-import type { Renderer } from '../render/renderer';
+import type { GameRenderer } from '../render/view';
 import type { Session } from '../ui/session';
 
 export interface ControlHooks {
@@ -22,29 +22,49 @@ const DRAG = 8;
 interface Ptr { x: number; y: number; sx: number; sy: number; moved: boolean }
 
 export class Controls {
+  private lifecycle = new AbortController();
+  private canvasLifecycle: AbortController | null = null;
+  private canvas: HTMLCanvasElement;
   private ptrs = new Map<number, Ptr>();
   /** Set once a gesture became a pan or pinch, so lifting a finger never counts as a tap. */
   private dead = false;
   private pinch: { dist: number; cx: number; cy: number } | null = null;
 
-  constructor(private canvas: HTMLCanvasElement, private session: Session, private renderer: Renderer, private hooks: ControlHooks) {
-    canvas.addEventListener('pointerdown', (e) => this.onDown(e));
-    canvas.addEventListener('pointermove', (e) => this.onMove(e));
-    canvas.addEventListener('pointerup', (e) => this.onUp(e));
-    canvas.addEventListener('pointercancel', (e) => this.drop(e));
+  constructor(canvas: HTMLCanvasElement, private session: Session, private renderer: GameRenderer, private hooks: ControlHooks) {
+    this.canvas = canvas;
+    this.bindCanvas(canvas);
+    window.addEventListener('keydown', (e) => this.onKey(e), { signal: this.lifecycle.signal });
+  }
+
+  setCanvas(canvas: HTMLCanvasElement): void {
+    if (canvas === this.canvas) return;
+    this.reset();
+    this.bindCanvas(canvas);
+  }
+
+  private bindCanvas(canvas: HTMLCanvasElement): void {
+    this.canvasLifecycle?.abort();
+    this.canvasLifecycle = new AbortController();
+    this.canvas = canvas;
+    const signal = this.canvasLifecycle.signal;
+    canvas.addEventListener('pointerdown', (e) => this.onDown(e), { signal });
+    canvas.addEventListener('pointermove', (e) => this.onMove(e), { signal });
+    canvas.addEventListener('pointerup', (e) => this.onUp(e), { signal });
+    canvas.addEventListener('pointercancel', (e) => this.drop(e), { signal });
     canvas.addEventListener('pointerleave', (e) => {
       if (e.pointerType === 'mouse' && !this.session.previewing) this.session.view.hoverTile = null;
-    });
+    }, { signal });
     canvas.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       if (this.hooks.active()) this.session.cancel();
-    });
+    }, { signal });
     canvas.addEventListener('wheel', (e) => {
       e.preventDefault();
       if (this.hooks.active()) this.renderer.zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015));
-    }, { passive: false });
-    window.addEventListener('keydown', (e) => this.onKey(e));
+    }, { passive: false, signal });
   }
+
+  dispose(): void { this.lifecycle.abort(); this.canvasLifecycle?.abort(); this.reset(); }
 
   /** Forget any gesture in progress (new run, menu opened, ...). */
   reset(): void {

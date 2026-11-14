@@ -1,0 +1,230 @@
+{
+  "asset": "goblin",
+  "sourcePath": "assets-src/studies/goblin-shaman/editor-preview.glb",
+  "sourceSha256": "48d8a90968caac7011e6378addfd78a7238db7ad2cc3ea11f69c7464d73a88cb",
+  "pipeline": "assets-src/rework/pipeline/adapt_pack.py",
+  "pipelineSha256": "5a2df3640536e17f303a000a3718f06f7ac47e138595fce0d3eda8f985c69684",
+  "adaptation": "vertex-color-remap-only; original mesh topology, skin weights, rig hierarchy, transforms, and clips retained",
+  "palette": {
+    "cloth": "#65714d",
+    "cloth-light": "#89936d",
+    "cloth-shadow": "#424b39",
+    "eye": "#22251f",
+    "leather": "#79573a",
+    "leather-dark": "#4e3b2a",
+    "leather-light": "#9a7650",
+    "metal": "#929391",
+    "metal-dark": "#5d6565",
+    "skin": "#778f44",
+    "skin-light": "#96a65c",
+    "skin-shadow": "#4d6533",
+    "stone-light": "#b9b9b3",
+    "tooth": "#d8cba9"
+  },
+  "colorAttribute": {
+    "elements": 8538,
+    "mappedColors": 13,
+    "note": "color-paint output is read live; this baseline upgrade preserved the existing attribute",
+    "sourceColors": 40,
+    "currentColors": [
+      "#22251f",
+      "#424b39",
+      "#4d6533",
+      "#4e3b2a",
+      "#5d6565",
+      "#65714d",
+      "#778f44",
+      "#79573a",
+      "#89936d",
+      "#96a65c",
+      "#9a7650",
+      "#b9b9b3",
+      "#d8cba9"
+    ]
+  },
+  "sourceMetrics": {
+    "mesh": {
+      "meshName": "tiny-characters-blocky-goblin-shaman-mesh",
+      "vertices": 5515,
+      "triangles": 2846,
+      "joints": 72,
+      "weightedAssignments": 5515,
+      "clips": [
+        "Attack1",
+        "Attack2",
+        "Block",
+        "Death",
+        "Hit",
+        "Idle",
+        "Run",
+        "Special",
+        "Walk",
+        "Wave"
+      ]
+    },
+    "gltf": {
+      "clips": 10,
+      "clip_names": [
+        "Idle",
+        "Walk",
+        "Run",
+        "Wave",
+        "Attack1",
+        "Attack2",
+        "Hit",
+        "Death",
+        "Block",
+        "Special"
+      ],
+      "clip_durations": {
+        "Idle": 4.0,
+        "Walk": 1.0,
+        "Run": 0.6200000047683716,
+        "Wave": 1.2000000476837158,
+        "Attack1": 1.2000000476837158,
+        "Attack2": 1.3200000524520874,
+        "Hit": 0.8700000047683716,
+        "Death": 1.7899999618530273,
+        "Block": 1.2000000476837158,
+        "Special": 1.850000023841858
+      },
+      "channels": 270,
+      "animation_samplers": 270,
+      "accessors": 547,
+      "buffer_views": 547,
+      "binary_bytes": 483192
+    },
+    "skin": {
+      "jointCounts": [
+        72
+      ],
+      "weightVertices": 5515,
+      "weightSumRange": [
+        1.0,
+        1.0
+      ]
+    },
+    "triangles": 2846
+  },
+  "output": {
+    "gltf": {
+      "clips": 10,
+      "clip_names": [
+        "Idle",
+        "Walk",
+        "Run",
+        "Wave",
+        "Attack1",
+        "Attack2",
+        "Hit",
+        "Death",
+        "Block",
+        "Special"
+      ],
+      "clip_durations": {
+        "Idle": 4.0,
+        "Walk": 1.0,
+        "Run": 0.6200000047683716,
+        "Wave": 1.2000000476837158,
+        "Attack1": 1.2000000476837158,
+        "Attack2": 1.3200000524520874,
+        "Hit": 0.8700000047683716,
+        "Death": 1.7899999618530273,
+        "Block": 1.2000000476837158,
+        "Special": 1.850000023841858
+      },
+      "channels": 270,
+      "animation_samplers": 270,
+      "accessors": 547,
+      "buffer_views": 547,
+      "binary_bytes": 483192
+    },
+    "skin": {
+      "jointCounts": [
+        72
+      ],
+      "weightVertices": 5515,
+      "weightSumRange": [
+        1.0,
+        1.0
+      ]
+    },
+    "triangles": 2846,
+    "triangleCountMatchesSource": true,
+    "markerPresent": true,
+    "nonColorBinaryUnchanged": true,
+    "patch": {
+      "patchedColorValues": 5515,
+      "sourceColorsMapped": 13,
+      "binaryChangedBytes": 54568,
+      "nonColorBinaryUnchanged": true
+    }
+  },
+  "poseBoundsSeconds": {
+    "samples": {
+      "Walk@0.0": [
+        -0.4480496942996979,
+        -0.23152001202106476,
+        0.0011579812271520495,
+        0.3303692638874054,
+        0.2703820765018463,
+        0.9421796798706055
+      ],
+      "Walk@0.2": [
+        -0.4206294119358063,
+        -0.23248818516731262,
+        -0.004341668915003538,
+        0.3236512541770935,
+        0.2728961408138275,
+        0.9522229433059692
+      ],
+      "Walk@0.5": [
+        -0.42464545369148254,
+        -0.23152001202106476,
+        0.0011584187159314752,
+        0.33323317766189575,
+        0.270516574382782,
+        0.9502196311950684
+      ],
+      "Attack1@0.0": [
+        -0.4355584979057312,
+        -0.22785347700119019,
+        -0.00038446541293524206,
+        0.3280520439147949,
+        0.25860267877578735,
+        0.9575119614601135
+      ],
+      "Attack1@0.2": [
+        -0.43560606241226196,
+        -0.5897296071052551,
+        -0.000384416343877092,
+        0.28980785608291626,
+        0.36135393381118774,
+        1.115309715270996
+      ],
+      "Attack1@0.5": [
+        -0.39368683099746704,
+        -0.23734551668167114,
+        -0.0003845010360237211,
+        0.36421293020248413,
+        0.9273011088371277,
+        0.7712076902389526
+      ]
+    },
+    "maxCoordinateError": {
+      "Walk@0.0": 0.0,
+      "Walk@0.2": 0.0,
+      "Walk@0.5": 0.0,
+      "Attack1@0.0": 0.0,
+      "Attack1@0.2": 0.0,
+      "Attack1@0.5": 0.0
+    }
+  },
+  "runtimeMethod": "source GLB COLOR_0 patch derived from current saved Blender vertex colors; gltf_tools parse/serialize validation only",
+  "limitation": "Blender 4.5.16 GLB re-export altered source mesh/root bind transforms. Runtime therefore patches the original source GLB; geometry edits/export remain unverified.",
+  "files": {
+    "blend": "goblin.blend",
+    "glb": "goblin.glb"
+  },
+  "editableBlend": "Current color attributes are read on each --export-existing run. Geometry, topology, rig, transforms, and clips must remain unchanged."
+}

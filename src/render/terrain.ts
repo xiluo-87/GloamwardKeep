@@ -72,19 +72,11 @@ export function blitBake(g: CanvasRenderingContext2D, t: Terrain, ox: number, oy
   g.drawImage(bk.canvas, ox - PAD_X * k, oy - TOP_MARGIN * k, bk.canvas.width / bk.scale * k, bk.canvas.height / bk.scale * k);
 }
 
-// Projection used while baking: upright, or turned 90 degrees clockwise (gates at the top).
-let ROT = false;
-let BOARD_H = 0;
-const pt = { x: 0, y: 0 };
-function P(x: number, y: number): void {
-  if (ROT) { pt.x = BOARD_H - y; pt.y = x; } else { pt.x = x; pt.y = y; }
-}
-
 export function bakeTerrain(t: Terrain, scale: number, rot = false): HTMLCanvasElement {
-  ROT = rot;
-  BOARD_H = boardHeight(t.rows);
-  const dw = rot ? BOARD_H : boardWidth(t.cols);
-  const dh = rot ? boardWidth(t.cols) : BOARD_H;
+  // Projection is local to this bake: upright, or turned 90 degrees clockwise.
+  const boardH = boardHeight(t.rows);
+  const dw = rot ? boardH : boardWidth(t.cols);
+  const dh = rot ? boardWidth(t.cols) : boardH;
   const w = dw + PAD_X * 2;
   const h = dh + TOP_MARGIN + PAD_BOTTOM;
   const c = document.createElement('canvas');
@@ -100,11 +92,10 @@ export function bakeTerrain(t: Terrain, scale: number, rot = false): HTMLCanvasE
     const key = (i: number): number => tileCenter(i % t.cols, Math.floor(i / t.cols)).x;
     idx.sort((a, b) => key(a) - key(b) || a - b);
   }
-  for (const i of idx) drawTile(g, t, i % t.cols, Math.floor(i / t.cols), hAt);
+  for (const i of idx) drawTile(g, t, i % t.cols, Math.floor(i / t.cols), hAt, rot, boardH);
   for (const [col, row] of t.spawns) {
     const p = tileCenter(col, row);
-    P(p.x, p.y);
-    drawGate(g, pt.x, pt.y - t.height[row * t.cols + col] * LIFT);
+    drawGate(g, rot ? boardH - p.y : p.x, (rot ? p.x : p.y) - t.height[row * t.cols + col] * LIFT);
   }
   // The keep is drawn live (its level changes during a run).
   return c;
@@ -119,24 +110,23 @@ function tint(c: string, d: number): string {
   return `rgb(${f(r)},${f(g)},${f(b)})`;
 }
 
-function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: number, hAt: (c: number, r: number) => number): void {
+function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: number, hAt: (c: number, r: number) => number, rot: boolean, boardH: number): void {
   const i = row * t.cols + col;
   const h = t.height[i];
   const p = tileCenter(col, row);
-  P(p.x, p.y);
-  const cx = pt.x;
-  const cy = pt.y - h * LIFT;
-  const hx = HXS[ROT ? 1 : 0];
-  const hy = HYS[ROT ? 1 : 0];
+  const cx = rot ? boardH - p.y : p.x;
+  const cy = (rot ? p.x : p.y) - h * LIFT;
+  const hx = HXS[rot ? 1 : 0];
+  const hy = HYS[rot ? 1 : 0];
   const v = hash3(col, row, 11);
   const v2 = hash3(col, row, 23);
   const var_ = (v - 0.5) * 0.12;
 
   // Side faces: the lower edges, extruded down to the ground.
-  const pairs = ROT ? [[5, 0], [0, 1], [1, 2]] : [[1, 2], [2, 3]];
-  const shades = ROT ? [-0.17, -0.07, 0.04] : [-0.14, 0.04];
-  const prof = ROT ? [2, 1, 0, 5] : [3, 2, 1];
-  const upper = ROT ? [2, 3, 4, 5] : [3, 4, 5];
+  const pairs = rot ? [[5, 0], [0, 1], [1, 2]] : [[1, 2], [2, 3]];
+  const shades = rot ? [-0.17, -0.07, 0.04] : [-0.14, 0.04];
+  const prof = rot ? [2, 1, 0, 5] : [3, 2, 1];
+  const upper = rot ? [2, 3, 4, 5] : [3, 4, 5];
   if (h > 0) {
     const d = h * LIFT;
     for (let k = 0; k < pairs.length; k++) {
@@ -174,12 +164,12 @@ function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: num
   }
 
   // Top face.
-  hexPath(g, cx, cy, 0.995, ROT);
+  hexPath(g, cx, cy, 0.995, rot);
   g.fillStyle = tint(TOPS[h], var_);
   g.fill();
 
   g.save();
-  hexPath(g, cx, cy, 1, ROT);
+  hexPath(g, cx, cy, 1, rot);
   g.clip();
   if (h === 0) roadTexture(g, cx, cy, col, row);
   else groundTexture(g, cx, cy, h, col, row, v2);
@@ -194,7 +184,7 @@ function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: num
     const q = tileCenter(nc, nr);
     let dx = q.x - p.x;
     let dy = q.y - p.y;
-    if (ROT) { const tx = -dy; dy = dx; dx = tx; }
+    if (rot) { const tx = -dy; dy = dx; dx = tx; }
     const len = Math.hypot(dx, dy) || 1;
     dx /= len;
     dy /= len;
@@ -214,10 +204,10 @@ function drawTile(g: CanvasRenderingContext2D, t: Terrain, col: number, row: num
     g.strokeStyle = 'rgba(255,255,230,0.22)';
     g.lineWidth = 1.2;
     g.beginPath();
-    for (let k = 0; k < upper.length; k++) g.lineTo(cx + hx[upper[k]] * (k === 0 ? 1 : 1) + (k === 0 ? 1 : 0), cy + hy[upper[k]] + 1);
+    for (let k = 0; k < upper.length; k++) g.lineTo(cx + hx[upper[k]] + (k === 0 ? 1 : 0), cy + hy[upper[k]] + 1);
     g.stroke();
   }
-  hexPath(g, cx, cy, 0.995, ROT);
+  hexPath(g, cx, cy, 0.995, rot);
   g.strokeStyle = h === 0 ? 'rgba(70,52,26,0.35)' : 'rgba(10,20,5,0.3)';
   g.lineWidth = 0.9;
   g.stroke();

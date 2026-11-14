@@ -1,0 +1,1551 @@
+{
+  "pack": "blocky-characters",
+  "packVersion": "1.0.1",
+  "files": [
+    {
+      "path": "glb/tiny-characters-blocky-dwarf.glb",
+      "bytes": 181664,
+      "sha256": "2be0cbe6d048d2ec79472d0504237b035bb1d36d4eae5fc02ffa27100561a4cc"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-dwarf.glb",
+      "bytes": 466596,
+      "sha256": "a3c01be7ee812306609729cd7738a8cd2600da87e0a9208389f0e4a27c5411c3"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-skeleton.glb",
+      "bytes": 157664,
+      "sha256": "e96f97f86a6cb9cc29f10d511a12c51d01f07d88605ac824532fd707b738ec17"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-skeleton.glb",
+      "bytes": 424812,
+      "sha256": "651a1993e4c7ad99ddf836f3e14262e8d1b7041aa668503baf66f8b22d286b28"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-golem.glb",
+      "bytes": 228268,
+      "sha256": "aa35e7b252ef55e96ae184a55bcec6adcfcdc4a2d394547653b32bab78990eed"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-golem.glb",
+      "bytes": 510008,
+      "sha256": "ef1c79c84f7a1cce34c25cadd51fc461f7dc133e7bb2c76c657587b6423da7b1"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-mummy.glb",
+      "bytes": 168088,
+      "sha256": "3e2262e40d7a93694858ee5ba6cee39c717359f6dad65dacfda3ec00847554ff"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-mummy.glb",
+      "bytes": 440796,
+      "sha256": "fd7af394c5b7beebd331d83cb6379ff0e86e55abfdab9ba30c5ac1515df80c5c"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-viking.glb",
+      "bytes": 160356,
+      "sha256": "6d2fc116c5a6df50a78a8d074f5401fe6f2b87cae71a010afdcbc50e6aa04890"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-viking.glb",
+      "bytes": 479836,
+      "sha256": "5ec85ff81917d835ff5829b1548b675b8dff36a84b57d66e94b7e32ccc397a1b"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-knight.glb",
+      "bytes": 169596,
+      "sha256": "1d3d88dfe8310e5865a7887070edd227f659ec792846b5e4b50afdeede0be8d1"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-knight.glb",
+      "bytes": 547800,
+      "sha256": "a5cf91cc328010880949c921bb81dac58745ae8c1311c83b1a9bf60173639a8e"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-pharaoh.glb",
+      "bytes": 187984,
+      "sha256": "d327de13f0cf769e192c69385e2e115d34d742939cbb696efaa5be0f5052b250"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-pharaoh.glb",
+      "bytes": 535096,
+      "sha256": "a76f2fc5024cd8d7a24fa31132b193f1eca105c383758e360a95a8d69f78c74d"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-orc.glb",
+      "bytes": 218864,
+      "sha256": "a782dad92fc32f47394317d7ac2b0d9daf4a910dae5d3aaca0aec454f777b034"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-orc.glb",
+      "bytes": 651932,
+      "sha256": "eb840a0b71589c146182d64dcb4800d88bd4827ad91ac8ea98ba34eeb138d170"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-wayfarer.glb",
+      "bytes": 179408,
+      "sha256": "eef6b7d4a6cb0d2359dd9120ae68161a9548e2e47763f5ce84cfe27ee5770fb5"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-wayfarer.glb",
+      "bytes": 572048,
+      "sha256": "b3030ebad8ce299dc49de5e10d3ba4071f65d403325fe3066eb657d91998b482"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-king.glb",
+      "bytes": 200428,
+      "sha256": "e37f016c005ff299dc09c063f8131fc19f2a8a8c1cd33bdee7ed590e40c530dd"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-king.glb",
+      "bytes": 581816,
+      "sha256": "947325a165ccd03c847557691cb35b3925dfa7b4c16b28181bcc79c584d452bc"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-cannoneer.glb",
+      "bytes": 176436,
+      "sha256": "19fc8edf5e5707bdb74ec9430c9d48ee7e4a29699a8ef5c83c62924cd0eec855"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-cannoneer.glb",
+      "bytes": 680396,
+      "sha256": "26ed6c03eca63734ff781ba0e5018102eccc6504d7806e9829ad18418a8a3b39"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-pirate.glb",
+      "bytes": 176952,
+      "sha256": "b135e9f6c6316c605a73625bad1b7252cb124827f1b36621c344c5c5243d802a"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-pirate.glb",
+      "bytes": 589260,
+      "sha256": "025ebfea282cb01f9330ed8bb29de13ef78eb324bf5d4eb2541fd229c56e5620"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-brute.glb",
+      "bytes": 217320,
+      "sha256": "9cb656919e7f4956e200fc372df163c194579bdbfcc7d0afa1a8f894f9ef2bca"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-brute.glb",
+      "bytes": 566628,
+      "sha256": "759d3b86ab44ba0baf4c32c0414781fb55023cec0551e0cc4cd3c4fda022fe71"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-lich.glb",
+      "bytes": 187112,
+      "sha256": "a3ae941eb9c15fcb0fc8c0dd9ce5e6b5540420a1218f6461b208065012117aaf"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-lich.glb",
+      "bytes": 570100,
+      "sha256": "11db6236daeee3172e634a345709f71cb60af4661e9625087ad2783fb73665b3"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-sorceress.glb",
+      "bytes": 172484,
+      "sha256": "fcd477980b008ab5a99f9e21f855ea92c463c948a674cd59147f0a1a4855c13b"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-sorceress.glb",
+      "bytes": 482336,
+      "sha256": "1e2f4b765b8231f57393bcf276de2344e31ce4cf3d26f7b1d80119f9dc166f4f"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-witch.glb",
+      "bytes": 171912,
+      "sha256": "99ea1dc763d5ad52f6f43d88d098f687bb92f374cc7d88fe6f51bc95210b93da"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-witch.glb",
+      "bytes": 591196,
+      "sha256": "a0520f13e35d45cf239ee427d3ac283ed8666da9732f0f7f4a9929405e82832f"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ranger.glb",
+      "bytes": 198888,
+      "sha256": "2c610a0e0e9acca1144c08ab95c756079076be369579f8da5dded03d193320f9"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ranger.glb",
+      "bytes": 625496,
+      "sha256": "71fd87785d1caee1fac31e6ede6a6dc29b1dcf5b8b58e8038cf213d7deeb622b"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-caveman.glb",
+      "bytes": 193784,
+      "sha256": "b21e9d9d38309e89309232e4db3eeabea5af06f688839aaaa216a99113b1c298"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-caveman.glb",
+      "bytes": 615560,
+      "sha256": "279163a3c1989682bfa526f0ae3d4b08e656e037f9fb0524c2e0acfb250ff5bf"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-zombie.glb",
+      "bytes": 174520,
+      "sha256": "01d7e9315398050818c370c1ea2b8b6d253eee608f6364c119b8809c07927c51"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-zombie.glb",
+      "bytes": 602456,
+      "sha256": "9433f3b1188ec76dcae42ff85136878adcd1755908dba74b921af0b57e13a1b2"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ghost.glb",
+      "bytes": 146616,
+      "sha256": "8837703f8386c9dd151ff04fbe701b82290fcbaec620988df6564dcca660772d"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ghost.glb",
+      "bytes": 563388,
+      "sha256": "29342b62f729cb604b3d1327bda56a23c02b9a2aaf6eeeb4431935d3233cf7ca"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-imp.glb",
+      "bytes": 164872,
+      "sha256": "79b64108a2eaebc9707463faca5933d0198bc782276f9b53fdd35c6742800559"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-imp.glb",
+      "bytes": 585788,
+      "sha256": "ff84e0d6983b26b0d984fcd47a3bbce687d4b34685bdda5fcd1e497faf1f3210"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-muncher.glb",
+      "bytes": 181736,
+      "sha256": "386b8308af79dc8adb605c987732413a326d229a2c96fef5a7335a41e4fc4f55"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-muncher.glb",
+      "bytes": 593256,
+      "sha256": "4c43ba01e642c69e27228dcd0ee5fecd2bcb005534dc002d2735ac1bd8bbe2f4"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-frost-golem.glb",
+      "bytes": 254612,
+      "sha256": "eaf0b9ac364a785ad2897cfc61b15439c61fccc27554a52ad2afca8c3279b506"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-frost-golem.glb",
+      "bytes": 682748,
+      "sha256": "43499c343c68721d3d69d9eef1eafbadf101f8424a04fd17904122c27652b7d0"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-juggernaut.glb",
+      "bytes": 223060,
+      "sha256": "fdcdf56bea63268b2bd406c7fb0bc6ed38872191a311dc8b63570082026868eb"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-juggernaut.glb",
+      "bytes": 663696,
+      "sha256": "6aab802a45f863333b9dff704e6584589f482ced59a90fac4a33551ad779cca2"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ogre.glb",
+      "bytes": 240660,
+      "sha256": "fae730298c0a69f03f6c404deb46b72543f1bb289214bc31046bafadbbb8aede"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ogre.glb",
+      "bytes": 678928,
+      "sha256": "36c4997ae4d1cefef5a490521df3f4f9139003979e82dedf2fba01bfe3ab018f"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-pit-demon.glb",
+      "bytes": 263408,
+      "sha256": "ca5ef09a07d2ffc973ed629c03f70b5c8929090c0c3ad0c9af790f185ba1d3be"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-pit-demon.glb",
+      "bytes": 698908,
+      "sha256": "b9e29bc1553ea9566018347604ee1755dc051426a8949ff73d422ce17801b3bd"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-bone-seer.glb",
+      "bytes": 167152,
+      "sha256": "e734100d56aa65f935bac6e41372033784951ab85f1e36ce56ff2698a4c17c2c"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-bone-seer.glb",
+      "bytes": 606840,
+      "sha256": "7fea41d57370ef16697b7d2d5d7682918c1cb998021a2bfd771d7861e79361f3"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-grove-warden.glb",
+      "bytes": 204448,
+      "sha256": "663c15974675fef29c26720625cc0ed898562d30a25c4601fda385e797ded258"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-grove-warden.glb",
+      "bytes": 624152,
+      "sha256": "08158030205db225e5d47983631c5c67c89c956a71632814f08da67b55c6cd91"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ghoul-raider.glb",
+      "bytes": 206932,
+      "sha256": "3c9778ac51e5cc7d92e0c90a734ea9c6ae68081a155b552931f0db5b3f265cf4"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ghoul-raider.glb",
+      "bytes": 636484,
+      "sha256": "0184f4eab363fbaedb4a4b7a3bdc5cc4d546acb94ee6ba154388bfabbe761f7d"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-sun-guard.glb",
+      "bytes": 176316,
+      "sha256": "51da7b5e04954b11ad300f6ab01440b1d95cafb2fcd79c69bdbaff99474e2211"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-sun-guard.glb",
+      "bytes": 613076,
+      "sha256": "44d44cfcd91b0bdcbfb6977c56dc6c95b15169bde70a7aada2e95920ad74bd59"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-goblin-shaman.glb",
+      "bytes": 178516,
+      "sha256": "0a155b7bce9b0d05a77e05bd7f846842a1561510589172e22ebc8a663b67455e"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-goblin-shaman.glb",
+      "bytes": 602568,
+      "sha256": "aa16da8ea8596f0a4e32f231d695baa8ea32d4b43421e7017836bd4cd452e270"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-hellblade.glb",
+      "bytes": 192892,
+      "sha256": "36798f56dfbbe7b78106867ef1ec67aa1ccf06c3163e33f36bfd2f4019c54d04"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-hellblade.glb",
+      "bytes": 613556,
+      "sha256": "7d43049583a15e29ea4e0bcf80b9dc96030e170ea63a4fad43febd49e3cf8eac"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-wolf-girl.glb",
+      "bytes": 173172,
+      "sha256": "dc6009775fdb4e316cc1576427407ec2cb644cd633195085d14ca327f5943fb6"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-wolf-girl.glb",
+      "bytes": 539360,
+      "sha256": "89de4ae1461cc9e50b3dd70256838e99be780708a3c5979519a9c9654abdf288"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-brawler.glb",
+      "bytes": 183692,
+      "sha256": "9978a705b9779b1d865f26c4ac05d2ff892053f3b2ee250299e46dffa3dccab8"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-brawler.glb",
+      "bytes": 590652,
+      "sha256": "df6b20eed5dd11bdc72229489382cac1223135bbcb470863776a48c262a250f3"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-barrel-knight.glb",
+      "bytes": 194220,
+      "sha256": "b0ae9495770bd68ec08e21a25a4e98dc43f57e19e6e682070718585160927eea"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-barrel-knight.glb",
+      "bytes": 622704,
+      "sha256": "b76a7275adb77dc70705dc197230ad2d8e2760f1a604d725f8b8c11932acc0e8"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-reaper.glb",
+      "bytes": 142044,
+      "sha256": "454219cf486ac58765ffc48471d1afad6964ffac6557e389ff5ae89551b07bac"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-reaper.glb",
+      "bytes": 575472,
+      "sha256": "7b945543f38463bc029862bae81520dafb68214c02b350a7aed94ffad170d15f"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-djinn.glb",
+      "bytes": 164452,
+      "sha256": "ce79dfb8604995b3267e07e412783fcaf97f11e5298df05e0f7d0d1215f5b219"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-djinn.glb",
+      "bytes": 591592,
+      "sha256": "0b3c22e81fdda94bc6b39f147c6425199e117ac2dff168c92e18d6d170bf91f9"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-screen-bot.glb",
+      "bytes": 163388,
+      "sha256": "44313b7dfdbddce7fd70958a75a568278c962c53a8ec94fb92a61656d2315d63"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-screen-bot.glb",
+      "bytes": 599724,
+      "sha256": "71a13321dcb913ea8fc8a16c74a62da6afb00f3792719eb0fbe722a11d163c0d"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-crt-bot.glb",
+      "bytes": 162336,
+      "sha256": "1ce087673f3af0857880517f192c672dbaeb16be20a0f35e4ae97a4d48a22c57"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-crt-bot.glb",
+      "bytes": 506676,
+      "sha256": "8d876b2f988510f0b62278693069a1cbc5c8e48c7b0658bf36820adcb904c232"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ember-revenant.glb",
+      "bytes": 151664,
+      "sha256": "783401786122b7040d7b6b00d882b16380a5837dca20a93e5b4b6274b60236d8"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ember-revenant.glb",
+      "bytes": 435336,
+      "sha256": "5977595d2e306ea5df6e270536773965015f03baa3fc90a7daf5bb255bd6e753"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ember-tiefling.glb",
+      "bytes": 160052,
+      "sha256": "a1c108779bda7e1a80e55b0ef3612223b0502a95b319cd76361a8aef82e99d54"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ember-tiefling.glb",
+      "bytes": 321468,
+      "sha256": "68e0805b8cea5eca0b0781ce995f21370b4464bf562505f1a9e4a21e0d6a017b"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-root-colossus.glb",
+      "bytes": 227364,
+      "sha256": "0de4a9c6adc348f504dfc2239bb055718aad0d3553986432df5537c01ed32179"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-root-colossus.glb",
+      "bytes": 401524,
+      "sha256": "fba079bcddb3ee396c28f072ca52a8d32dae1e8bebbf0fae08480b63648abd1c"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-bone-marauder.glb",
+      "bytes": 154836,
+      "sha256": "e719d388fb62e3ca8ecc7516fce54c450873f45a1bd90802634ccaa69bd6c061"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-bone-marauder.glb",
+      "bytes": 289400,
+      "sha256": "94062b11f46768edfde97b8682725e2a3ab02f5af83e0e8a6c02f6015091e262"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-sun-monk.glb",
+      "bytes": 160272,
+      "sha256": "bd63223bd66d2a2b46cdf53a26fd9407d6a54cbfd6f833c2a57bb8b3649a7c0b"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-sun-monk.glb",
+      "bytes": 301320,
+      "sha256": "0fbe2abd7204ae3cc5f87f48d14159d67b05dd584f09da94c4a4196532be4af2"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-wrapped-fighter.glb",
+      "bytes": 157588,
+      "sha256": "69620286b4ab514f66b7a00b7b6c86fa13c62ad820df631e837f59b15e2de6b4"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-wrapped-fighter.glb",
+      "bytes": 271036,
+      "sha256": "33f4b33b8e7385efa05f7b1c4eb3376507c705d22517971d0fe4cf7d88258b7b"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ochre-monk.glb",
+      "bytes": 157108,
+      "sha256": "bddf9e043479ac451e733aa61d477a0875fc8b7879d7386faf77e6bf75776a63"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ochre-monk.glb",
+      "bytes": 250476,
+      "sha256": "897840b9800fd3d69fc4b82120f1ae890fa1fb409037a76a1fcab512379c230a"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-scale-guard.glb",
+      "bytes": 171992,
+      "sha256": "1316d32c85e627d70471168aea38cbd45ae33b27fbaae0fd63fe3efc7431eed3"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-scale-guard.glb",
+      "bytes": 334656,
+      "sha256": "22e5fd66f7ad982f8db5588457e89a01df5faebae00d783435f9e4d0e888d8da"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-crimson-gnome.glb",
+      "bytes": 159740,
+      "sha256": "9b140fe2fd1f0bd25a3c862daa1de1fd76239c14cfe725884e0b97b1042b13b1"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-crimson-gnome.glb",
+      "bytes": 265556,
+      "sha256": "39bc2194d684e49f14b1beb40b0c8d771560b7678115440c4ee3ba632dc99de7"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-bog-explorer.glb",
+      "bytes": 155024,
+      "sha256": "8a7d2e1077451fb1b8e4a86852b9cabc6f79807b701fc53ab09d4def13a21130"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-bog-explorer.glb",
+      "bytes": 288800,
+      "sha256": "d2087bda188c1060e8143169ef838564c120cffdbbb7216e88bd1ee4d4177b8a"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-tusk-brute.glb",
+      "bytes": 212484,
+      "sha256": "a9b735a84fed3cf1de80044e63061e3fc051671744629970384d48cda4c05a8b"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-tusk-brute.glb",
+      "bytes": 352372,
+      "sha256": "9a119427bef5833f5ebcf7c49e19dc67e379417f8abf7211d74bd578edbd5b9e"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-trail-scout.glb",
+      "bytes": 157016,
+      "sha256": "12bd4a6cfbfd0f16b82727c38b6b93b95face5e2b39460a69526b28b3e5f08cf"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-trail-scout.glb",
+      "bytes": 279924,
+      "sha256": "dbfca158a062cd94b68842e158f79b2c797cd40db4be055d3185a08c1e2b9817"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-city-kid.glb",
+      "bytes": 153172,
+      "sha256": "acf99aeffea478a89e697191d1aa4a3fabb7253249427d60be3fd28c71fb502e"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-city-kid.glb",
+      "bytes": 273660,
+      "sha256": "2ca322981c8a5b27bd3f34d0ac575db66ea15f00474e13ccb473641c8f83db47"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-hill-troll.glb",
+      "bytes": 257468,
+      "sha256": "f405a1ed3bf4064cf8f3f0455e8a11bbd99db4de95f406faee63634abf02221d"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-hill-troll.glb",
+      "bytes": 692220,
+      "sha256": "b66f6374eb769b33320fcb0bb70c941bbbe94eedec7bca1c19bed68cfa1bd628"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-minotaur.glb",
+      "bytes": 212568,
+      "sha256": "e80765c1084aace925fc5d8308c89526787198b0aeb4337943ed6806c8c8594a"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-minotaur.glb",
+      "bytes": 633332,
+      "sha256": "ac0b7a01460897386ab9c07065afa4432febc2a2c3a3ac86b53c0f405c5ced04"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ronin.glb",
+      "bytes": 209008,
+      "sha256": "8d6b50a9ae34bae05e94d8fa1b30aa10f312073a7df0c909893626da270ea320"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ronin.glb",
+      "bytes": 558748,
+      "sha256": "60d15a926fec085b0bd80a5136972c28b00663371234fb47deb85d212d3a7bc9"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-plague-doctor.glb",
+      "bytes": 181744,
+      "sha256": "f1163db2ff8d999e8b5459c64c02b51d5762977684e52d61446572e923d1a609"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-plague-doctor.glb",
+      "bytes": 469196,
+      "sha256": "04437c081c54c6262cd74d5f6c42e9834043cd195455433fb41a937bcf588b0d"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-rat-rogue.glb",
+      "bytes": 165764,
+      "sha256": "6ecae83f6f81aa66d0ee23baaac79b5a4cc7be8e16ae8d5829435502529b07fc"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-rat-rogue.glb",
+      "bytes": 561072,
+      "sha256": "9746d9eb8d5aeed5a159da1f192a50853a751a4f44a7c34b166a9c5540b47369"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-shroomling.glb",
+      "bytes": 163116,
+      "sha256": "a64a319f4b221b7d93c03923b23dcbbed4b75bc4b95ec7761af4a3021d88ea9c"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-shroomling.glb",
+      "bytes": 475652,
+      "sha256": "007e8037fa615466c781b1a631eafde1a1b6626e8f73d527248e9eb8e3fba9bb"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-maw-troll.glb",
+      "bytes": 234932,
+      "sha256": "1fdda88dd9614d5eb37b9804aae803cdc91ee4622ef78583163c3593f2badea9"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-maw-troll.glb",
+      "bytes": 411868,
+      "sha256": "ad3c68af354bb906fba3c8f82ec2fe4929e4b336a6f95e1b138a9f48d960d23f"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-hood-archer.glb",
+      "bytes": 184984,
+      "sha256": "26af76d29030a3a992d86e0d9de214b0b94f4141c596d9a5912378c9c54c5e88"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-hood-archer.glb",
+      "bytes": 330064,
+      "sha256": "cbcb5523413e76d83a888dc246793202ef58be269fec97b75c8196338c74a889"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-fang-beast.glb",
+      "bytes": 184588,
+      "sha256": "f59558377a156a910c88c4467f99e5530a995fd7ff12d52ad5b580339435b957"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-fang-beast.glb",
+      "bytes": 319724,
+      "sha256": "6d0ad8e5c8dd8d5847ad76813dd6b50b96968962c8a6652e1b17403103d73ba7"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-amber-bot.glb",
+      "bytes": 148272,
+      "sha256": "9308acee039d2de9e6875fcf94338756961c3cc6aba6d25c6195cf9021a05d75"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-amber-bot.glb",
+      "bytes": 224604,
+      "sha256": "50178345dd04c6dfc383aff2668ce6977916f444532283cb5dbdef88428397eb"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-forge-warchief.glb",
+      "bytes": 212408,
+      "sha256": "aa116b8d323a881264e68cfc940b57c26b1bec36a4ffc1e5a1935b617589b24a"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-forge-warchief.glb",
+      "bytes": 457568,
+      "sha256": "435af52519aead3e363229815a82548e21bace084dafd850d751bf21ff060a9c"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-horn-sentinel.glb",
+      "bytes": 216276,
+      "sha256": "5cfd45a701eccdf222bbc189764d23644618ae3ebe0c4203baca1f0dccacacbd"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-horn-sentinel.glb",
+      "bytes": 412544,
+      "sha256": "eef2a0a5ba1212bfb50b177e46eab8ab5d52e559b2fa329a31060f1650ab6099"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-horn-raider.glb",
+      "bytes": 207316,
+      "sha256": "23dde0df1c0d394869a670801493298fab9942f92a2ddb91e34551faf7d58f74"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-horn-raider.glb",
+      "bytes": 427848,
+      "sha256": "e59cb642297f9098e98b94c9f760ca9708b69a7ab0599554979c89ac23608fe6"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-whitebeard-chief.glb",
+      "bytes": 221764,
+      "sha256": "3eb7dbf4ae0625381937f3ba24f95ef85c7df2c033f110677d2e697963ae74b7"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-whitebeard-chief.glb",
+      "bytes": 501612,
+      "sha256": "a55bacf54bdf84fdd31dfd88a5a6b782dc745b316c4164d7c6b1f56a26faec28"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-mask-pugilist.glb",
+      "bytes": 167316,
+      "sha256": "21be8ef159801d934ad1c49c774e4d3a6a471b6c19388f5554ba292177101c14"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-mask-pugilist.glb",
+      "bytes": 315108,
+      "sha256": "093d8a23ed77a947bae801589e09d7d5f71d5814349929a50477579bab901d6e"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ram-demon.glb",
+      "bytes": 196492,
+      "sha256": "5b6c25b62722bedd5020c76bfeabe25284f68bc2f2c3d12e3a176f9eff285200"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ram-demon.glb",
+      "bytes": 347924,
+      "sha256": "fba20b403e0d073b534008b7fefa89ad35ebee2b57345a296cb97b534f7557de"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-moss-skeleton.glb",
+      "bytes": 162140,
+      "sha256": "a26791f374c47fdfad21491ae94da3706eb40de9dceb98d50c877e68d0264d2b"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-moss-skeleton.glb",
+      "bytes": 271964,
+      "sha256": "44d7d877043c82f70060bff47ee31c99f97fa00ab122b5bfb7f4cd86b1edd459"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-halfling-rogue.glb",
+      "bytes": 153352,
+      "sha256": "2335d887d8a87c8e5c6ff808fcb8caf1a303c84578ad443a059cd11b8e46bc5e"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-halfling-rogue.glb",
+      "bytes": 275984,
+      "sha256": "859ef2b786ca1e82f64c04fa07dc4f260b1fbb6f4ce002e9d82cb2baec4b6806"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-dragon-paladin.glb",
+      "bytes": 206616,
+      "sha256": "e9cb9a8ae071360ab45e8fcf908e61586105bcd92a9dccbd9c75c5adebc5adfa"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-dragon-paladin.glb",
+      "bytes": 404976,
+      "sha256": "847e028f807e3b79412446077f845e9f4c32f49f852b4adf6cfeccaeaddaa63f"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-wild-orc.glb",
+      "bytes": 217024,
+      "sha256": "4dcdcc16c99c8574a3afa5d843d1e6b5f6798ad14ab675087599ce8d32d9bea5"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-wild-orc.glb",
+      "bytes": 418220,
+      "sha256": "cb9d36a3aee63b14cc29de89d7eb98cb83e16fca4e5104c4a9fd277e5b4d04b5"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-lute-bard.glb",
+      "bytes": 159144,
+      "sha256": "f389d2b07865ba7ee762d3c8cb143aa12c7847da0c13d9423cc86d6230e1d3e7"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-lute-bard.glb",
+      "bytes": 315020,
+      "sha256": "662b8e129b20ef74bc9e5659835ddf1a6f05f833a1a7f015123337b727d3d722"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-antler-druid.glb",
+      "bytes": 166768,
+      "sha256": "89b77d864952034c89a7ebf3e38864ec6d422e794a68f6821d68906485b6888b"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-antler-druid.glb",
+      "bytes": 362648,
+      "sha256": "7cc067ab6556b4041087bc3abd233dbde4d66d90f852b858359f92ea2a5dc23e"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-coal-miner.glb",
+      "bytes": 170556,
+      "sha256": "e57a719697382dfaed1529643e2f27a2da8497b87b6e442bbb21904caa185727"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-coal-miner.glb",
+      "bytes": 273920,
+      "sha256": "d947081db0860ca549d66a177742c451e6b4b398b76bcfd4259596c768448dae"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-copper-prospector.glb",
+      "bytes": 167908,
+      "sha256": "a16812d6744726a995fec9f2c058737553240f429599267dcb142457dd0cbc02"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-copper-prospector.glb",
+      "bytes": 298816,
+      "sha256": "5c68763e0183fe1614140278ca0f10cef76ee845a169527f6bb422efaa6e098f"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-greybeard-ranger.glb",
+      "bytes": 186328,
+      "sha256": "b9e527dc2348caf10e7613f8e72b2e563a5de600f0ecbd6fc78918e60a3fbf2d"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-greybeard-ranger.glb",
+      "bytes": 338368,
+      "sha256": "636ffd1eb593badd1436a4f7aaa0a67ee2df439ecbd44f9e9a506cd19ee02357"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-hearth-digger.glb",
+      "bytes": 169492,
+      "sha256": "bfed9bc1fc78b8a19553e09c567a9ae931711d951804d86b0ebc3f3338b88acf"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-hearth-digger.glb",
+      "bytes": 306648,
+      "sha256": "c22fda0a61067395e79438625a8a9b3470e738513f4047cf04b412018fd10454"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ember-delver.glb",
+      "bytes": 169480,
+      "sha256": "e67f0d4b4da58186783effc5f82bded80fd491ce03b0ad11869660081a08190c"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ember-delver.glb",
+      "bytes": 310916,
+      "sha256": "64b16d628ed141ee7002e820a7b39e39b91c3d7f6f86d1bf4573dc651d146759"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-hide-hunter.glb",
+      "bytes": 178820,
+      "sha256": "af525218049a5da591d2e426e87e7221516f472b00896f50f34e828228826a27"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-hide-hunter.glb",
+      "bytes": 328304,
+      "sha256": "2e301cd934b76e492392a98e86d539a2a49aeed66c68797dbe90203d1ec71528"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-iron-warden.glb",
+      "bytes": 173736,
+      "sha256": "bc97097d698ee4f0ded3b3f33d81ca61456bee4ca578c18000c04e9f4df215ab"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-iron-warden.glb",
+      "bytes": 294092,
+      "sha256": "bb8ff8c2f671f9f9e46ff1d3700afc9d206853db782bbc971044619f45c15d05"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-tide-duelist.glb",
+      "bytes": 178020,
+      "sha256": "b0043abaf76514ffcbf310c7d9deb37e4b3ec3322a83c08255f87d08fa5dfd0b"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-tide-duelist.glb",
+      "bytes": 349588,
+      "sha256": "8a7043ef8c24b2429606e1de6f8b5725745e5e136fb4dfeef64209691958749b"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-ivory-adventurer.glb",
+      "bytes": 157352,
+      "sha256": "92b4b0b5fbdec9cf44c50402d7815aaf248af354a34f0d097154ac0c35a6d24b"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-ivory-adventurer.glb",
+      "bytes": 272368,
+      "sha256": "01ebc5d8f5f24dc35549dfa6c89257291916c140de2263595a0a79172580490e"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-chapel-priest.glb",
+      "bytes": 168016,
+      "sha256": "0cf26d42a4ec48567e0d321802a36a37c902235f16e0ccd292c7c6408857e08e"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-chapel-priest.glb",
+      "bytes": 306924,
+      "sha256": "5aa994cd5662180a9268eacc55776ce67a8f8eae9f4c74008fa1189e8714ccc8"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-chain-brawler.glb",
+      "bytes": 195920,
+      "sha256": "726dd47b362ac691c6b45aa05056b12a7fa6c748adc2878ed9e74e41b533197f"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-chain-brawler.glb",
+      "bytes": 343824,
+      "sha256": "5421ba3c1ab1834427ea6c67a6e3ba88e9a4e80ffab875d1bcc25caba7b103db"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-feather-shaman.glb",
+      "bytes": 194836,
+      "sha256": "e78b978e3376a32e411cb1967bdd4c6c0888f217eb6a57a62e792c35fffca17c"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-feather-shaman.glb",
+      "bytes": 441560,
+      "sha256": "244d021502d478f5cd00d0e91593e4f7ecb2ef9dbd7bf3609ab5efc99d57e6bf"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-harlequin.glb",
+      "bytes": 165156,
+      "sha256": "34724662ff2a3e1d4f82d2e79b558d73836733a8de24172544a73a67688e335d"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-harlequin.glb",
+      "bytes": 319812,
+      "sha256": "a08c282415b6c7e3938aefefe17a83ed61cb5280a9f4409dc72fa75d75bcafd3"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-flesh-hook.glb",
+      "bytes": 239196,
+      "sha256": "d998017997ccca9b6c56fac034c87be5e4f5b4531af18ed4d6236891d9ea8f53"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-flesh-hook.glb",
+      "bytes": 382204,
+      "sha256": "31431abe03c2566e914a9130e2aa1a6984b9854446ba36eb309361cf5c635f8d"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-vampire-count.glb",
+      "bytes": 174912,
+      "sha256": "cddf51580a0d115370c9b03bdf33291a830af851135b5a1ccad0a44cdd8d3c97"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-vampire-count.glb",
+      "bytes": 295600,
+      "sha256": "5f0b9b18773a89998f05f16eae76628f3d5a221e24d41b6d721b0cf55fb2b302"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-tide-golem.glb",
+      "bytes": 141856,
+      "sha256": "cc462cd13a4974aa8496eb1e64c77d41a38f31a6413480ffa864d6efc0516d26"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-tide-golem.glb",
+      "bytes": 255000,
+      "sha256": "7c46f4ab998595ef295cd96ef8ac922ce758bebf29b5c9e2126cee086b24d445"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-fel-golem.glb",
+      "bytes": 218096,
+      "sha256": "d7ff70d8e925e7bf34591fdf1d3ddff7a0a1dcfc6b323f22b9985456637c3ae9"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-fel-golem.glb",
+      "bytes": 345516,
+      "sha256": "46d42efd8c92b5d7b073856fee65e02a5086a738c7309a5dc5eb3f7046527534"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-void-oracle.glb",
+      "bytes": 175756,
+      "sha256": "e172788e78e73d71488a38e4d20b06590aa63753e9e868495ad5dc82c8cd079e"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-void-oracle.glb",
+      "bytes": 325064,
+      "sha256": "83e10a0ca9abd395f5f4515972bd49a060391b5500cb79823dd8c7d069a5e41a"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-pyramid-executioner.glb",
+      "bytes": 203688,
+      "sha256": "490a2cefb12a856e140448bd11e995fce4757619b98381e9d88d231054796472"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-pyramid-executioner.glb",
+      "bytes": 295868,
+      "sha256": "767504c32323cd202d0665c54ab0af0e64ce6094d3d0b5ce4c0bdec9b3d9cb63"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-jotunn.glb",
+      "bytes": 242356,
+      "sha256": "edc2e57673b5605e579c61dd9ff5b42b409dd36db4d04708c72d4aa801ed4bff"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-jotunn.glb",
+      "bytes": 411164,
+      "sha256": "83b31b53fdf2c492bd040f554982a2ed23c088111cab09876e6d569fcfb386eb"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-cyclops.glb",
+      "bytes": 203760,
+      "sha256": "ab09f2ce9bbdc9cda2dcf20846c361030469953073e3e5c051357887dcc1cac3"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-cyclops.glb",
+      "bytes": 345164,
+      "sha256": "e6eec33abf4c6e2085558151fa7c5c6f3151ab6d15caaf95761afe3107c8d368"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-grave-reaver.glb",
+      "bytes": 186332,
+      "sha256": "0a573ef83feecff61350b6876a5e8405d28e5f6f2bc1a36cdf3a3b3bd0d83462"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-grave-reaver.glb",
+      "bytes": 309252,
+      "sha256": "cdab0f83be6a98744606f1aef8df113665b0f9ecfd10fade3a8d53ecc14b1598"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-panda-marauder.glb",
+      "bytes": 217528,
+      "sha256": "904112a51eb881300ff69a8dca5b0efdb53713e31d7c8b90db1fb2a754ddf38c"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-panda-marauder.glb",
+      "bytes": 353672,
+      "sha256": "67a897afc836d3705a236299b7c934f12a915dbe2e8f9f89f96831117876ef9c"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-wisp-mage.glb",
+      "bytes": 165472,
+      "sha256": "99abb2a5275134e4dd611ae7a4bdee8991c464dcad76af1734169cc77dbad7e9"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-wisp-mage.glb",
+      "bytes": 279328,
+      "sha256": "779087592335e90ebbcacfb50b97b5a66c588a9ecaab5638e17a7a563eaf1690"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-gothic-sawyer.glb",
+      "bytes": 178488,
+      "sha256": "4088818b00286985b3cc16a9b0de1b98db3dbe2bef98f32d5dccf6030828c412"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-gothic-sawyer.glb",
+      "bytes": 395060,
+      "sha256": "870271721c715e4a44a0a857aacd620f8cb94949af28bf1d26c818df811d276e"
+    },
+    {
+      "path": "glb/tiny-characters-blocky-violet-maw.glb",
+      "bytes": 228852,
+      "sha256": "788dc7a3ba2ddf43670e02a852a5cda8cf580ee468f28abd49bb39d3f61a34d8"
+    },
+    {
+      "path": "dcc/tiny-characters-blocky-violet-maw.glb",
+      "bytes": 392364,
+      "sha256": "afbdc8cd7a5070fb8f17864204b2c257832fcfa1f8a0b241997183cb8582fe05"
+    },
+    {
+      "path": "glb/catalog.glb",
+      "bytes": 2615408,
+      "sha256": "a0eb49717ce1f424aa876b56b0e50a9c56b960db7660a3e16f8dc95b4371701f"
+    },
+    {
+      "path": "dcc/catalog.glb",
+      "bytes": 28601980,
+      "sha256": "16fb861b9a287ab7529a1ec02421b7a299c60ec4479449dfc1ccf4088faf3aba"
+    },
+    {
+      "path": "components/TinyCharactersBlockyDwarf.tsx",
+      "bytes": 1927,
+      "sha256": "b381175f89708a224516aa55d862eb1ccfe8b301649c9148df509a288a95fc7a"
+    },
+    {
+      "path": "components/TinyCharactersBlockySkeleton.tsx",
+      "bytes": 1978,
+      "sha256": "60d5be7f45a3f85812fb0df64efd8cb60c2c1c89c074b9680f6e9adde19ad229"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGolem.tsx",
+      "bytes": 1927,
+      "sha256": "8436f0821e7399decefcc74c7611f0d353ea76394c29f0b16cc92ed46faf3c1a"
+    },
+    {
+      "path": "components/TinyCharactersBlockyMummy.tsx",
+      "bytes": 1927,
+      "sha256": "c6f40e89c72e427bf7eca3cd36d8f39e5187bde60dd8ed7627c145eb573839c2"
+    },
+    {
+      "path": "components/TinyCharactersBlockyViking.tsx",
+      "bytes": 1944,
+      "sha256": "cbd6cdf2b4b1af9d09739ae5e8f1390a0d3b2df3412d9062ba2c144d053c5e11"
+    },
+    {
+      "path": "components/TinyCharactersBlockyKnight.tsx",
+      "bytes": 1944,
+      "sha256": "91ca4abad4c431c923c550903cd33466efabe6bb0c54cede268cd8acd27b4124"
+    },
+    {
+      "path": "components/TinyCharactersBlockyPharaoh.tsx",
+      "bytes": 1961,
+      "sha256": "e460235e0ddfb17092354616fc1f754589c777754d27dc3431f12a09604295cd"
+    },
+    {
+      "path": "components/TinyCharactersBlockyOrc.tsx",
+      "bytes": 1893,
+      "sha256": "a487486b73385b532795d0d557a537a494cfff80edaa86fb525d9fc6ff40e79b"
+    },
+    {
+      "path": "components/TinyCharactersBlockyWayfarer.tsx",
+      "bytes": 1978,
+      "sha256": "8a535cf01fd5943e78e4edf0f03121fc9ca1c57affc51213e6a1ea13a4bcf012"
+    },
+    {
+      "path": "components/TinyCharactersBlockyKing.tsx",
+      "bytes": 1930,
+      "sha256": "7fd39beab0dd0354e426bbfdfd2e634351f56c1a7035732ccefc5ae9cea159e8"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCannoneer.tsx",
+      "bytes": 1995,
+      "sha256": "6a07ccd51045c1f4ccadad537a180a95fcc4eb54ea2eb90da889aee0c0cb4676"
+    },
+    {
+      "path": "components/TinyCharactersBlockyPirate.tsx",
+      "bytes": 1960,
+      "sha256": "4f5dd702306d5533fb3bd968b6044a06570e0c5cdaa1a779ace811615761dead"
+    },
+    {
+      "path": "components/TinyCharactersBlockyBrute.tsx",
+      "bytes": 1945,
+      "sha256": "26ae40c8624d1b52648cdfd279dc5eef4f6361b9d80cd7ac3525ab2b9beac315"
+    },
+    {
+      "path": "components/TinyCharactersBlockyLich.tsx",
+      "bytes": 1926,
+      "sha256": "233e5600e7bb58ab9004073a75ef1ffd240a19b00b38180c12144d6bee389eb1"
+    },
+    {
+      "path": "components/TinyCharactersBlockySorceress.tsx",
+      "bytes": 1995,
+      "sha256": "aabbfcde20ed631d812ee8f2abe4c2a2c7fe67878fea02dadd20d48fa4fc377d"
+    },
+    {
+      "path": "components/TinyCharactersBlockyWitch.tsx",
+      "bytes": 1927,
+      "sha256": "a4962923de6c51c8498605afba871b094ba5764c0e00339558f4f093b8053add"
+    },
+    {
+      "path": "components/TinyCharactersBlockyRanger.tsx",
+      "bytes": 1944,
+      "sha256": "3d6181ed6ca3609033013f0ecacc5046dadd43b9e519b38749eeafa791db732f"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCaveman.tsx",
+      "bytes": 1961,
+      "sha256": "7526fce017453e58d4d10b809ae9677a0511e8a10c8155866d02d0549941c44e"
+    },
+    {
+      "path": "components/TinyCharactersBlockyZombie.tsx",
+      "bytes": 1944,
+      "sha256": "2439dffd9f5d5183939a5c59c6bd94ba36061d826261f5494bbd8fc731e8f74a"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGhost.tsx",
+      "bytes": 1927,
+      "sha256": "86d1578b65d87094465ad9452ada477f9b32c10b166440f4677bb4bcec0c9cc8"
+    },
+    {
+      "path": "components/TinyCharactersBlockyImp.tsx",
+      "bytes": 1893,
+      "sha256": "bd1f6b72628f5fb66ecd8fc9ac626dcc35575af160ecafe3a0d70b8076eb57b7"
+    },
+    {
+      "path": "components/TinyCharactersBlockyMuncher.tsx",
+      "bytes": 1961,
+      "sha256": "6778bf0daf301bd922cbc738566235e01facc770d6591424f9b173feea79401e"
+    },
+    {
+      "path": "components/TinyCharactersBlockyFrostGolem.tsx",
+      "bytes": 2018,
+      "sha256": "586301a8a259bcc6880f606992c5f650ecf507303bc3e27be4dff98376758068"
+    },
+    {
+      "path": "components/TinyCharactersBlockyJuggernaut.tsx",
+      "bytes": 2012,
+      "sha256": "b1df24ad7727774ab41cdebaeabc4fa2ca986233280b345d0aacc3483abd33d8"
+    },
+    {
+      "path": "components/TinyCharactersBlockyOgre.tsx",
+      "bytes": 1910,
+      "sha256": "f9ab5da1062bc8ef43f9200ecc51eecba82bc282f70b1fbcef14c3a9b089cb80"
+    },
+    {
+      "path": "components/TinyCharactersBlockyPitDemon.tsx",
+      "bytes": 1984,
+      "sha256": "9ac67c1d7da10afda820ec44bc7458bc74ca3a30b970489847a954dbe1004305"
+    },
+    {
+      "path": "components/TinyCharactersBlockyBoneSeer.tsx",
+      "bytes": 1984,
+      "sha256": "aa12c07e8b8d5c3f508efd8588ef1123c018bf425f83e7e4a76942e28a5a295f"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGroveWarden.tsx",
+      "bytes": 2035,
+      "sha256": "c9f3ee01162b41e4b79b4785b9598232f7dd5504e2dac2f40850f29c81500407"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGhoulRaider.tsx",
+      "bytes": 2035,
+      "sha256": "98d97009e0ffffb9344d99d4655901fd83bb495956e5edf6719a0ebc450f9df2"
+    },
+    {
+      "path": "components/TinyCharactersBlockySunGuard.tsx",
+      "bytes": 1984,
+      "sha256": "b43ad724cdee023a789085022adb1d978985ebcde414de1302baa98318a97726"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGoblinShaman.tsx",
+      "bytes": 2052,
+      "sha256": "4a67023b282135915cbc19771b4fc38d28ecce78a7d47fcd5c5422903e3bddfc"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHellblade.tsx",
+      "bytes": 1995,
+      "sha256": "4e90b32c925508f6b32d64f2beb23cbafdba5a6c34fe56c001400dbd6a174cd1"
+    },
+    {
+      "path": "components/TinyCharactersBlockyWolfGirl.tsx",
+      "bytes": 1984,
+      "sha256": "4c43407550b9c278c2faae2fdf8637f48511e49fd9f5f4eff1dc9976818a855f"
+    },
+    {
+      "path": "components/TinyCharactersBlockyBrawler.tsx",
+      "bytes": 1961,
+      "sha256": "6bf1ddea6b03b859d328366526461bc7f6b8146a5372dcb70c6a7e9cc89c847b"
+    },
+    {
+      "path": "components/TinyCharactersBlockyBarrelKnight.tsx",
+      "bytes": 2052,
+      "sha256": "c22059b2e8e186c7ee55c77d72434669cacad491e140e07d2d77dcffe36cc869"
+    },
+    {
+      "path": "components/TinyCharactersBlockyReaper.tsx",
+      "bytes": 1944,
+      "sha256": "452fa3c785dc5300478942968adec07af4f2b4602d2c1aa7686a059fb24ebf8f"
+    },
+    {
+      "path": "components/TinyCharactersBlockyDjinn.tsx",
+      "bytes": 1927,
+      "sha256": "6dd0094884172f2523a0d177eea63db16ea9cc51379c9e338638d9ae16f74c14"
+    },
+    {
+      "path": "components/TinyCharactersBlockyScreenBot.tsx",
+      "bytes": 2001,
+      "sha256": "c0ad4edb3823469f5a1bbd8f6cbdab011ee1ca41d8886200e386fcd429c8cf26"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCrtBot.tsx",
+      "bytes": 1950,
+      "sha256": "4aa8b383f8e14f439c283baba57e1d8e47c46ed7ffbffe4594aff48a085ec994"
+    },
+    {
+      "path": "components/TinyCharactersBlockyEmberRevenant.tsx",
+      "bytes": 2069,
+      "sha256": "097397506e255b3ee1e76f3ded873d17f96c6d69aa1bef36914c348b9f0fd20b"
+    },
+    {
+      "path": "components/TinyCharactersBlockyEmberTiefling.tsx",
+      "bytes": 2069,
+      "sha256": "90628d7bea7315e97d11b0cce44edc67d849cfe64b354efcc158ddb234445994"
+    },
+    {
+      "path": "components/TinyCharactersBlockyRootColossus.tsx",
+      "bytes": 2052,
+      "sha256": "bd9099ee7a5370e3fdb9b59a7422784194e085e950f56b8b0efddaa3b33eed7b"
+    },
+    {
+      "path": "components/TinyCharactersBlockyBoneMarauder.tsx",
+      "bytes": 2052,
+      "sha256": "ff3960d61b17dba410de9b7fe09d92f2f4851379f629cd9e0565aaddde2ea0be"
+    },
+    {
+      "path": "components/TinyCharactersBlockySunMonk.tsx",
+      "bytes": 1967,
+      "sha256": "ea20f1cb037ed3b9ba505eeb18a0af949489bb765165dbcd0116dd502e3a4af3"
+    },
+    {
+      "path": "components/TinyCharactersBlockyWrappedFighter.tsx",
+      "bytes": 2086,
+      "sha256": "3a4d35cf50b225f1eaebf8cd4c5fc17e7aed5c423c46600fca5746ccc6f1fc44"
+    },
+    {
+      "path": "components/TinyCharactersBlockyOchreMonk.tsx",
+      "bytes": 2001,
+      "sha256": "42190d2d0a81063a4cfe4ad364cdbdd03b63a024af8647e6bbffc2317bf1820e"
+    },
+    {
+      "path": "components/TinyCharactersBlockyScaleGuard.tsx",
+      "bytes": 2018,
+      "sha256": "ae10697f479ba410a48dd6247c9f027fc53cc1fa873638fafcdc987cbe2c871b"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCrimsonGnome.tsx",
+      "bytes": 2052,
+      "sha256": "59d280dec4cd456374da8df0e57f3135c7b904141999face32b58cba3306cf28"
+    },
+    {
+      "path": "components/TinyCharactersBlockyBogExplorer.tsx",
+      "bytes": 2035,
+      "sha256": "2ea61ea082e5064722f1318d7ae821ba34c59c524a2b6b59194fbf4037f006a1"
+    },
+    {
+      "path": "components/TinyCharactersBlockyTuskBrute.tsx",
+      "bytes": 2001,
+      "sha256": "0875908eecff308f17aea079d7ee9130e76376338bf1e33ecfe979f6fd4a90da"
+    },
+    {
+      "path": "components/TinyCharactersBlockyTrailScout.tsx",
+      "bytes": 2018,
+      "sha256": "49e14ed57c07b6c81c6fb17343391664288abef58163334bcdc5a3a086786501"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCityKid.tsx",
+      "bytes": 1967,
+      "sha256": "44ec8e9e973a27514f69b8045957ffb094b2bd4fa9259850e2c6b0c2800397eb"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHillTroll.tsx",
+      "bytes": 2001,
+      "sha256": "e4dcf7fba07a5967b572cbb04da1594634dac9642048aa9cf458e01ac61a4b3c"
+    },
+    {
+      "path": "components/TinyCharactersBlockyMinotaur.tsx",
+      "bytes": 1978,
+      "sha256": "35443ccc9ed0bc173c95e1523998e246181cf459fde3901402ccf6f6f919842c"
+    },
+    {
+      "path": "components/TinyCharactersBlockyRonin.tsx",
+      "bytes": 1927,
+      "sha256": "2201d0c039085f566ca667b967829e1a33cc46b0a7f0cff52d0c1e9c43eb4280"
+    },
+    {
+      "path": "components/TinyCharactersBlockyPlagueDoctor.tsx",
+      "bytes": 2052,
+      "sha256": "23cf6975bc3316b96df874671598446c20d8d884c9037f231bc941d251d4e9fc"
+    },
+    {
+      "path": "components/TinyCharactersBlockyRatRogue.tsx",
+      "bytes": 1984,
+      "sha256": "719ebe9edd258eabbc892b3772107c8ad153aefb5ae797b04e5ce5452d851981"
+    },
+    {
+      "path": "components/TinyCharactersBlockyShroomling.tsx",
+      "bytes": 2012,
+      "sha256": "d5dcb113968142bc50444cf5917a1ad89087b83ade7b2659f80e246209a0ec92"
+    },
+    {
+      "path": "components/TinyCharactersBlockyMawTroll.tsx",
+      "bytes": 1984,
+      "sha256": "b13ad64017a532d3751012d535efb9d0913b7febc023a7feeec0010854e0aa71"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHoodArcher.tsx",
+      "bytes": 2018,
+      "sha256": "b508904b2a5f39a3227d7c1c063e97b7b11831facd197063a8fc5315f525dd62"
+    },
+    {
+      "path": "components/TinyCharactersBlockyFangBeast.tsx",
+      "bytes": 2001,
+      "sha256": "08f8af47a2cbd2d3197a6fc7b85109cd8306f34b95bd222a892f30ac29d17a3b"
+    },
+    {
+      "path": "components/TinyCharactersBlockyAmberBot.tsx",
+      "bytes": 1984,
+      "sha256": "57beb697ed371afd4af15474e3251733a6f485da11fbfa72a52ebbb41642295b"
+    },
+    {
+      "path": "components/TinyCharactersBlockyForgeWarchief.tsx",
+      "bytes": 2069,
+      "sha256": "aba62de52a7c10ef944a496730de9331f2fdb115f6a44e78aefaf30cbc9a8979"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHornSentinel.tsx",
+      "bytes": 2052,
+      "sha256": "63a0d45f5faddfded7c15c95c6f2bf233980940b8a2e0df1b4af0f72a5a136d2"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHornRaider.tsx",
+      "bytes": 2018,
+      "sha256": "83bf36fe82f100c1ff8a2a4dd06c01a237abc42a9ba13eb199c55436a391b137"
+    },
+    {
+      "path": "components/TinyCharactersBlockyWhitebeardChief.tsx",
+      "bytes": 2103,
+      "sha256": "b60c7cf4091febf18d8d2f05ed0b10d510b44597cf15cf6d6a5d7850478b98e3"
+    },
+    {
+      "path": "components/TinyCharactersBlockyMaskPugilist.tsx",
+      "bytes": 2052,
+      "sha256": "103a947255724f2d626c146cf9fdba7c7168755dcdb3599368bee0c641599c1c"
+    },
+    {
+      "path": "components/TinyCharactersBlockyRamDemon.tsx",
+      "bytes": 1984,
+      "sha256": "1a4e5017d09c86cedbef65d40e99d8fac6fbb56bb31aa4b06132d805a379194f"
+    },
+    {
+      "path": "components/TinyCharactersBlockyMossSkeleton.tsx",
+      "bytes": 2052,
+      "sha256": "458ade16c29ff0cadd1c8510ede67ea3130ba8ad12f165beccf03eb67ce602d2"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHalflingRogue.tsx",
+      "bytes": 2069,
+      "sha256": "80b660f36b56712ec8e1a444616ab85d79f8e3bee069e36eecb91fb824c9bd9c"
+    },
+    {
+      "path": "components/TinyCharactersBlockyDragonPaladin.tsx",
+      "bytes": 2069,
+      "sha256": "8d2061f24b60dd8ea2e0c830adfbbea387dfbc4e2a997a0d112cf0b1503105d4"
+    },
+    {
+      "path": "components/TinyCharactersBlockyWildOrc.tsx",
+      "bytes": 1967,
+      "sha256": "8d9e318213d3f562e6a3c4b391ee07625379df82fb5af74da6cfa7af361fc3ce"
+    },
+    {
+      "path": "components/TinyCharactersBlockyLuteBard.tsx",
+      "bytes": 1984,
+      "sha256": "98151db6bd0e480c3ffe98d72b0610d52b26716aa75e7c8478ce5df3108dbd8a"
+    },
+    {
+      "path": "components/TinyCharactersBlockyAntlerDruid.tsx",
+      "bytes": 2035,
+      "sha256": "2930ff2d2b5575f45ac00c58e55467c1444af38c1bf13b5557d72ca2d5149db4"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCoalMiner.tsx",
+      "bytes": 2001,
+      "sha256": "8626d2284e8a6d9cef6c9cba0d84bef3f49ab74119aa38003ffa9919f400617a"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCopperProspector.tsx",
+      "bytes": 2120,
+      "sha256": "0363acbdeceb53c31633ba5508c94c0d3e4863ea20b335577c03d18f4b6f9e57"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGreybeardRanger.tsx",
+      "bytes": 2103,
+      "sha256": "37d171156c706841596d84283395d4f1e6b17c5524a753defc017ce4577104b1"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHearthDigger.tsx",
+      "bytes": 2052,
+      "sha256": "96b99d5728e6f5c8d4fcd5f0096e45b8bb0fdb10c65749adc2aaf6c1d49d405c"
+    },
+    {
+      "path": "components/TinyCharactersBlockyEmberDelver.tsx",
+      "bytes": 2035,
+      "sha256": "fd2b154c5be1c9ebdadcf743fefa55fb7b7aa1ed4a726ab2c28523556cde34c0"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHideHunter.tsx",
+      "bytes": 2018,
+      "sha256": "ec3ac45149c039a5a8c1d6a390793fee219986fb26526ea3dc5ce482a7ecc70e"
+    },
+    {
+      "path": "components/TinyCharactersBlockyIronWarden.tsx",
+      "bytes": 2018,
+      "sha256": "1fc043649d1d6f9271af249bbe5cbe6a8dad3850f5f961ec28285f01469e7318"
+    },
+    {
+      "path": "components/TinyCharactersBlockyTideDuelist.tsx",
+      "bytes": 2035,
+      "sha256": "9322fc4f0edde6db65e31171b5cc5477b458866f3c340bbd34bb2ddbff3c9bd0"
+    },
+    {
+      "path": "components/TinyCharactersBlockyIvoryAdventurer.tsx",
+      "bytes": 2103,
+      "sha256": "377ec01edce9661565d6b6c2a1deebc5db14b3498c39c16998d50fc19a6b33ad"
+    },
+    {
+      "path": "components/TinyCharactersBlockyChapelPriest.tsx",
+      "bytes": 2052,
+      "sha256": "89c05922bc1eaaa8565c2818dddd2c4cb34b9c37a854df8345658d733cc9b461"
+    },
+    {
+      "path": "components/TinyCharactersBlockyChainBrawler.tsx",
+      "bytes": 2052,
+      "sha256": "a9ae517de4fd9f31bbe0e7a68d848f991985a20a9181320875a6b0e818fe695e"
+    },
+    {
+      "path": "components/TinyCharactersBlockyFeatherShaman.tsx",
+      "bytes": 2069,
+      "sha256": "668e3fb48ef11c6a5f6d7bf4e74c7678d28e2e39b9cf108408ee2a52aecec18e"
+    },
+    {
+      "path": "components/TinyCharactersBlockyHarlequin.tsx",
+      "bytes": 1995,
+      "sha256": "3ea7f629220472ada6d91c01bdd9cc13fba4ef3824b8966fd7cfbdd4863ca2c6"
+    },
+    {
+      "path": "components/TinyCharactersBlockyFleshHook.tsx",
+      "bytes": 2001,
+      "sha256": "d267c9addcf9c4769d7f9b52d8287688b243f3f9a78641138bd483df31798702"
+    },
+    {
+      "path": "components/TinyCharactersBlockyVampireCount.tsx",
+      "bytes": 2052,
+      "sha256": "b0ddb798555844c75e2e7b544513071c152d76717b2c3e2445673f7dcb55d3f7"
+    },
+    {
+      "path": "components/TinyCharactersBlockyTideGolem.tsx",
+      "bytes": 2001,
+      "sha256": "241c3e4dcd3e7534475c278586b494a74efef96728253372c925cccf39e8b25c"
+    },
+    {
+      "path": "components/TinyCharactersBlockyFelGolem.tsx",
+      "bytes": 1984,
+      "sha256": "851548d641e2e14e6912f508cdcc3dd4e892376e549b1b9d70ff19649fc6370f"
+    },
+    {
+      "path": "components/TinyCharactersBlockyVoidOracle.tsx",
+      "bytes": 2018,
+      "sha256": "9b30bf6d9d5ad7ad1fc98f6fbe637f254b8b2bc64105492a4ffbd47c94209ff6"
+    },
+    {
+      "path": "components/TinyCharactersBlockyPyramidExecutioner.tsx",
+      "bytes": 2154,
+      "sha256": "32586db6799bf17cd03ffb9a76771228ba66db650c29c33103f0b8cc6b578cdc"
+    },
+    {
+      "path": "components/TinyCharactersBlockyJotunn.tsx",
+      "bytes": 1944,
+      "sha256": "9da672bf7cff69e183a664a4a7d62254f407948ed07d26c15a5cfbc6c532dd84"
+    },
+    {
+      "path": "components/TinyCharactersBlockyCyclops.tsx",
+      "bytes": 1961,
+      "sha256": "50b1a24e24b61998974cd275d17bf57a4e4c31b7cf661031b4e27cd2e7ea2a61"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGraveReaver.tsx",
+      "bytes": 2035,
+      "sha256": "1171da2eecb6486f2287dbf377cd60e642c9d6dc2b540b5eab8eda91b721bea0"
+    },
+    {
+      "path": "components/TinyCharactersBlockyPandaMarauder.tsx",
+      "bytes": 2069,
+      "sha256": "67a1640ee944df44f2e8d486e592dd45ca855e6a413069fd07a8cf23228d469f"
+    },
+    {
+      "path": "components/TinyCharactersBlockyWispMage.tsx",
+      "bytes": 1984,
+      "sha256": "408efa4998536c01f4b6515b3ca1f3a023964f4b7bd3a327ac15e623196ec51e"
+    },
+    {
+      "path": "components/TinyCharactersBlockyGothicSawyer.tsx",
+      "bytes": 2052,
+      "sha256": "58e658dedaef10368946e4d7ecfc7ce755e39c8a57edc4011079a706c5a151ae"
+    },
+    {
+      "path": "components/TinyCharactersBlockyVioletMaw.tsx",
+      "bytes": 2001,
+      "sha256": "6b68d080a009e419bc350c91ebb6a94e709478af22310c3d6408890c87099481"
+    },
+    {
+      "path": "preview/showroom.html",
+      "bytes": 595987,
+      "sha256": "6f137445031cbf84402f57f32b2dba94094725a6167e3dbc71cf9bddbda7e2b3"
+    },
+    {
+      "path": "preview/showroom.data.js",
+      "bytes": 57504327,
+      "sha256": "e874dbd0c2653c0430e6a0867f732ffa9f29b90b0ae05c046238ed867faef788"
+    },
+    {
+      "path": "palettes.json",
+      "bytes": 174957,
+      "sha256": "5b21e99f5e1b107b1f1101703ddc307c8ed47507f35186621befeacceb98cc9b"
+    },
+    {
+      "path": "helpers/articulation.ts",
+      "bytes": 21843,
+      "sha256": "69e9624a5ff246bfcb9795eb907294444cb7874b59dd22ae9919404ba7d21b46"
+    },
+    {
+      "path": "helpers/articulation.js",
+      "bytes": 15234,
+      "sha256": "4da80fba2cb09b422c4715c807ce576be5deece920707f4eb0c2048357dc9098"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6074,
+      "sha256": "aa2f60c39f1d9dd311ad57b90dd1b4a03c0b0cafe1d6eac267ba1c7c1b6aa485"
+    },
+    {
+      "path": "LICENSE.txt",
+      "bytes": 1319,
+      "sha256": "48d9e6baa97a3c1011af86af54121e8d91ff1ba2156697b0e09e9d49dda1ec44"
+    }
+  ]
+}

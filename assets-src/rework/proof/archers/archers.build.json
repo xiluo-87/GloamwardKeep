@@ -1,0 +1,73 @@
+{
+  "status": "pending visual review",
+  "source_sha256": "2d175826d79b44101e72bb5d805d10101524cc1905c4b0925971a60af5a368cc",
+  "output_sha256": "ccb2c8c5a81b071c323fd31e9760bfd40bbf717a826b016e9159e9ae688515e1",
+  "models": [
+    {
+      "id": "tower/archer/tier-1",
+      "blocks": 30,
+      "triangles": 1320,
+      "crew": [
+        "crew-0"
+      ],
+      "design": "Four timber stilts with exposed X braces and a single open plank deck."
+    },
+    {
+      "id": "tower/archer/tier-2",
+      "blocks": 55,
+      "triangles": 2420,
+      "crew": [
+        "crew-0.001"
+      ],
+      "design": "Low coursed stone plinth, cantilever braces, open timber upper frame and a front access ladder."
+    },
+    {
+      "id": "tower/archer/tier-3",
+      "blocks": 94,
+      "triangles": 4136,
+      "crew": [
+        "crew-0.002"
+      ],
+      "design": "Square stone shaft, stepped corner buttresses and a broad wood fighting platform with low stone merlons."
+    },
+    {
+      "id": "tower/archer/fork-a-1",
+      "blocks": 27,
+      "triangles": 1188,
+      "crew": [
+        "crew-0.003"
+      ],
+      "design": "Narrow tall braced timber lookout on two massive side trestles; one unobstructed firing position."
+    },
+    {
+      "id": "tower/archer/fork-a-2",
+      "blocks": 124,
+      "triangles": 5456,
+      "crew": [
+        "crew-0.004"
+      ],
+      "design": "Offset stone observation pier and a cantilevered split-level timber perch, joined by a visible side stair."
+    },
+    {
+      "id": "tower/archer/fork-b-1",
+      "blocks": 37,
+      "triangles": 1628,
+      "crew": [
+        "crew-0.005",
+        "crew-1"
+      ],
+      "design": "Two separated low firing bays with a central access notch and a shared stone-backed Y-braced trestle."
+    },
+    {
+      "id": "tower/archer/fork-b-2",
+      "blocks": 58,
+      "triangles": 2552,
+      "crew": [
+        "crew-0.006",
+        "crew-1.001",
+        "crew-2"
+      ],
+      "design": "Three staggered firing platforms: two low side bays and a raised rear centre bay, on a stone-and-timber gantry."
+    }
+  ]
+}

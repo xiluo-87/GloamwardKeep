@@ -5,7 +5,7 @@ import { ENEMY_TEXT, GAME_NAME, GAME_TAG, HERO_TEXT, MAP_TEXT, PERK_TEXT } from 
 import {
   heroSlots, heroUnlocked, levelOf, levelProgress, mapUnlocked, perkSlots, perkUnlocked, Profile, unlocksAt,
 } from '../meta/profile';
-import type { Renderer } from '../render/renderer';
+import { drawPreview } from '../render/preview';
 import { boardHeight, boardWidth } from '../sim/hex';
 import { generateMap, Terrain } from '../sim/mapgen';
 import { WORLD } from '../data/balance';
@@ -40,7 +40,7 @@ export class Screens {
   private armedAt = 0;
   private pauseOpen = false;
 
-  constructor(private profile: Profile, private renderer: Renderer, private ui: UiSettings, private h: ScreenHandlers) {
+  constructor(private profile: Profile, private ui: UiSettings, private h: ScreenHandlers) {
     this.root = document.getElementById('overlay') as HTMLElement;
     this.root.addEventListener('click', (e) => {
       const el = (e.target as HTMLElement).closest('[data-act]') as HTMLElement | null;
@@ -88,7 +88,7 @@ export class Screens {
     const level = levelOf(p.xp);
     switch (act) {
       case 'title': this.h.onTitle(); this.title(); break;
-      case 'play': this.mapSeed = this.mapSeed || newSeed(); this.play(); break;
+      case 'play': this.play(); break;
       case 'profile': this.profileScreen(); break;
       case 'sound': p.muted = !p.muted; this.h.saved(); this.title(); break;
       case 'slow':
@@ -214,7 +214,7 @@ export class Screens {
     </div>`, 'scroll');
     const cv = this.root.querySelector('#preview') as HTMLCanvasElement | null;
     const g = cv?.getContext('2d');
-    if (cv && g) this.renderer.drawPreview(g, this.terrain(p.map, this.mapSeed), cv.width, cv.height);
+    if (cv && g) drawPreview(g, this.terrain(p.map, this.mapSeed), cv.width, cv.height);
   }
 
   // -- profile ----------------------------------------------------------------------------------

@@ -5,3 +5,7 @@ coverage/
 .DS_Store
 .env*
 .vite/
+
+# Blender/Python asset pipeline caches
+__pycache__/
+*.py[cod]

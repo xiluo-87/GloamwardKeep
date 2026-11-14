@@ -39,6 +39,8 @@ export interface RingItem {
   keepOpen?: boolean;
   /** Build item: shows a ghost on the tile while pressed. */
   place?: TowerId | HeroId;
+  /** Upgrade option whose additional range is previewed while this item is hovered/focused. */
+  upgradePath?: 'tier' | 'a' | 'b';
   desc: (s: RunState) => DescInfo;
   /** Per-frame state: greyed out, and an optional replacement for the cost line. */
   state: (s: RunState) => { poor: boolean; sub?: string };
@@ -223,6 +225,7 @@ function towerItems(s: RunState, ss: Session, t: Tower): RingItem[] {
       const sum = (): number => { let g = 0; for (let k = s.keep; k < o.keep; k++) g += Math.round(KEEP.cost[k] * s.mods.costMul); return g; };
       items.push({
         key: `up-${o.path}`, icon: ACTION_ICONS.upgrade, label: fork && t.forkTier === 0 ? fork.name : 'Upgrade', locked: true, cost: o.cost, lockTag: roman(o.keep),
+        upgradePath: o.path,
         desc: () => ({
           title: fork && t.forkTier === 0 ? fork.name : `Upgrade: ${next}`,
           sub: fork && t.forkTier === 0 ? `Fork ${o.path.toUpperCase()}` : next,
@@ -236,6 +239,7 @@ function towerItems(s: RunState, ss: Session, t: Tower): RingItem[] {
     }
     items.push({
       key: `up-${o.path}`, icon: ACTION_ICONS.upgrade, label: fork && t.forkTier === 0 ? fork.name : 'Upgrade', cost: o.cost, keepOpen: true,
+      upgradePath: o.path,
       desc: () => ({
         title: fork && t.forkTier === 0 ? fork.name : `Upgrade: ${next}`,
         sub: fork && t.forkTier === 0 ? `Fork ${o.path.toUpperCase()} — a permanent choice` : next,
@@ -283,6 +287,7 @@ export class Ring {
   private shown = false;
   private cur = -1;
   private pressId: number | null = null;
+  private pointerInside = false;
   private holdTimer = 0;
   private card: HTMLElement;
 
@@ -297,6 +302,7 @@ export class Ring {
       this.enter(i, true);
     });
     root.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'mouse') this.pointerInside = true;
       if (this.pressId === null) {
         if (e.pointerType === 'mouse') this.enter(this.indexAt(document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null), false);
         return;
@@ -316,7 +322,19 @@ export class Ring {
       else this.leave();
     });
     root.addEventListener('pointercancel', () => { this.pressId = null; this.leave(); });
-    root.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && this.pressId === null) this.leave(); });
+    root.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') this.pointerInside = true; });
+    root.addEventListener('pointerleave', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      this.pointerInside = false;
+      if (this.pressId === null && !root.contains(document.activeElement)) this.leave();
+    });
+    root.addEventListener('focusin', (e) => {
+      const i = this.indexAt((e.target as HTMLElement).closest?.('.ri') as HTMLElement | null);
+      if (i >= 0) this.enter(i, false);
+    });
+    root.addEventListener('focusout', (e) => {
+      if (!root.contains(e.relatedTarget as Node | null) && !this.pointerInside) this.leave();
+    });
     root.addEventListener('contextmenu', (e) => e.preventDefault());
   }
 
@@ -333,7 +351,11 @@ export class Ring {
     const it = this.items[i];
     const s = this.session.run;
     if (!it || !s) { this.leave(); return; }
-    if (it.place) this.session.previewBuild(it.place); else this.session.previewPlain(true);
+    if (it.upgradePath) this.session.previewUpgrade(it.upgradePath);
+    else {
+      this.session.previewUpgrade(null);
+      if (it.place) this.session.previewBuild(it.place); else this.session.previewPlain(true);
+    }
     this.showCard({ ...it.desc(s), icon: it.icon });
     this.setPressed(i);
     if (press && it.hold) {
@@ -352,6 +374,7 @@ export class Ring {
     window.clearTimeout(this.holdTimer);
     this.cur = -1;
     this.card.hidden = true;
+    this.session.previewUpgrade(null);
     this.session.previewPlain(false);
   }
 

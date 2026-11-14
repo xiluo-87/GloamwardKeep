@@ -1,0 +1,7298 @@
+{
+  "pack": "blocky-characters",
+  "packVersion": "1.0.0",
+  "note": "Hex colours used by the pack. Model ids match glb/<id>.glb.",
+  "models": [
+    {
+      "id": "firehouse",
+      "name": "Voxel Firehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "corner-building",
+      "name": "Voxel Corner Store Building",
+      "category": "Buildings"
+    },
+    {
+      "id": "mansard-townhouse",
+      "name": "Mansard Townhouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "limestone-bowfront",
+      "name": "Limestone Bowfront Townhouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "dutch-gable-townhouse",
+      "name": "Dutch Gable Townhouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "wood-tenement",
+      "name": "Wood Tenement",
+      "category": "Buildings"
+    },
+    {
+      "id": "brick-tenement",
+      "name": "Brick Tenement",
+      "category": "Buildings"
+    },
+    {
+      "id": "corner-bodega",
+      "name": "Corner Bodega Tenement",
+      "category": "Buildings"
+    },
+    {
+      "id": "yellow-brick-cafe",
+      "name": "Yellow Brick Cafe",
+      "category": "Buildings"
+    },
+    {
+      "id": "pizzeria",
+      "name": "Brick Pizzeria",
+      "category": "Buildings"
+    },
+    {
+      "id": "cinema",
+      "name": "Art Deco Cinema",
+      "category": "Buildings"
+    },
+    {
+      "id": "clinic",
+      "name": "Neighbourhood Clinic",
+      "category": "Buildings"
+    },
+    {
+      "id": "police-station",
+      "name": "Police Precinct",
+      "category": "Buildings"
+    },
+    {
+      "id": "church",
+      "name": "Neo-Gothic Church",
+      "category": "Buildings"
+    },
+    {
+      "id": "warehouse",
+      "name": "Brick Warehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "gas-station",
+      "name": "Gas Station",
+      "category": "Buildings"
+    },
+    {
+      "id": "ground-surface",
+      "name": "Compacted Ground Surface",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-props",
+      "name": "Voxel Street Props Collection",
+      "category": "Sets"
+    },
+    {
+      "id": "traffic-control-props",
+      "name": "Traffic Control Props",
+      "category": "Sets"
+    },
+    {
+      "id": "street-surfaces",
+      "name": "Street Surface Modules",
+      "category": "Sets"
+    },
+    {
+      "id": "subway-entrance",
+      "name": "Subway Entrance",
+      "category": "Buildings"
+    },
+    {
+      "id": "wall-neon-sign",
+      "name": "Wall Neon OPEN Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "foliage-planter",
+      "name": "Procedural Foliage Planter",
+      "category": "Greenery"
+    },
+    {
+      "id": "grass-patch",
+      "name": "Grass Patch Set",
+      "category": "Sets"
+    },
+    {
+      "id": "narrow-tree",
+      "name": "Narrow Greenery Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "broad-tree",
+      "name": "Broad Canopy Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "ivy-vines",
+      "name": "Ivy Vines Set",
+      "category": "Sets"
+    },
+    {
+      "id": "industrial-boiler-house",
+      "name": "Boiler House",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-corrugated-factory-office",
+      "name": "Corrugated Factory Office",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-substation",
+      "name": "Electrical Substation",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-substation-surface",
+      "name": "Substation Surface",
+      "category": "Surfaces"
+    },
+    {
+      "id": "industrial-cooling-tower",
+      "name": "Cooling Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-factory",
+      "name": "Factory",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-pipe-rack",
+      "name": "Pipe Rack",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-tank",
+      "name": "Horizontal Tank",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-vertical-storage-tank",
+      "name": "Vertical Storage Tank",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-spherical-storage-tank",
+      "name": "Spherical Storage Tank",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-wooden-crate",
+      "name": "Wooden Crate",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-arched-gatehouse",
+      "name": "Arched Gatehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-brick-pallet",
+      "name": "Brick Pallet",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-caution-sign",
+      "name": "Caution Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "industrial-construction-floodlight-pole",
+      "name": "Construction Floodlight Pole",
+      "category": "Street"
+    },
+    {
+      "id": "industrial-control-tower",
+      "name": "Control Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-danger-sign",
+      "name": "Danger Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "industrial-dirty-barrel",
+      "name": "Dirty Industrial Barrel",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-dirty-dumpster",
+      "name": "Dirty Dumpster",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-dirty-transformer-kiosk",
+      "name": "Dirty Transformer Kiosk",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-electrical-control-cabinet",
+      "name": "Electrical Control Cabinet",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-forklift",
+      "name": "Forklift",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-loading-canopy",
+      "name": "Loading Canopy",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-power-station",
+      "name": "Power Station",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-rail-crane",
+      "name": "Rail Crane",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-crawler-crane",
+      "name": "Crawler Crane",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-rail-scrap-pile",
+      "name": "Rail Scrap Pile",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-rail-scrap-pile-2",
+      "name": "Rail Scrap Pile 2",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-tire",
+      "name": "Tire",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-tripod-warning-sign",
+      "name": "Tripod Warning Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "industrial-utility-annex",
+      "name": "Utility Annex",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-water-treatment-building",
+      "name": "Water Treatment Building",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-wooden-cable-reel",
+      "name": "Wooden Cable Reel",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-barrier-gate",
+      "name": "Barrier Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "industrial-concrete-panel-fence",
+      "name": "Concrete Panel Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "industrial-concrete-panel-fence-open-base",
+      "name": "Concrete Panel Fence — Open Base",
+      "category": "Fences"
+    },
+    {
+      "id": "industrial-excavator",
+      "name": "Excavator",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-chunky-grass",
+      "name": "Chunky Grass",
+      "category": "Greenery"
+    },
+    {
+      "id": "industrial-sparse-grass-field",
+      "name": "Sparse Grass Field",
+      "category": "Greenery"
+    },
+    {
+      "id": "industrial-ibc-water-container",
+      "name": "IBC Water Container",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-pedestrian-overpass",
+      "name": "Pedestrian Overpass",
+      "category": "Street"
+    },
+    {
+      "id": "industrial-pedestrian-overpass-corner",
+      "name": "Pedestrian Overpass Corner",
+      "category": "Street"
+    },
+    {
+      "id": "industrial-semi-truck",
+      "name": "Semi Truck",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-shipping-container",
+      "name": "Shipping Container",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-small-hangar",
+      "name": "Small Hangar",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-maintenance-workshop",
+      "name": "Maintenance Workshop",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-small-truck",
+      "name": "Small Truck",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-van",
+      "name": "Service Van",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-warehouse",
+      "name": "Warehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-water-service-tanker",
+      "name": "Water / Fuel Service Tanker",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-concrete-mixer-truck",
+      "name": "Concrete Mixer Truck",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-road-roller",
+      "name": "Single-Drum Road Roller",
+      "category": "Vehicles"
+    },
+    {
+      "id": "industrial-water-tower",
+      "name": "Water Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-wind-generator",
+      "name": "Wind Generator",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-solar-panel",
+      "name": "Solar Panel",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-workshop-shack",
+      "name": "Workshop Shack",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-pedestrian-overpass-stair",
+      "name": "Pedestrian Overpass Stair",
+      "category": "Street"
+    },
+    {
+      "id": "industrial-concrete-road-barrier",
+      "name": "Concrete Road Barrier",
+      "category": "Street"
+    },
+    {
+      "id": "industrial-pipe-stack",
+      "name": "Pipe Stack",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-log-bundle",
+      "name": "Log Bundle",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-striped-barricade",
+      "name": "Striped Barricade",
+      "category": "Street"
+    },
+    {
+      "id": "industrial-manhole-platform",
+      "name": "Manhole Platform",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-ground-patch",
+      "name": "Ground Patch",
+      "category": "Surfaces"
+    },
+    {
+      "id": "industrial-ground-pit",
+      "name": "Ground Pit",
+      "category": "Surfaces"
+    },
+    {
+      "id": "industrial-concrete-surface",
+      "name": "Concrete Surface",
+      "category": "Surfaces"
+    },
+    {
+      "id": "industrial-arched-brick-workshop",
+      "name": "Arched Brick Workshop",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-compact-factory-office",
+      "name": "Compact Factory Office",
+      "category": "Buildings"
+    },
+    {
+      "id": "industrial-metal-arch",
+      "name": "Metal Structural Arch",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-metal-booth",
+      "name": "Metal Louvered Booth",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-siding-board-pile",
+      "name": "Siding Board Pile",
+      "category": "Props"
+    },
+    {
+      "id": "industrial-structural-frame-tower",
+      "name": "Structural Frame Tower",
+      "category": "Props"
+    },
+    {
+      "id": "suburban-corner-porch-house",
+      "name": "Corner Porch House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-porch-cottage",
+      "name": "Porch Cottage",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-screened-porch",
+      "name": "Screened Porch",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-double-garage",
+      "name": "Double Garage",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-split-level-house",
+      "name": "Split Level House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-carport",
+      "name": "Carport",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-two-story-house",
+      "name": "Two Story House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-garden-shed",
+      "name": "Garden Shed",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-backyard-studio",
+      "name": "Backyard Studio",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-wood-privacy-fence",
+      "name": "Wood Privacy Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "suburban-wood-privacy-fence-2",
+      "name": "Wood Privacy Fence 2.0",
+      "category": "Fences"
+    },
+    {
+      "id": "suburban-gas-grill",
+      "name": "Gas Grill",
+      "category": "Props"
+    },
+    {
+      "id": "suburban-mailbox-modern",
+      "name": "Modern Mailbox",
+      "category": "Props"
+    },
+    {
+      "id": "suburban-mailbox-rustic",
+      "name": "Rustic Mailbox",
+      "category": "Props"
+    },
+    {
+      "id": "suburban-classic-street-lamp",
+      "name": "Classic Street Lamp",
+      "category": "Street"
+    },
+    {
+      "id": "suburban-round-canopy-tree",
+      "name": "Round Canopy Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "suburban-speed-limit-signs",
+      "name": "Speed Limit Signs",
+      "category": "Signs"
+    },
+    {
+      "id": "suburban-guarded-young-tree",
+      "name": "Guarded Young Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "suburban-patio-dining-set",
+      "name": "Patio Dining Set",
+      "category": "Props"
+    },
+    {
+      "id": "suburban-utility-pole-set",
+      "name": "Utility Pole Set",
+      "category": "Street"
+    },
+    {
+      "id": "suburban-utility-pole-wire-span",
+      "name": "Utility Pole Wires",
+      "category": "Sets"
+    },
+    {
+      "id": "suburban-brick-boundary-wall",
+      "name": "Brick Boundary Wall",
+      "category": "Fences"
+    },
+    {
+      "id": "suburban-picnic-table",
+      "name": "Picnic Table",
+      "category": "Props"
+    },
+    {
+      "id": "gable-roof-bus-shelter",
+      "name": "Gable Roof Bus Shelter",
+      "category": "Props"
+    },
+    {
+      "id": "wood-slat-transit-bench",
+      "name": "Wood Slat Transit Bench",
+      "category": "Props"
+    },
+    {
+      "id": "bus-stop-sign-post",
+      "name": "Bus Stop Sign Post",
+      "category": "Signs"
+    },
+    {
+      "id": "octagonal-garden-gazebo",
+      "name": "Octagonal Garden Gazebo",
+      "category": "Props"
+    },
+    {
+      "id": "freestanding-octagonal-patio-umbrella",
+      "name": "Freestanding Octagonal Patio Umbrella",
+      "category": "Props"
+    },
+    {
+      "id": "cushioned-patio-chaise",
+      "name": "Cushioned Patio Chaise",
+      "category": "Props"
+    },
+    {
+      "id": "slatted-patio-side-table",
+      "name": "Slatted Patio Side Table",
+      "category": "Props"
+    },
+    {
+      "id": "square-storm-drain-grate",
+      "name": "Square Storm Drain Grate",
+      "category": "Props"
+    },
+    {
+      "id": "linear-channel-drain-grate",
+      "name": "Linear Channel Drain Grate",
+      "category": "Props"
+    },
+    {
+      "id": "narrow-column-conifer-planter",
+      "name": "Narrow Column Conifer Planter",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiered-spruce-planter",
+      "name": "Tiered Spruce Planter",
+      "category": "Greenery"
+    },
+    {
+      "id": "white-picket-garden-gate",
+      "name": "White Picket Garden Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "arched-board-wood-gate",
+      "name": "Arched Board Wood Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "ornamental-iron-spear-gate",
+      "name": "Ornamental Iron Spear Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "galvanized-chain-link-gate",
+      "name": "Galvanized Chain Link Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "brick-pier-iron-driveway-gate",
+      "name": "Brick Pier Iron Driveway Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "suburban-purple-flower-spray",
+      "name": "Purple Flower Spray",
+      "category": "Sets"
+    },
+    {
+      "id": "round-ceramic-purple-flower-planter",
+      "name": "Round Ceramic Purple Flower Planter",
+      "category": "Greenery"
+    },
+    {
+      "id": "tall-charcoal-purple-flower-planter",
+      "name": "Tall Charcoal Purple Flower Planter",
+      "category": "Greenery"
+    },
+    {
+      "id": "portable-basketball-hoop",
+      "name": "Portable Basketball Hoop",
+      "category": "Props"
+    },
+    {
+      "id": "double-wood-frame-swing-set",
+      "name": "Double Wood Frame Swing Set",
+      "category": "Props"
+    },
+    {
+      "id": "plastic-toddler-slide",
+      "name": "Plastic Toddler Slide",
+      "category": "Props"
+    },
+    {
+      "id": "round-safety-net-trampoline",
+      "name": "Round Safety Net Trampoline",
+      "category": "Props"
+    },
+    {
+      "id": "maple-street-name-sign",
+      "name": "Maple Street Name Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "narrow-outdoor-electrical-cabinet",
+      "name": "Narrow Outdoor Electrical Cabinet",
+      "category": "Props"
+    },
+    {
+      "id": "double-door-utility-cabinet",
+      "name": "Double Door Utility Cabinet",
+      "category": "Props"
+    },
+    {
+      "id": "wall-mounted-satellite-dish",
+      "name": "Wall Mounted Satellite Dish",
+      "category": "Props"
+    },
+    {
+      "id": "white-wood-porch-rocking-chair",
+      "name": "White Wood Porch Rocking Chair",
+      "category": "Props"
+    },
+    {
+      "id": "freestanding-gable-carport",
+      "name": "Freestanding Gable Carport",
+      "category": "Props"
+    },
+    {
+      "id": "blue-inflatable-kiddie-pool",
+      "name": "Blue Inflatable Kiddie Pool",
+      "category": "Props"
+    },
+    {
+      "id": "suburban-azalea-flowering-shrub",
+      "name": "Azalea Flowering Shrub",
+      "category": "Greenery"
+    },
+    {
+      "id": "suburban-barn-door-workshop-garage",
+      "name": "Barn Door Workshop Garage",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-beige-colonial-garage-house",
+      "name": "Colonial Garage House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-blue-duplex-townhouse",
+      "name": "Duplex Townhouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-blue-gmc-suv",
+      "name": "Car suv",
+      "category": "Vehicles"
+    },
+    {
+      "id": "suburban-pickup-truck",
+      "name": "Pickup truck",
+      "category": "Vehicles"
+    },
+    {
+      "id": "suburban-brick-raised-ranch-house",
+      "name": "Raised Ranch House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-grass-surface",
+      "name": "Editable Grass Surface",
+      "category": "Surfaces"
+    },
+    {
+      "id": "suburban-craftsman-ranch-garage-house",
+      "name": "Craftsman Ranch Garage House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-farmhouse-glass-sunroom-house",
+      "name": "Farmhouse Glass Sunroom House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-gray-colonial-portico-house",
+      "name": "Colonial Portico House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-green-cottage-dormer-porch",
+      "name": "Cottage Dormer Porch",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-olive-farmhouse-garage-house",
+      "name": "Farmhouse Garage House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-seedhead-grass-clump",
+      "name": "Seedhead Grass Clump",
+      "category": "Greenery"
+    },
+    {
+      "id": "suburban-shingle-stone-manor-house",
+      "name": "Shingle Stone Manor House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-spreading-oak-tree",
+      "name": "Spreading Oak Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "suburban-tan-craftsman-two-car-house",
+      "name": "Craftsman Two Car House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-teal-split-level-garage-house",
+      "name": "Split Level Garage House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-white-dormer-ranch-porch",
+      "name": "Dormer Ranch Porch",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-yellow-cape-cod-garage-house",
+      "name": "Cape Cod Garage House",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-yellow-wraparound-porch-house",
+      "name": "Wraparound Porch House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-bottle-crate-stack",
+      "name": "Bottle Crate Stack",
+      "category": "Props"
+    },
+    {
+      "id": "japan-ramen-sign",
+      "name": "Ramen Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "japan-pharmacy-sign",
+      "name": "Pharmacy Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "japan-shutter-garage",
+      "name": "Shutter Garage",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-stainless-tank",
+      "name": "Stainless Tank",
+      "category": "Props"
+    },
+    {
+      "id": "japan-prefab-hut",
+      "name": "Prefab Hut",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-satellite-dish",
+      "name": "Satellite Dish",
+      "category": "Props"
+    },
+    {
+      "id": "japan-rooftop-water-tank",
+      "name": "Rooftop Water Tank",
+      "category": "Props"
+    },
+    {
+      "id": "japan-ac-outdoor-unit",
+      "name": "AC Outdoor Unit",
+      "category": "Props"
+    },
+    {
+      "id": "japan-hedge",
+      "name": "Hedge",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-temple-gate",
+      "name": "Temple Gate",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-block-wall",
+      "name": "Concrete Block Wall",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-precast-concrete-wall",
+      "name": "Precast Concrete Wall",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-tiled-plaster-wall",
+      "name": "Tiled Plaster Wall",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-wood-board-fence",
+      "name": "Wood Board Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-chainlink-fence",
+      "name": "Chain-Link Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-welded-mesh-fence",
+      "name": "Welded Mesh Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-school-mesh-fence",
+      "name": "School Mesh Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-slat-fence",
+      "name": "Horizontal Slat Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-bamboo-fence",
+      "name": "Bamboo Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "japan-vending-machine",
+      "name": "Drinks Vending Machine",
+      "category": "Props"
+    },
+    {
+      "id": "japan-gomi-station",
+      "name": "Refuse Collection Station",
+      "category": "Props"
+    },
+    {
+      "id": "japan-school-gym",
+      "name": "School Gymnasium",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-bus-stop-sign",
+      "name": "Bus Stop Sign Board",
+      "category": "Signs"
+    },
+    {
+      "id": "japan-street-lamp",
+      "name": "Street Lamp (Japan)",
+      "category": "Street"
+    },
+    {
+      "id": "japan-utility-pole",
+      "name": "Utility Pole (Japan)",
+      "category": "Street"
+    },
+    {
+      "id": "japan-utility-pole-wire-span",
+      "name": "Utility Pole Wires (Japan)",
+      "category": "Sets"
+    },
+    {
+      "id": "japan-service-drop",
+      "name": "Service Drop (Japan)",
+      "category": "Sets"
+    },
+    {
+      "id": "japan-traffic-signal",
+      "name": "Traffic Signal (Japan)",
+      "category": "Street"
+    },
+    {
+      "id": "japan-corner-mirror",
+      "name": "Corner Mirror (Japan)",
+      "category": "Street"
+    },
+    {
+      "id": "japan-road-sign",
+      "name": "Road Signs (Japan)",
+      "category": "Signs"
+    },
+    {
+      "id": "japan-fish-box-stack",
+      "name": "Fish Box Stack",
+      "category": "Props"
+    },
+    {
+      "id": "japan-produce-pallet-stack",
+      "name": "Produce Carton Pallet",
+      "category": "Props"
+    },
+    {
+      "id": "japan-storefront-display-rack",
+      "name": "Storefront Display Rack",
+      "category": "Props"
+    },
+    {
+      "id": "japan-horizontal-tank",
+      "name": "Horizontal Skid Tank",
+      "category": "Props"
+    },
+    {
+      "id": "japan-entrance-stair",
+      "name": "Concrete Entrance Stair",
+      "category": "Props"
+    },
+    {
+      "id": "japan-steel-access-stair",
+      "name": "Steel Access Stair",
+      "category": "Props"
+    },
+    {
+      "id": "japan-utility-cabin",
+      "name": "Utility Cabin",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-tile-capped-wall",
+      "name": "Tile-Capped Boundary Wall",
+      "category": "Fences"
+    },
+    {
+      "id": "suburban-garden-path",
+      "name": "Garden Path",
+      "category": "Sets"
+    },
+    {
+      "id": "japan-timber-shop",
+      "name": "Timber Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-shop-building",
+      "name": "Shop Building",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-modern-shop",
+      "name": "Modern Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-town-house",
+      "name": "Town House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-apartment-house",
+      "name": "Apartment House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-traditional-timber-house",
+      "name": "Traditional Timber House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-mansion-block",
+      "name": "Mansion Block",
+      "category": "Buildings"
+    },
+    {
+      "id": "suburban-classic-car",
+      "name": "Classic car",
+      "category": "Vehicles"
+    },
+    {
+      "id": "rooms-kit",
+      "name": "Rooms · Cozy Bedroom",
+      "category": "Rooms"
+    },
+    {
+      "id": "japan-gray-tile-house",
+      "name": "Japan Gray Tile House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-blue-balcony-house",
+      "name": "Japan Blue Balcony House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-tile-ramen-house",
+      "name": "Japan Tile Ramen House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-ramen-yatai",
+      "name": "Japan Ramen Yatai",
+      "category": "Props"
+    },
+    {
+      "id": "japan-weathered-wood-house",
+      "name": "Japan Weathered Wood House",
+      "category": "Buildings"
+    },
+    {
+      "id": "rooms-gaming-lounge",
+      "name": "Rooms · Gaming Lounge",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-arcade-bedroom",
+      "name": "Rooms · Arcade Bedroom",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-student-bedroom",
+      "name": "Rooms · Student Bedroom",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-hacker-workshop",
+      "name": "Rooms · Hacker Workshop",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-pastel-bedroom",
+      "name": "Rooms · Pastel Bedroom",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-artist-studio",
+      "name": "Rooms · Artist Studio",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-music-studio",
+      "name": "Rooms · Music Studio",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-bunker-shelter",
+      "name": "Rooms · Bunker Shelter",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-retro-bedroom",
+      "name": "Rooms · 90s Bedroom",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-vintage-bedroom",
+      "name": "Rooms · Vintage Bedroom",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-cyberpunk-apartment",
+      "name": "Rooms · Cyberpunk Micro Apartment",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-streaming-studio",
+      "name": "Rooms · Streaming Studio",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-home-cinema",
+      "name": "Rooms · Home Cinema",
+      "category": "Rooms"
+    },
+    {
+      "id": "rooms-billiards-lounge",
+      "name": "Rooms · Billiards Lounge",
+      "category": "Rooms"
+    },
+    {
+      "id": "japan-neighborhood-supermarket",
+      "name": "Japan Neighborhood Supermarket",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-sakura-department-store",
+      "name": "Sakura Department Store",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-street-path",
+      "name": "Japan Street Path",
+      "category": "Sets"
+    },
+    {
+      "id": "japan-ground-surface",
+      "name": "Ground Surface",
+      "category": "Surfaces"
+    },
+    {
+      "id": "apocalyptic-brick-house",
+      "name": "Apocalyptic Brick House",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-garage",
+      "name": "Garage",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-garage-workshop",
+      "name": "Garage Workshop",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-road",
+      "name": "Apocalyptic Road",
+      "category": "Sets"
+    },
+    {
+      "id": "apocalyptic-fence-chain-link",
+      "name": "Chain-Link Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "apocalyptic-fence-scrap",
+      "name": "Scrap Barricade",
+      "category": "Fences"
+    },
+    {
+      "id": "apocalyptic-fence-concrete-wall",
+      "name": "Concrete Pillar Wall",
+      "category": "Fences"
+    },
+    {
+      "id": "apocalyptic-fence-jersey",
+      "name": "Jersey Barrier Line",
+      "category": "Fences"
+    },
+    {
+      "id": "apocalyptic-fence-sandbag",
+      "name": "Sandbag Wall",
+      "category": "Fences"
+    },
+    {
+      "id": "apocalyptic-gate",
+      "name": "Compound Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "apocalyptic-checkpoint",
+      "name": "Checkpoint",
+      "category": "Fences"
+    },
+    {
+      "id": "apocalyptic-roadblock",
+      "name": "Roadblock",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-school-bus",
+      "name": "School Bus",
+      "category": "Vehicles"
+    },
+    {
+      "id": "apocalyptic-sedan",
+      "name": "Rusted Sedan",
+      "category": "Vehicles"
+    },
+    {
+      "id": "apocalyptic-pickup-truck",
+      "name": "Rusted Pickup Truck",
+      "category": "Vehicles"
+    },
+    {
+      "id": "apocalyptic-cargo-van",
+      "name": "Abandoned Cargo Van",
+      "category": "Vehicles"
+    },
+    {
+      "id": "apocalyptic-police-car",
+      "name": "Wrecked Police Car",
+      "category": "Vehicles"
+    },
+    {
+      "id": "apocalyptic-overturned-suv",
+      "name": "Overturned SUV",
+      "category": "Vehicles"
+    },
+    {
+      "id": "apocalyptic-car-parts",
+      "name": "Car Parts",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-traffic-props",
+      "name": "Traffic Props",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-street-furniture",
+      "name": "Street Furniture",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-appliance-props",
+      "name": "Wrecked Appliances",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-scrap-props",
+      "name": "Scrap & Rubble",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-supply-props",
+      "name": "Supplies & Crates",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-camp-props",
+      "name": "Tanks, Containers & Camp",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-military-props",
+      "name": "Military Checkpoint",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-ruin-props",
+      "name": "Construction Ruins",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-household-props",
+      "name": "Household Junk",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-sign-gantry",
+      "name": "Sign Gantry",
+      "category": "Signs"
+    },
+    {
+      "id": "apocalyptic-dead-trees",
+      "name": "Dead Trees & Wood",
+      "category": "Greenery"
+    },
+    {
+      "id": "apocalyptic-overgrowth",
+      "name": "Overgrowth",
+      "category": "Greenery"
+    },
+    {
+      "id": "apocalyptic-hazard-containers",
+      "name": "Hazard Containers",
+      "category": "Props"
+    },
+    {
+      "id": "apocalyptic-hazard-decals",
+      "name": "Spills, Scorch & Debris",
+      "category": "Surfaces"
+    },
+    {
+      "id": "apocalyptic-auto-repair",
+      "name": "Auto Repair",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-fire-station",
+      "name": "Fire Station",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-pharmacy",
+      "name": "Pharmacy",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-grocery",
+      "name": "Grocery",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-bar",
+      "name": "Bar",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-diner",
+      "name": "Diner",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-gas-station",
+      "name": "Gas Station",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-police-station",
+      "name": "Police Station",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-watchtower",
+      "name": "Watchtower",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-motel",
+      "name": "Motel",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-city-offices",
+      "name": "City Offices",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-church",
+      "name": "Church",
+      "category": "Buildings"
+    },
+    {
+      "id": "apocalyptic-farmhouse",
+      "name": "Farmhouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-stacked-shop-house",
+      "name": "Japan Stacked Shop House",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-kishi-shop",
+      "name": "Kishi Corner Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-yaokado-building",
+      "name": "Japan Yaokado Building",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-kei-truck",
+      "name": "Kei Truck",
+      "category": "Vehicles"
+    },
+    {
+      "id": "japan-sedan-taxi",
+      "name": "Sedan Taxi",
+      "category": "Vehicles"
+    },
+    {
+      "id": "cozy-town-crate",
+      "name": "Wooden Crate",
+      "category": "Props"
+    },
+    {
+      "id": "cozy-town-cottage",
+      "name": "Cozy Cottage",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-potion-shop",
+      "name": "Potion Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-shop",
+      "name": "Cozy Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-gable-house",
+      "name": "Cozy Gable House",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-flower-stall",
+      "name": "Flower Stall",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-woodcutter",
+      "name": "Woodcutter's Workshop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-town-hall",
+      "name": "Town Hall",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-quarry",
+      "name": "Stone Quarry",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-blacksmith",
+      "name": "Blacksmith's Forge",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-pottery",
+      "name": "Pottery Workshop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-weaver",
+      "name": "Weaver's Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-cheese-dairy",
+      "name": "Cheese Dairy",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-windmill",
+      "name": "Windmill",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-fish-shack",
+      "name": "Fisherman's Hut",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-apiary",
+      "name": "Honey Apiary",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-tavern",
+      "name": "Tavern",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-clock-tower",
+      "name": "Clock Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-chapel",
+      "name": "Chapel",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-greengrocer",
+      "name": "Greengrocer",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-observatory",
+      "name": "Observatory",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-post-office",
+      "name": "Post Office",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-cafe",
+      "name": "Cafe",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-pastry-shop",
+      "name": "Pastry Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-toy-shop",
+      "name": "Toy Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-jeweler",
+      "name": "Jeweler",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-library",
+      "name": "Library",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-bookshop",
+      "name": "Bookshop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-bank",
+      "name": "Bank",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-fire-station",
+      "name": "Fire Station",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-clinic",
+      "name": "Clinic",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-school",
+      "name": "School",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-storehouse",
+      "name": "Storehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-tiny-house",
+      "name": "Tiny House",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-tall-house",
+      "name": "Tall House",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-longhouse",
+      "name": "Longhouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-bay-cottage",
+      "name": "Bay Cottage",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-double-house",
+      "name": "Double House",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-courtyard-house",
+      "name": "Courtyard House",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-stone-cottage",
+      "name": "Stone Cottage",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-villa",
+      "name": "Villa",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-tinker",
+      "name": "Tinker's Workshop",
+      "category": "Buildings"
+    },
+    {
+      "id": "cozy-town-grass-surface",
+      "name": "Grass Surface",
+      "category": "Surfaces"
+    },
+    {
+      "id": "cozy-town-path",
+      "name": "Path",
+      "category": "Sets"
+    },
+    {
+      "id": "cozy-town-lake",
+      "name": "Lake",
+      "category": "Surfaces"
+    },
+    {
+      "id": "japan-delivery-van",
+      "name": "Delivery Van",
+      "category": "Vehicles"
+    },
+    {
+      "id": "japan-reefer-truck",
+      "name": "Reefer Truck",
+      "category": "Vehicles"
+    },
+    {
+      "id": "japan-kei-police-car",
+      "name": "Kei Police Car",
+      "category": "Vehicles"
+    },
+    {
+      "id": "japan-kei-taxi",
+      "name": "Kei Taxi",
+      "category": "Vehicles"
+    },
+    {
+      "id": "japan-mamachari-bicycle",
+      "name": "Mamachari Bicycle",
+      "category": "Props"
+    },
+    {
+      "id": "japan-sakura-tree",
+      "name": "Sakura Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-pine-tree",
+      "name": "Niwaki Pine",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-maple-tree",
+      "name": "Momiji Maple",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-bamboo-grove",
+      "name": "Bamboo Grove",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-hydrangea",
+      "name": "Hydrangea",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-grass-tile",
+      "name": "Grass Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-pine-tree",
+      "name": "Pine Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-wood-cabin",
+      "name": "Wood Cabin",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-dirt-tile",
+      "name": "Dirt Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-stone-tile",
+      "name": "Stone Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-sand-tile",
+      "name": "Sand Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-water-tile",
+      "name": "Water Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-snow-tile",
+      "name": "Snow Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-ice-tile",
+      "name": "Ice Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-hay-tile",
+      "name": "Hay Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-farmland-tile",
+      "name": "Farmland Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-stone-stairs",
+      "name": "Stone Stairs",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-round-tree",
+      "name": "Round Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-bush",
+      "name": "Leafy Bush",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-flower-bush",
+      "name": "Flower Bush",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-mushrooms",
+      "name": "Red Mushrooms",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-rocks",
+      "name": "Small Rocks",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-boulder",
+      "name": "Big Boulder",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-tree-stump",
+      "name": "Tree Stump",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-hanging-vines",
+      "name": "Hanging Vines",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-flower-patch",
+      "name": "Flower Patch",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-log-bridge",
+      "name": "Log Bridge",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-rope-ladder",
+      "name": "Rope Ladder",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-rope-fence",
+      "name": "Rope Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "tiny-cubes-barrel",
+      "name": "Wooden Barrel",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-crate",
+      "name": "Wooden Crate",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-campfire",
+      "name": "Campfire",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-well",
+      "name": "Stone Well",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-cauldron",
+      "name": "Cauldron",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-picket-fence",
+      "name": "Picket Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "tiny-cubes-mushroom-lamp",
+      "name": "Mushroom Lamp",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-stone-house",
+      "name": "Stone House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-stone-tower",
+      "name": "Stone Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-village-house",
+      "name": "Village House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-market-stall",
+      "name": "Market Stall",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-stone-bin",
+      "name": "Stone Bin",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-palm-tree",
+      "name": "Palm Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-fern",
+      "name": "Tropical Fern",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-pier",
+      "name": "Wooden Pier",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-rowboat",
+      "name": "Rowboat",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-beach-shack",
+      "name": "Beach Shack",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-torn-flag",
+      "name": "Torn Flag",
+      "category": "Signs"
+    },
+    {
+      "id": "tiny-cubes-red-barn",
+      "name": "Red Barn",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-water-tower",
+      "name": "Water Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-farm-shed",
+      "name": "Farm Shed",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-hay-pile",
+      "name": "Hay Pile",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-pumpkins",
+      "name": "Pumpkins",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-feather-pole",
+      "name": "Feather Pole",
+      "category": "Signs"
+    },
+    {
+      "id": "japan-paper-bundle-stack",
+      "name": "Paper Bundle Stack",
+      "category": "Props"
+    },
+    {
+      "id": "japan-komainu",
+      "name": "Komainu Guardian",
+      "category": "Props"
+    },
+    {
+      "id": "japan-jizo-shrine",
+      "name": "Jizo Shrine",
+      "category": "Props"
+    },
+    {
+      "id": "japan-garbage-bag-pile",
+      "name": "Garbage Bag Pile",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-characters-acolyte",
+      "name": "Acolyte",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-wanderer",
+      "name": "Wanderer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-dwarf",
+      "name": "Blocky Dwarf",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-skeleton",
+      "name": "Blocky Skeleton",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-golem",
+      "name": "Blocky Golem",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-mummy",
+      "name": "Blocky Mummy",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-viking",
+      "name": "Blocky Viking",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-knight",
+      "name": "Blocky Knight",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-pharaoh",
+      "name": "Blocky Pharaoh",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-orc",
+      "name": "Blocky Orc",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-rhino-warrior",
+      "name": "Rhino Warrior",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-cubes-cave-rock",
+      "name": "Cave Rock",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-vine-pillar",
+      "name": "Vine Pillar",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-log-stairs",
+      "name": "Log Stairs",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-cliff-tile",
+      "name": "Cliff Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-stone-wall",
+      "name": "Stone Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-cubes-stilt-house",
+      "name": "Stilt House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-sail-flag",
+      "name": "Sail Flag",
+      "category": "Signs"
+    },
+    {
+      "id": "tiny-cubes-cargo-net",
+      "name": "Cargo Net",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-bottle-message",
+      "name": "Message Bottle",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-broken-stakes",
+      "name": "Broken Stakes",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-water-rock",
+      "name": "Water Rock",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-grain-silo",
+      "name": "Grain Silo",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-crop-row",
+      "name": "Crop Row",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-striped-canopy",
+      "name": "Striped Canopy",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-canvas-shade",
+      "name": "Canvas Shade",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-drain-outlet",
+      "name": "Drain Outlet",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-ice-pillar",
+      "name": "Ice Pillar",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-log-pile",
+      "name": "Log Pile",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-snow-drift",
+      "name": "Snow Drift",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-ice-hole",
+      "name": "Ice Fishing Hole",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-swamp-tile",
+      "name": "Swamp Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-bog-water-tile",
+      "name": "Bog Water Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-willow-tree",
+      "name": "Willow Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-cattails",
+      "name": "Cattails",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-lily-pads",
+      "name": "Lily Pads",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-stilt-hut",
+      "name": "Swamp Stilt Hut",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-boardwalk",
+      "name": "Boardwalk",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-hollow-log",
+      "name": "Hollow Log",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-frog-king",
+      "name": "Frog King",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-concrete-tile",
+      "name": "Concrete Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-road-tile",
+      "name": "Road Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-railing",
+      "name": "Metal Railing",
+      "category": "Fences"
+    },
+    {
+      "id": "tiny-cubes-city-tree",
+      "name": "City Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-apartment-tower",
+      "name": "Apartment Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-city-shop",
+      "name": "City Shop",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-city-van",
+      "name": "City Van",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-city-car",
+      "name": "City Car",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-dumpster",
+      "name": "Dumpster",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-hydrant",
+      "name": "Fire Hydrant",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-street-lamp",
+      "name": "Street Lamp",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-utility-pole",
+      "name": "Utility Pole",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-road-sign",
+      "name": "Road Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "tiny-cubes-cloud-tile",
+      "name": "Cloud Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-candy-tile",
+      "name": "Candy Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-rainbow",
+      "name": "Rainbow",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-bunting",
+      "name": "Bunting",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-cloud-puff",
+      "name": "Cloud Puff",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-hot-air-balloon",
+      "name": "Hot Air Balloon",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-biplane",
+      "name": "Biplane",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-birds",
+      "name": "Birds",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-butterflies",
+      "name": "Butterflies",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-fireflies",
+      "name": "Fireflies",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-jumping-fish",
+      "name": "Jumping Fish",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-waterfall",
+      "name": "Waterfall",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-drifting-clouds",
+      "name": "Drifting Clouds",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-stylized-cloud",
+      "name": "Stylized Cloud",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-weather-cloud",
+      "name": "Weather Cloud",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-cloud-sea",
+      "name": "Cloud Sea",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-island-underside",
+      "name": "Island Underside",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-airship",
+      "name": "Airship",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-treasure-chest",
+      "name": "Treasure Chest",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-pickup",
+      "name": "Pickup",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-checkpoint-flag",
+      "name": "Checkpoint Flag",
+      "category": "Signs"
+    },
+    {
+      "id": "tiny-cubes-signpost",
+      "name": "Signpost",
+      "category": "Signs"
+    },
+    {
+      "id": "tiny-cubes-portal",
+      "name": "Portal",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-locked-gate",
+      "name": "Locked Gate",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-lever",
+      "name": "Lever",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-pressure-plate",
+      "name": "Pressure Plate",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-spike-trap",
+      "name": "Spike Trap",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-hammock",
+      "name": "Hammock",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-sheep",
+      "name": "Sheep",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-cow",
+      "name": "Cow",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-chicken",
+      "name": "Chickens",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-duck",
+      "name": "Ducks",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-cat",
+      "name": "Cat",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-crab",
+      "name": "Crabs",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-beehive",
+      "name": "Beehive",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-windmill",
+      "name": "Windmill",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-water-wheel",
+      "name": "Water Wheel",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-rail-track",
+      "name": "Rail Track",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-minecart",
+      "name": "Minecart",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-mine-entrance",
+      "name": "Mine Entrance",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-desert-tile",
+      "name": "Desert Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-cactus",
+      "name": "Cactus",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-adobe-house",
+      "name": "Adobe House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-mesa-rock",
+      "name": "Mesa Rock",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-camel",
+      "name": "Camel",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-clay-pots",
+      "name": "Clay Pots",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-desert-bones",
+      "name": "Desert Bones",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-basalt-tile",
+      "name": "Basalt Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-lava-tile",
+      "name": "Lava Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-volcano",
+      "name": "Volcano",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-crystals",
+      "name": "Crystals",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-charred-tree",
+      "name": "Charred Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-magma-vent",
+      "name": "Magma Vent",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-temple-tile",
+      "name": "Temple Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-temple-shrine",
+      "name": "Temple Shrine",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-broken-pillar",
+      "name": "Broken Pillar",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-stone-idol",
+      "name": "Stone Idol",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-jungle-tree",
+      "name": "Jungle Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-cake-tile",
+      "name": "Cake Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-lollipop-tree",
+      "name": "Lollipop Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-candy-fence",
+      "name": "Candy Cane Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "tiny-cubes-gingerbread-house",
+      "name": "Gingerbread House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-sweets",
+      "name": "Sweets",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-pirate-ship",
+      "name": "Pirate Ship",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-cubes-cannon",
+      "name": "Cannon",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-lighthouse",
+      "name": "Lighthouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-skull-rock",
+      "name": "Skull Rock",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-tiki-hut",
+      "name": "Tiki Hut",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-torii-gate",
+      "name": "Torii Gate",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-stone-lantern",
+      "name": "Stone Lantern",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-pagoda",
+      "name": "Pagoda",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-cubes-arched-bridge",
+      "name": "Arched Bridge",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-cubes-sakura-tree",
+      "name": "Sakura Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-bamboo",
+      "name": "Bamboo",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-zen-gravel-tile",
+      "name": "Zen Gravel Tile",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-cubes-koi-fish",
+      "name": "Koi Fish",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-snowman",
+      "name": "Snowman",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-gift-boxes",
+      "name": "Gift Boxes",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-gravestones",
+      "name": "Gravestones",
+      "category": "Props"
+    },
+    {
+      "id": "tiny-cubes-spooky-tree",
+      "name": "Spooky Tree",
+      "category": "Greenery"
+    },
+    {
+      "id": "tiny-cubes-scarecrow",
+      "name": "Scarecrow",
+      "category": "Props"
+    },
+    {
+      "id": "japan-temple-hall",
+      "name": "Temple Main Hall",
+      "category": "Buildings"
+    },
+    {
+      "id": "japan-stone-lantern",
+      "name": "Stone Lantern",
+      "category": "Props"
+    },
+    {
+      "id": "japan-chozuya",
+      "name": "Temizuya Water Pavilion",
+      "category": "Props"
+    },
+    {
+      "id": "japan-ema-rack",
+      "name": "Ema Votive Rack",
+      "category": "Props"
+    },
+    {
+      "id": "japan-park-bench",
+      "name": "Park Bench",
+      "category": "Props"
+    },
+    {
+      "id": "japan-drinking-fountain",
+      "name": "Drinking Fountain",
+      "category": "Props"
+    },
+    {
+      "id": "japan-park-clock",
+      "name": "Park Clock Post",
+      "category": "Street"
+    },
+    {
+      "id": "japan-swing-set",
+      "name": "Swing Set",
+      "category": "Props"
+    },
+    {
+      "id": "japan-playground-slide",
+      "name": "Playground Slide",
+      "category": "Props"
+    },
+    {
+      "id": "japan-jungle-gym",
+      "name": "Jungle Gym",
+      "category": "Props"
+    },
+    {
+      "id": "japan-vegetable-plot",
+      "name": "Vegetable Plot",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-nobori-banner",
+      "name": "Nobori Banner",
+      "category": "Signs"
+    },
+    {
+      "id": "japan-a-frame-sign",
+      "name": "A-Frame Menu Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "japan-chochin-lantern",
+      "name": "Chochin Lantern",
+      "category": "Props"
+    },
+    {
+      "id": "japan-potted-plants",
+      "name": "Potted Plant Cluster",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-street-garland",
+      "name": "Street Garland",
+      "category": "Street"
+    },
+    {
+      "id": "japan-lamp-banner",
+      "name": "Lamp Post Banner",
+      "category": "Signs"
+    },
+    {
+      "id": "tiny-castle-building",
+      "name": "Castle Building",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-storage-house",
+      "name": "Storage House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-gate",
+      "name": "Castle Gate",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-tower",
+      "name": "Castle Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-wall",
+      "name": "Castle Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-grand-keep",
+      "name": "Grand Keep",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-compact-keep",
+      "name": "Compact Keep",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-great-hall",
+      "name": "Great Hall",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-castle-manor",
+      "name": "Castle Manor",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-noble-residence",
+      "name": "Noble Residence",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-barracks",
+      "name": "Barracks",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-guard-house",
+      "name": "Guard House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-armory",
+      "name": "Armory",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-blacksmith",
+      "name": "Blacksmith",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-kitchen",
+      "name": "Kitchen",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-bakery",
+      "name": "Bakery",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-servants-house",
+      "name": "Servants House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-curtain",
+      "name": "Curtain Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-single-gate",
+      "name": "Single Gate",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-double-gate",
+      "name": "Double Gate",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-twin-tower-gatehouse",
+      "name": "Twin-Tower Gatehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-portcullis-gatehouse",
+      "name": "Portcullis Gatehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-drawbridge-gatehouse",
+      "name": "Drawbridge Gatehouse",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-murder-hole-passage",
+      "name": "Murder-Hole Passage",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-guard-post",
+      "name": "Guard Post",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-broken-gate",
+      "name": "Broken Gate",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-postern-tower",
+      "name": "Postern Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-portcullis-frame",
+      "name": "Portcullis Frame",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-well",
+      "name": "Well",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-fountain",
+      "name": "Fountain",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-wooden-canopy",
+      "name": "Wooden Canopy",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-fire-pit",
+      "name": "Fire Pit",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-horse-trough",
+      "name": "Horse Trough",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-bench",
+      "name": "Bench",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-table",
+      "name": "Table",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-water-bucket",
+      "name": "Water Bucket",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-stool",
+      "name": "Stool",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-notice-board",
+      "name": "Notice Board",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-bell-frame",
+      "name": "Bell Frame",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-lantern",
+      "name": "Lantern",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-headstones",
+      "name": "Headstones",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-stone-cross",
+      "name": "Stone Cross",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-cemetery-corner",
+      "name": "Cemetery Corner",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-anvil",
+      "name": "Anvil",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-grindstone",
+      "name": "Grindstone",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-barrels",
+      "name": "Barrels",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-water-barrels",
+      "name": "Water Barrels",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-crates",
+      "name": "Crates",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-food-crates",
+      "name": "Food Crates",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-weapon-crates",
+      "name": "Weapon Crates",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-sacks",
+      "name": "Sacks",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-hay-bales",
+      "name": "Hay Bales",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-wood-pile",
+      "name": "Wood Pile",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-rope-coil",
+      "name": "Rope Coil",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-stacked-supplies",
+      "name": "Stacked Supplies",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-cart",
+      "name": "Cart",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-hand-cart",
+      "name": "Hand Cart",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-wheelbarrow",
+      "name": "Wheelbarrow",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-ladder",
+      "name": "Ladder",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-round-corner-tower",
+      "name": "Round Corner Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-square-tower",
+      "name": "Square Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-tall-watchtower",
+      "name": "Tall Watchtower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-small-wall-tower",
+      "name": "Small Wall Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-open-platform-tower",
+      "name": "Open Platform Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-conical-roof-tower",
+      "name": "Conical Roof Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-flat-crenellated-tower",
+      "name": "Flat Crenellated Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-timber-upper-tower",
+      "name": "Timber Upper Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-ruined-tower",
+      "name": "Ruined Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-tower-entrance",
+      "name": "Tower Entrance",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-low-wall",
+      "name": "Low Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-tall-wall",
+      "name": "Tall Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-hoarding-wall",
+      "name": "Hoarding Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-walkway-wall",
+      "name": "Wall with Walkway",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-postern-wall",
+      "name": "Postern Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-small-gate-wall",
+      "name": "Small Gate Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-damaged-wall",
+      "name": "Damaged Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-breached-wall",
+      "name": "Breached Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-collapsed-wall",
+      "name": "Collapsed Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-buttressed-wall",
+      "name": "Buttressed Wall",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-wall-corner",
+      "name": "Wall Corner",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-wall-stairs",
+      "name": "Wall Stairs",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-bridge",
+      "name": "Castle Bridge",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-granary",
+      "name": "Granary",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-stable",
+      "name": "Stable",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-carriage-shed",
+      "name": "Carriage Shed",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-small-chapel",
+      "name": "Small Chapel",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-large-chapel",
+      "name": "Large Chapel",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-bell-tower",
+      "name": "Bell Tower",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-shrine",
+      "name": "Shrine",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-prison-house",
+      "name": "Prison House",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-dungeon-entrance",
+      "name": "Dungeon Entrance",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-abandoned-castle",
+      "name": "Abandoned Castle",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-castle-palace",
+      "name": "Castle Palace",
+      "category": "Buildings"
+    },
+    {
+      "id": "tiny-castle-ground",
+      "name": "Castle Ground",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-castle-hill",
+      "name": "Castle Hill",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-castle-moat",
+      "name": "Moat",
+      "category": "Surfaces"
+    },
+    {
+      "id": "tiny-castle-parts-architecture",
+      "name": "Architecture Parts",
+      "category": "Sets"
+    },
+    {
+      "id": "tiny-castle-rubble-pile",
+      "name": "Rubble Pile",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-loose-stone-blocks",
+      "name": "Loose Stone Blocks",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-wooden-debris",
+      "name": "Wooden Debris",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-broken-cart",
+      "name": "Broken Cart",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-broken-barrels",
+      "name": "Broken Barrels",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-cage",
+      "name": "Cage",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-stocks",
+      "name": "Stocks",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-chains-wall",
+      "name": "Chains on Wall",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-barred-door",
+      "name": "Barred Door",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-ventilation-grille",
+      "name": "Ventilation Grille",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-down-stairs",
+      "name": "Dungeon Stairs",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-shield-rack",
+      "name": "Shield Rack",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-sword-rack",
+      "name": "Sword Rack",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-spear-rack",
+      "name": "Spear Rack",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-bow-stand",
+      "name": "Bow Stand",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-arrow-bundles",
+      "name": "Arrow Bundles",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-quivers",
+      "name": "Quivers",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-helmets",
+      "name": "Helmets on Stands",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-armor-stand",
+      "name": "Armour Stand",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-shield-display",
+      "name": "Shield Display",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-standing-banner",
+      "name": "Standing Banner",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-vertical-flag",
+      "name": "Vertical Flag",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-wall-banner-bracket",
+      "name": "Wall Banner Bracket",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-pennants",
+      "name": "Pennants",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-brazier",
+      "name": "Brazier",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-wall-torch",
+      "name": "Wall Torch",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-signal-fire",
+      "name": "Signal Fire",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-trebuchet",
+      "name": "Trebuchet",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-catapult",
+      "name": "Catapult",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-ballista",
+      "name": "Ballista",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-battering-ram",
+      "name": "Battering Ram",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-siege-tower",
+      "name": "Siege Tower",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-siege-ladder",
+      "name": "Siege Ladder",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-short-ladder",
+      "name": "Short Ladder",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-mantlet",
+      "name": "Mantlet",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-catapult-stones",
+      "name": "Catapult Stones",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-broken-siege-engine",
+      "name": "Broken Siege Engine",
+      "category": "Vehicles"
+    },
+    {
+      "id": "tiny-castle-archery-target",
+      "name": "Archery Target",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-training-dummy",
+      "name": "Training Dummy",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-weapon-rack",
+      "name": "Weapon Rack",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-training-yard-fence",
+      "name": "Training Yard Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "tiny-castle-training-yard",
+      "name": "Training Yard",
+      "category": "Street"
+    },
+    {
+      "id": "tiny-castle-road",
+      "name": "Castle Road",
+      "category": "Sets"
+    },
+    {
+      "id": "tiny-castle-water-outlet",
+      "name": "Water Outlet",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "tiny-castle-fence-line",
+      "name": "Fence Line",
+      "category": "Fences"
+    },
+    {
+      "id": "tiny-characters-bone-warrior",
+      "name": "Bone Warrior",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-wayfarer",
+      "name": "Blocky Wayfarer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-king",
+      "name": "Blocky Barbarian King",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-cannoneer",
+      "name": "Blocky Cannoneer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-pirate",
+      "name": "Blocky Pirate Captain",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-brute",
+      "name": "Blocky Stitched Brute",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-lich",
+      "name": "Blocky Lantern Lich",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-sorceress",
+      "name": "Blocky Sorceress",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-witch",
+      "name": "Blocky Witch",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ranger",
+      "name": "Blocky Ranger",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-caveman",
+      "name": "Blocky Caveman",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-zombie",
+      "name": "Blocky Zombie",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ghost",
+      "name": "Blocky Ghost",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-imp",
+      "name": "Blocky Imp",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-muncher",
+      "name": "Blocky Muncher",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-frost-golem",
+      "name": "Blocky Frost Golem",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-juggernaut",
+      "name": "Blocky Juggernaut",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ogre",
+      "name": "Blocky Ogre",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-pit-demon",
+      "name": "Blocky Pit Demon",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-bone-seer",
+      "name": "Blocky Bone Seer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-grove-warden",
+      "name": "Blocky Grove Warden",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ghoul-raider",
+      "name": "Blocky Ghoul Raider",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-sun-guard",
+      "name": "Blocky Sun Guard",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-goblin-shaman",
+      "name": "Blocky Goblin Shaman",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-hellblade",
+      "name": "Blocky Hellblade",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-wolf-girl",
+      "name": "Blocky Wolf Girl",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-brawler",
+      "name": "Blocky Brawler",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-barrel-knight",
+      "name": "Blocky Barrel Knight",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-reaper",
+      "name": "Blocky Reaper",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-djinn",
+      "name": "Blocky Djinn",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-screen-bot",
+      "name": "Blocky Screen Bot",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-crt-bot",
+      "name": "Blocky CRT Bot",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ember-revenant",
+      "name": "Blocky Ember Revenant",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ember-tiefling",
+      "name": "Blocky Ember Tiefling",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-root-colossus",
+      "name": "Blocky Root Colossus",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-bone-marauder",
+      "name": "Blocky Bone Marauder",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-sun-monk",
+      "name": "Blocky Sun Monk",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-wrapped-fighter",
+      "name": "Blocky Wrapped Fighter",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ochre-monk",
+      "name": "Blocky Ochre Monk",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-scale-guard",
+      "name": "Blocky Scale Guard",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-crimson-gnome",
+      "name": "Blocky Crimson Gnome",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-bog-explorer",
+      "name": "Blocky Bog Explorer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-tusk-brute",
+      "name": "Blocky Tusk Brute",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-trail-scout",
+      "name": "Blocky Trail Scout",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-city-kid",
+      "name": "Blocky City Kid",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-hill-troll",
+      "name": "Blocky Hill Troll",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-minotaur",
+      "name": "Blocky Minotaur",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ronin",
+      "name": "Blocky Ronin",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-plague-doctor",
+      "name": "Blocky Plague Doctor",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-rat-rogue",
+      "name": "Blocky Rat Rogue",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-shroomling",
+      "name": "Blocky Shroomling",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-maw-troll",
+      "name": "Blocky Maw Troll",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-hood-archer",
+      "name": "Blocky Hood Archer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-fang-beast",
+      "name": "Blocky Fang Beast",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-amber-bot",
+      "name": "Blocky Amber Bot",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-forge-warchief",
+      "name": "Blocky Forge Warchief",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-horn-sentinel",
+      "name": "Blocky Horn Sentinel",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-horn-raider",
+      "name": "Blocky Horn Raider",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-whitebeard-chief",
+      "name": "Blocky Whitebeard Chief",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-mask-pugilist",
+      "name": "Blocky Mask Pugilist",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ram-demon",
+      "name": "Blocky Ram Demon",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-moss-skeleton",
+      "name": "Blocky Moss Skeleton",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-halfling-rogue",
+      "name": "Blocky Halfling Rogue",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-dragon-paladin",
+      "name": "Blocky Dragon Paladin",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-wild-orc",
+      "name": "Blocky Wild Orc",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-lute-bard",
+      "name": "Blocky Lute Bard",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-antler-druid",
+      "name": "Blocky Antler Druid",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-coal-miner",
+      "name": "Blocky Coal Miner",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-copper-prospector",
+      "name": "Blocky Copper Prospector",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-greybeard-ranger",
+      "name": "Blocky Greybeard Ranger",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-hearth-digger",
+      "name": "Blocky Hearth Digger",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ember-delver",
+      "name": "Blocky Ember Delver",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-hide-hunter",
+      "name": "Blocky Hide Hunter",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-iron-warden",
+      "name": "Blocky Iron Warden",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-tide-duelist",
+      "name": "Blocky Tide Duelist",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-ivory-adventurer",
+      "name": "Blocky Ivory Adventurer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-chapel-priest",
+      "name": "Blocky Chapel Priest",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-chain-brawler",
+      "name": "Blocky Chain Brawler",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-feather-shaman",
+      "name": "Blocky Feather Shaman",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-harlequin",
+      "name": "Blocky Harlequin",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-flesh-hook",
+      "name": "Blocky Flesh Hook",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-vampire-count",
+      "name": "Blocky Vampire Count",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-tide-golem",
+      "name": "Blocky Tide Golem",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-fel-golem",
+      "name": "Blocky Fel Golem",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-void-oracle",
+      "name": "Blocky Void Oracle",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-pyramid-executioner",
+      "name": "Blocky Pyramid Executioner",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-jotunn",
+      "name": "Blocky Jotunn",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-cyclops",
+      "name": "Blocky Cyclops",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-grave-reaver",
+      "name": "Blocky Grave Reaver",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-panda-marauder",
+      "name": "Blocky Panda Marauder",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-wisp-mage",
+      "name": "Blocky Wisp Mage",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-gothic-sawyer",
+      "name": "Blocky Gothic Sawyer",
+      "category": "Characters"
+    },
+    {
+      "id": "tiny-characters-blocky-violet-maw",
+      "name": "Blocky Violet Maw",
+      "category": "Characters"
+    },
+    {
+      "id": "dungeon-room",
+      "name": "Dungeon · Room",
+      "category": "Rooms"
+    },
+    {
+      "id": "dungeon-corridor",
+      "name": "Dungeon · Corridor",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "dungeon-props",
+      "name": "Dungeon · Props",
+      "category": "Props"
+    },
+    {
+      "id": "street-props:illuminated-advertising-kiosk",
+      "name": "Illuminated Advertising Kiosk",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:hydrant",
+      "name": "Fire Hydrant",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:round-trash-can",
+      "name": "Round Trash Can",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:manhole",
+      "name": "Manhole Cover",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:storm-drain-grate",
+      "name": "Storm Drain Grate",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:street-lamp",
+      "name": "Street Lamp",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:park-bench",
+      "name": "Park Bench",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:mailbox",
+      "name": "Street Mailbox",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:outdoor-advertising-sign",
+      "name": "A-Frame Advertising Sign",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:advertising-column",
+      "name": "Vintage Advertising Column",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:traffic-cone",
+      "name": "Traffic Cone",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:construction-barrier",
+      "name": "Construction Barrier",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:bollard",
+      "name": "Bollard",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:litter-bin",
+      "name": "Street Dumpster",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:wooden-pallet",
+      "name": "Wooden Pallet",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:worn-cardboard-box",
+      "name": "Worn Cardboard Box",
+      "category": "Street"
+    },
+    {
+      "id": "street-props:air-conditioner",
+      "name": "Air Conditioner (Wall)",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "street-props:rooftop-air-conditioner",
+      "name": "Rooftop Condenser",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "street-props:ventilation-straight",
+      "name": "Ventilation Duct — Straight",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "street-props:ventilation-elbow",
+      "name": "Ventilation Duct — Elbow",
+      "category": "Roof & Wall"
+    },
+    {
+      "id": "street-props:chain-link-fence",
+      "name": "Chain-Link Fence Span",
+      "category": "Fences"
+    },
+    {
+      "id": "street-props:chain-link-double-gate",
+      "name": "Chain-Link Double Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "street-props:chain-link-single-gate",
+      "name": "Chain-Link Pedestrian Gate",
+      "category": "Fences"
+    },
+    {
+      "id": "street-props:damaged-chain-link-fence",
+      "name": "Chain-Link Fence — Damaged",
+      "category": "Fences"
+    },
+    {
+      "id": "street-props:precast-concrete-fence",
+      "name": "Precast Concrete Fence",
+      "category": "Fences"
+    },
+    {
+      "id": "street-props:wind-poster-ground-drift-area",
+      "name": "Wind Poster Drift Area",
+      "category": "Effects"
+    },
+    {
+      "id": "traffic-control-props:traffic-light",
+      "name": "Traffic Light",
+      "category": "Signs"
+    },
+    {
+      "id": "traffic-control-props:stop-sign",
+      "name": "Stop Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "traffic-control-props:speed-limit-sign",
+      "name": "Speed Limit Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "traffic-control-props:right-arrow-sign",
+      "name": "Right Arrow Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "traffic-control-props:pedestrian-crossing-sign",
+      "name": "Pedestrian Crossing Sign",
+      "category": "Signs"
+    },
+    {
+      "id": "traffic-control-props:parking-meter",
+      "name": "Parking Meter",
+      "category": "Signs"
+    },
+    {
+      "id": "street-surfaces:sidewalk-flat",
+      "name": "Pavement — Straight",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:sidewalk-corner-90",
+      "name": "Pavement — 90° Corner",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:sidewalk-ramp",
+      "name": "Pavement — Ramp",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-straight",
+      "name": "Road — Straight",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-corner",
+      "name": "Road — 90° Corner",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-t-junction",
+      "name": "Road — T-Junction",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-cross",
+      "name": "Road — Crossroads",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-one-way-straight",
+      "name": "One-Way Road — Straight",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-one-way-corner",
+      "name": "One-Way Road — 90° Corner",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-one-way-t-junction",
+      "name": "One-Way Road — T-Junction",
+      "category": "Surfaces"
+    },
+    {
+      "id": "street-surfaces:road-one-way-cross",
+      "name": "One-Way Road — Crossroads",
+      "category": "Surfaces"
+    },
+    {
+      "id": "grass-patch:dense",
+      "name": "Grass Patch — Dense",
+      "category": "Greenery"
+    },
+    {
+      "id": "grass-patch:medium",
+      "name": "Grass Patch — Medium",
+      "category": "Greenery"
+    },
+    {
+      "id": "grass-patch:light",
+      "name": "Grass Patch — Light",
+      "category": "Greenery"
+    },
+    {
+      "id": "grass-patch:sparse",
+      "name": "Grass Patch — Sparse",
+      "category": "Greenery"
+    },
+    {
+      "id": "grass-patch:five-card",
+      "name": "Grass Patch — Five Card",
+      "category": "Greenery"
+    },
+    {
+      "id": "ivy-vines:curtain-tall",
+      "name": "Ivy Vines — Tall Curtain",
+      "category": "Greenery"
+    },
+    {
+      "id": "ivy-vines:curtain-wide",
+      "name": "Ivy Vines — Wide Curtain",
+      "category": "Greenery"
+    },
+    {
+      "id": "ivy-vines:curtain-patch",
+      "name": "Ivy Vines — Curtain Patch",
+      "category": "Greenery"
+    },
+    {
+      "id": "ivy-vines:valance-long",
+      "name": "Ivy Vines — Long Valance",
+      "category": "Greenery"
+    },
+    {
+      "id": "ivy-vines:valance-short",
+      "name": "Ivy Vines — Short Valance",
+      "category": "Greenery"
+    },
+    {
+      "id": "japan-vending-machine:classic",
+      "name": "Vending Machine — Classic Drinks",
+      "category": "Vending"
+    },
+    {
+      "id": "japan-vending-machine:retro",
+      "name": "Vending Machine — Retro Cola",
+      "category": "Vending"
+    },
+    {
+      "id": "japan-vending-machine:coffee",
+      "name": "Vending Machine — Coffee",
+      "category": "Vending"
+    },
+    {
+      "id": "japan-vending-machine:fruit",
+      "name": "Vending Machine — Fruit Water",
+      "category": "Vending"
+    },
+    {
+      "id": "japan-vending-machine:tea",
+      "name": "Vending Machine — Japanese Tea",
+      "category": "Vending"
+    },
+    {
+      "id": "rooms-kit:billiards-table",
+      "name": "Walnut Pool Table",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-balls",
+      "name": "Billiard Balls",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-triangle",
+      "name": "Wood Triangle Rack",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-bar",
+      "name": "Paneled Walnut Bar",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-stool",
+      "name": "Burgundy Bar Stool",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-armchair",
+      "name": "Burgundy Lounge Chair",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-cafe-table",
+      "name": "Brass Pedestal Cafe Table",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-cabinet",
+      "name": "Walnut Drinks Cabinet",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-rug",
+      "name": "Burgundy Billiard Rug",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-pendant",
+      "name": "Triple Green Billiard Pendant",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-cue-rack",
+      "name": "Six Cue Wall Rack",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-window",
+      "name": "Burgundy Curtains and Blinds",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-bottle-shelf",
+      "name": "Bottles and Glasses Shelf",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-bar-props",
+      "name": "Bar Bottles Shaker and Glasses",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-clock",
+      "name": "Ivory Wall Clock",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-scoreboard",
+      "name": "Brass Framed Scoreboard",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-art",
+      "name": "Billiard Art Print",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-sconce",
+      "name": "Brass Tube Wall Sconce",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-table-lamp",
+      "name": "Brass Cafe Lamp",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-plant",
+      "name": "Tall Potted Plant",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-small-plant",
+      "name": "Small Trailing Plant",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:billiards-books",
+      "name": "Stacked Books",
+      "category": "Billiards Lounge"
+    },
+    {
+      "id": "rooms-kit:cinema-sofa-three",
+      "name": "Three Cinema Seats",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-sofa-two",
+      "name": "Two Cinema Seats",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-media-console",
+      "name": "Walnut Media Console",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-snack-shelf",
+      "name": "Snack Shelf",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-popcorn-stand",
+      "name": "Popcorn Machine Stand",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-side-table",
+      "name": "Round Drink Table",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-rug",
+      "name": "Charcoal Cinema Rug",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-throw",
+      "name": "Draped Herringbone Throw",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-screen",
+      "name": "Framed Projection Screen",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-tower-speaker",
+      "name": "Gold Cone Tower Speaker",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-center-speaker",
+      "name": "Center Channel Speaker",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-surround-speaker",
+      "name": "Surround Speaker and Stand",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-subwoofer",
+      "name": "Subwoofer",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-projector",
+      "name": "Ceiling Projector",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-popcorn-machine",
+      "name": "Illuminated Popcorn Machine",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-table-props",
+      "name": "Popcorn Bucket and Drink",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-receiver",
+      "name": "AV Receiver",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-remote",
+      "name": "Cinema Remote",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-curtain",
+      "name": "Burgundy Theater Curtain",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-acoustic-panel",
+      "name": "Acoustic Absorber and Slats",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-wall-sconce",
+      "name": "Warm Theater Wall Sconce",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:cinema-plant",
+      "name": "Cinema Floor Plant",
+      "category": "Home Cinema"
+    },
+    {
+      "id": "rooms-kit:streaming-desk",
+      "name": "Creator Workstation Desk",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-chair",
+      "name": "Mesh Studio Chair",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-shelf",
+      "name": "Studio Display Shelf",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-flight-cases",
+      "name": "Stacked Flight Cases",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-side-table",
+      "name": "Studio Side Table",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-rug",
+      "name": "Charcoal Studio Rug",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-green-screen",
+      "name": "Green Cyclorama and Roller",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-camera",
+      "name": "Cinema Camera on Tripod",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-softbox",
+      "name": "Studio Softbox and Stand",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-ring-light",
+      "name": "Ring Light and Phone Mount",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-monitors",
+      "name": "Dual Wave Monitors",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-controls",
+      "name": "Keyboard Mouse and Stream Decks",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-microphone",
+      "name": "Broadcast Microphone on Boom",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-pc",
+      "name": "Warm Fan Workstation Tower",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-acoustic-panel",
+      "name": "Ribbed Acoustic Foam Panel",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-window",
+      "name": "Dark Venetian Blinds",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-poster",
+      "name": "Purple Moon and Mountains Print",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-cable-hook",
+      "name": "Hanging Studio Cable Coil",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-plant",
+      "name": "Potted Monstera",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-desk-props",
+      "name": "Creator Desktop Accessories",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:streaming-table-props",
+      "name": "Books Diffuser and Plant",
+      "category": "Streaming Studio"
+    },
+    {
+      "id": "rooms-kit:studio-notebook",
+      "name": "Studio Notebook and Pen",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:artist-bed",
+      "name": "Artist Olive Storage Bed",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-table",
+      "name": "Paint Splattered Work Table",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-stool",
+      "name": "Painted Studio Stool",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-shelf",
+      "name": "Artist Supply Shelving",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-easel",
+      "name": "Landscape Painting Easel",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-cart",
+      "name": "Rolling Paint Drawer Cart",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-sink",
+      "name": "Studio Utility Sink",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-drying-rack",
+      "name": "Paint Cloth Drying Rack",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-canvas-crate",
+      "name": "Wooden Canvas Crate",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-window",
+      "name": "Studio Daylight Window",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-sketches",
+      "name": "Taped Botanical Studies",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-supplies",
+      "name": "Palette Brushes and Paints",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-rug",
+      "name": "Paint Splattered Floor Cloth",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-task-lamp",
+      "name": "Articulated Artist Lamp",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:artist-canvases",
+      "name": "Leaning Abstract Canvases",
+      "category": "Artist Studio"
+    },
+    {
+      "id": "rooms-kit:digital-piano",
+      "name": "Digital Piano and X Stand",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:piano-stool",
+      "name": "Piano Stool",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:acoustic-guitar",
+      "name": "Acoustic Guitar and Stand",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:electric-guitar",
+      "name": "Red Electric Guitar and Stand",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:pedalboard",
+      "name": "Three Effect Pedals",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:guitar-amplifier",
+      "name": "Guitar Amplifier",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:guitar-case",
+      "name": "Guitar Hard Case",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-monitor",
+      "name": "Yellow Cone Studio Monitor",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:audio-interface",
+      "name": "Red Audio Interface",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-laptop",
+      "name": "DAW Recording Laptop",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-microphone",
+      "name": "Boom Microphone and Pop Filter",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:music-stand",
+      "name": "Sheet Music Stand",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:acoustic-panel",
+      "name": "Ribbed Acoustic Absorber",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-window",
+      "name": "Night Window and Curtains",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-rug",
+      "name": "Circular Woven Studio Rug",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-floor-lamp",
+      "name": "Warm Studio Floor Lamp",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-cable",
+      "name": "Coiled Instrument Cable",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-desk",
+      "name": "Recording Desk",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:record-bookcase",
+      "name": "Vinyl Record Bookcase",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-armchair",
+      "name": "Mustard Studio Armchair",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-chair",
+      "name": "Charcoal Studio Chair",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-side-table",
+      "name": "Round Studio Side Table",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:studio-headphones",
+      "name": "Studio Headphones",
+      "category": "Music Studio"
+    },
+    {
+      "id": "rooms-kit:hacker-desk",
+      "name": "Technical Workstation Desk",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:repair-bench",
+      "name": "Electronics Repair Bench",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:hacker-chair",
+      "name": "Charcoal Workshop Chair",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:utility-shelf",
+      "name": "Steel Utility Shelving",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:workshop-safe",
+      "name": "Workshop Combination Safe",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:cargo-boxes",
+      "name": "Electronics Cargo Boxes",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:investigation-board",
+      "name": "Pinned Investigation Board",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:workshop-blind",
+      "name": "Dark Venetian Blind",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:wall-utilities",
+      "name": "Conduits and Alarm Beacon",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:terminal-array",
+      "name": "Four Terminal Displays",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:hacker-laptop",
+      "name": "Terminal Laptop",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:server-rack",
+      "name": "Patched Server Rack",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:repair-tools",
+      "name": "Soldering Tools and Circuit Board",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:hacker-pc",
+      "name": "Open Cyan Workstation PC",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:rubber-mat",
+      "name": "Dotted Anti-fatigue Mat",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:workshop-clutter",
+      "name": "Workshop Accessories",
+      "category": "Hacker Workshop"
+    },
+    {
+      "id": "rooms-kit:bunker-cot",
+      "name": "Field Cot",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-chair",
+      "name": "Canvas Folding Chair",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-workbench",
+      "name": "Utility Workbench",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-shelf",
+      "name": "Stocked Utility Shelf",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-locker",
+      "name": "Tall Metal Locker",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-crate",
+      "name": "Field Supply Crate",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-sandbags",
+      "name": "Stacked Sandbags",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-mug",
+      "name": "Field Mug",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-flashlight",
+      "name": "Field Flashlight",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-door",
+      "name": "Armored Bunker Door",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-vent",
+      "name": "Wall Vent",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-louver",
+      "name": "Metal Wall Louver",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-generator",
+      "name": "Portable Generator",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-lantern",
+      "name": "Oil Lantern",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-radio",
+      "name": "Field Radio",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-first-aid",
+      "name": "First Aid Box",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-map",
+      "name": "Pinned Wall Map",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-tools",
+      "name": "Workbench Tools",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-supplies",
+      "name": "Stacked Supplies",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-backpack",
+      "name": "Field Backpack",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-boots",
+      "name": "Field Boots",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-pipes",
+      "name": "Exposed Wall Pipes",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-grate",
+      "name": "Floor Drain Grate",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:bunker-wall-lamp",
+      "name": "Caged Wall Lamp",
+      "category": "Bunker Shelter"
+    },
+    {
+      "id": "rooms-kit:cyber-bed",
+      "name": "Cybernetic Storage Bed",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-workbench",
+      "name": "Cybernetic Repair Workbench",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-locker",
+      "name": "Tall Tech Locker",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-stool",
+      "name": "Swivel Workshop Stool",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-side-table",
+      "name": "Compact Side Table",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-bar-stool",
+      "name": "Industrial Bar Stool",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-crate",
+      "name": "Tech Supply Crate",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-niche",
+      "name": "Recessed Tech Display Niche",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-terminals",
+      "name": "Twin Medical Terminals",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-prosthetic",
+      "name": "Prosthetic Workpiece",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-hand-cradle",
+      "name": "Prosthetic Hand Cradle",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-sink",
+      "name": "Utility Sink",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-jacket",
+      "name": "Hanging Tech Jacket",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-clutter",
+      "name": "Workbench Clutter",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-tools",
+      "name": "Precision Tool Set",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-blind",
+      "name": "Neon Venetian Blind",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-vent",
+      "name": "Industrial Wall Vent",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-utilities",
+      "name": "Wall Utility Conduit",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-wall-lamp",
+      "name": "Linear Amber Wall Lamp",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-poster",
+      "name": "Neon City Poster",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-rug",
+      "name": "Cyan Floor Mat",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-grate",
+      "name": "Floor Service Grate",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:cyber-conduits",
+      "name": "Continuous Exposed Cable Network",
+      "category": "Cyberpunk Micro Apartment"
+    },
+    {
+      "id": "rooms-kit:vintage-bed",
+      "name": "Vintage Single Bed",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-armchair",
+      "name": "Olive Vintage Armchair",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-bookcase",
+      "name": "Dark Wood Bookcase",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-nightstand",
+      "name": "Vintage Nightstand",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-side-table",
+      "name": "Round Vintage Side Table",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-grandfather-clock",
+      "name": "Grandfather Clock",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-window",
+      "name": "Lace Curtain Window",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-radiator",
+      "name": "Cast Iron Radiator",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-rug",
+      "name": "Floral Vintage Rug",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-portraits",
+      "name": "Framed Family Portraits",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-mantel-clock",
+      "name": "Mantel Clock",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-radio",
+      "name": "Tabletop Radio",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-cane",
+      "name": "Walking Cane",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-slippers",
+      "name": "Pair of Slippers",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-floor-lamp",
+      "name": "Brass Floor Lamp",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-table-lamp",
+      "name": "Pleated Table Lamp",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-tea-set",
+      "name": "Tea and Pill Organizer",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-flower-vase",
+      "name": "Dried Flower Vase",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:vintage-planter",
+      "name": "Window Sill Plant",
+      "category": "Vintage Bedroom"
+    },
+    {
+      "id": "rooms-kit:room-shell",
+      "name": "Open Room Shell",
+      "category": "Room"
+    },
+    {
+      "id": "rooms-kit:bed",
+      "name": "Layered Double Bed",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:bedside-cabinet",
+      "name": "Two Drawer Bedside Cabinet",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:desk",
+      "name": "Oak Writing Desk",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:office-chair",
+      "name": "Upholstered Office Chair",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:wardrobe",
+      "name": "Paneled Wardrobe",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:bookcase",
+      "name": "Low Open Bookcase",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:armchair",
+      "name": "Linen Armchair",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:bench",
+      "name": "Upholstered Bed Bench",
+      "category": "Furniture"
+    },
+    {
+      "id": "rooms-kit:monitor",
+      "name": "Landscape Monitor",
+      "category": "Workspace"
+    },
+    {
+      "id": "rooms-kit:table-lamp",
+      "name": "Cube Table Lamp",
+      "category": "Lighting"
+    },
+    {
+      "id": "rooms-kit:floor-lamp",
+      "name": "Cube Floor Lamp",
+      "category": "Lighting"
+    },
+    {
+      "id": "rooms-kit:wall-shelf",
+      "name": "Floating Oak Shelf",
+      "category": "Wall Decor"
+    },
+    {
+      "id": "rooms-kit:window",
+      "name": "Moonlit Window and Blind",
+      "category": "Wall Decor"
+    },
+    {
+      "id": "rooms-kit:wall-art",
+      "name": "Framed Sunset Print",
+      "category": "Wall Decor"
+    },
+    {
+      "id": "rooms-kit:books",
+      "name": "Colored Books",
+      "category": "Decor"
+    },
+    {
+      "id": "rooms-kit:planter",
+      "name": "Square Potted Plant",
+      "category": "Plants"
+    },
+    {
+      "id": "rooms-kit:trailing-planter",
+      "name": "Trailing Potted Plant",
+      "category": "Plants"
+    },
+    {
+      "id": "rooms-kit:basket",
+      "name": "Woven Textile Basket",
+      "category": "Decor"
+    },
+    {
+      "id": "rooms-kit:rug",
+      "name": "Bordered Woven Rug",
+      "category": "Textiles"
+    },
+    {
+      "id": "rooms-kit:throw",
+      "name": "Fringed Teal Throw",
+      "category": "Textiles"
+    },
+    {
+      "id": "rooms-kit:pillow",
+      "name": "Accent Pillow",
+      "category": "Textiles"
+    },
+    {
+      "id": "rooms-kit:gaming-desk",
+      "name": "Corner Gaming Desk",
+      "category": "Gaming Furniture"
+    },
+    {
+      "id": "rooms-kit:gaming-chair",
+      "name": "Cyan Trim Gaming Chair",
+      "category": "Gaming Furniture"
+    },
+    {
+      "id": "rooms-kit:sofa",
+      "name": "Two Seat Charcoal Sofa",
+      "category": "Gaming Furniture"
+    },
+    {
+      "id": "rooms-kit:coffee-table",
+      "name": "Oak Coffee Table",
+      "category": "Gaming Furniture"
+    },
+    {
+      "id": "rooms-kit:tv-console",
+      "name": "Open TV Console",
+      "category": "Gaming Furniture"
+    },
+    {
+      "id": "rooms-kit:mini-fridge",
+      "name": "Illuminated Drinks Fridge",
+      "category": "Gaming Furniture"
+    },
+    {
+      "id": "rooms-kit:gaming-monitor",
+      "name": "Gaming Landscape Monitor",
+      "category": "Gaming Equipment"
+    },
+    {
+      "id": "rooms-kit:television",
+      "name": "Landscape Television",
+      "category": "Gaming Equipment"
+    },
+    {
+      "id": "rooms-kit:pc-tower",
+      "name": "RGB Desktop Tower",
+      "category": "Gaming Equipment"
+    },
+    {
+      "id": "rooms-kit:keyboard-mouse",
+      "name": "RGB Keyboard and Mouse Mat",
+      "category": "Gaming Equipment"
+    },
+    {
+      "id": "rooms-kit:headphones",
+      "name": "Headphones and Stand",
+      "category": "Gaming Equipment"
+    },
+    {
+      "id": "rooms-kit:microphone",
+      "name": "Desktop Boom Microphone",
+      "category": "Gaming Equipment"
+    },
+    {
+      "id": "rooms-kit:controller",
+      "name": "Game Controller",
+      "category": "Gaming Decor"
+    },
+    {
+      "id": "rooms-kit:pixel-figure",
+      "name": "Pixel Shelf Figure",
+      "category": "Gaming Decor"
+    },
+    {
+      "id": "rooms-kit:rgb-panels",
+      "name": "Triangular RGB Wall Panels",
+      "category": "Gaming Decor"
+    },
+    {
+      "id": "rooms-kit:mug",
+      "name": "Coffee Mug",
+      "category": "Gaming Decor"
+    },
+    {
+      "id": "rooms-kit:arcade-cabinet",
+      "name": "Retro Arcade Cabinet",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:gaming-pegboard",
+      "name": "Controller Pegboard",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:skateboard",
+      "name": "Striped Skateboard",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:task-lamp",
+      "name": "Adjustable Desk Lamp",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:arcade-bed",
+      "name": "Teal and Gold Storage Bed",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:arcade-desk",
+      "name": "Straight Gaming Desk",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:tall-bookcase",
+      "name": "Gaming Display Bookcase",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:drawer-chest",
+      "name": "Three Drawer Chest",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:beanbag",
+      "name": "Mustard Beanbag",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:round-side-table",
+      "name": "Round Charcoal Side Table",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:sunset-window",
+      "name": "Sunset Window and Gold Curtains",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:wall-clock",
+      "name": "Dark Wall Clock",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:gaming-posters",
+      "name": "Gaming and Mountain Posters",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:gold-crystal",
+      "name": "Faceted Ornament",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:sunset-monitor",
+      "name": "Ultrawide Sunset Monitor",
+      "category": "Arcade Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-bed",
+      "name": "Olive Storage Bed",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-desk",
+      "name": "Student Writing Desk",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-bookcase",
+      "name": "Binder Bookcase",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:clothes-rack",
+      "name": "Rack with Three Hoodies",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-fridge",
+      "name": "Cream Mini Fridge",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:laptop",
+      "name": "Open Laptop",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:cork-board",
+      "name": "Pinned Cork Board",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:moving-boxes",
+      "name": "Moving Boxes and Folded Clothes",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:backpack",
+      "name": "Olive Backpack",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:laundry-basket",
+      "name": "Laundry Basket",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-desk-clutter",
+      "name": "Study Papers and Noodle Cups",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:alarm-clock",
+      "name": "Twin Bell Alarm Clock",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:slippers",
+      "name": "Pair of Slippers",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-window",
+      "name": "Daylight Window and Gray Blind",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-posters",
+      "name": "Three Pinned Nature Prints",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-rug",
+      "name": "Striped Slate Rug",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-chair",
+      "name": "Slate Swivel Chair",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-plant",
+      "name": "Round Pot Plant",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:student-storage-box",
+      "name": "Lidded Storage Box",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:power-strip",
+      "name": "Power Strip and Desk Cables",
+      "category": "Student Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-bed",
+      "name": "Pastel Scallop Bed",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-desk",
+      "name": "Pastel Honey Writing Desk",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-chair",
+      "name": "Pastel Upholstered Chair",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-wardrobe",
+      "name": "Pastel Paneled Wardrobe",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-bookcase",
+      "name": "Pastel Six-Cubby Bookcase",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-vanity",
+      "name": "Pastel Vanity with Oval Mirror",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-stool",
+      "name": "Pastel Vanity Stool",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-beanbag",
+      "name": "Lilac Heart Beanbag",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-nightstand",
+      "name": "Pastel Two-Drawer Nightstand",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-window",
+      "name": "Pastel Four-Pane Window",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:rainbow-decor",
+      "name": "Pastel Rainbow Wall Decor",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:flower-decor",
+      "name": "Pastel Flower Wall Decor",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:star-decor",
+      "name": "Pastel Star Wall Decor",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:tulip-picture",
+      "name": "Framed Tulip Picture",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:moon-lamp",
+      "name": "Crescent Moon Lamp",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:heart-picture",
+      "name": "Heart Picture Frame",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:house-shelf",
+      "name": "House-Outline Wall Shelf",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:plush-toy",
+      "name": "Pastel Plush Toy",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:toy-basket",
+      "name": "Woven Pastel Toy Basket",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:cloud-rug",
+      "name": "Cloud-Shaped Rug",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pastel-task-lamp",
+      "name": "Pastel Curved Task Lamp",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:pencil-cup",
+      "name": "Pastel Pencil Cup",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:tulip-vase",
+      "name": "Pastel Tulip Vase",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:cosmetics",
+      "name": "Pastel Cosmetics Tray",
+      "category": "Pastel Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-bed",
+      "name": "Wood Bed with Geometric Quilt",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-desk",
+      "name": "90s Computer Desk",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-chair",
+      "name": "Blue Office Chair",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-wardrobe",
+      "name": "Wood Wardrobe",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-bedside",
+      "name": "Wood Nightstand",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-stereo-shelf",
+      "name": "Hi-Fi Shelf",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-cd-rack",
+      "name": "CD Tower",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-computer",
+      "name": "CRT Computer and Tower",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-keyboard-mouse",
+      "name": "Beige Keyboard and Mouse",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-printer",
+      "name": "Dot Matrix Printer",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-telephone",
+      "name": "Corded Telephone",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-stereo",
+      "name": "Hi-Fi Stereo and Speakers",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-fan",
+      "name": "Pedestal Fan",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-window",
+      "name": "Venetian Blind Window",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-posters",
+      "name": "Geometric 90s Poster",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-rug",
+      "name": "Striped Rug",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-drawer-tower",
+      "name": "Plastic Drawers",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-storage-boxes",
+      "name": "Lidded Storage Boxes",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-sneakers",
+      "name": "Striped Sneakers",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-desk-clutter",
+      "name": "CDs Floppies and Pencils",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-clock",
+      "name": "Red Digital Alarm Clock",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-bedside-lamp",
+      "name": "Conical Bedside Lamp",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "rooms-kit:retro-backpack",
+      "name": "Navy Backpack",
+      "category": "90s Bedroom"
+    },
+    {
+      "id": "apocalyptic-car-parts:door-front-blue",
+      "name": "Sedan Front Door (Blue)",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:door-front-red",
+      "name": "Pickup Door (Red)",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:door-front-cream",
+      "name": "Pickup Door (Cream)",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:van-side-door",
+      "name": "Van Side Door",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:van-rear-doors",
+      "name": "Van Rear Doors",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:hood-scoop",
+      "name": "Hood with Scoop",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:trunk-lid",
+      "name": "Trunk Lid",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:fender-front",
+      "name": "Front Fender",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:bed-side",
+      "name": "Pickup Bed Side",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:front-bumper",
+      "name": "Front Bumper & Grille",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:roof-panel",
+      "name": "Crumpled Roof Panel",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:windshield",
+      "name": "Cracked Windshield",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:tailgate",
+      "name": "Pickup Tailgate",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:hood-vented",
+      "name": "Louvred Hood",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:dashboard",
+      "name": "Dashboard Shell",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:rocker-panel",
+      "name": "Rocker Panel",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:quarter-panel",
+      "name": "Rear Quarter Panel",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:wheel-well",
+      "name": "Wheel Well Tub",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:floor-pan",
+      "name": "Floor Pan",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:frame-rail",
+      "name": "Bent Frame Rail",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:b-pillar",
+      "name": "B-Pillar Fragment",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:vent-window-frame",
+      "name": "Vent Window Frame",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-car-parts:battery-box",
+      "name": "Crumpled Box Section",
+      "category": "Car Parts"
+    },
+    {
+      "id": "apocalyptic-traffic-props:traffic-light-standing",
+      "name": "Traffic Light",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:traffic-light-leaning",
+      "name": "Leaning Traffic Light",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:traffic-light-fallen",
+      "name": "Fallen Traffic Light",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:stop-sign",
+      "name": "Stop Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:exit-sign",
+      "name": "Exit Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:highway-gantry",
+      "name": "Highway Sign Gantry",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:arrow-signpost",
+      "name": "Arrow Signpost",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:curve-warning-bent",
+      "name": "Bent Curve Warning Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:blue-direction-signs",
+      "name": "Blue Direction Signs",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:stop-sign-bent",
+      "name": "Bent Stop Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:green-direction-stack",
+      "name": "Green Direction Signs",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:speed-limit-35",
+      "name": "Speed Limit 35 Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:street-name-sign",
+      "name": "Street Name Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:highway-shield-fallen",
+      "name": "Fallen Highway Sign & Barricade",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:winding-road-sign",
+      "name": "Winding Road Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:stop-sign-fallen",
+      "name": "Fallen Stop Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:wrong-way-sign",
+      "name": "Wrong Way Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-traffic-props:fuel-pylon-sign",
+      "name": "Fuel Pylon Sign",
+      "category": "Traffic & Signs"
+    },
+    {
+      "id": "apocalyptic-street-furniture:fire-hydrant",
+      "name": "Rusty Fire Hydrant",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:phone-booth",
+      "name": "Broken Phone Booth",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:bus-shelter",
+      "name": "Wrecked Bus Shelter",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:street-lamp",
+      "name": "Street Lamp",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:street-lamp-bent",
+      "name": "Bent Street Lamp",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:street-lamp-fallen",
+      "name": "Fallen Street Lamp",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:utility-pole-transformer",
+      "name": "Utility Pole with Transformers",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:utility-pole-double",
+      "name": "Utility Pole with Junction Box",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:electrical-cabinet",
+      "name": "Electrical Cabinet",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:utility-box-small",
+      "name": "Small Utility Box",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:mailbox",
+      "name": "Mail Collection Box",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:parking-meter",
+      "name": "Parking Meter",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:fire-hose-cabinet",
+      "name": "Fire Hose Cabinet",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:storm-drain-grate",
+      "name": "Storm Drain Grate",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:manhole-open",
+      "name": "Open Manhole",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-street-furniture:roof-vent-turbine",
+      "name": "Turbine Roof Vent",
+      "category": "Street Furniture"
+    },
+    {
+      "id": "apocalyptic-appliance-props:chest-freezer",
+      "name": "Chest Freezer",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:fridge-tall",
+      "name": "Two-Door Fridge",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:washer-top-loader",
+      "name": "Top-Loader Washer (Lid Open)",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:fridge-open",
+      "name": "Small Fridge (Door Open)",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:washer-front-loader",
+      "name": "Front-Loader Washer (Door Off)",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:washer-door",
+      "name": "Washer Door",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:vending-machine-smashed",
+      "name": "Vending Machine (Smashed)",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:vending-machine-open",
+      "name": "Vending Machine (Door Open)",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:vending-machine-toppled",
+      "name": "Toppled Vending Machine",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-appliance-props:cans-spilled",
+      "name": "Spilled Cans",
+      "category": "Appliances"
+    },
+    {
+      "id": "apocalyptic-scrap-props:tyre-stack",
+      "name": "Tyre Stack",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:tyre-pile",
+      "name": "Tyre Pile",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:tyres-pair",
+      "name": "Two Tyres",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:tyre-single",
+      "name": "Single Tyre",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:tractor-tyre",
+      "name": "Tractor Tyre",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:rims-and-tyres",
+      "name": "Rims & Tyres Heap",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:tyre-stack-leaning",
+      "name": "Tyre Stack with Leaning Tyre",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:junk-pile",
+      "name": "Junk Pile",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:bricks-small",
+      "name": "Small Brick Pile",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:bricks-scatter",
+      "name": "Scattered Bricks",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:rubble-pile-large",
+      "name": "Large Rubble Pile",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:rubble-pile-medium",
+      "name": "Medium Rubble Pile",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:rubble-mound-low",
+      "name": "Low Rubble Mound",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:rubble-with-wall-stub",
+      "name": "Rubble with Wall Stub",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:concrete-block-rubble",
+      "name": "Concrete Block Rubble",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:brick-heap-small",
+      "name": "Small Brick Heap",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-scrap-props:rubble-slab",
+      "name": "Rubble with Broken Slab",
+      "category": "Scrap & Rubble"
+    },
+    {
+      "id": "apocalyptic-supply-props:crate-stack",
+      "name": "Stacked Wooden Crates",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:military-case",
+      "name": "Military Footlocker",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:toolbox-stack",
+      "name": "Toolbox Stack",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:ammo-box",
+      "name": "Ammunition Box",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:medical-case",
+      "name": "Medical Supplies Case",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:fragile-crate",
+      "name": "Fragile Crate",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:striped-trunk",
+      "name": "Striped Steel Trunk",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:crate-broken",
+      "name": "Broken Crate with Scrap",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:fuel-case",
+      "name": "Fuel Case",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:small-case",
+      "name": "Small Olive Case",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:barrel-red",
+      "name": "Rusty Red Drum",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:jerry-can",
+      "name": "Jerry Can",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:wooden-crate",
+      "name": "Wooden Supply Crate",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:pallet",
+      "name": "Wooden Pallet",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:sandbag-stack",
+      "name": "Sandbag Stack",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:jersey-barrier",
+      "name": "Striped Jersey Barrier",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:corrugated-sheets",
+      "name": "Corrugated Sheet Pile",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:plank-pile",
+      "name": "Loose Plank Pile",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:fence-panel",
+      "name": "Chain-Link Fence Panel",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:cable-spool",
+      "name": "Cable Spool",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:generator",
+      "name": "Portable Generator",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-supply-props:flood-light-tower",
+      "name": "Flood Light Tower",
+      "category": "Supplies"
+    },
+    {
+      "id": "apocalyptic-camp-props:diesel-tank-tower",
+      "name": "Diesel Tank Tower",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:fuel-tank-upright",
+      "name": "Upright Fuel Tank",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:emergency-fuel-tank",
+      "name": "Emergency Fuel Tank",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:twin-fuel-tanks",
+      "name": "Twin Fuel Tanks with Catwalk",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:container-cargo",
+      "name": "Cargo Container (Blue)",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:container-holed",
+      "name": "Rusted-Through Container",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:container-open",
+      "name": "Open Supply Container",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:container-shack",
+      "name": "Container Shelter",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-camp-props:survivor-tent",
+      "name": "Survivor Tent",
+      "category": "Tanks & Containers"
+    },
+    {
+      "id": "apocalyptic-military-props:sandbag-wall",
+      "name": "Sandbag Wall",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:sandbag-corner",
+      "name": "Sandbag Corner",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:sandbag-ring",
+      "name": "Sandbag Ring",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:watchtower",
+      "name": "Wooden Watchtower",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:barbed-wire-barrier",
+      "name": "Barbed Wire Barrier",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:czech-hedgehog",
+      "name": "Czech Hedgehog",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:czech-hedgehog-tilted",
+      "name": "Czech Hedgehog (Tipped Over)",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:spike-strip",
+      "name": "Spike Strip",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:mg-nest",
+      "name": "Machine-Gun Nest",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:searchlight-trailer",
+      "name": "Searchlight Trailer",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:ammo-crate-stack",
+      "name": "Ammo Crate Stack",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:radio-post",
+      "name": "Radio Post",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:checkpoint-cluster",
+      "name": "Checkpoint Barricade",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-military-props:concrete-bunker-wall",
+      "name": "Concrete Bunker Wall",
+      "category": "Military"
+    },
+    {
+      "id": "apocalyptic-ruin-props:scaffold-tall",
+      "name": "Scaffold Tower (Tarp)",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:scaffold-small",
+      "name": "Scaffold (Leaning Plank)",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:column-broken-tall",
+      "name": "Broken Concrete Column",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:column-stub",
+      "name": "Broken Column Stub",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:column-rebar-exposed",
+      "name": "Column with Exposed Rebar",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:rebar-cage",
+      "name": "Rebar Cage",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:i-beam-pile",
+      "name": "Rusty I-Beam Pile",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:concrete-stairs",
+      "name": "Concrete Stair Flight",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:stairs-broken",
+      "name": "Collapsed Stair Flight",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:slab-broken",
+      "name": "Broken Floor Slab",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:brick-wall-window",
+      "name": "Brick Wall with Windows",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:roof-collapse",
+      "name": "Collapsed Roof",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:brick-pile",
+      "name": "Brick Pile",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:wall-ruin-low",
+      "name": "Low Wall Ruin",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:wall-ruin-corner",
+      "name": "Wall Ruin with Pillar",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-ruin-props:wall-ruin-tall",
+      "name": "Tall Wall Ruin",
+      "category": "Ruins"
+    },
+    {
+      "id": "apocalyptic-household-props:sofa",
+      "name": "Ruined Sofa",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:mattress",
+      "name": "Stained Mattress",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:armchair",
+      "name": "Mouldy Armchair",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:desk-broken",
+      "name": "Broken Desk",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:wardrobe-open",
+      "name": "Open Wardrobe",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:office-chair-black",
+      "name": "Torn Office Chair (Black)",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:office-chair-red",
+      "name": "Torn Office Chair (Red)",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:filing-cabinet",
+      "name": "Filing Cabinet",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:crt-tv-smashed",
+      "name": "Smashed CRT TV",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:monitor-pile",
+      "name": "Monitor Pile",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:microwave",
+      "name": "Open Microwave",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:plastic-crate",
+      "name": "Plastic Crate",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:laundry-basket",
+      "name": "Laundry Basket",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:trash-bags",
+      "name": "Trash Bag Pile",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:trash-can-metal",
+      "name": "Metal Trash Can",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:wheelie-bin-green",
+      "name": "Wheelie Bin (Green)",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:wheelie-bin-blue",
+      "name": "Wheelie Bin (Blue)",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-household-props:dumpster",
+      "name": "Rusty Dumpster",
+      "category": "Household Junk"
+    },
+    {
+      "id": "apocalyptic-sign-gantry:sign-gantry",
+      "name": "Sign Gantry",
+      "category": "Gantry"
+    },
+    {
+      "id": "apocalyptic-sign-gantry:sign-gantry-collapsed",
+      "name": "Collapsed Sign Gantry",
+      "category": "Gantry"
+    },
+    {
+      "id": "apocalyptic-sign-gantry:sign-gantry-half",
+      "name": "Cantilever Sign Gantry",
+      "category": "Gantry"
+    },
+    {
+      "id": "apocalyptic-dead-trees:dead-tree",
+      "name": "Dead Gnarled Tree",
+      "category": "Trees"
+    },
+    {
+      "id": "apocalyptic-dead-trees:dead-tree-small",
+      "name": "Small Dead Tree",
+      "category": "Trees"
+    },
+    {
+      "id": "apocalyptic-dead-trees:young-tree",
+      "name": "Young Sparse Tree",
+      "category": "Trees"
+    },
+    {
+      "id": "apocalyptic-dead-trees:fallen-log",
+      "name": "Fallen Broken Log",
+      "category": "Trees"
+    },
+    {
+      "id": "apocalyptic-dead-trees:stump",
+      "name": "Broken Stump with Roots",
+      "category": "Trees"
+    },
+    {
+      "id": "apocalyptic-dead-trees:surface-roots",
+      "name": "Surface Roots",
+      "category": "Trees"
+    },
+    {
+      "id": "apocalyptic-overgrowth:bush-leafy",
+      "name": "Leafy Bush",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:bush-mixed",
+      "name": "Leafy & Dry Bush",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:ivy-pillar-a",
+      "name": "Ivy Pillar A",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:ivy-pillar-b",
+      "name": "Ivy Pillar B",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:ivy-pillar-c",
+      "name": "Ivy Pillar C",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:ivy-fence-dense",
+      "name": "Chain-Link Fence (Dense Ivy)",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:ivy-fence-dry",
+      "name": "Chain-Link Fence (Dry Vines)",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:ivy-fence-light",
+      "name": "Chain-Link Fence (Light Ivy)",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:grass-dry-tall",
+      "name": "Tall Dry Grass",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:grass-dry-small",
+      "name": "Small Dry Grass",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-overgrowth:wildflowers",
+      "name": "Wild Yellow Flowers",
+      "category": "Plants"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:toxic-barrel",
+      "name": "Toxic Barrel",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:toxic-barrel-spilled",
+      "name": "Toxic Barrel (Spilled)",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:toxic-barrels",
+      "name": "Toxic Barrels",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:radioactive-barrel",
+      "name": "Radioactive Barrel",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:radioactive-barrel-lying",
+      "name": "Radioactive Barrel (Lying)",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:radioactive-barrels",
+      "name": "Radioactive Barrels",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:biohazard-dumpster",
+      "name": "Biohazard Dumpster",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:biohazard-bin",
+      "name": "Biohazard Wheelie Bin",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:quarantine-fence",
+      "name": "Quarantine Fence",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-containers:quarantine-fence-panel",
+      "name": "Quarantine Fence Panel",
+      "category": "Hazard"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:burnt-debris",
+      "name": "Burnt Debris Pile",
+      "category": "Decals"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:ash-heap",
+      "name": "Ash & Rubble Heap",
+      "category": "Decals"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:toxic-puddle",
+      "name": "Toxic Puddle with Drain",
+      "category": "Decals"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:oil-slick",
+      "name": "Oil Slick",
+      "category": "Decals"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:biohazard-paint",
+      "name": "Painted Biohazard Symbol",
+      "category": "Decals"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:toxic-splatter",
+      "name": "Toxic Splatter",
+      "category": "Decals"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:scorch-mark",
+      "name": "Scorch Mark",
+      "category": "Decals"
+    },
+    {
+      "id": "apocalyptic-hazard-decals:tyre-marks",
+      "name": "Tyre Skid Marks",
+      "category": "Decals"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-red",
+      "name": "Red Tile Roof",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-blue",
+      "name": "Blue Tile Roof",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-stone",
+      "name": "Stone Slate Roof",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-corner",
+      "name": "Roof Corner",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-ridge",
+      "name": "Roof Ridge",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-steep",
+      "name": "Steep Roof",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-cone",
+      "name": "Conical Tower Roof",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:dormer",
+      "name": "Roof Dormer",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-damaged",
+      "name": "Damaged Roof",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:roof-tiles",
+      "name": "Roof Tile Chunk",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:chimney-stone",
+      "name": "Stone Chimney",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:chimney-tall",
+      "name": "Tall Chimney With Pots",
+      "category": "Roofs"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:arched-door",
+      "name": "Arched Double Door",
+      "category": "Doors"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:wooden-door",
+      "name": "Wooden Door",
+      "category": "Doors"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:reinforced-door",
+      "name": "Reinforced Door",
+      "category": "Doors"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:window-arched",
+      "name": "Arched Window",
+      "category": "Windows"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:window-gothic",
+      "name": "Twin Gothic Window",
+      "category": "Windows"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:window-stained",
+      "name": "Stained Glass Window",
+      "category": "Windows"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:arrow-slit",
+      "name": "Arrow Slit",
+      "category": "Windows"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:stone-arch",
+      "name": "Stone Arch",
+      "category": "Details"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:wooden-beams",
+      "name": "Wooden Beam Frame",
+      "category": "Details"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:balcony",
+      "name": "Timber Balcony",
+      "category": "Details"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:wooden-gallery",
+      "name": "Wooden Gallery",
+      "category": "Details"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:gutter",
+      "name": "Gutter And Downpipe",
+      "category": "Details"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:external-stair",
+      "name": "External Staircase",
+      "category": "Details"
+    },
+    {
+      "id": "tiny-castle-parts-architecture:battlement",
+      "name": "Battlement Module",
+      "category": "Details"
+    },
+    {
+      "id": "dungeon-props:table",
+      "name": "Plank Table",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:bench",
+      "name": "Bench",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:stool",
+      "name": "Stool",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:chair",
+      "name": "High-back Chair",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:bed",
+      "name": "Bed",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:bunk-bed",
+      "name": "Bunk Bed",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:desk",
+      "name": "Writing Desk",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:throne",
+      "name": "Throne",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:shelf-rack",
+      "name": "Open Shelving",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:bookshelf",
+      "name": "Bookshelf",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:weapon-rack",
+      "name": "Weapon Rack",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:armor-stand",
+      "name": "Armor Stand",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:training-dummy",
+      "name": "Training Dummy",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:anvil",
+      "name": "Anvil on Stump",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:chest",
+      "name": "Iron-bound Chest",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:treasure-chest",
+      "name": "Open Treasure Chest",
+      "category": "Dungeon · Treasure"
+    },
+    {
+      "id": "dungeon-props:crate",
+      "name": "Crate",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:crate-stack",
+      "name": "Crate Stack",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:barrel",
+      "name": "Barrel",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:barrel-group",
+      "name": "Barrel Group",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:sack",
+      "name": "Grain Sacks",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:pottery",
+      "name": "Amphorae",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:bucket",
+      "name": "Bucket",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:jug",
+      "name": "Clay Jug",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:basket",
+      "name": "Wicker Basket",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:rope-coil",
+      "name": "Rope Coil",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:ladder",
+      "name": "Ladder",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:wheelbarrow",
+      "name": "Wheelbarrow",
+      "category": "Dungeon · Storage"
+    },
+    {
+      "id": "dungeon-props:hearth",
+      "name": "Hearth",
+      "category": "Dungeon · Kitchen"
+    },
+    {
+      "id": "dungeon-props:cauldron",
+      "name": "Cauldron on Fire",
+      "category": "Dungeon · Kitchen"
+    },
+    {
+      "id": "dungeon-props:kitchen-table",
+      "name": "Kitchen Counter",
+      "category": "Dungeon · Kitchen"
+    },
+    {
+      "id": "dungeon-props:torch-sconce",
+      "name": "Wall Torch",
+      "category": "Dungeon · Lighting"
+    },
+    {
+      "id": "dungeon-props:standing-torch",
+      "name": "Standing Torch",
+      "category": "Dungeon · Lighting"
+    },
+    {
+      "id": "dungeon-props:brazier",
+      "name": "Brazier",
+      "category": "Dungeon · Lighting"
+    },
+    {
+      "id": "dungeon-props:candles",
+      "name": "Candle Cluster",
+      "category": "Dungeon · Lighting"
+    },
+    {
+      "id": "dungeon-props:candelabrum",
+      "name": "Candelabrum",
+      "category": "Dungeon · Lighting"
+    },
+    {
+      "id": "dungeon-props:banner",
+      "name": "Banner",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:shield-wall",
+      "name": "Shield and Swords",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:chains-wall",
+      "name": "Wall Chains",
+      "category": "Dungeon · Prison"
+    },
+    {
+      "id": "dungeon-props:wall-shelf",
+      "name": "Wall Shelf",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:rug",
+      "name": "Rug",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:floor-grate",
+      "name": "Floor Grate",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:inlay-diamond",
+      "name": "Floor Inlay · Diamond",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:inlay-compass",
+      "name": "Floor Inlay · Compass",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:inlay-tile",
+      "name": "Floor Inlay · Small Diamond",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:altar",
+      "name": "Altar",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:blood-altar",
+      "name": "Blood Altar",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:necro-altar",
+      "name": "Necromancer Altar",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:statue",
+      "name": "Statue",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:wall-shrine",
+      "name": "Wall Shrine",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:lectern",
+      "name": "Lectern",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:pew",
+      "name": "Chapel Pew",
+      "category": "Dungeon · Furniture"
+    },
+    {
+      "id": "dungeon-props:font",
+      "name": "Holy Water Font",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:sarcophagus",
+      "name": "Sarcophagus",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:sarcophagus-open",
+      "name": "Open Sarcophagus",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:coffin",
+      "name": "Coffin",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:banner-stand",
+      "name": "Banner Stand",
+      "category": "Dungeon · Decor"
+    },
+    {
+      "id": "dungeon-props:hero-alcove",
+      "name": "Monument Alcove",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:alchemy-table",
+      "name": "Alchemy Table",
+      "category": "Dungeon · Ritual"
+    },
+    {
+      "id": "dungeon-props:gold-pile",
+      "name": "Gold Hoard",
+      "category": "Dungeon · Treasure"
+    },
+    {
+      "id": "dungeon-props:cage",
+      "name": "Iron Cage",
+      "category": "Dungeon · Prison"
+    },
+    {
+      "id": "dungeon-props:torture-rack",
+      "name": "Torture Rack",
+      "category": "Dungeon · Prison"
+    },
+    {
+      "id": "dungeon-props:stocks",
+      "name": "Stocks",
+      "category": "Dungeon · Prison"
+    },
+    {
+      "id": "dungeon-props:chain-pile",
+      "name": "Chain Pile",
+      "category": "Dungeon · Prison"
+    },
+    {
+      "id": "dungeon-props:skeleton",
+      "name": "Slumped Skeleton",
+      "category": "Dungeon · Prison"
+    },
+    {
+      "id": "dungeon-props:bones",
+      "name": "Bone Pile",
+      "category": "Dungeon · Debris"
+    },
+    {
+      "id": "dungeon-props:rubble",
+      "name": "Rubble Pile",
+      "category": "Dungeon · Debris"
+    },
+    {
+      "id": "dungeon-props:broken-pillar",
+      "name": "Broken Column",
+      "category": "Dungeon · Debris"
+    },
+    {
+      "id": "dungeon-props:well",
+      "name": "Cistern Well",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:stairs-up",
+      "name": "Stone Stair Landing",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:spike-trap",
+      "name": "Spike Trap",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:pressure-plate",
+      "name": "Pressure Plate",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:lever",
+      "name": "Wall Lever",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:pit",
+      "name": "Spiked Pit",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:pool",
+      "name": "Cistern Basin",
+      "category": "Dungeon · Structure"
+    },
+    {
+      "id": "dungeon-props:trapdoor",
+      "name": "Floor Hatch",
+      "category": "Dungeon · Structure"
+    }
+  ],
+  "palettes": {}
+}

@@ -8,7 +8,7 @@ This document is the source of truth for how the game behaves. **`src/data/balan
 2. **Mazing is the strategy.** Enemies walk only on level 0, which is the road. You steer them by building walls and towers on it, so they take longer routes under your fire.
 3. **Seal it and they smash.** If every route is blocked, enemies walk to the cheapest blocker and smash it. Sealing is a bet, not a cheat.
 4. **Every map is new.** Maps are generated from a seed, so no two runs share a layout.
-5. **Classic fantasy, readable at a glance.** Towers, heroes and enemies are drawn in code and sound comes from Web Audio.
+5. **Classic fantasy, readable at a glance.** The current 2D version draws towers, heroes and enemies in code and synthesizes sound with Web Audio. The 3D rework may use authored models and a redesigned interface.
 
 ## 2. Core loop
 
@@ -18,7 +18,7 @@ A run starts with 330 gold and 20 lives. The player starts the first wave; later
 
 ## 3. Controls
 
-Phones and desktop share one model: **tap a tile to select it, tap it again for its actions.**
+Phones and desktop currently share one model: **tap a tile to select it, tap it again for its actions.** The controls and layouts below describe the playable 2D version; menus, tooltips and other presentation details are due for redesign during the 3D rework.
 
 - **Camera.** Drag to pan (a drag is never a tap), pinch or mouse wheel to zoom, and a fit-map button. In portrait the board is turned 90°: gates at the top, the keep at the bottom.
 - **First tap** selects the tile and shows a short corner card: terrain, height and range bonus, the tower and its HP, and a Clear button on forest or rocks.
@@ -74,6 +74,8 @@ The same preset and map seed always give the same map. The generator retries wit
 7. **Forest and rocks only on heights 1 to 4,** never on level 0. Forest grows in groves on low hills (heights 1 to 2 on Meadow and Canyon, 1 to 3 on Highlands). Rocks sit on high ground (heights 2 to 4) and are more common on cliff edges (a drop of 2 or more to a neighbour). Covered tiles cannot be built on until cleared (section 5.7).
 8. **Canyon gates.** One gate sits in the top half of the left edge and one in the bottom half. Each has its own winding road, and the two roads merge at the middle of the board (50% of the width), then share one serpentine to the keep. Spawns alternate between the gates.
 9. **The keep** sits on the right edge, at least 2 rows from the top and bottom.
+
+The 3D renderer also shows small cosmetic bushes and stones on some otherwise bare raised tiles. A separate seed hash assigns these after map acceptance without changing any heights, blocking features, routes or gameplay RNG. They cost nothing to clear, never affect placement or movement, and disappear automatically when a building occupies their tile. Removed dressing stays gone for that run; new runs regenerate the same decoration for the same map seed. These small decorations are distinct from clearable forest/rock features.
 
 ## 5. Pathing, smashing and economy
 
@@ -287,4 +289,14 @@ The profile is stored in `localStorage` under the versioned key `gloamward-keep.
 
 ## 15. Future work
 
-A 3D renderer with Three.js is planned; see [3D-RENDERER.md](3D-RENDERER.md). The simulation does not change for it.
+An initial live Three.js renderer is available at `?renderer=3d`, using the existing simulation and provisional menus. Canvas 2D remains the default and startup fallback. Working Blender model coverage and camera preference infrastructure are implemented; final camera controls, art/device acceptance and the menu/tooltip/UI redesign remain planned; see [3D-RENDERER.md](3D-RENDERER.md). Mobile layout and touch acceptance are deferred to the UI redesign.
+
+The 3D range display highlights tile centres in current range blue. Hovering or keyboard-focusing a tower upgrade shows only its added range tiles in green, using the real next upgrade stats with height and perk bonuses. This presentation does not change continuous range checks in combat.
+
+The separate `camera-preview.html` study reuses the map generator to compare camera directions, tilts and voxel tower density. A local fixture uses the real build, clear and upgrade actions with extra budget/unlocks, and adds road walls only when all gates retain open routes. Enemy figures move along those routes without running combat. Its art, terrain proportions and zoom bounds are provisional; it does not change the main game's rules or saves.
+
+The 3D camera uses orthographic projection, defaults to southeast at 35.3°, and provides independent direction (SE/NE/NW/SW) and tilt (25°/35.3°/45°/55°) settings. Zoom is pointer/pinch-centered, with no free rotation or drag panning. The preference infrastructure is implemented; its menu presentation is deferred. The current 2D controls are described in section 3.
+
+For 3D visibility, trees and rocks fade smoothly when they cover a mob, with trees anticipating an approaching overlap. Towers keep visual priority and remain opaque; only the covered portions of a hidden mob receive a faint, smoothly appearing silhouette. This presentation behavior is prototyped in the voxel study and does not change gameplay visibility or targeting.
+
+Visual terrain sampling adds small seeded surface offsets, intermediate ledges and prop size/shape variation. Simulation heights remain integer 0–4; this dressing does not change height bonuses, routes, targeting, feature rules or gameplay RNG.

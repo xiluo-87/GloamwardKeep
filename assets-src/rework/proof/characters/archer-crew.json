@@ -1,0 +1,225 @@
+{
+  "asset": "archer-crew",
+  "sourcePath": "blocky-pack/dcc/tiny-characters-blocky-hood-archer.glb",
+  "sourceSha256": "cbcb5523413e76d83a888dc246793202ef58be269fec97b75c8196338c74a889",
+  "pipeline": "assets-src/rework/pipeline/adapt_pack.py",
+  "pipelineSha256": "5a2df3640536e17f303a000a3718f06f7ac47e138595fce0d3eda8f985c69684",
+  "adaptation": "vertex-color-remap-only; original mesh topology, skin weights, rig hierarchy, transforms, and clips retained",
+  "palette": {
+    "cloth-light": "#78858a",
+    "cloth-shadow": "#3e4d56",
+    "clothcrew": "#576875",
+    "eye": "#211f1d",
+    "leather": "#79573a",
+    "leather-dark": "#4e3b2a",
+    "leather-light": "#987349",
+    "metal": "#929391",
+    "metal-dark": "#5d6565",
+    "skin": "#a18060",
+    "skin-light": "#c3a584",
+    "skin-shadow": "#765b45",
+    "stone-light": "#b9b9b3",
+    "tooth": "#ded1b3"
+  },
+  "colorAttribute": {
+    "elements": 3948,
+    "mappedColors": 8,
+    "note": "color-paint output is read live; this baseline upgrade preserved the existing attribute",
+    "sourceColors": 16,
+    "currentColors": [
+      "#211f1d",
+      "#3e4d56",
+      "#4e3b2a",
+      "#765b45",
+      "#78858a",
+      "#a18060",
+      "#c3a584",
+      "#ded1b3"
+    ]
+  },
+  "sourceMetrics": {
+    "mesh": {
+      "meshName": "tiny-characters-blocky-hood-archer",
+      "vertices": 2370,
+      "triangles": 1316,
+      "joints": 75,
+      "weightedAssignments": 2688,
+      "clips": [
+        "Attack1",
+        "Attack2",
+        "Block",
+        "Death",
+        "Hit",
+        "Idle",
+        "Run",
+        "Special",
+        "Walk",
+        "Wave"
+      ]
+    },
+    "gltf": {
+      "clips": 10,
+      "clip_names": [
+        "Idle",
+        "Walk",
+        "Run",
+        "Wave",
+        "Attack1",
+        "Attack2",
+        "Hit",
+        "Death",
+        "Block",
+        "Special"
+      ],
+      "clip_durations": {
+        "Idle": 4.0,
+        "Walk": 1.0,
+        "Run": 0.6200000047683716,
+        "Wave": 1.2000000476837158,
+        "Attack1": 2.2333333492279053,
+        "Attack2": 1.2599999904632568,
+        "Hit": 0.6200000047683716,
+        "Death": 1.5099999904632568,
+        "Block": 1.0199999809265137,
+        "Special": 1.7999999523162842
+      },
+      "channels": 360,
+      "animation_samplers": 360,
+      "accessors": 310,
+      "buffer_views": 4,
+      "binary_bytes": 249536
+    },
+    "skin": {
+      "jointCounts": [
+        75
+      ],
+      "weightVertices": 2370,
+      "weightSumRange": [
+        0.9999999850988388,
+        1.0
+      ]
+    },
+    "triangles": 1316
+  },
+  "output": {
+    "gltf": {
+      "clips": 10,
+      "clip_names": [
+        "Idle",
+        "Walk",
+        "Run",
+        "Wave",
+        "Attack1",
+        "Attack2",
+        "Hit",
+        "Death",
+        "Block",
+        "Special"
+      ],
+      "clip_durations": {
+        "Idle": 4.0,
+        "Walk": 1.0,
+        "Run": 0.6200000047683716,
+        "Wave": 1.2000000476837158,
+        "Attack1": 2.2333333492279053,
+        "Attack2": 1.2599999904632568,
+        "Hit": 0.6200000047683716,
+        "Death": 1.5099999904632568,
+        "Block": 1.0199999809265137,
+        "Special": 1.7999999523162842
+      },
+      "channels": 360,
+      "animation_samplers": 360,
+      "accessors": 310,
+      "buffer_views": 4,
+      "binary_bytes": 249536
+    },
+    "skin": {
+      "jointCounts": [
+        75
+      ],
+      "weightVertices": 2370,
+      "weightSumRange": [
+        0.9999999850988388,
+        1.0
+      ]
+    },
+    "triangles": 1316,
+    "triangleCountMatchesSource": true,
+    "markerPresent": true,
+    "nonColorBinaryUnchanged": true,
+    "patch": {
+      "patchedColorValues": 2370,
+      "sourceColorsMapped": 8,
+      "binaryChangedBytes": 20497,
+      "nonColorBinaryUnchanged": true
+    }
+  },
+  "poseBoundsSeconds": {
+    "samples": {
+      "Walk@0.0": [
+        -0.4085884094238281,
+        -0.24009323120117188,
+        0.002508280100300908,
+        0.3199615478515625,
+        0.25672054290771484,
+        1.3575439453125
+      ],
+      "Walk@0.2": [
+        -0.4050025939941406,
+        -0.24471092224121094,
+        -0.00017721904441714287,
+        0.3179435729980469,
+        0.2651042938232422,
+        1.3377685546875
+      ],
+      "Walk@0.5": [
+        -0.40082550048828125,
+        -0.24001502990722656,
+        0.002509342972189188,
+        0.332611083984375,
+        0.25685930252075195,
+        1.35369873046875
+      ],
+      "Attack1@0.0": [
+        -0.404754638671875,
+        -0.23849105834960938,
+        -1.8800335510604782e-08,
+        0.36417388916015625,
+        0.2543935775756836,
+        1.3536529541015625
+      ],
+      "Attack1@0.2": [
+        -0.37155914306640625,
+        -0.29492616653442383,
+        -2.2728676412953064e-05,
+        0.3709678649902344,
+        0.25887441635131836,
+        1.3536376953125
+      ],
+      "Attack1@0.5": [
+        -0.3719635009765625,
+        -0.4433417320251465,
+        0.003939751069992781,
+        0.38457489013671875,
+        0.2782249450683594,
+        1.3521575927734375
+      ]
+    },
+    "maxCoordinateError": {
+      "Walk@0.0": 0.0,
+      "Walk@0.2": 0.0,
+      "Walk@0.5": 0.0,
+      "Attack1@0.0": 0.0,
+      "Attack1@0.2": 0.0,
+      "Attack1@0.5": 0.0
+    }
+  },
+  "runtimeMethod": "source GLB COLOR_0 patch derived from current saved Blender vertex colors; gltf_tools parse/serialize validation only",
+  "limitation": "Blender 4.5.16 GLB re-export altered source mesh/root bind transforms. Runtime therefore patches the original source GLB; geometry edits/export remain unverified.",
+  "files": {
+    "blend": "archer-crew.blend",
+    "glb": "archer-crew.glb"
+  },
+  "editableBlend": "Current color attributes are read on each --export-existing run. Geometry, topology, rig, transforms, and clips must remain unchanged."
+}
