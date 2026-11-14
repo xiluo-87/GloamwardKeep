@@ -25,6 +25,33 @@ function board(terrain: Terrain): { tiles: InstancedMesh; bounds: Box3 } {
 }
 
 describe('GameCamera3D', () => {
+  it('moves a zoomed inspection point with the drag and restores framing with Fit', () => {
+    const terrain = generateMap('highlands', 5);
+    const { tiles, bounds } = board(terrain);
+    const camera = new GameCamera3D();
+    camera.layout(1100, 800, { top: 150, bottom: 30, left: 12, right: 12 });
+    camera.setTerrain(terrain, bounds);
+    const fit = camera.tileToScreen(12, 7);
+    const unzoomed = camera.camera.position.clone();
+    camera.panBy(80, -45);
+    expect(camera.camera.position.distanceTo(unzoomed)).toBe(0);
+    camera.zoomAt(fit.x, fit.y, 2, tiles);
+    const before = camera.tileToScreen(12, 7);
+    const orientation = camera.camera.quaternion.clone();
+    camera.panBy(80, -45);
+    const after = camera.tileToScreen(12, 7);
+    expect(after.x - before.x).toBeCloseTo(80, 5);
+    expect(after.y - before.y).toBeCloseTo(-45, 5);
+    expect(camera.camera.quaternion.angleTo(orientation)).toBeLessThan(1e-7);
+    expect(camera.zoom).toBe(2);
+    camera.fitBoard();
+    const restored = camera.tileToScreen(12, 7);
+    expect(restored.x).toBeCloseTo(fit.x, 5);
+    expect(restored.y).toBeCloseTo(fit.y, 5);
+    expect(camera.zoom).toBe(1);
+    tiles.geometry.dispose();
+    (tiles.material as MeshStandardMaterial).dispose();
+  });
   it.each(['meadow', 'highlands', 'canyon'] as const)('%s fits and picks raised tiles by original instance ID', (map) => {
     const terrain = generateMap(map, 5);
     const { tiles, bounds } = board(terrain);

@@ -1,17 +1,194 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gloamward Keep · Art proof</title>
-<style>
-:root{color-scheme:dark;font:14px/1.45 system-ui,sans-serif;background:#1c2a2b;color:#eee9dc}*{box-sizing:border-box}body{margin:0}header{position:sticky;top:0;z-index:5;background:#182322f5;border-bottom:1px solid #58665b;padding:12px 24px}h1{font-size:20px;margin:0}p{margin:4px 0 10px;color:#bdc8bd}nav,.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px}nav{margin-bottom:8px}button,select,input{background:#2c3a35;color:inherit;border:1px solid #657566;border-radius:5px;padding:6px 10px;font:inherit}button{cursor:pointer}button[aria-pressed=true]{background:#75613e;border-color:#d1b174}label{display:flex;gap:6px;align-items:center}#status{font-size:12px;color:#d5c38e;margin-left:auto}#cards{position:relative;z-index:2;max-width:1600px;margin:auto;padding:18px 24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}article{border:1px solid #536458;border-radius:7px;overflow:hidden;background:#22312e22;position:relative}article h2{font-size:15px;margin:10px 14px 0}article p{font-size:12px;min-height:35px;margin:3px 14px 8px}.port{height:260px;position:relative}.tag{font:11px/1.3 ui-monospace,monospace;color:#b1c1b5;padding:0 14px 10px}canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}#map-canvas{pointer-events:auto}#map-note{position:fixed;bottom:18px;left:24px;z-index:4;max-width:430px;background:#172321ed;border:1px solid #64705b;border-radius:7px;padding:12px}#map-note p{margin:4px 0}#reference-dialog{max-width:92vw;border:1px solid #657566;background:#172321;padding:16px}#reference-dialog img{display:block;max-width:85vw;max-height:80vh}dialog::backdrop{background:#000a}[hidden]{display:none!important}#cards.towers{grid-template-columns:repeat(4,minmax(0,1fr))}#cards.towers .port{height:300px}#cards.towers article:last-child{grid-column:auto}#cards.focus{grid-template-columns:repeat(2,minmax(0,1fr))}#cards.focus .port{height:480px}.small{font-size:12px}#failure{color:#ffb69f;white-space:pre-wrap;margin:16px 24px}
-</style></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gloamward Keep · Art proof</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font: 14px/1.45 system-ui, sans-serif;
+      background: #1c2a2b;
+      color: #eee9dc;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 10px 18px;
+      background: #182322f5;
+      border-bottom: 1px solid #58665b;
+    }
+    h1 { margin: 0; font-size: 20px; }
+    header > p { margin: 3px 0 10px; color: #bdc8bd; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; }
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      padding: 6px 8px;
+      border: 1px solid #46564b;
+      border-radius: 6px;
+      background: #202d29;
+    }
+    .group-label { color: #bdc8bd; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+    nav { display: flex; flex-wrap: wrap; gap: 5px; }
+    button, select, input {
+      padding: 6px 9px;
+      border: 1px solid #657566;
+      border-radius: 5px;
+      background: #2c3a35;
+      color: inherit;
+      font: inherit;
+    }
+    button { cursor: pointer; }
+    button:hover, select:hover { border-color: #b3bc9e; }
+    button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible {
+      outline: 2px solid #d1b174;
+      outline-offset: 2px;
+    }
+    button[aria-pressed="true"], [data-view][aria-pressed="true"] {
+      border-color: #d1b174;
+      background: #75613e;
+    }
+    label { display: inline-flex; align-items: center; gap: 6px; }
+    .small { font-size: 12px; }
+    #status { align-self: center; flex: 1 1 260px; min-width: 220px; color: #d5c38e; font-size: 12px; }
+    #map-stats { color: #d5c38e; }
+    #cards {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 1600px;
+      margin: auto;
+      padding: 18px 24px;
+    }
+    article { position: relative; overflow: hidden; border: 1px solid #536458; border-radius: 7px; background: #22312e22; }
+    article h2 { margin: 10px 14px 0; font-size: 15px; }
+    article p { min-height: 35px; margin: 3px 14px 8px; color: #bdc8bd; font-size: 12px; }
+    .port { position: relative; height: 260px; }
+    .tag { padding: 0 14px 10px; color: #b1c1b5; font: 11px/1.3 ui-monospace, monospace; }
+    canvas { position: fixed; z-index: 0; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    #map-canvas { pointer-events: auto; cursor: default; touch-action: none; }
+    #map-canvas.can-pan { cursor: grab; }
+    #map-canvas.dragging { cursor: grabbing; }
+    #reference-dialog, #info-dialog { max-width: min(92vw, 700px); border: 1px solid #657566; border-radius: 8px; background: #172321; color: inherit; padding: 16px; }
+    #reference-dialog img { display: block; max-width: 85vw; max-height: 80vh; margin-top: 12px; }
+    #info-dialog p { color: #bdc8bd; }
+    dialog::backdrop { background: #000a; }
+    [hidden] { display: none !important; }
+    #cards.towers { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    #cards.towers .port { height: 300px; }
+    #cards.custom, #cards.focus { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #cards.custom .port { height: 440px; }
+    #cards.focus .port { height: 480px; }
+    #failure { margin: 16px 24px; color: #ffb69f; white-space: pre-wrap; }
+    @media (max-width: 1050px) {
+      #cards, #cards.towers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toolbar-group { flex: 1 1 auto; }
+    }
+    @media (max-width: 620px) {
+      header { padding: 8px; }
+      #cards, #cards.towers, #cards.custom, #cards.focus { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+      #status { flex-basis: 100%; }
+    }
+  </style>
+</head>
 <body>
-<canvas id="proof-canvas" aria-label="Original pack and archer tower comparisons"></canvas><canvas id="map-canvas" aria-label="Real map art proof" hidden></canvas>
-<header><h1>Gloamward Keep · art proof</h1><p>Stages 1–2 · actual pack meshes · roofless archer designs · awaiting your visual review</p>
-<nav><button data-view="characters" aria-pressed="true">Pack / adaptation / crowd</button><button data-view="towers">Seven archer designs</button><button data-view="map">Real map</button><button data-view="replacements">Replacement choices</button><button id="reference">Reference artwork</button></nav>
-<div class="controls"><label>Motion <select id="clip"><option>Idle</option><option selected>Walk</option><option>Attack1</option></select></label><label><input type="checkbox" id="pause"> Pause</label><button id="restart">Restart motion</button><label><input type="checkbox" id="silhouette"> Silhouettes</label><label><input type="checkbox" id="large"> Larger cards</label><label>Direction <select id="direction"><option value="0">SE</option><option value="1">NE</option><option value="2">NW</option><option value="3">SW</option></select></label><label>Tilt <select id="tilt"><option value="0">25°</option><option value="1" selected>35.3°</option><option value="2">45°</option><option value="3">55°</option></select></label><span id="status" role="status">Loading the actual models…</span></div>
-<div class="controls" id="map-controls" hidden><label>Map <select id="map"><option value="highlands">Highlands</option><option value="meadow">Meadow</option><option value="canyon">Canyon</option></select></label><label>Seed <input id="seed" type="number" value="5" min="0" max="4294967295" style="width:90px"></label><label>Layout <select id="density"><option value="7">Sparse · 7 towers</option><option value="40">Crowded · 40 towers</option><option value="80">Dense · 80 towers</option></select></label><button id="rebuild">Rebuild map</button><button id="fit">Fit map</button></div>
-</header>
-<div id="failure" role="alert" hidden></div><main id="cards"></main><aside id="map-note" hidden><strong>Roomier tile layout</strong><p>Larger tiles · resized buildings and vegetation · original mob proportions.</p><p>Only the three approved enemy models and seven archer states are under review. Terrain, gate and keep are existing working art. This is a moving display fixture, not a combat simulation.</p><span class="small">Scroll to zoom at the pointer. No pan or rotation.</span><div id="map-stats" class="small"></div></aside>
-<dialog id="reference-dialog"><button id="close-reference">Close</button><img id="reference-image" alt="User-selected voxel reference artwork"></dialog>
-<script type="module" src="/src/art-review/main.ts"></script>
-</body></html>
+  <canvas id="proof-canvas" aria-label="Art proof cards"></canvas>
+  <canvas id="map-canvas" aria-label="Real map art proof" hidden></canvas>
+  <header>
+    <h1>Gloamward Keep · art proof</h1>
+    <p>Custom Goblin and scenery proof · roofless archer designs · awaiting visual review</p>
+    <div class="toolbar">
+      <section class="toolbar-group" aria-label="Study navigation">
+        <span class="group-label">Study</span>
+        <nav aria-label="Art studies">
+          <button data-view="custom" aria-pressed="true">Custom Goblin</button>
+          <button data-view="nature" aria-pressed="false">Scenery variants</button>
+          <button data-view="characters" aria-pressed="false">Pack study archive</button>
+          <button data-view="towers" aria-pressed="false">Seven archer designs</button>
+          <button data-view="map" aria-pressed="false">Real map</button>
+          <button data-view="replacements" aria-pressed="false">Replacement choices</button>
+        </nav>
+        <button id="reference" type="button">Reference artwork</button>
+        <button id="info" type="button">About this proof</button>
+      </section>
+
+      <section id="motion-controls" class="toolbar-group" aria-label="Playback controls">
+        <span class="group-label">Playback</span>
+        <label id="motion-select-wrap">Motion
+          <select id="clip" aria-label="Character motion">
+            <option>Idle</option><option selected>Walk</option><option>Attack1</option>
+            <option>Run</option><option>Hit</option><option>Death</option>
+          </select>
+        </label>
+        <button id="pause" type="button" aria-pressed="false">Pause motion</button>
+        <button id="restart" type="button">Restart motion</button>
+      </section>
+
+      <section id="inspection-controls" class="toolbar-group" aria-label="Card inspection controls">
+        <span class="group-label">Inspect cards</span>
+        <button id="silhouette" type="button" aria-pressed="false">Silhouette</button>
+        <button id="large" type="button" aria-pressed="false">Larger cards</button>
+      </section>
+
+      <section id="camera-controls" class="toolbar-group" aria-label="Camera view controls">
+        <span class="group-label">Camera</span>
+        <label>Direction
+          <select id="direction" aria-label="Camera direction">
+            <option value="0">SE</option><option value="1">NE</option><option value="2">NW</option><option value="3">SW</option>
+          </select>
+        </label>
+        <label>Tilt
+          <select id="tilt" aria-label="Camera tilt">
+            <option value="0">25°</option><option value="1" selected>35.3°</option><option value="2">45°</option><option value="3">55°</option>
+          </select>
+        </label>
+      </section>
+
+      <section id="map-controls" class="toolbar-group" aria-label="Real map controls" hidden>
+        <span class="group-label">Map</span>
+        <label>Preset
+          <select id="map" aria-label="Map preset">
+            <option value="highlands">Highlands</option><option value="meadow">Meadow</option><option value="canyon">Canyon</option>
+          </select>
+        </label>
+        <label>Seed <input id="seed" type="number" value="5" min="0" max="4294967295" style="width:110px" aria-label="Map seed"></label>
+        <label>Density
+          <select id="density" aria-label="Map density">
+            <option value="7">Sparse · 7 towers</option><option value="40">Crowded · 40 towers</option><option value="80">Dense · 80 towers</option>
+          </select>
+        </label>
+        <button id="rebuild" type="button">Rebuild map</button>
+        <button id="fit" type="button">Fit map</button>
+        <span id="map-stats" class="small" role="status"></span>
+      </section>
+      <span id="status" role="status" aria-live="polite">Loading the study…</span>
+    </div>
+  </header>
+
+  <div id="failure" role="alert" hidden></div>
+  <main id="cards"></main>
+
+  <dialog id="info-dialog" aria-labelledby="info-title">
+    <h2 id="info-title">About this proof</h2>
+    <p>The map is a review fixture on generated terrain. It uses roomier tiles with resized buildings and vegetation, while mobs keep their earlier proportions. It shows legal archer placements and moving Goblins; it is not a combat simulation.</p>
+    <p>Map inspection: scroll to zoom around the pointer, then drag to pan while zoomed. Fit map recenters the full board. Camera direction and tilt are available in the toolbar.</p>
+    <p>The custom Goblin, terrain, trees, rocks, and tower pieces are provisional art candidates. Earlier pack models remain available in the archive.</p>
+    <button id="close-info" type="button">Close</button>
+  </dialog>
+  <dialog id="reference-dialog" aria-labelledby="reference-title">
+    <h2 id="reference-title">Reference artwork</h2>
+    <button id="close-reference" type="button">Close</button>
+    <img id="reference-image" alt="User-selected voxel reference artwork">
+  </dialog>
+  <script type="module" src="/src/art-review/main.ts"></script>
+</body>
+</html>

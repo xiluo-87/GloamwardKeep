@@ -1,5 +1,11 @@
 # Art sources
 
+## Current custom proof
+
+`rework/custom/goblin/` contains original Gloamward block-form mesh geometry following the user's voxel reference: 29 parts, 1,276 triangles and a short sword. Its 72-joint rig and ten animations are reused unchanged from the purchased Blocky Characters Goblin Shaman study below. It is not an independently authored rig or animation library. Original purchased files and supplied license remain unchanged.
+
+`rework/custom/nature/` contains 34 original Gloamward tree, rock, bush and small-stone prefabs, including snow and paired-tree variants, with editable Blender sources. No third-party nature geometry or textures are used. The custom proof was authored with the installed Blender 5.3; source/export instructions and review status are recorded in [3D-CUSTOM-PROOF.md](../docs/3D-CUSTOM-PROOF.md).
+
 ## Simplified goblin shaman study
 
 - Creator: 3D Asset, [Blocky Characters](https://3d-asset.com/packs/blocky-characters/), purchased version 1.0.1.

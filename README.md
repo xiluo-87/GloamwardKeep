@@ -10,7 +10,7 @@ The default game uses Canvas 2D. Add `?renderer=3d` for the live Three.js render
 
 Generated hills now include small one-level patches and distributed groves to break up broad empty plateaus. All three presets have more forest; clustered cosmetic bushes/stones fill remaining bare interiors. The 3D level steps are 50% taller. Roads and entrances retain their seeded layout, and dressing still disappears when built over.
 
-Art direction is being replanned around a custom Goblin proof built directly from the voxel reference. The purchased-pack adaptations are preserved experiments with unresolved visual artifacts; they are not final accepted characters. Rig/animation reuse will be tested on that one custom model before expanding the roster.
+The current art proof has one custom Goblin built directly from the voxel reference, reusing the purchased rig and animations, plus 34 varied scenery prefabs including paired small trees and snow variants. The purchased-pack adaptations are preserved experiments with unresolved visual artifacts. The new art remains a review candidate; roster expansion waits for that review.
 
 ## Run it
 
@@ -27,7 +27,7 @@ Terrain keeps gameplay heights 0–4 while adding seeded small surface steps, su
 
 The [voxel map study](camera-preview.html) compares real generated maps across four directions/four tilts, a legal 0/12/40/80-tower density fixture and a close archer/goblin art pair. Its scripted movement is not combat. The [desktop benchmark](render-benchmark.html) exercises every entity cap, records frame/resource/load results and repeats disposal/recreation. These development tools do not change player saves or establish final device acceptance.
 
-The current [art rework proof](art-review.html) compares actual purchased Goblin, Orc, Hill Troll and Hood Archer models before/after conservative polygon cleanup and shape refinement, native/crowd animation, seven newly authored roofless archer designs and sparse/crowded real maps. All four retain their original rigs and all ten native animations. Larger reduction candidates were rejected after surface artifacts; current measured savings range from 0.73% for Troll to 10.96% for Orc. Barrel Knight, Pit Demon and Ghost are the selected pack replacement proposals. This stages 1–2 proof uses the live renderer through a shared asset registry; the main game's older art remains until review. See the [bounded rework plan](docs/3D-ART-REWORK.md) and [model refinement record](docs/3D-MODEL-REFINEMENT.md).
+The [art rework proof](art-review.html) compares the custom Goblin in native/crowd rendering, shows the scenery variants, and places them beside seven distinct roofless archer designs on generated maps. Zoomed map inspection supports dragging, with Fit map to recenter. Controls are grouped by purpose and explanatory notes are optional. The earlier pack study and replacement proposals remain available as archives. This proof uses the live renderer through a shared asset registry; the main game's older art remains until review. See the [custom proof record](docs/3D-CUSTOM-PROOF.md) and [bounded rework plan](docs/3D-ART-REWORK.md).
 
 The [asset sources](assets-src/README.md) retain editable `.blend` files, reproducible builders and runtime GLBs. The purchased pack/license remain unchanged. Blender is an authoring tool; Three.js is the only new game runtime dependency. Assets resolve through Vite under `/gloamward/`.
 

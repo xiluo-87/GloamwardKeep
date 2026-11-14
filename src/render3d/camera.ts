@@ -9,7 +9,7 @@ export interface CameraInsets { top: number; bottom: number; left: number; right
 
 const EMPTY_INSETS: CameraInsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
-/** Orthographic world camera for the initial Three.js game slice. It intentionally has no pan API. */
+/** Orthographic world camera; zoomed panning is exposed only by the art-proof viewer. */
 export class GameCamera3D {
   readonly camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 1000);
   private terrain: Terrain | null = null;
@@ -67,6 +67,17 @@ export class GameCamera3D {
   }
 
   get zoom(): number { return this.camera.zoom; }
+
+  /** Screen-space dragging for zoomed art inspection; fitting restores the original framing. */
+  panBy(dx: number, dy: number): void {
+    if (this.camera.zoom <= 1 || !Number.isFinite(dx) || !Number.isFinite(dy)) return;
+    const xScale = (this.camera.right - this.camera.left) / (this.width * this.camera.zoom);
+    const yScale = (this.camera.top - this.camera.bottom) / (this.height * this.camera.zoom);
+    const right = new Vector3().setFromMatrixColumn(this.camera.matrixWorld, 0);
+    const up = new Vector3().setFromMatrixColumn(this.camera.matrixWorld, 1);
+    this.camera.position.addScaledVector(right, -dx * xScale).addScaledVector(up, dy * yScale);
+    this.camera.updateMatrixWorld(true);
+  }
 
   zoomAt(x: number, y: number, factor: number, tiles: InstancedMesh): void {
     const point = this.ndc(x, y);

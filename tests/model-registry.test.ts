@@ -110,6 +110,32 @@ describe('RuntimeModelRegistry', () => {
     registry.dispose();
   });
 
+  it('loads a custom character catalog and owns every source in an extended static library', async () => {
+    const custom = character();
+    const sources = new Map(['base', 'archers', 'nature'].map((name, index) => [
+      name, { ...character(), scene: prefabScene(`study/${name}`, ['#887755', '#997733', '#668844'][index]) } as GLTF,
+    ]));
+    const disposal = vi.fn();
+    for (const template of sources.values()) template.scene.traverse(object => {
+      if (object instanceof Mesh) object.geometry.addEventListener('dispose', disposal);
+    });
+    const catalog = { ...PROOF_CHARACTER_CATALOG, goblin: {
+      ...PROOF_CHARACTER_CATALOG.goblin,
+      adapted: { ...PROOF_CHARACTER_CATALOG.goblin.adapted, url: 'custom-goblin' },
+    } };
+    const registry = new RuntimeModelRegistry({
+      characterCatalog: catalog,
+      staticLibraryUrls: ['base', 'archers', 'nature'],
+      loader: loaderFor(url => url === 'custom-goblin' ? custom : sources.get(url)!),
+    });
+    expect(await registry.loadCharacter('goblin')).toBe(custom);
+    expect(PROOF_CHARACTER_CATALOG.goblin.adapted.url).not.toBe('custom-goblin');
+    const library = await registry.loadStaticLibrary();
+    expect([...library.ids].sort()).toEqual(['study/archers', 'study/base', 'study/nature']);
+    registry.dispose();
+    expect(disposal).toHaveBeenCalledTimes(3);
+  });
+
   it('validates semantic anchors on every actual source and adapted character GLB', async () => {
     const urls = new Map<string, { id: ProofCharacterId; revision: 'source' | 'adapted' }>();
     for (const [id, definition] of Object.entries(PROOF_CHARACTER_CATALOG) as [ProofCharacterId, typeof PROOF_CHARACTER_CATALOG[ProofCharacterId]][]) {

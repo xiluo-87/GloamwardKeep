@@ -2,11 +2,24 @@
 
 The first supplied voxel artwork is the shared style reference. Models and tuning added during the delegated implementation are working art for review. The confirmed roofless archer, crisp-neutral lighting and camera choices stay in place; menus/mobile work remains deferred.
 
-## Current stages 1–2 rework
+## Current custom proof
 
-The pack-mesh adaptation/reduction route is paused. Its current files are retained experiments with unresolved visual faceting. The next art proof is a custom Goblin built directly from the reference, with rig/animation reuse tested separately; see the current direction in [3D-ART-REWORK.md](../docs/3D-ART-REWORK.md).
+`rework/custom/goblin/` contains an editable original block-form Goblin, its runtime GLB and a provenance report. Its 29 authored parts have 1,276 triangles; the purchased Goblin Shaman supplies the unchanged rig and ten animation clips. `rework/custom/nature/` contains 34 editable base/snow scenery prefabs, including two-tree variants. See [3D-CUSTOM-PROOF.md](../docs/3D-CUSTOM-PROOF.md) for the current review scope.
 
-The current four character models are now reduced and shape-refined actual pack meshes in `rework/refined/characters/`. Use the installed Blender in Applications. The [refinement record](../docs/3D-MODEL-REFINEMENT.md) documents measured reductions, source ancestry and preservation of all native animations. Edit those `.blend` files and export their current meshes with:
+Use the installed Blender in Applications and export the saved sources:
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender -b --python-exit-code 1 --python assets-src/rework/pipeline/build_custom_goblin.py -- --export-existing
+/Applications/Blender.app/Contents/MacOS/Blender -b --python-exit-code 1 --python assets-src/rework/pipeline/build_custom_nature.py -- --export-existing
+```
+
+The one-time Goblin `--build` and nature `--init` commands refuse existing files. Normal edits use `--export-existing`; do not regenerate over native edits. Custom models are enabled in the art-proof page only, pending review.
+
+## Archived stages 1–2 rework
+
+The pack-mesh adaptation/reduction route is paused. Its files are retained experiments with unresolved visual faceting, available in the proof page's archive. The current custom proof is described above.
+
+The archived four character models are reduced and shape-refined actual pack meshes in `rework/refined/characters/`. Use the installed Blender in Applications. The [refinement record](../docs/3D-MODEL-REFINEMENT.md) documents measured reductions, source ancestry and preservation of all native animations. Edit those `.blend` files and export their current meshes with:
 
 ```sh
 /Applications/Blender.app/Contents/MacOS/Blender -b --python-exit-code 1 --python assets-src/rework/pipeline/refine_pack.py -- --asset goblin --export-existing

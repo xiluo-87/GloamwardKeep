@@ -13,7 +13,8 @@ import {
 export type ModelLoader = Pick<GLTFLoader, 'loadAsync'>;
 export interface ModelRegistryOptions {
   loader?: ModelLoader;
-  staticLibraryUrls?: readonly [legacy: string, proof: string];
+  staticLibraryUrls?: readonly string[];
+  characterCatalog?: Readonly<Record<ProofCharacterId, ProofCharacterAsset>>;
 }
 
 const DISPOSED = 'Model registry is disposed.';
@@ -23,9 +24,9 @@ const DISPOSED = 'Model registry is disposed.';
  * cache/contract, while choosing native animated instances or baked crowd batches independently.
  */
 export class RuntimeModelRegistry {
-  readonly characterCatalog = PROOF_CHARACTER_CATALOG;
+  readonly characterCatalog: Readonly<Record<ProofCharacterId, ProofCharacterAsset>>;
   private readonly loader: ModelLoader;
-  private readonly staticLibraryUrls: readonly [string, string];
+  private readonly staticLibraryUrls: readonly string[];
   private readonly gltfRequests = new Map<string, Promise<GLTF>>();
   private readonly characterRequests = new Map<string, Promise<GLTF>>();
   private readonly loaded = new Set<GLTF>();
@@ -35,6 +36,7 @@ export class RuntimeModelRegistry {
   private disposed = false;
 
   constructor(options: ModelRegistryOptions = {}) {
+    this.characterCatalog = options.characterCatalog ?? PROOF_CHARACTER_CATALOG;
     this.loader = options.loader ?? new GLTFLoader();
     this.staticLibraryUrls = options.staticLibraryUrls ?? [LEGACY_STATIC_LIBRARY, PROOF_ARCHER_LIBRARY];
   }
@@ -84,9 +86,9 @@ export class RuntimeModelRegistry {
     if (this.disposed) return Promise.reject(new Error(DISPOSED));
     if (this.library) return Promise.resolve(this.library);
     if (this.libraryRequest) return this.libraryRequest;
-    const request = Promise.all(this.staticLibraryUrls.map(url => this.loadAsset(url))).then(([legacy, proof]) => {
+    const request = Promise.all(this.staticLibraryUrls.map(url => this.loadAsset(url))).then(templates => {
       if (this.disposed) throw new Error(DISPOSED);
-      const sources = [legacy.scene, proof.scene];
+      const sources = templates.map(template => template.scene);
       const library = new ContentAssetLibrary(sources);
       this.librarySources = new Set(sources);
       this.library = library;

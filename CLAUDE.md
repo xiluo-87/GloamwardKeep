@@ -12,7 +12,7 @@ Seeded visual micro-elevation, supported small ledges and prop size/shape variat
 
 ## Next steps
 
-The pack-character reduction experiment is paused and checkpointed, with unresolved visual artifacts. Start the revised art route with one custom Goblin matching the voxel reference; verify animation reuse and review it at gameplay size before expanding the roster. See `docs/3D-ART-REWORK.md` for the current decision and preserved history.
+The pack-character reduction experiment is paused and checkpointed, with unresolved visual artifacts. The revised art proof now contains one original-geometry Goblin on the purchased rig/animations and 34 seasonal scenery prefabs. Review this candidate at gameplay size before expanding the roster. The proof page has contextual controls and zoomed drag panning; the player camera stays unchanged. See `docs/3D-CUSTOM-PROOF.md` and `docs/3D-ART-REWORK.md` for scope and preserved history.
 
 1. **Human playtesting.** Start with the early economy (waves 1–10), whether mazing with walls beats plain tower building, the stalker wave (8) without a detector, and Canyon with two gates.
 2. **Balance tuning with the bot.** Tune values in `src/data/balance.ts`. Last check (3 map seeds per preset, Knight only): Meadow won / 24 / 14, Highlands 26 / 28 / 21, Canyon 22 / 23 / 13. Flyers follow the road but fly over walls, so mazes do not slow them. `tests/docs.test.ts` keeps the price tables in DESIGN.md in sync with balance.ts.

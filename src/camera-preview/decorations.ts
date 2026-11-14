@@ -1,4 +1,7 @@
-import { AlwaysStencilFunc, Group, Matrix4, MeshStandardMaterial, ReplaceStencilOp } from 'three';
+import {
+  AlwaysStencilFunc, BufferGeometry, Group, InstancedMesh, Material, Matrix4, Mesh, MeshStandardMaterial,
+  Quaternion, ReplaceStencilOp, Vector3,
+} from 'three';
 import { WORLD } from '../data/balance';
 import { tileCenter } from '../sim/hex';
 import { DECORATION } from '../sim/decorations';
@@ -7,6 +10,9 @@ import { hashCell } from '../sim/rng';
 import { visualTileHeight } from './surface';
 import { Painter } from './voxel-model';
 import { BASE_SCENE, type SceneProportions } from '../render3d/scene-proportions';
+import { ContentAssetLibrary } from '../render3d/asset-library';
+import { selectNatureVariant } from '../render3d/nature-variants';
+import { disposeTerrain } from './terrain';
 
 export interface DecorationLayer {
   root: Group;
@@ -17,6 +23,14 @@ export interface DecorationLayer {
 const GREENS = ['#355727', '#486b27', '#62822d', '#7d9635', '#8fa43c'];
 const STONES = ['#626d74', '#7d888b', '#929da0', '#a7b0b1'];
 interface Range { start: number; count: number }
+interface CustomBatch {
+  geometry: BufferGeometry;
+  material: Material | Material[];
+  localMatrix: Matrix4;
+  matrices: Matrix4[];
+  mesh?: InstancedMesh;
+}
+interface InstanceRef { batch: CustomBatch; slot: number }
 
 function randomSource(seed: number, index: number): () => number {
   let state = (Math.imul(seed | 0, 0x9e3779b1) ^ Math.imul(index + 1, 0x85ebca6b) ^ 0xc2b2ae35) >>> 0;
@@ -60,11 +74,45 @@ function paintStones(p: Painter, x: number, y: number, z: number, random: () => 
 }
 
 /** Build sparse, non-gameplay map dressing as one removable instanced layer. */
-export function buildDecorations(terrain: Terrain, proportions: SceneProportions = BASE_SCENE): DecorationLayer {
+export function buildDecorations(terrain: Terrain, proportions: SceneProportions = BASE_SCENE,
+  library: ContentAssetLibrary | null = null): DecorationLayer {
   const painter = new Painter();
-  const ranges: (Range | undefined)[] = new Array(terrain.cols * terrain.rows);
+  const fallbackRanges: (Range | undefined)[] = new Array(terrain.cols * terrain.rows);
+  const customRanges: (InstanceRef | undefined)[] = new Array(terrain.cols * terrain.rows);
+  const customBatches = new Map<string, CustomBatch>();
   const zeroMatrix = new Matrix4().makeScale(0, 0, 0);
-  for (let index = 0; index < ranges.length; index++) {
+
+  const createCustomBatch = (id: string): CustomBatch | null => {
+    const prefab = library?.instantiate(id);
+    if (!prefab) return null;
+    prefab.updateMatrixWorld(true);
+    const meshes: Mesh[] = [];
+    prefab.traverse(object => { if (object instanceof Mesh) meshes.push(object); });
+    if (meshes.length !== 1) { disposeTerrain(prefab); return null; }
+    const sourceMesh = meshes[0];
+    const cloneMaterial = (material: Material): Material => {
+      const copy = material.clone();
+      copy.userData.sharedAsset = false;
+      if ('stencilWrite' in copy) {
+        const stencilMaterial = copy as MeshStandardMaterial;
+        stencilMaterial.stencilWrite = true;
+        stencilMaterial.stencilRef = 0;
+        stencilMaterial.stencilFunc = AlwaysStencilFunc;
+        stencilMaterial.stencilZPass = ReplaceStencilOp;
+      }
+      return copy;
+    };
+    const material = Array.isArray(sourceMesh.material)
+      ? sourceMesh.material.map(cloneMaterial)
+      : cloneMaterial(sourceMesh.material);
+    const inverseRoot = prefab.matrixWorld.clone().invert();
+    const localMatrix = inverseRoot.multiply(sourceMesh.matrixWorld.clone());
+    const batch: CustomBatch = { geometry: sourceMesh.geometry, material, localMatrix, matrices: [] };
+    disposeTerrain(prefab);
+    return batch;
+  };
+
+  for (let index = 0; index < customRanges.length; index++) {
     const kind = terrain.decoration[index];
     if (kind !== DECORATION.bush && kind !== DECORATION.stones) continue;
     const col = index % terrain.cols;
@@ -73,6 +121,31 @@ export function buildDecorations(terrain: Terrain, proportions: SceneProportions
     const originX = center.x / WORLD.hex;
     const originZ = center.y / WORLD.hex;
     const baseY = visualTileHeight(terrain, index) / proportions.tile;
+    const family = kind === DECORATION.bush ? 'bush' : 'stones';
+    const selection = selectNatureVariant(terrain, index, family);
+    const customId = selection.snow && library?.has(selection.snowId) ? selection.snowId
+      : library?.has(selection.baseId) ? selection.baseId : null;
+    if (customId) {
+      let batch = customBatches.get(customId);
+      if (!batch) {
+        batch = createCustomBatch(customId) ?? undefined;
+        if (batch) customBatches.set(customId, batch);
+      }
+      if (batch) {
+        const scale = proportions.vegetation / proportions.tile;
+        const position = new Vector3(originX + selection.offsetX * scale, baseY,
+          originZ + selection.offsetZ * scale);
+        const rotation = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), selection.rotation);
+        const instanceScale = new Vector3(scale * selection.size * selection.width,
+          scale * selection.size * selection.height, scale * selection.size);
+        const matrix = new Matrix4().compose(position, rotation, instanceScale).multiply(batch.localMatrix);
+        const slot = batch.matrices.length;
+        batch.matrices.push(matrix);
+        customRanges[index] = { batch, slot };
+        continue;
+      }
+    }
+
     const cellSeed = Math.floor(hashCell(terrain.seed, col, row) * 0xffffffff);
     const random = randomSource(cellSeed, index);
     const start = painter.parts.length;
@@ -95,32 +168,52 @@ export function buildDecorations(terrain: Terrain, proportions: SceneProportions
       part.h *= scale;
       part.d *= scale;
     }
-    ranges[index] = { start, count: painter.parts.length - start };
+    fallbackRanges[index] = { start, count: painter.parts.length - start };
   }
 
   const root = new Group();
   root.name = 'Small map decorations';
-  if (!painter.parts.length) return { root, removeAt() {} };
-  const mesh = painter.mesh();
-  mesh.name = 'Small map decoration instances';
-  const material = mesh.material as MeshStandardMaterial;
-  material.stencilWrite = true;
-  material.stencilRef = 0;
-  material.stencilFunc = AlwaysStencilFunc;
-  material.stencilZPass = ReplaceStencilOp;
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  root.add(mesh);
+  const fallbackMesh = painter.parts.length ? painter.mesh() : null;
+  if (fallbackMesh) {
+    fallbackMesh.name = 'Small map decoration instances';
+    const material = fallbackMesh.material as MeshStandardMaterial;
+    material.stencilWrite = true;
+    material.stencilRef = 0;
+    material.stencilFunc = AlwaysStencilFunc;
+    material.stencilZPass = ReplaceStencilOp;
+    fallbackMesh.castShadow = true;
+    fallbackMesh.receiveShadow = true;
+    root.add(fallbackMesh);
+  }
+  for (const [id, batch] of customBatches) {
+    const mesh = new InstancedMesh(batch.geometry, batch.material, batch.matrices.length);
+    mesh.name = `Small map decoration ${id}`;
+    mesh.count = batch.matrices.length;
+    mesh.frustumCulled = false;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    batch.matrices.forEach((matrix, index) => mesh.setMatrixAt(index, matrix));
+    mesh.instanceMatrix.needsUpdate = true;
+    batch.mesh = mesh;
+    root.add(mesh);
+  }
   return {
     root,
     removeAt(index) {
-      const range = ranges[index];
-      if (!range || range.count === 0) return;
-      for (let instance = range.start; instance < range.start + range.count; instance++) {
-        mesh.setMatrixAt(instance, zeroMatrix);
+      const fallbackRange = fallbackRanges[index];
+      if (fallbackMesh && fallbackRange) {
+        for (let instance = fallbackRange.start; instance < fallbackRange.start + fallbackRange.count; instance++) {
+          fallbackMesh.setMatrixAt(instance, zeroMatrix);
+        }
+        fallbackRanges[index] = undefined;
+        fallbackMesh.instanceMatrix.needsUpdate = true;
       }
-      ranges[index] = undefined;
-      mesh.instanceMatrix.needsUpdate = true;
+      const custom = customRanges[index];
+      if (custom?.batch.mesh) {
+        custom.batch.mesh.setMatrixAt(custom.slot, zeroMatrix);
+        custom.batch.mesh.instanceMatrix.needsUpdate = true;
+        customRanges[index] = undefined;
+      }
     },
   };
 }

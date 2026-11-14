@@ -1,0 +1,911 @@
+{
+  "name": "custom-nature",
+  "assets": [
+    {
+      "id": "nature/bush/low-clump",
+      "family": "bush",
+      "variant": "low-clump",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 532,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.16249999403953552
+        ],
+        "max": [
+          0.22750000655651093,
+          0.25999999046325684,
+          0.16249999403953552
+        ]
+      },
+      "parts": [
+        "leaf clump"
+      ]
+    },
+    {
+      "id": "nature/bush/low-clump-snow",
+      "family": "bush",
+      "variant": "low-clump",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 564,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.16249999403953552
+        ],
+        "max": [
+          0.22750000655651093,
+          0.32499998807907104,
+          0.16249999403953552
+        ]
+      },
+      "parts": [
+        "leaf clump",
+        "leaf clump snow cap"
+      ]
+    },
+    {
+      "id": "nature/bush/round-clump",
+      "family": "bush",
+      "variant": "round-clump",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 740,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.22750000655651093
+        ],
+        "max": [
+          0.22750000655651093,
+          0.25999999046325684,
+          0.22750000655651093
+        ]
+      },
+      "parts": [
+        "leaf clump"
+      ]
+    },
+    {
+      "id": "nature/bush/round-clump-snow",
+      "family": "bush",
+      "variant": "round-clump",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 772,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.22750000655651093
+        ],
+        "max": [
+          0.22750000655651093,
+          0.32499998807907104,
+          0.22750000655651093
+        ]
+      },
+      "parts": [
+        "leaf clump",
+        "leaf clump snow cap"
+      ]
+    },
+    {
+      "id": "nature/bush/tall-clump",
+      "family": "bush",
+      "variant": "tall-clump",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 772,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.22750000655651093
+        ],
+        "max": [
+          0.22750000655651093,
+          0.32499998807907104,
+          0.22750000655651093
+        ]
+      },
+      "parts": [
+        "leaf clump"
+      ]
+    },
+    {
+      "id": "nature/bush/tall-clump-snow",
+      "family": "bush",
+      "variant": "tall-clump",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 804,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.22750000655651093
+        ],
+        "max": [
+          0.22750000655651093,
+          0.38999998569488525,
+          0.22750000655651093
+        ]
+      },
+      "parts": [
+        "leaf clump",
+        "leaf clump snow cap"
+      ]
+    },
+    {
+      "id": "nature/bush/wide-clump",
+      "family": "bush",
+      "variant": "wide-clump",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 636,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.16249999403953552
+        ],
+        "max": [
+          0.22750000655651093,
+          0.25999999046325684,
+          0.16249999403953552
+        ]
+      },
+      "parts": [
+        "leaf clump"
+      ]
+    },
+    {
+      "id": "nature/bush/wide-clump-snow",
+      "family": "bush",
+      "variant": "wide-clump",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 668,
+      "bounds": {
+        "min": [
+          -0.22750000655651093,
+          0.0,
+          -0.16249999403953552
+        ],
+        "max": [
+          0.22750000655651093,
+          0.32499998807907104,
+          0.16249999403953552
+        ]
+      },
+      "parts": [
+        "leaf clump",
+        "leaf clump snow cap"
+      ]
+    },
+    {
+      "id": "nature/forest/pine-broad",
+      "family": "forest",
+      "variant": "pine-broad",
+      "snow": false,
+      "treeCount": 1,
+      "triangles": 1124,
+      "bounds": {
+        "min": [
+          -0.3499999940395355,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.3499999940395355,
+          1.399999976158142,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "tree canopy tier 1",
+        "tree canopy tier 2",
+        "tree canopy tier 3",
+        "tree canopy tier 4",
+        "tree trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/pine-broad-snow",
+      "family": "forest",
+      "variant": "pine-broad",
+      "snow": true,
+      "treeCount": 1,
+      "triangles": 1156,
+      "bounds": {
+        "min": [
+          -0.3499999940395355,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.3499999940395355,
+          1.5,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "tree canopy tier 1",
+        "tree canopy tier 2",
+        "tree canopy tier 3",
+        "tree canopy tier 4",
+        "tree canopy tier 4 snow cap",
+        "tree snow ring 11",
+        "tree trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/pine-slender",
+      "family": "forest",
+      "variant": "pine-slender",
+      "snow": false,
+      "treeCount": 1,
+      "triangles": 798,
+      "bounds": {
+        "min": [
+          -0.25,
+          0.0,
+          -0.25
+        ],
+        "max": [
+          0.25,
+          1.5,
+          0.25
+        ]
+      },
+      "parts": [
+        "tree canopy tier 1",
+        "tree canopy tier 2",
+        "tree canopy tier 3",
+        "tree trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/pine-slender-snow",
+      "family": "forest",
+      "variant": "pine-slender",
+      "snow": true,
+      "treeCount": 1,
+      "triangles": 830,
+      "bounds": {
+        "min": [
+          -0.25,
+          0.0,
+          -0.25
+        ],
+        "max": [
+          0.25,
+          1.600000023841858,
+          0.25
+        ]
+      },
+      "parts": [
+        "tree canopy tier 1",
+        "tree canopy tier 2",
+        "tree canopy tier 3",
+        "tree canopy tier 3 snow cap",
+        "tree snow ring 10",
+        "tree trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/pine-tiered",
+      "family": "forest",
+      "variant": "pine-tiered",
+      "snow": false,
+      "treeCount": 1,
+      "triangles": 1180,
+      "bounds": {
+        "min": [
+          -0.3499999940395355,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.3499999940395355,
+          1.399999976158142,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "tree canopy tier 1",
+        "tree canopy tier 2",
+        "tree canopy tier 3",
+        "tree canopy tier 4",
+        "tree trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/pine-tiered-snow",
+      "family": "forest",
+      "variant": "pine-tiered",
+      "snow": true,
+      "treeCount": 1,
+      "triangles": 1244,
+      "bounds": {
+        "min": [
+          -0.3499999940395355,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.3499999940395355,
+          1.5,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "tree canopy tier 1",
+        "tree canopy tier 2",
+        "tree canopy tier 3",
+        "tree canopy tier 4",
+        "tree canopy tier 4 snow cap",
+        "tree snow ring 10",
+        "tree trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/twin-pines",
+      "family": "forest",
+      "variant": "twin-pines",
+      "snow": false,
+      "treeCount": 2,
+      "triangles": 1324,
+      "bounds": {
+        "min": [
+          -0.5199999809265137,
+          0.0,
+          -0.20000000298023224
+        ],
+        "max": [
+          0.5199999809265137,
+          0.9599999785423279,
+          0.20000000298023224
+        ]
+      },
+      "parts": [
+        "east pine canopy tier 1",
+        "east pine canopy tier 2",
+        "east pine canopy tier 3",
+        "east pine trunk",
+        "west pine canopy tier 1",
+        "west pine canopy tier 2",
+        "west pine canopy tier 3",
+        "west pine trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/twin-pines-snow",
+      "family": "forest",
+      "variant": "twin-pines",
+      "snow": true,
+      "treeCount": 2,
+      "triangles": 1388,
+      "bounds": {
+        "min": [
+          -0.5199999809265137,
+          0.0,
+          -0.20000000298023224
+        ],
+        "max": [
+          0.5199999809265137,
+          1.0399999618530273,
+          0.20000000298023224
+        ]
+      },
+      "parts": [
+        "east pine canopy tier 1",
+        "east pine canopy tier 2",
+        "east pine canopy tier 3",
+        "east pine canopy tier 3 snow cap",
+        "east pine snow ring 7",
+        "east pine trunk",
+        "west pine canopy tier 1",
+        "west pine canopy tier 2",
+        "west pine canopy tier 3",
+        "west pine canopy tier 3 snow cap",
+        "west pine snow ring 7",
+        "west pine trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/twin-saplings",
+      "family": "forest",
+      "variant": "twin-saplings",
+      "snow": false,
+      "treeCount": 2,
+      "triangles": 1308,
+      "bounds": {
+        "min": [
+          -0.4399999976158142,
+          0.0,
+          -0.20000000298023224
+        ],
+        "max": [
+          0.4399999976158142,
+          0.8799999952316284,
+          0.20000000298023224
+        ]
+      },
+      "parts": [
+        "east sapling canopy tier 1",
+        "east sapling canopy tier 2",
+        "east sapling canopy tier 3",
+        "east sapling trunk",
+        "west sapling canopy tier 1",
+        "west sapling canopy tier 2",
+        "west sapling canopy tier 3",
+        "west sapling trunk"
+      ]
+    },
+    {
+      "id": "nature/forest/twin-saplings-snow",
+      "family": "forest",
+      "variant": "twin-saplings",
+      "snow": true,
+      "treeCount": 2,
+      "triangles": 1372,
+      "bounds": {
+        "min": [
+          -0.4399999976158142,
+          0.0,
+          -0.20000000298023224
+        ],
+        "max": [
+          0.4399999976158142,
+          0.9599999785423279,
+          0.20000000298023224
+        ]
+      },
+      "parts": [
+        "east sapling canopy tier 1",
+        "east sapling canopy tier 2",
+        "east sapling canopy tier 3",
+        "east sapling canopy tier 3 snow cap",
+        "east sapling snow ring 7",
+        "east sapling trunk",
+        "west sapling canopy tier 1",
+        "west sapling canopy tier 2",
+        "west sapling canopy tier 3",
+        "west sapling canopy tier 3 snow cap",
+        "west sapling snow ring 7",
+        "west sapling trunk"
+      ]
+    },
+    {
+      "id": "nature/rocks/boulders",
+      "family": "rocks",
+      "variant": "boulders",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 1250,
+      "bounds": {
+        "min": [
+          -0.8500000238418579,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.3499999940395355,
+          0.5,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "main boulder",
+        "side boulder"
+      ]
+    },
+    {
+      "id": "nature/rocks/boulders-snow",
+      "family": "rocks",
+      "variant": "boulders",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 1314,
+      "bounds": {
+        "min": [
+          -0.8500000238418579,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.3499999940395355,
+          0.6000000238418579,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "main boulder",
+        "main boulder snow cap",
+        "side boulder",
+        "side boulder snow cap"
+      ]
+    },
+    {
+      "id": "nature/rocks/low-slab",
+      "family": "rocks",
+      "variant": "low-slab",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 1142,
+      "bounds": {
+        "min": [
+          -0.550000011920929,
+          0.0,
+          -0.44999998807907104
+        ],
+        "max": [
+          0.550000011920929,
+          0.4000000059604645,
+          0.44999998807907104
+        ]
+      },
+      "parts": [
+        "raised slab corner",
+        "wide low slab"
+      ]
+    },
+    {
+      "id": "nature/rocks/low-slab-snow",
+      "family": "rocks",
+      "variant": "low-slab",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 1230,
+      "bounds": {
+        "min": [
+          -0.550000011920929,
+          0.0,
+          -0.44999998807907104
+        ],
+        "max": [
+          0.550000011920929,
+          0.5,
+          0.44999998807907104
+        ]
+      },
+      "parts": [
+        "raised slab corner",
+        "raised slab corner snow cap",
+        "wide low slab",
+        "wide low slab snow cap"
+      ]
+    },
+    {
+      "id": "nature/rocks/scattered-rocks",
+      "family": "rocks",
+      "variant": "scattered-rocks",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 915,
+      "bounds": {
+        "min": [
+          -0.550000011920929,
+          0.0,
+          -0.44999998807907104
+        ],
+        "max": [
+          0.550000011920929,
+          0.30000001192092896,
+          0.44999998807907104
+        ]
+      },
+      "parts": [
+        "scatter stone 1",
+        "scatter stone 2",
+        "scatter stone 3",
+        "scatter stone 4",
+        "scatter stone 5",
+        "scatter stone 6"
+      ]
+    },
+    {
+      "id": "nature/rocks/scattered-rocks-snow",
+      "family": "rocks",
+      "variant": "scattered-rocks",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 1075,
+      "bounds": {
+        "min": [
+          -0.550000011920929,
+          0.0,
+          -0.44999998807907104
+        ],
+        "max": [
+          0.550000011920929,
+          0.4000000059604645,
+          0.44999998807907104
+        ]
+      },
+      "parts": [
+        "scatter stone 1",
+        "scatter stone 1 snow cap",
+        "scatter stone 2",
+        "scatter stone 2 snow cap",
+        "scatter stone 3",
+        "scatter stone 3 snow cap",
+        "scatter stone 4",
+        "scatter stone 4 snow cap",
+        "scatter stone 5",
+        "scatter stone 5 snow cap",
+        "scatter stone 6",
+        "scatter stone 6 snow cap"
+      ]
+    },
+    {
+      "id": "nature/rocks/split-boulder",
+      "family": "rocks",
+      "variant": "split-boulder",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 1336,
+      "bounds": {
+        "min": [
+          -0.6499999761581421,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.6499999761581421,
+          0.5,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "east boulder",
+        "west boulder"
+      ]
+    },
+    {
+      "id": "nature/rocks/split-boulder-snow",
+      "family": "rocks",
+      "variant": "split-boulder",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 1400,
+      "bounds": {
+        "min": [
+          -0.6499999761581421,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.6499999761581421,
+          0.6000000238418579,
+          0.3499999940395355
+        ]
+      },
+      "parts": [
+        "east boulder",
+        "east boulder snow cap",
+        "west boulder",
+        "west boulder snow cap"
+      ]
+    },
+    {
+      "id": "nature/rocks/stepped-pile",
+      "family": "rocks",
+      "variant": "stepped-pile",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 1232,
+      "bounds": {
+        "min": [
+          -0.550000011920929,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.550000011920929,
+          0.5,
+          0.550000011920929
+        ]
+      },
+      "parts": [
+        "left stack",
+        "rear stack",
+        "right stack"
+      ]
+    },
+    {
+      "id": "nature/rocks/stepped-pile-snow",
+      "family": "rocks",
+      "variant": "stepped-pile",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 1352,
+      "bounds": {
+        "min": [
+          -0.550000011920929,
+          0.0,
+          -0.3499999940395355
+        ],
+        "max": [
+          0.550000011920929,
+          0.6000000238418579,
+          0.550000011920929
+        ]
+      },
+      "parts": [
+        "left stack",
+        "left stack snow cap",
+        "rear stack",
+        "rear stack snow cap",
+        "right stack",
+        "right stack snow cap"
+      ]
+    },
+    {
+      "id": "nature/stones/flat-stones",
+      "family": "stones",
+      "variant": "flat-stones",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 564,
+      "bounds": {
+        "min": [
+          -0.2199999988079071,
+          0.0,
+          -0.10000000149011612
+        ],
+        "max": [
+          0.2199999988079071,
+          0.11999999731779099,
+          0.10000000149011612
+        ]
+      },
+      "parts": [
+        "stone 1",
+        "stone 2",
+        "stone 3"
+      ]
+    },
+    {
+      "id": "nature/stones/flat-stones-snow",
+      "family": "stones",
+      "variant": "flat-stones",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 660,
+      "bounds": {
+        "min": [
+          -0.2199999988079071,
+          0.0,
+          -0.10000000149011612
+        ],
+        "max": [
+          0.2199999988079071,
+          0.1599999964237213,
+          0.10000000149011612
+        ]
+      },
+      "parts": [
+        "stone 1",
+        "stone 1 snow cap",
+        "stone 2",
+        "stone 2 snow cap",
+        "stone 3",
+        "stone 3 snow cap"
+      ]
+    },
+    {
+      "id": "nature/stones/pebbles",
+      "family": "stones",
+      "variant": "pebbles",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 624,
+      "bounds": {
+        "min": [
+          -0.22499999403953552,
+          0.0,
+          -0.2750000059604645
+        ],
+        "max": [
+          0.22499999403953552,
+          0.15000000596046448,
+          0.17499999701976776
+        ]
+      },
+      "parts": [
+        "stone 1",
+        "stone 2",
+        "stone 3",
+        "stone 4"
+      ]
+    },
+    {
+      "id": "nature/stones/pebbles-snow",
+      "family": "stones",
+      "variant": "pebbles",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 744,
+      "bounds": {
+        "min": [
+          -0.22499999403953552,
+          0.0,
+          -0.2750000059604645
+        ],
+        "max": [
+          0.22499999403953552,
+          0.20000000298023224,
+          0.17499999701976776
+        ]
+      },
+      "parts": [
+        "stone 1",
+        "stone 1 snow cap",
+        "stone 2",
+        "stone 2 snow cap",
+        "stone 3",
+        "stone 3 snow cap",
+        "stone 4",
+        "stone 4 snow cap"
+      ]
+    },
+    {
+      "id": "nature/stones/twin-stones",
+      "family": "stones",
+      "variant": "twin-stones",
+      "snow": false,
+      "treeCount": 0,
+      "triangles": 504,
+      "bounds": {
+        "min": [
+          -0.22499999403953552,
+          0.0,
+          -0.07500000298023224
+        ],
+        "max": [
+          0.2750000059604645,
+          0.20000000298023224,
+          0.07500000298023224
+        ]
+      },
+      "parts": [
+        "stone 1",
+        "stone 2"
+      ]
+    },
+    {
+      "id": "nature/stones/twin-stones-snow",
+      "family": "stones",
+      "variant": "twin-stones",
+      "snow": true,
+      "treeCount": 0,
+      "triangles": 568,
+      "bounds": {
+        "min": [
+          -0.22499999403953552,
+          0.0,
+          -0.07500000298023224
+        ],
+        "max": [
+          0.2750000059604645,
+          0.25,
+          0.07500000298023224
+        ]
+      },
+      "parts": [
+        "stone 1",
+        "stone 1 snow cap",
+        "stone 2",
+        "stone 2 snow cap"
+      ]
+    }
+  ]
+}

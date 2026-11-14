@@ -13,6 +13,7 @@ import { buildDecorations, type DecorationLayer } from './decorations';
 import { ContentAssetLibrary } from '../render3d/asset-library';
 import { hashCell } from '../sim/rng';
 import { BASE_SCENE, type SceneProportions } from '../render3d/scene-proportions';
+import { selectNatureVariant } from '../render3d/nature-variants';
 
 const STONE = '#c2bca5', DARK_WOOD = '#60472e';
 
@@ -104,37 +105,52 @@ export function buildVoxelEnvironment(
     position.y /= proportions.tile;
     return position;
   });
-  const decorations = buildDecorations(terrain, proportions);
+  const decorations = buildDecorations(terrain, proportions, library);
   decorations.root.visible = terrainLook === 'artwork';
   root.add(decorations.root);
   positions.forEach(({ x, y, z }, i) => {
     const kind = terrain.feature[i];
     if (terrainLook === 'artwork' && library && (kind === FEATURE.forest || kind === FEATURE.rocks)) {
       const col = i % terrain.cols, row = Math.floor(i / terrain.cols);
+      const family = kind === FEATURE.forest ? 'forest' : 'rocks';
+      const selection = selectNatureVariant(terrain, i, family);
+      const customName = selection.snow && library.has(selection.snowId) ? selection.snowId
+        : library.has(selection.baseId) ? selection.baseId : null;
       const sample = 1 + Math.floor(hashCell(terrain.seed, col, row) * 3);
-      const name = kind === FEATURE.forest ? `nature/forest/sample-${sample}` : `nature/rocks/sample-${sample}`;
-      const prefab = library.instantiate(name, true);
+      const legacyName = kind === FEATURE.forest ? `nature/forest/sample-${sample}` : `nature/rocks/sample-${sample}`;
+      const prefab = (customName ? library.instantiate(customName, true) : null)
+        ?? library.instantiate(legacyName, true);
       if (prefab) {
-        const size = 0.92 + hashCell(terrain.seed ^ 0x4129b, col, row) * 0.13;
+        const size = customName ? selection.size : 0.92 + hashCell(terrain.seed ^ 0x4129b, col, row) * 0.13;
+        const width = customName ? selection.width : 0.96 + hashCell(terrain.seed ^ 0x783fa, col, row) * 0.08;
+        const height = customName ? selection.height : 0.94 + hashCell(terrain.seed ^ 0x1bef4, row, col) * 0.12;
+        const rotation = customName ? selection.rotation : Math.floor(hashCell(terrain.seed ^ 0x2be51, row, col) * 4) * Math.PI / 2;
+        const offsetX = customName ? selection.offsetX : 0;
+        const offsetZ = customName ? selection.offsetZ : 0;
         prefab.name = `${kind === FEATURE.forest ? 'Forest' : 'Rocks'} tile ${i}`;
-        prefab.position.set(x, y, z);
-        prefab.rotation.y = Math.floor(hashCell(terrain.seed ^ 0x2be51, row, col) * 4) * Math.PI / 2;
-        const width = 0.96 + hashCell(terrain.seed ^ 0x783fa, col, row) * 0.08;
-        const height = 0.94 + hashCell(terrain.seed ^ 0x1bef4, row, col) * 0.12;
+        prefab.position.set(x + offsetX * proportions.vegetation / proportions.tile, y, z + offsetZ * proportions.vegetation / proportions.tile);
+        prefab.rotation.y = rotation;
         const scale = proportions.vegetation / proportions.tile;
         prefab.scale.set(size * width * scale, size * height * scale, size * scale);
         const mesh = firstMesh(prefab);
         if (mesh) {
-          const material = mesh.material as MeshStandardMaterial;
-          material.transparent = true;
-          material.opacity = 1;
-          material.depthWrite = true;
-          writeOccluderMask(material, false);
-          mesh.renderOrder = 10;
+          prefab.traverse(object => {
+            if (!(object instanceof Mesh)) return;
+            for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+              const standard = material as MeshStandardMaterial;
+              standard.transparent = true;
+              standard.opacity = 1;
+              standard.depthWrite = true;
+              writeOccluderMask(standard, false);
+            }
+            object.renderOrder = 10;
+            object.castShadow = true;
+            object.receiveShadow = true;
+          });
+          const material = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as MeshStandardMaterial;
           const bounds = new Box3().setFromObject(prefab);
           features.push({ mesh, material, bounds, tree: kind === FEATURE.forest });
-          prefab.traverse(object => { if (object instanceof Mesh) { object.castShadow = true; object.receiveShadow = true; } });
-          root.add(prefab);
+          prepareStaticPrefab(prefab, root, { col, row }, false);
           return;
         }
       }

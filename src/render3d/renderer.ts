@@ -19,6 +19,8 @@ import { RuntimeModelRegistry } from './model-registry';
 import { BASE_SCENE, type SceneProportions } from './scene-proportions';
 import { EnemyPresentation } from './model-scale';
 
+type ProofEnemyKind = 'goblin' | 'orc' | 'troll';
+
 /** Initial live backend. It reads the real run; there is no fixture budget or scripted combat. */
 export class Renderer3D implements GameRenderer {
   readonly assetsReady: Promise<void>;
@@ -59,7 +61,8 @@ export class Renderer3D implements GameRenderer {
   private notice: HTMLDivElement;
 
   constructor(private canvas: HTMLCanvasElement, private proofRegistry?: RuntimeModelRegistry,
-    private proportions: SceneProportions = BASE_SCENE) {
+    private proportions: SceneProportions = BASE_SCENE,
+    private proofSpecies: readonly ProofEnemyKind[] = ['goblin', 'orc', 'troll']) {
     const presentation = new EnemyPresentation();
     this.cameraRig = new GameCamera3D(0, 1, proportions);
     this.actors = new LiveActors(this.actorsRoot, proportions, presentation);
@@ -102,14 +105,12 @@ export class Renderer3D implements GameRenderer {
     const registry = this.proofRegistry!;
     this.canvas.dataset.model = 'loading';
     try {
-      const [goblin, orc, troll, crew, library] = await Promise.all([
-        registry.loadCharacter('goblin'), registry.loadCharacter('orc'), registry.loadCharacter('troll'),
+      const [characters, crew, library] = await Promise.all([
+        Promise.all(this.proofSpecies.map(async kind => [kind, await registry.loadCharacter(kind)] as const)),
         registry.loadCharacter('archer-crew'), registry.loadStaticLibrary(),
       ]);
       if (this.disposed) return;
-      this.actors.setTemplate(goblin, 'goblin');
-      this.actors.setTemplate(orc, 'orc');
-      this.actors.setTemplate(troll, 'troll');
+      for (const [kind, template] of characters) this.actors.setTemplate(template, kind);
       this.library = library;
       this.towers.setLibrary(library);
       this.towers.setCrewTemplate(crew);
@@ -156,6 +157,8 @@ export class Renderer3D implements GameRenderer {
   }
   // The existing input contract still sends drag deltas; the confirmed 3D camera does not pan.
   panBy(): void {}
+  /** The art-proof viewer opts into inspection panning without changing player camera controls. */
+  panForInspection(dx: number, dy: number): void { this.cameraRig.panBy(dx, dy); }
   focusTile(_col: number, _row: number, avoidBottom = 0): void {
     this.temporaryInset = avoidBottom > this.insets.bottom;
     // Until the UI redesign, reserve the existing touch sheet without adding camera panning.

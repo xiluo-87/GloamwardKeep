@@ -1,6 +1,6 @@
 import {
-  AlwaysStencilFunc, AnimationClip, AnimationMixer, Box3, EqualStencilFunc, GreaterDepth,
-  Group, KeepStencilOp, Mesh, MeshBasicMaterial, MeshStandardMaterial, ReplaceStencilOp,
+  AlwaysStencilFunc, AnimationAction, AnimationClip, AnimationMixer, Box3, EqualStencilFunc, GreaterDepth,
+  Group, KeepStencilOp, LoopOnce, LoopRepeat, Mesh, MeshBasicMaterial, MeshStandardMaterial, ReplaceStencilOp,
   SkinnedMesh, Vector3, ZeroStencilOp,
 } from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
@@ -18,7 +18,7 @@ export interface ArtCharacter {
 /** Own a fresh skinned copy; map rebuilds must not dispose the reusable loaded template. */
 export function createArtCharacter(template: GLTF, initialClip = 'Walk'): ArtCharacter {
   const root = new Group();
-  root.name = 'Pack character';
+  root.name = 'Art character';
   const body = clone(template.scene);
   root.add(body);
   const meshes: SkinnedMesh[] = [];
@@ -53,12 +53,17 @@ export function createArtCharacter(template: GLTF, initialClip = 'Walk'): ArtCha
   const mixer = new AnimationMixer(body);
   if (!meshes.length) throw new Error('Character needs a skinned model.');
   let activeClip = '';
+  let activeAction: AnimationAction;
   const setClip = (name: string): void => {
     if (activeClip === name) return;
     const clip = AnimationClip.findByName(template.animations, name);
     if (!clip) throw new Error(`Character has no ${name} animation.`);
     mixer.stopAllAction();
-    mixer.clipAction(clip).reset().play();
+    const loop = !['Attack1', 'Attack2', 'Hit', 'Death', 'Special'].includes(name);
+    activeAction = mixer.clipAction(clip);
+    activeAction.reset().setLoop(loop ? LoopRepeat : LoopOnce, 1);
+    activeAction.clampWhenFinished = !loop;
+    activeAction.play();
     activeClip = name;
   };
   setClip(initialClip);
@@ -84,6 +89,9 @@ export function createArtCharacter(template: GLTF, initialClip = 'Walk'): ArtCha
   return {
     root, height, setClip,
     update(time, position, yaw) {
+      // Sampling is absolute: a clamped one-shot must also be able to seek or restart.
+      activeAction.paused = false;
+      activeAction.enabled = true;
       mixer.setTime(time);
       root.position.copy(position);
       root.rotation.y = yaw + Math.PI; // The pack faces -Z; fixture routes use +Z as forward.

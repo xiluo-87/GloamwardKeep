@@ -1,0 +1,537 @@
+{
+  "asset": "custom-goblin-v1",
+  "status": "provisional custom sample for review",
+  "geometryOrigin": "Original authored mesh forms; no pack mesh geometry reused.",
+  "rigDonor": "assets-src/rework/proof/characters/goblin.blend",
+  "animationSource": "assets-src/studies/goblin-shaman/editor-preview.glb",
+  "sourceSha256": "48d8a90968caac7011e6378addfd78a7238db7ad2cc3ea11f69c7464d73a88cb",
+  "nativePath": "assets-src/rework/custom/goblin/goblin.blend",
+  "nativeSha256": "45094dad5ebce28bec62e12f9a1ba731d69ad620de138b8967d49f97f1706f69",
+  "outputPath": "assets-src/rework/custom/goblin/goblin.glb",
+  "parts": [
+    {
+      "id": "left-boot",
+      "bone": "mixamorig:LeftFoot",
+      "center": [
+        -8,
+        2,
+        3.0
+      ],
+      "size": [
+        12,
+        17,
+        6
+      ],
+      "color": "#503a29",
+      "bevel": 0.55
+    },
+    {
+      "id": "right-boot",
+      "bone": "mixamorig:RightFoot",
+      "center": [
+        8,
+        2,
+        3.0
+      ],
+      "size": [
+        12,
+        17,
+        6
+      ],
+      "color": "#503a29",
+      "bevel": 0.55
+    },
+    {
+      "id": "left-shin",
+      "bone": "mixamorig:LeftLeg",
+      "center": [
+        -8,
+        0,
+        10.0
+      ],
+      "size": [
+        9,
+        12,
+        13
+      ],
+      "color": "#556e34",
+      "bevel": 0.45
+    },
+    {
+      "id": "right-shin",
+      "bone": "mixamorig:RightLeg",
+      "center": [
+        8,
+        0,
+        10.0
+      ],
+      "size": [
+        9,
+        12,
+        13
+      ],
+      "color": "#556e34",
+      "bevel": 0.45
+    },
+    {
+      "id": "left-trouser",
+      "bone": "mixamorig:LeftUpLeg",
+      "center": [
+        -8,
+        0,
+        20.0
+      ],
+      "size": [
+        11,
+        14,
+        13
+      ],
+      "color": "#66462e",
+      "bevel": 0.5
+    },
+    {
+      "id": "right-trouser",
+      "bone": "mixamorig:RightUpLeg",
+      "center": [
+        8,
+        0,
+        20.0
+      ],
+      "size": [
+        11,
+        14,
+        13
+      ],
+      "color": "#66462e",
+      "bevel": 0.5
+    },
+    {
+      "id": "tunic-lower",
+      "bone": "mixamorig:Spine1",
+      "center": [
+        0,
+        0,
+        32.2
+      ],
+      "size": [
+        25,
+        18,
+        14
+      ],
+      "color": "#765237",
+      "bevel": 0.65
+    },
+    {
+      "id": "tunic-upper",
+      "bone": "mixamorig:Spine2",
+      "center": [
+        0,
+        0,
+        44.3
+      ],
+      "size": [
+        26,
+        18,
+        14
+      ],
+      "color": "#805a3b",
+      "bevel": 0.65
+    },
+    {
+      "id": "leather-belt",
+      "bone": "mixamorig:Hips",
+      "center": [
+        0,
+        0,
+        26.5
+      ],
+      "size": [
+        28,
+        19,
+        4
+      ],
+      "color": "#493426",
+      "bevel": 0.35
+    },
+    {
+      "id": "belt-buckle",
+      "bone": "mixamorig:Hips",
+      "center": [
+        0,
+        10.2,
+        27
+      ],
+      "size": [
+        4.5,
+        1.5,
+        3.2
+      ],
+      "color": "#9a7542",
+      "bevel": 0.18
+    },
+    {
+      "id": "head",
+      "bone": "mixamorig:Head",
+      "center": [
+        0,
+        0,
+        68.1
+      ],
+      "size": [
+        27,
+        21,
+        22
+      ],
+      "color": "#718b3e",
+      "bevel": 0.7
+    },
+    {
+      "id": "jaw",
+      "bone": "mixamorig:Head",
+      "center": [
+        0,
+        3.0,
+        58.3
+      ],
+      "size": [
+        20,
+        17,
+        7
+      ],
+      "color": "#698237",
+      "bevel": 0.42
+    },
+    {
+      "id": "left-ear",
+      "bone": "mixamorig:Head",
+      "center": [
+        -15.5,
+        0,
+        68.0
+      ],
+      "size": [
+        7,
+        10,
+        7.5
+      ],
+      "color": "#617b34",
+      "bevel": 0.32
+    },
+    {
+      "id": "right-ear",
+      "bone": "mixamorig:Head",
+      "center": [
+        15.5,
+        0,
+        68.0
+      ],
+      "size": [
+        7,
+        10,
+        7.5
+      ],
+      "color": "#617b34",
+      "bevel": 0.32
+    },
+    {
+      "id": "nose",
+      "bone": "mixamorig:Head",
+      "center": [
+        0,
+        11.9,
+        66.1
+      ],
+      "size": [
+        5.2,
+        4.3,
+        6.1
+      ],
+      "color": "#829947",
+      "bevel": 0.28
+    },
+    {
+      "id": "left-eye-slot",
+      "bone": "LeftEye",
+      "center": [
+        -5.7,
+        10.72,
+        70.3
+      ],
+      "size": [
+        6.1,
+        1.7,
+        2.5
+      ],
+      "color": "#1c2118",
+      "bevel": 0.1
+    },
+    {
+      "id": "right-eye-slot",
+      "bone": "RightEye",
+      "center": [
+        5.7,
+        10.72,
+        70.3
+      ],
+      "size": [
+        6.1,
+        1.7,
+        2.5
+      ],
+      "color": "#1c2118",
+      "bevel": 0.1
+    },
+    {
+      "id": "left-tusk",
+      "bone": "mixamorig:Head",
+      "center": [
+        -6.3,
+        10.1,
+        59.3
+      ],
+      "size": [
+        2.3,
+        2.3,
+        3.0
+      ],
+      "color": "#d0c39e",
+      "bevel": 0.12
+    },
+    {
+      "id": "right-tusk",
+      "bone": "mixamorig:Head",
+      "center": [
+        6.3,
+        10.1,
+        59.3
+      ],
+      "size": [
+        2.3,
+        2.3,
+        3.0
+      ],
+      "color": "#d0c39e",
+      "bevel": 0.12
+    },
+    {
+      "id": "left-upper-arm",
+      "bone": "mixamorig:LeftArm",
+      "center": [
+        -21.2,
+        0,
+        46.3
+      ],
+      "size": [
+        11,
+        12,
+        12
+      ],
+      "color": "#718b3e",
+      "bevel": 0.48
+    },
+    {
+      "id": "left-forearm",
+      "bone": "mixamorig:LeftForeArm",
+      "center": [
+        -30.0,
+        0.7,
+        44.7
+      ],
+      "size": [
+        10,
+        11,
+        12
+      ],
+      "color": "#7c9342",
+      "bevel": 0.46
+    },
+    {
+      "id": "left-hand",
+      "bone": "mixamorig:LeftHand",
+      "center": [
+        -39.2,
+        2.0,
+        43.6
+      ],
+      "size": [
+        9,
+        10,
+        8
+      ],
+      "color": "#718b3e",
+      "bevel": 0.38
+    },
+    {
+      "id": "right-upper-arm",
+      "bone": "mixamorig:RightArm",
+      "center": [
+        21.2,
+        0,
+        46.3
+      ],
+      "size": [
+        11,
+        12,
+        12
+      ],
+      "color": "#718b3e",
+      "bevel": 0.48
+    },
+    {
+      "id": "right-forearm",
+      "bone": "mixamorig:RightForeArm",
+      "center": [
+        30.0,
+        0.7,
+        44.7
+      ],
+      "size": [
+        10,
+        11,
+        12
+      ],
+      "color": "#7c9342",
+      "bevel": 0.46
+    },
+    {
+      "id": "right-hand",
+      "bone": "mixamorig:RightHand",
+      "center": [
+        39.7,
+        2.1,
+        44.0
+      ],
+      "size": [
+        9,
+        10,
+        8
+      ],
+      "color": "#718b3e",
+      "bevel": 0.38
+    },
+    {
+      "id": "sword-grip",
+      "bone": "mixamorig:RightHand",
+      "center": [
+        41.2,
+        5.2,
+        47.4
+      ],
+      "size": [
+        3.2,
+        3.2,
+        7.2
+      ],
+      "color": "#493426",
+      "bevel": 0.16
+    },
+    {
+      "id": "sword-guard",
+      "bone": "mixamorig:RightHand",
+      "center": [
+        41.2,
+        6.0,
+        51.6
+      ],
+      "size": [
+        8.4,
+        2.5,
+        2.0
+      ],
+      "color": "#667273",
+      "bevel": 0.15
+    },
+    {
+      "id": "sword-blade",
+      "bone": "mixamorig:RightHand",
+      "center": [
+        41.2,
+        6.1,
+        57.5
+      ],
+      "size": [
+        4.6,
+        2.0,
+        10.0
+      ],
+      "color": "#9da9a7",
+      "bevel": 0.18
+    },
+    {
+      "id": "sword-tip",
+      "bone": "mixamorig:RightHand",
+      "center": [
+        41.2,
+        6.1,
+        64.0
+      ],
+      "size": [
+        2.8,
+        1.8,
+        3.2
+      ],
+      "color": "#b6bfba",
+      "bevel": 0.1
+    }
+  ],
+  "partCount": 29,
+  "palette": {
+    "skin": [
+      "#50692f",
+      "#718b3e",
+      "#829947",
+      "#93a64d"
+    ],
+    "tunic/leather": [
+      "#493426",
+      "#66462e",
+      "#765237",
+      "#805a3b",
+      "#9a7542"
+    ],
+    "blade/iron": [
+      "#667273",
+      "#9da9a7",
+      "#b6bfba"
+    ],
+    "eye/tusk": [
+      "#1c2118",
+      "#d0c39e"
+    ]
+  },
+  "triangleCount": 1276,
+  "vertexCount": 2784,
+  "boundsGltfLocal": {
+    "min": [
+      -0.4370000076293945,
+      0.0,
+      -0.14050000190734863
+    ],
+    "max": [
+      0.4540000152587891,
+      0.7909999847412109,
+      0.105
+    ]
+  },
+  "jointCount": 72,
+  "clips": {
+    "Idle": 4.0,
+    "Walk": 1.0,
+    "Run": 0.6200000047683716,
+    "Wave": 1.2000000476837158,
+    "Attack1": 1.2000000476837158,
+    "Attack2": 1.3200000524520874,
+    "Hit": 0.8700000047683716,
+    "Death": 1.7899999618530273,
+    "Block": 1.2000000476837158,
+    "Special": 1.850000023841858
+  },
+  "sourceRigSha256": "dd3370b66fd8a1367ffebc05e0d7cf1694377049e7f59e9a3e180ae0a235eaca",
+  "outputRigSha256": "dd3370b66fd8a1367ffebc05e0d7cf1694377049e7f59e9a3e180ae0a235eaca",
+  "sourceAnimationSha256": "d2c6fd5921dad2273cbd8d636f2424c6b25271997b644203d3bc99f1c21352ca",
+  "outputAnimationSha256": "d2c6fd5921dad2273cbd8d636f2424c6b25271997b644203d3bc99f1c21352ca",
+  "sourceRigMotionSha256": "32d47bac6b8197fd516d533ddcf512e672f48c1fe80d3145b8e9dbc3c7eca357",
+  "outputRigMotionSha256": "32d47bac6b8197fd516d533ddcf512e672f48c1fe80d3145b8e9dbc3c7eca357",
+  "rigAndAnimationsPreserved": true,
+  "method": "Custom block forms weighted to existing Goblin bones; original GLB rig/nodes/skin/animation data retained while replacing only the mesh accessors."
+}

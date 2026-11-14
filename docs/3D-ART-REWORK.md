@@ -4,19 +4,19 @@
 
 The pack-mesh adaptation experiment is paused and retained as a checkpoint. Its detailed equipment, proportions and reduction artifacts have not reached the reference artwork's clean block shapes. The retained assets are experiments, not accepted final art.
 
-The agreed next direction is one custom Goblin authored from simple block forms in Blender, reviewed at gameplay size beside an existing roofless archer tower. Prove whether the purchased rig/animations can drive that model before expanding the roster; their reuse remains a technical question. Review the complete static and animated example before producing other characters. Use a shared block/material kit for towers and scenery, while terrain layout remains generated. Camera, lighting and the reusable renderer stay in place; UI/mobile work remains deferred.
+The current candidate is one custom Goblin authored from simple block forms in Blender, reviewed at gameplay size beside the existing roofless archer structures. The purchased rig and all ten animations are preserved exactly; native/crowd sampled poses and restart are checked. There are also 34 scenery prefabs with paired small trees, different silhouettes/palettes and snow variants near snowy terrain. See [3D-CUSTOM-PROOF.md](3D-CUSTOM-PROOF.md) for sources, scope and validation. Review the complete static and animated example before producing other characters. Camera, lighting and the reusable renderer stay in place; the game UI/mobile redesign remains deferred.
 
 The sections below preserve the previous stages and findings for reference.
 
 The user approved stages 1 and 2 only. The attached first voxel artwork remains the reference. These models are a visual proof awaiting review, not accepted final art. Do not expand the roster or other tower families until that review.
 
-The user subsequently approved polygon reduction and shape refinement for the four proof characters. See [3D-MODEL-REFINEMENT.md](3D-MODEL-REFINEMENT.md) for actual triangle counts, native sources and the geometry export route. The current registry uses those refined models; the palette-only baseline below is preserved history.
+The user subsequently approved polygon reduction and shape refinement for the four proof characters. See [3D-MODEL-REFINEMENT.md](3D-MODEL-REFINEMENT.md) for actual triangle counts, native sources and the geometry export route. The archive registry uses those refined models; the custom proof replaces only the Goblin. The palette-only baseline below is preserved history.
 
 The user then chose larger tiles with resized buildings and vegetation, keeping mob model sizes intact, after observing terrain clipping. The first map-review profile uses tile size 2.4, buildings 1.4 and vegetation 1.5 relative to the prior model units. Rendering remains in tile coordinates: unchanged mob model sizes are divided by tile size, while static props use their own scale divided by tile size. Ground elevation also divides by tile size, so horizontal expansion does not make cliffs taller relative to the mobs. This is a scene-proportion change; no character animation or model file is scaled for it. The shared renderer accepts this profile, currently enabled in the art-review map. The legacy game keeps its base profile pending art review. These numerical proportions are the first review pass, not a recorded final user preference. A diagnostic sampled 48 moving poses per species on each of Highlands, Meadow and Canyon (seed 5): the 2.4 tile profile removed sampled body intersections with raised ground. The Troll's long held club still enters terrain on some turns; it needs a separate carry-pose/weapon decision. This is not a claim that all animated weapon intersections are solved. A source-derived Idle/Walk floor correction keeps feet seated without altering animation clips.
 
 ## Fixed choices
 
-- Southeast, 35.3° orthographic default; zoom at the pointer/touch, no pan or orbit. Existing direction and tilt alternatives remain available.
+- Southeast, 35.3° orthographic default; zoom at the pointer/touch, no player pan or orbit. Existing direction and tilt alternatives remain available. The art-proof viewer additionally allows dragging while zoomed for inspection, with Fit map to reset.
 - Crisp neutral daylight only.
 - Roofless archer platforms, so their real character crew can aim freely.
 - Chunky visible blocks, subtly softened edges, warm timber, cool stone, restrained greens and orange accents. Terrain should eventually keep the reference's irregular ledges and small variations.
